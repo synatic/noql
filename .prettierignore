@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+.nyc_output
+
+# lock files
+yarn.lock
+package.json
+package-lock.json

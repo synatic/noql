@@ -1,0 +1,26 @@
+{
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": ["eslint:recommended", "google", "prettier"],
+  "globals": {},
+  "parserOptions": {},
+  "rules": {
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "max-len": ["off"],
+    "no-prototype-builtins": "off",
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true
+        }
+      }
+    ]
+  }
+}
