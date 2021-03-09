@@ -149,8 +149,9 @@ describe('SQL Parser', function () {
             collection: 'people'
         }, "Invalid parse");
 
-        //TODO ID issue shoot 
-        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT id, user_id, status FROM people`), {
+        //TODO ID issue shoot
+        assert.deepStrictEqual(SQLParser.parseSQL(`SELECT id, user_id, status FROM people`), {
+            type:"query",
             limit: 100,
             collection: 'people',
             projection: { id: 1, user_id: 1, status: 1 }
@@ -207,6 +208,12 @@ describe('SQL Parser', function () {
             query: { age: { '$lt': 25 } }
         }, "Invalid parse");
 
+        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT * FROM people WHERE age > 25 and age <30`), {
+            limit: 100,
+            collection: 'people',
+            query: {age: { '$gt': 25 , '$lt': 30 }}
+        }, "Invalid parse");
+
         assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT * FROM people WHERE user_id like "%bc%"`), {
             limit: 100,
             collection: 'people',
@@ -232,13 +239,63 @@ describe('SQL Parser', function () {
             count: true
         }, "Invalid parse");
 
-        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT COUNT(user_id) FROM people`), {
-            limit: 100,
+        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT COUNT(*) FROM people where status = 'a'`), {
             collection: 'people',
             query: { status: 'A' },
-            sort: { user_id: -1 }
+            count:true
+        }, "Invalid parse");
+    });
+
+    it('should parse aggregate 1', function () {
+        assert.deepEqual(SQLParser.makeMongoAggregate("select avg(age) as avgAge from `person` where `state`='a'"), {
+            "collections": ["person"],
+            pipeline:[
+                {$match:{
+                    state:"a"
+                    }},
+                {
+
+                    $group:{
+                        _id:1,
+                        avgAge:{
+                            $avg:"$age"
+                        }
+                    }
+                },{
+                $projection:{
+                    avgAge:1,
+                    _id:-1
+                }
+                }
+            ]
         }, "Invalid parse");
 
+        it('should parse aggregate 1', function () {
+            assert.deepEqual(SQLParser.makeMongoAggregate("select state,avg(age) as avgAge from `person` where `state`='a' group by `state`"), {
+                "collections": ["person"],
+                pipeline: [
+                    {
+                        $match: {
+                            state: "a"
+                        }
+                    },
+                    {
 
-    })
+                        $group: {
+                            _id: {state:"$state"},
+                            avgAge: {
+                                $avg: "$age"
+                            }
+                        }
+                    }, {
+                        $projection: {
+                            "state":"$_id.state",
+                            avgAge: 1,
+                            _id: -1
+                        }
+                    }
+                ]
+            }, "Invalid parse");
+        });
+    });
 });
