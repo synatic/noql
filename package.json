@@ -47,7 +47,8 @@
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
     "moment": "2.29.1",
-    "mongodb": "3.6.4",
+    "mongodb": "^3.6.4",
+    "mongodb-language-model": "^1.6.1",
     "node-sql-parser": "3.1.0",
     "underscore.string": "3.3.5"
   },
