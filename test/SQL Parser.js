@@ -1,91 +1,68 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
+const $equal=require('deep-equal');
+
+const _queryTests=require('./MongoQueryTests.json');
+
 
 describe('SQL Parser', function () {
-    it('should parse plain query', function () {
-        assert.deepEqual(SQLParser.makeMongoQuery("select * from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100
-        }, "Invalid parse");
 
-        assert.deepEqual(SQLParser.makeMongoQuery("select sum(`a`,2) as s from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                s: {
-                    "$add": [
-                        "$a",
-                        {
-                            "$literal": 2
-                        }
-                    ]
+    it('should run query tests', function () {
+        let results=_queryTests.map(t=>{
+            if(t.error){
+                try{
+                    SQLParser.makeMongoQuery(t.query);
+                    return {
+                        query:t.query,
+                        passed:false,
+                        error:"Error condition not met"
+                    };
+                }catch(exp){
+                    return {
+                        query:t.query,
+                        passed:exp.message===t.error,
+                        error:exp.message!==t.error?`${exp.message} != ${t.error}`:null
+                    };
                 }
-            }
-        }, "Invalid parse");
+            }else{
+                try{
+                    let parsedQuery=SQLParser.makeMongoQuery(t.query);
+                    return {
+                        query:t.query,
+                        passed:$equal(t.output,parsedQuery),
+                        error:!$equal(t.output,parsedQuery)?JSON.stringify(parsedQuery):null
+                    };
+                }catch(exp){
+                    return {
+                        query:t.query,
+                        passed:false,
+                        error:exp.message
+                    };
+                }
 
-        assert.deepEqual(SQLParser.makeMongoQuery("select Id,Name from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                Id: 1,
-                Name: 1
             }
-        }, "Invalid parse");
+        });
 
-        assert.deepEqual(SQLParser.makeMongoQuery("select Id as id,Name from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                id: "$Id",
-                Name: 1
+        results.forEach(r=>{
+            if(r.passed){
+                console.log(`\u2714 ${r.query}`);
+            }else{
+                console.error(`\u2716 ${r.query} ${r.error||""}`);
             }
-        }, "Invalid parse");
 
-        assert.deepEqual(SQLParser.makeMongoQuery("select `a.b` as Id ,Name from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                "Id": "$a.b",
-                Name: 1
-            }
-        }, "Invalid parse");
+        })
 
-        assert.deepEqual(SQLParser.makeMongoQuery("select 'Name' as Id ,Name from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                "Id": { $literal: 'Name' },
-                Name: 1
-            }
-        }, "Invalid parse");
+        assert.equal(results.filter(r=>!r.passed).length,0,"Mongo Query parsing errors")
+
+    });
+
+    it('should parse plain query', function () {
 
         assert.throws(() => { SQLParser.makeMongoQuery("select sum(cnt) from `global-test`") }, Error, "Invalid parse");
 
         assert.throws(() => { SQLParser.makeMongoQuery("select case when x=1 then 1 else 0 end as d from `global-test`") }, Error, "Invalid parse");
 
         assert.throws(() => { SQLParser.makeMongoQuery("select subtract(convert('1','int'),abs(`a`)) from `global-test`") }, Error, "Invalid parse");
-
-        assert.deepEqual(SQLParser.makeMongoQuery("select subtract(convert('1','int'),abs(`a`)) as d from `global-test`"), {
-            "collection": "global-test",
-            "limit": 100,
-            projection: {
-                "d": {
-                    "$subtract": [
-                        {
-                            "$convert": {
-                                "input": {
-                                    "$literal": "1"
-                                },
-                                "to": "int"
-                            }
-                        },
-                        {
-                            "$abs": "$a"
-                        }
-                    ]
-                }
-            }
-        }, "Invalid parse")
 
     });
 
@@ -144,10 +121,6 @@ describe('SQL Parser', function () {
 
     // SQL to MongoBD Mapping examples from docs.mongobd.com
     it('SQL to MongoBD Mapping', function () {
-        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT * FROM people`), {
-            limit: 100,
-            collection: 'people'
-        }, "Invalid parse");
 
         //TODO ID issue shoot
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT id, user_id, status FROM people`), {
@@ -214,11 +187,6 @@ describe('SQL Parser', function () {
             query: {age: { '$gt': 25 , '$lt': 30 }}
         }, "Invalid parse");
 
-        assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT * FROM people WHERE user_id like "%bc%"`), {
-            limit: 100,
-            collection: 'people',
-            query: { user_id: { '$regex': /bc/, '$options': 'i' } }
-        }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.makeMongoQuery(`SELECT * FROM people WHERE user_id like "bc%"`), {
             limit: 100,

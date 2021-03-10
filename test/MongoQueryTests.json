@@ -1,0 +1,173 @@
+[
+  {
+    "query": "select * from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100
+    }
+  },
+  {
+    "query": "select Title,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Title" : 1,
+        "Description": 1
+      }
+    }
+  },
+  {
+    "query": "select Title as Name,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Name" : "$Title",
+        "Description": 1
+      }
+    }
+  },
+  {
+    "query": "select `Replacement Value` as Value,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Value" : "$Replacement Value",
+        "Description": 1
+      }
+    }
+  },
+  {
+    "query": "select Title as Name,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Name" : "$Title",
+        "Description": 1
+      }
+    }
+  },
+  {
+    "query": "select 'Name' as Id,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Id" : { "$literal": "Name" },
+        "Description": 1
+      }
+    }
+  },
+  {
+    "query": "select sum(`Replacement Cost`,2)  from `films`",
+    "error": "Require as for calculation:sum"
+  },
+  {
+    "query": "select sum(`Replacement Cost`,2) as s from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$add": [
+            "$Replacement Cost",
+            {
+              "$literal": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
+    "output": {
+      "collection": "customers",
+      "limit": 10,
+      "skip": 5,
+      "projection": {
+        "City": "$Address.City",
+        "Name": "$First Name"
+      },
+      "query": {
+        "id": { "$gt": 1 }
+
+      }
+    }
+  },
+  {
+    "query": "select `First Name` as Name,first(`Payments`) as Payment from `customers` where `id`>1 limit 10 offset 5",
+    "output": {
+      "collection": "customers",
+      "limit": 10,
+      "skip": 5,
+      "projection": {
+        "Payment": {
+          "$first": "$Payments"
+        },
+        "Name": "$First Name"
+      },
+      "query": {
+        "id": { "$gt": 1 }
+
+      }
+    }
+  },
+  {
+    "query": "select subtract(convert('1','int'),abs(`Replacement Cost`)) as d,Title from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Title": 1,
+        "d": {
+          "$subtract": [
+            {
+              "$convert": {
+                "input": {
+                  "$literal": "1"
+                },
+                "to": "int"
+              }
+            },
+            {
+              "$abs": "$Replacement Cost"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+  },
+  {
+    "query": "",
+    "output": {}
+  },
+  {
+    "query": "",
+    "output": {}
+  },
+  {
+    "query": "",
+    "output": {}
+  },
+  {
+    "query": "",
+    "output": {}
+  },
+  {
+    "query": "",
+    "output": {}
+  }
+
+
+]
