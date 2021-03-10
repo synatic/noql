@@ -1,0 +1,15 @@
+[
+  {
+    "query": "select * from `films`",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 100
+        }
+      ]
+    }
+  }
+
+
+]

@@ -1,11 +1,21 @@
-const data=require('./test/films.json')
+const {MongoClient} = require('mongodb');
+const assert = require('assert');
 
-const results=data.map(c=>{
-   c['Replacement Cost']=parseFloat(c['Replacement Cost'])
-    c['Length']=parseInt(c['Length'])
-    c.id=c._id
-    delete c._id
-    return c;
-})
 
-require('fs').writeFileSync('./films.json',JSON.stringify(results))
+const _connectionString="mongodb://127.0.0.1:27017";
+const _dbName="sql-to-mongo-test";
+
+async function run (){
+    try{
+        const client = new MongoClient(_connectionString);
+        await client.connect();
+        const dbs=await client.listDatabases().toArray();
+        let xc;
+    }catch(exp){
+        console.error(exp)
+    }
+
+
+
+}
+run();

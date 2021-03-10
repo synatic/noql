@@ -3,7 +3,7 @@ const SQLParser = require('../lib/SQLParser.js');
 const $equal=require('deep-equal');
 
 const _queryTests=require('./MongoQueryTests.json');
-
+const _aggregateTests=require('./MongoAggregateTests.json');
 
 describe('SQL Parser', function () {
 
@@ -27,6 +27,55 @@ describe('SQL Parser', function () {
             }else{
                 try{
                     let parsedQuery=SQLParser.makeMongoQuery(t.query);
+                    return {
+                        query:t.query,
+                        passed:$equal(t.output,parsedQuery),
+                        error:!$equal(t.output,parsedQuery)?JSON.stringify(parsedQuery):null
+                    };
+                }catch(exp){
+                    return {
+                        query:t.query,
+                        passed:false,
+                        error:exp.message
+                    };
+                }
+
+            }
+        });
+
+        results.forEach(r=>{
+            if(r.passed){
+                console.log(`\u2714 ${r.query}`);
+            }else{
+                console.error(`\u2716 ${r.query} ${r.error||""}`);
+            }
+
+        })
+
+        assert.equal(results.filter(r=>!r.passed).length,0,"Mongo Query parsing errors")
+
+    });
+
+    it('should run aggregate tests', function () {
+        let results=_aggregateTests.map(t=>{
+            if(t.error){
+                try{
+                    SQLParser.makeMongoAggregate(t.query);
+                    return {
+                        query:t.query,
+                        passed:false,
+                        error:"Error condition not met"
+                    };
+                }catch(exp){
+                    return {
+                        query:t.query,
+                        passed:exp.message===t.error,
+                        error:exp.message!==t.error?`${exp.message} != ${t.error}`:null
+                    };
+                }
+            }else{
+                try{
+                    let parsedQuery=SQLParser.makeMongoAggregate(t.query);
                     return {
                         query:t.query,
                         passed:$equal(t.output,parsedQuery),

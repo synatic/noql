@@ -99,14 +99,14 @@
     }
   },
   {
-    "query": "select `First Name` as Name,first(`Payments`) as Payment from `customers` where `id`>1 limit 10 offset 5",
+    "query": "select `First Name` as Name,first(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
     "output": {
       "collection": "customers",
       "limit": 10,
       "skip": 5,
       "projection": {
-        "Payment": {
-          "$first": "$Payments"
+        "Rental": {
+          "$first": "$Rentals"
         },
         "Name": "$First Name"
       },
@@ -149,8 +149,11 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
-    "query": "",
-    "output": {}
+    "query": "SELECT COUNT(*) FROM customers",
+    "output": {
+      "count": true,
+      "collection": "customers"
+    }
   },
   {
     "query": "",
