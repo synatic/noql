@@ -147,29 +147,6 @@
       "limit": 100,
       "collection": "customers",
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
-  },
-  {
-    "query": "SELECT COUNT(*) FROM customers",
-    "output": {
-      "count": true,
-      "collection": "customers"
-    }
-  },
-  {
-    "query": "",
-    "output": {}
-  },
-  {
-    "query": "",
-    "output": {}
-  },
-  {
-    "query": "",
-    "output": {}
-  },
-  {
-    "query": "",
-    "output": {}
   }
 
 

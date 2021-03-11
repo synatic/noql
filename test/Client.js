@@ -58,7 +58,7 @@ describe('Client Queries', function () {
                 const tests=_queryTests.filter(q=>!!q.query&&!q.error);
                 for (const test of tests) {
                     try{
-                        const parsedQuery=SQLParser.makeMongoQuery(test.query);
+                        const parsedQuery=SQLParser.parseSQL(test.query);
                         if(parsedQuery.count){
                             const count=await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query||null);
                             console.log(`\u2714 ${test.query} ${count}`);

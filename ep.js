@@ -16,6 +16,6 @@
 
 const SQLParser = require('./lib/SQLParser.js');
 
-const r = SQLParser.makeMongoQuery("select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5");
+const r = SQLParser.parseSQL("select abs(age) as aggr from `person` where `state`='a'", 'aggregate');
 
-console.log(r)
+console.log(JSON.stringify(r, null, 2))

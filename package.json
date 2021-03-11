@@ -46,6 +46,7 @@
   "dependencies": {
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
+    "lodash": "^4.17.21",
     "node-sql-parser": "3.1.0"
   },
   "devDependencies": {
