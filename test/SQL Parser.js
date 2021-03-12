@@ -276,7 +276,7 @@ describe('SQL Parser', function () {
         });
 
         it('add', function () {
-            assert.deepStrictEqual(SQLParser.parseSQL("select sum(age) as aggr from `person` where `state`='a'", 'aggregate'), {
+            assert.deepStrictEqual(SQLParser.parseSQL("select age + 10 + 20 as aggr from `person` where `state`='a'", 'aggregate'), {
                 collections: ["person"],
                 pipeline: [
                     {
@@ -291,7 +291,14 @@ describe('SQL Parser', function () {
                     }, {
                         $project: {
                             aggr: {
-                                $add: "$age"
+                                $add: [
+                                    {
+                                        $add: [
+                                            "$age", 10
+                                        ]
+                                    },
+                                    20
+                                ]
                             }
                         }
                     }
@@ -324,7 +331,7 @@ describe('SQL Parser', function () {
         });
 
         it('divide', function () {
-            assert.deepStrictEqual(SQLParser.parseSQL("select age / 10 as aggr from `person` where `state`='a'", 'aggregate'), {
+            assert.deepStrictEqual(SQLParser.parseSQL("select age / 10 / 20 as aggr from `person` where `state`='a'", 'aggregate'), {
                 collections: ["person"],
                 pipeline: [
                     {
@@ -337,10 +344,16 @@ describe('SQL Parser', function () {
                             aggr: 1
                         }
                     }, {
-                        $group: {
-                            _id: null,
+                        $project: {
                             aggr: {
-                                $divide: "$age"
+                                $divide: [
+                                    {
+                                        $divide: [
+                                            "$age", 10
+                                        ]
+                                    },
+                                    20
+                                ]
                             }
                         }
                     }
@@ -493,7 +506,7 @@ describe('SQL Parser', function () {
         });
 
         it('multiply', function () {
-            assert.deepStrictEqual(SQLParser.parseSQL("select age * 10 as aggr from `person` where `state`='a'", 'aggregate'), {
+            assert.deepStrictEqual(SQLParser.parseSQL("select age * 10 * 20 as aggr from `person` where `state`='a'", 'aggregate'), {
                 collections: ["person"],
                 pipeline: [
                     {
@@ -508,7 +521,14 @@ describe('SQL Parser', function () {
                     }, {
                         $project: {
                             aggr: {
-                                $multiply: "$age"
+                                $multiply: [
+                                    {
+                                        $multiply: [
+                                            "$age", 10
+                                        ]
+                                    },
+                                    20
+                                ]
                             }
                         }
                     }
@@ -557,6 +577,61 @@ describe('SQL Parser', function () {
                         $project: {
                             aggr: {
                                 $round: "$age"
+                            }
+                        }
+                    }
+                ]
+            }, "Invalid parse");
+        });
+
+        it('sqrt', function () {
+            assert.deepStrictEqual(SQLParser.parseSQL("select sqrt(age) as aggr from `person` where `state`='a'", 'aggregate'), {
+                collections: ["person"],
+                pipeline: [
+                    {
+                        $match: {
+                            state: "a"
+                        }
+                    },
+                    {
+                        $projection: {
+                            aggr: 1
+                        }
+                    }, {
+                        $project: {
+                            aggr: {
+                                $sqrt: "$age"
+                            }
+                        }
+                    }
+                ]
+            }, "Invalid parse");
+        });
+
+        it('subtract', function () {
+            assert.deepStrictEqual(SQLParser.parseSQL("select age - 10 - 20 as aggr from `person` where `state`='a'", 'aggregate'), {
+                collections: ["person"],
+                pipeline: [
+                    {
+                        $match: {
+                            state: "a"
+                        }
+                    },
+                    {
+                        $projection: {
+                            aggr: 1
+                        }
+                    }, {
+                        $project: {
+                            aggr: {
+                                $subtract: [
+                                    {
+                                        $subtract: [
+                                            "$age", 10
+                                        ]
+                                    },
+                                    20
+                                ]
                             }
                         }
                     }

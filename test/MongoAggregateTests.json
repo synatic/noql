@@ -1,6 +1,43 @@
 [
   {
-    "query": "select * from `films`",
+    "query": "select abs(`Replacement Cost`) as aggr from `films`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 100
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `Replacement Cost` + 10 as aggr from `films`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 100
+        }
+      ]
+    }
+  },
+  {
+    "query": "select ceiling(`Replacement Cost`) as aggr from `films`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 100
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `Replacement Cost` / 10 / 2 as aggr from `films`",
+    "type": "aggregate",
     "output": {
       "collections": ["films"],
       "pipeline": [
@@ -10,6 +47,4 @@
       ]
     }
   }
-
-
 ]
