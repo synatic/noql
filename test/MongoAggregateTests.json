@@ -6,7 +6,11 @@
       "collections": ["films"],
       "pipeline": [
         {
-          "$limit": 100
+          "$project": {
+            "aggr": {
+              "$abs": "$age"
+            }
+          }
         }
       ]
     }
@@ -43,6 +47,88 @@
       "pipeline": [
         {
           "$limit": 100
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City` ",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$Address.City",
+            "Rentals": 1
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "City":"$City"},
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+              }
+          }
+        },
+        {
+          "$project": {
+            "City": "$_id.City",
+            "AvgRentals": 1,
+            "_id":-1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals on x=y where `First Name` like 'm%' group by `Address.City` ",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$Address.City",
+            "Rentals": 1
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "City":"$City"},
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$_id.City",
+            "AvgRentals": 1,
+            "_id":-1
+          }
         }
       ]
     }

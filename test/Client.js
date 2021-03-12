@@ -92,7 +92,7 @@ describe('Client Queries', function () {
                         const parsedQuery = SQLParser.parseSQL(test.query, test.type);
                         let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate([parsedQuery.pipeline[1]], parsedQuery.pipeline[0]);
                         results = await results.toArray()
-                        
+
                         console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
 
                     } catch (exp) {

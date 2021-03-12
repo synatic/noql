@@ -16,6 +16,9 @@
 
 const SQLParser = require('./lib/SQLParser.js');
 
-const r = SQLParser.parseSQL("select age / 10 / 20 as aggr from `person` where `state`='a'", 'aggregate');
+const r = SQLParser.parseSQL("select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' ", 'aggregate');
+
+
+
 
 console.log(JSON.stringify(r, null, 2))
