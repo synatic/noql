@@ -52,7 +52,7 @@
     }
   },
   {
-    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City` ",
+    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
       "collections": ["customers"],
@@ -83,7 +83,7 @@
           }
         },
         {
-          "$project": {
+          "$projection": {
             "City": "$_id.City",
             "AvgRentals": 1,
             "_id":-1
@@ -93,7 +93,7 @@
     }
   },
   {
-    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals on x=y where `First Name` like 'm%' group by `Address.City` ",
+    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals on x=y where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
       "collections": ["customers"],
@@ -124,7 +124,7 @@
           }
         },
         {
-          "$project": {
+          "$projection": {
             "City": "$_id.City",
             "AvgRentals": 1,
             "_id":-1
