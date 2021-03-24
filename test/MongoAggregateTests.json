@@ -93,10 +93,12 @@
     }
   },
   {
-    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals on x=y where `First Name` like 'm%' group by `Address.City`",
+    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
-      "collections": ["customers"],
+      "collections": [
+        "customers"
+      ],
       "pipeline": [
         {
           "$match": {
@@ -115,7 +117,8 @@
         {
           "$group": {
             "_id": {
-              "City":"$City"},
+              "City": "$City"
+            },
             "AvgRentals": {
               "$avg": {
                 "$size": "$Rentals"
@@ -127,10 +130,52 @@
           "$projection": {
             "City": "$_id.City",
             "AvgRentals": 1,
-            "_id":-1
+            "_id": -1
           }
         }
       ]
     }
+  },
+  {
+    "query": "select `First Name`,`Last Name`,unwind(`Rentals`) as Rental from `customers`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$unwind": "$Rentals"
+        },{
+          "$project": {
+            "First Name":1,
+            "Last Name": 1,
+            "Rental": "$Rentals"
+
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `First Name`,`Last Name`,unwind(`Rentals`) from `customers`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$unwind": "$Rentals"
+        },{
+          "$project": {
+            "First Name":1,
+            "Last Name": 1,
+            "Rental": "$Rentals"
+
+          }
+        },{
+          "$mergeObjects": ["$First Name","$Last Name","$Retnal"]
+
+        }
+      ]
+    }
   }
+
 ]
