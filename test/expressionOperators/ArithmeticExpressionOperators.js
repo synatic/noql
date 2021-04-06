@@ -2,7 +2,6 @@ class ArithmeticExpressionOperators {
   static tests = {
     abs: {
       query: "select abs(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [
@@ -19,7 +18,6 @@ class ArithmeticExpressionOperators {
 
     add: {
       query: "select `Replacement Cost` + 10 + 20 as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -41,7 +39,6 @@ class ArithmeticExpressionOperators {
 
     ceil: {
       query: "select ceiling(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -56,7 +53,6 @@ class ArithmeticExpressionOperators {
 
     divide: {
       query: "select `Replacement Cost` / 10 / 20 as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -78,7 +74,6 @@ class ArithmeticExpressionOperators {
 
     exp: {
       query: "select exp(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -93,7 +88,6 @@ class ArithmeticExpressionOperators {
 
     floor: {
       query: "select floor(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -108,7 +102,6 @@ class ArithmeticExpressionOperators {
 
     ln: {
       query: "select log(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -122,14 +115,13 @@ class ArithmeticExpressionOperators {
     },
 
     log: {
-      query: "select log(`Replacement Cost`, 2) as aggr from `films`",
-      type: "aggregate",
+      query: "select log(2, `Replacement Cost`) as aggr from `films`",
       output: {
         collections: ["films"],
         pipeline: [{
           $project: {
             aggr: {
-              // $ln: "$Replacement Cost"
+              $log: ["$Replacement Cost", 2]
             }
           }
         }]
@@ -138,7 +130,6 @@ class ArithmeticExpressionOperators {
 
     log10: {
       query: "select log10(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -153,13 +144,12 @@ class ArithmeticExpressionOperators {
 
     mod: {
       query: "select mod(`Replacement Cost`, 10) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
           $project: {
             aggr: {
-              $mod: "$Replacement Cost"
+              $mod: ["$Replacement Cost", 10]
             }
           }
         }]
@@ -168,7 +158,6 @@ class ArithmeticExpressionOperators {
 
     multiply: {
       query: "select `Replacement Cost` * 10 * 20 as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -190,13 +179,12 @@ class ArithmeticExpressionOperators {
 
     pow: {
       query: "select pow(`Replacement Cost`, 10) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
           $project: {
             aggr: {
-              $pow: "$Replacement Cost"
+              $pow: ["$Replacement Cost", 10]
             }
           }
         }]
@@ -205,13 +193,12 @@ class ArithmeticExpressionOperators {
 
     round: {
       query: "select round(`Replacement Cost`, 2) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
           $project: {
             aggr: {
-              $round: "$Replacement Cost"
+              $round: ["$Replacement Cost", 2]
             }
           }
         }]
@@ -220,7 +207,6 @@ class ArithmeticExpressionOperators {
 
     sqrt: {
       query: "select sqrt(`Replacement Cost`) as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -235,7 +221,6 @@ class ArithmeticExpressionOperators {
 
     subtract: {
       query: "select `Replacement Cost` - 10 - 20 as aggr from `films`",
-      type: "aggregate",
       output: {
         collections: ["films"],
         pipeline: [{
@@ -249,6 +234,20 @@ class ArithmeticExpressionOperators {
                 },
                 20
               ]
+            }
+          }
+        }]
+      }
+    },
+
+    trunc: {
+      query: "select trunc(`Replacement Cost`, 1) as aggr from `films`",
+      output: {
+        collections: ["films"],
+        pipeline: [{
+          $project: {
+            aggr: {
+              $trunc: ["$Replacement Cost", 1]
             }
           }
         }]

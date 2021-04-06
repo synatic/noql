@@ -10,6 +10,8 @@ const _dbName = "sql-to-mongo-test";
 const _queryTests = require('./MongoQueryTests.json');
 const _aggregateTests = require('./MongoAggregateTests.json');
 
+const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
+
 describe('Client Queries', function () {
     this.timeout(90000)
     let client;
@@ -106,6 +108,23 @@ describe('Client Queries', function () {
 
         });
 
+    });
+
+    describe('Arithmetic Expression Operators', function () {
+        for (const [key, test] of Object.entries(arithmeticExpressionOperators.tests)) {
+            it(key, async function () {
+                try {
+                    const parsedQuery = SQLParser.parseSQL(test.query, test.type);
+                    let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray()
+
+                    console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+
+                } catch (exp) {
+                    console.error(`\u2716 ${test.query} ${exp.message || ""}`);
+                }
+            });
+        }
     });
 
 });

@@ -5,7 +5,12 @@ const $equal = require('deep-equal');
 const _queryTests = require('./MongoQueryTests.json');
 const _aggregateTests = require('./MongoAggregateTests.json');
 
-const arithmeticExpressionOperators = require('./operatorExpressions/ArithmeticExpressionOperators')
+const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
+const arrayExpressionOperators = require('./expressionOperators/ArrayExpressionOperators')
+const booleanExpressionOperators = require('./expressionOperators/BooleanExpressionOperators')
+const comparisonExpressionOperators = require('./expressionOperators/ComparisonExpressionOperators')
+
+
 
 describe('SQL Parser', function () {
 
@@ -258,7 +263,6 @@ describe('SQL Parser', function () {
                 assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
             });
         }
-
         {
             // // it('should parse aggregate 1', function () {
             // //     assert.deepEqual(SQLParser.makeMongoAggregate("select state,avg(`Replacement Cost`) as avgAge from `films` group by `state`"), {
@@ -287,6 +291,30 @@ describe('SQL Parser', function () {
             // //         ]
             // //     }, "Invalid parse");
             // // });
+        }
+    });
+
+    describe('Array Expression Operators', function () {
+        for (const [key, value] of Object.entries(arrayExpressionOperators.tests)) {
+            it(key, function () {
+                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+            });
+        }
+    });
+ 
+    describe('Boolean Expression Operators', function () {
+        for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
+            it(key, function () {
+                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+            });
+        }
+    });
+
+    describe('Comparison Expression Operators', function () {
+        for (const [key, value] of Object.entries(comparisonExpressionOperators.tests)) {
+            it(key, function () {
+                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+            });
         }
     });
 });
