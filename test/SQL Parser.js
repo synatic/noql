@@ -11,8 +11,130 @@ const booleanExpressionOperators = require('./expressionOperators/BooleanExpress
 const comparisonExpressionOperators = require('./expressionOperators/ComparisonExpressionOperators')
 
 
-
 describe('SQL Parser', function () {
+
+    describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
+        it('should parse simple sql', function () {
+            let ast=SQLParser.parseSQLtoAST('select * from `collection`')
+            assert(ast.from[0].table==='collection',"Invalid from")
+        })
+
+        it('should return an ast when ast passed', function () {
+            let ast=SQLParser.parseSQLtoAST('select * from `collection`')
+            let ast2=SQLParser.parseSQLtoAST(ast)
+            assert(ast===ast2,"Invalid returns from ast")
+        })
+
+        it('should fail if no collection passed', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST('select 1');
+
+            }catch(exp){
+                return assert.equal(exp.message,"SQL statement requires at least 1 collection","Invalid error message")
+            }
+            assert(false,'No error')
+        })
+
+        it('should fail on an invalid statement', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select *  `collection`");
+
+            }catch(exp){
+                return assert.equal(exp.message,'1:11 - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GROUP", "HAVING", "LIMIT", "ORDER", "UNION", "WHERE", [ \\t\\n\\r], or end of input but "`" found.')
+            }
+            assert(false,'No error')
+        })
+
+        it('should fail on an invalid statement 2', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select * from `collection` with unwind");
+
+            }catch(exp){
+                return assert.equal(exp.message,'1:32 - Expected [A-Za-z0-9_] but " " found.')
+            }
+            assert(false,'No error')
+        })
+
+        it('should fail on no as with function', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select Name,sum(`Replacement Cost`,2)  from `films`");
+
+            }catch(exp){
+                return assert.equal(exp.message,'Requires as for function:sum')
+            }
+            assert(false,'No error')
+        })
+
+        it('should fail on no as', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select Name,a>b from `films`");
+
+            }catch(exp){
+                return assert.equal(exp.message,'Requires as for binary_expr')
+            }
+            assert(false,'No error')
+        })
+
+    })
+
+    describe('should test can query: SQLParser.canQuery', function () {
+        it('should test a simple sql', function () {
+            assert(SQLParser.canQuery('select * from `collection`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with where', function () {
+            assert(SQLParser.canQuery('select * from `collection` where a=1'), "Invalid can query")
+        })
+
+        it('should test a simple sql with names', function () {
+            assert(SQLParser.canQuery('select Title,Description from `collection`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with unwind', function () {
+            assert(!SQLParser.canQuery('select unwind(a) as b from `collection` where a=1'), "Invalid can query")
+        })
+
+        it('should test a simple sql with a group by', function () {
+            assert(!SQLParser.canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), "Invalid can query")
+        })
+
+        it('should test a simple sql with a join', function () {
+            assert(!SQLParser.canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), "Invalid can query")
+        })
+
+        it('should test a simple sql with single abs', function () {
+            assert(SQLParser.canQuery('select abs(`Replacement Cost`) as s from `films`'), "Invalid can query")
+        })
+
+
+        it('should test a simple sql with single sum', function () {
+            assert(SQLParser.canQuery('select sum(`Replacement Cost`,2) as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with single for aggregate', function () {
+            assert(!SQLParser.canQuery('select sum(`Replacement Cost`) as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with single sum', function () {
+            assert(SQLParser.canQuery('select avg(`Replacement Cost`,2) as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with single for avg', function () {
+            assert(!SQLParser.canQuery('select avg(`Replacement Cost`) as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with single for aggregate', function () {
+            assert(!SQLParser.canQuery('select count(1) as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with an expr sum', function () {
+            assert(SQLParser.canQuery('select `Replacement Cost` + 2 as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with an expr sum', function () {
+            assert(SQLParser.canQuery('select `Replacement Cost` + 2 as s from `films`'), "Invalid can query")
+        })
+    });
 
     it('should run query tests', function () {
         let results = _queryTests.map(t => {
@@ -301,7 +423,7 @@ describe('SQL Parser', function () {
             });
         }
     });
- 
+
     describe('Boolean Expression Operators', function () {
         for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
             it(key, function () {

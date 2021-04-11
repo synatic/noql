@@ -63,7 +63,7 @@
   },
   {
     "query": "select sum(`Replacement Cost`,2)  from `films`",
-    "error": "Require as for calculation:sum"
+    "error": "Requires as for function:sum"
   },
   {
     "query": "select sum(`Replacement Cost`,2) as s from `films`",
