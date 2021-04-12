@@ -11,3 +11,6 @@ Supported methods
 over
 
 case statements
+
+CTE's
+

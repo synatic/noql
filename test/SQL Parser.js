@@ -151,6 +151,15 @@ describe('SQL Parser', function () {
         it('should nt allow *,function ', function () {
             assert(!SQLParser.canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), "Invalid can query")
         })
+
+        it('should nt allow where functions ', function () {
+            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and arraySize(Rentals)<90"), "Invalid can query")
+        })
+
+        it('should nt allow where functions with complex where ', function () {
+            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)"), "Invalid can query")
+        })
+
     });
 
     it('should run query tests', function () {

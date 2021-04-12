@@ -66,7 +66,7 @@
     "error": "Requires as for function:sum"
   },
   {
-    "query": "select sum(`Replacement Cost`,2) as s from `films`",
+    "query": "select sum(`Replacement Cost`,2,id) as s from `films`",
     "output": {
       "collection": "films",
       "limit": 100,
@@ -76,7 +76,8 @@
             "$Replacement Cost",
             {
               "$literal": 2
-            }
+            },
+            "$id"
           ]
         }
       }
@@ -99,7 +100,7 @@
     }
   },
   {
-    "query": "select `First Name` as Name,first(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
+    "query": "select `First Name` as Name,arrayFirst(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
     "output": {
       "collection": "customers",
       "limit": 10,
@@ -149,11 +150,24 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
+    "output": {
+      "limit": 10,
+      "skip": 2,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+  },
+  {
     "query": "SELECT abs(id + arraySize(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
     "output": {
       "limit": 100,
       "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }},
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      },
       "projection": {
         "testComplex": {
           "$abs": {
@@ -171,36 +185,56 @@
           }
         }
       }
-  },
-  {
-    "query": "SELECT *,convert(id,'int') as idConv FROM customers",
-    "output": {
-      "limit": 100,
-      "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+    }
   },
   {
     "query": "SELECT ceiling(id + arraySize(Rentals) + 1) as testComplex FROM customers",
     "output": {
       "limit": 100,
       "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }},
-    "projection": {
-      "$ceil": {
-        "$add": [
-          {
-            "$add": [
-              "$id",
-              {
-                "$size": "$Rentals"
-              }
-            ]
-          },
-          1
-        ]
+      "projection": {
+        "testComplex": {
+        "$ceil": {
+          "$add": [
+            {
+              "$add": [
+                "$id",
+                {
+                  "$size": "$Rentals"
+                }
+              ]
+            },
+            1
+          ]
+        }
       }
     }
-  }
+    }
+  },
+  {
+    "query": "select * from `films` where id<90 and (id>10 or id=5)",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "query": {
+        "id": {
+          "$lt": 90
+        },
+        "$or": [
+          {
+            "id": {
+              "$gt": 10
+            }
+          },
+          {
+            "id": 5
+          }
+        ]
+      }
+      }
+    }
 
 
 ]
+
+
