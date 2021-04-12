@@ -1,5 +1,50 @@
 [
   {
+    "query": "select * from `films`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+
+      ]
+    }
+  },
+  {
+    "query": "select * from `films` limit 10",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 10
+        }
+      ]
+    }
+  },
+  {
+    "query": "select * from `films` limit 10 offset 5",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [
+        {
+          "$limit": 10
+        },
+        {
+          "$skip": 5
+        }
+      ]
+    }
+  },
+  {
+    "query": "select Title,Rating from `films`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [{"$project":{"Title":1,"Rating":1}}]
+    }
+  },
+  {
     "query": "select abs(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
     "output": {
@@ -8,7 +53,7 @@
         {
           "$project": {
             "aggr": {
-              "$abs": "$age"
+              "$abs": "$Replacement Cost"
             }
           }
         }
@@ -20,11 +65,7 @@
     "type": "aggregate",
     "output": {
       "collections": ["films"],
-      "pipeline": [
-        {
-          "$limit": 100
-        }
-      ]
+      "pipeline": [{"$project":{"aggr":{"$add":["$Replacement Cost",10]}}}]
     }
   },
   {

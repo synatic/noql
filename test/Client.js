@@ -58,6 +58,7 @@ describe('Client Queries', function () {
         it('run query tests', function (done) {
             (async () => {
                 const tests = _queryTests.filter(q => !!q.query && !q.error);
+                let errors=0;
                 for (const test of tests) {
                     try {
                         const parsedQuery = SQLParser.parseSQL(test.query);
@@ -76,11 +77,12 @@ describe('Client Queries', function () {
                             console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
                         }
                     } catch (exp) {
+                        errors++;
                         console.error(`\u2716 ${test.query} ${exp.message || ""}`);
                     }
 
                 }
-                done();
+                done(errors>0?"Error exeucting queries":null);
             })()
 
 
@@ -89,6 +91,7 @@ describe('Client Queries', function () {
         it('run aggregate tests', function (done) {
             (async () => {
                 const tests = _aggregateTests.filter(q => !!q.query && !q.error);
+                let errors=0;
                 for (const test of tests) {
                     try {
                         const parsedQuery = SQLParser.parseSQL(test.query, test.type);
@@ -98,11 +101,12 @@ describe('Client Queries', function () {
                         console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
 
                     } catch (exp) {
+                        errors++;
                         console.error(`\u2716 ${test.query} ${exp.message || ""}`);
                     }
 
                 }
-                done();
+                done(errors>0?"Error exeucting queries":null);
             })()
 
 
