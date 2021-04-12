@@ -65,12 +65,22 @@ describe('SQL Parser', function () {
             assert(false,'No error')
         })
 
-        it('should fail on no as', function () {
+        it('should fail on no as with binary expr', function () {
             try{
                 let ast=SQLParser.parseSQLtoAST("select Name,a>b from `films`");
 
             }catch(exp){
                 return assert.equal(exp.message,'Requires as for binary_expr')
+            }
+            assert(false,'No error')
+        })
+
+        it('should fail on no as with aggr func', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select sum(a) from `films`");
+
+            }catch(exp){
+                return assert.equal(exp.message,'Requires as for aggr_func:SUM')
             }
             assert(false,'No error')
         })
@@ -104,16 +114,15 @@ describe('SQL Parser', function () {
 
         it('should test a simple sql with single abs', function () {
             assert(SQLParser.canQuery('select abs(`Replacement Cost`) as s from `films`'), "Invalid can query")
-        })
-
+        });
 
         it('should test a simple sql with single sum', function () {
             assert(SQLParser.canQuery('select sum(`Replacement Cost`,2) as s from `films`'), "Invalid can query")
-        })
+        });
 
         it('should test a simple sql with single for aggregate', function () {
             assert(!SQLParser.canQuery('select sum(`Replacement Cost`) as s from `films`'), "Invalid can query")
-        })
+        });
 
         it('should test a simple sql with single sum', function () {
             assert(SQLParser.canQuery('select avg(`Replacement Cost`,2) as s from `films`'), "Invalid can query")
@@ -133,6 +142,14 @@ describe('SQL Parser', function () {
 
         it('should test a simple sql with an expr sum', function () {
             assert(SQLParser.canQuery('select `Replacement Cost` + 2 as s from `films`'), "Invalid can query")
+        })
+
+        it('should test a simple sql with a convert', function () {
+            assert(SQLParser.canQuery('select convert(`Replacement Cost`) as s from `films`'), "Invalid can query")
+        })
+
+        it('should nt allow *,function ', function () {
+            assert(!SQLParser.canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), "Invalid can query")
         })
     });
 

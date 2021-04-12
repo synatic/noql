@@ -147,6 +147,13 @@
       "limit": 100,
       "collection": "customers",
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+  },
+  {
+    "query": "SELECT *,convert(id,'int') as idConv FROM customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   }
 
 
