@@ -149,11 +149,57 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
+    "query": "SELECT abs(id + arraySize(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }},
+      "projection": {
+        "testComplex": {
+          "$abs": {
+            "$add": [
+              {
+                "$add": [
+                  "$id",
+                  {
+                    "$size": "$Rentals"
+                  }
+                ]
+              },
+              1
+            ]
+          }
+        }
+      }
+  },
+  {
     "query": "SELECT *,convert(id,'int') as idConv FROM customers",
     "output": {
       "limit": 100,
       "collection": "customers",
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+  },
+  {
+    "query": "SELECT ceiling(id + arraySize(Rentals) + 1) as testComplex FROM customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }},
+    "projection": {
+      "$ceil": {
+        "$add": [
+          {
+            "$add": [
+              "$id",
+              {
+                "$size": "$Rentals"
+              }
+            ]
+          },
+          1
+        ]
+      }
+    }
   }
 
 
