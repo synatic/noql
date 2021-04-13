@@ -29,6 +29,16 @@
     }
   },
   {
+    "query": "SELECT * FROM customers WHERE `Address.Country`='Japan' ORDER BY id desc",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "query": { "Address.Country": "Japan" },
+      "sort": { "id" : -1 }
+    }
+
+  },
+  {
     "query": "select `Replacement Value` as Value,Description from `films`",
     "output": {
       "collection": "films",

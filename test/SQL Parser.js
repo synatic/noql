@@ -350,18 +350,7 @@ describe('SQL Parser', function () {
         }, "Invalid parse");
 
 
-        assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE user_id like "bc%"`), {
-            limit: 100,
-            collection: 'people',
-            query: { user_id: { '$regex': "^bc", '$options': 'i' } }
-        }, "Invalid parse");
 
-        assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" ORDER BY user_id ASC`), {
-            limit: 100,
-            collection: 'people',
-            query: { status: 'A' },
-            sort: { user_id: 1 }
-        }, "Invalid parse");
     });
 
     describe('Arithmetic Expression Operators', function () {
@@ -369,7 +358,7 @@ describe('SQL Parser', function () {
             it(key, function () {
                 assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
                 if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
                 }
             });
         }
@@ -380,7 +369,7 @@ describe('SQL Parser', function () {
             it(key, function () {
                 assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
                 if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
                 }
             });
         }
@@ -391,7 +380,7 @@ describe('SQL Parser', function () {
             it(key, function () {
                 assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
                 if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
                 }
             });
         }
@@ -402,7 +391,7 @@ describe('SQL Parser', function () {
             it(key, function () {
                 assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
                 if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
                 }
             });
         }

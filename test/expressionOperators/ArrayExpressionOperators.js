@@ -71,7 +71,7 @@ class ArrayExpressionOperators {
     },
 
     first: {
-      query: "select first(`Actors`) as aggr from `films`",
+      query: "select arrayFirst(`Actors`) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [
@@ -83,7 +83,17 @@ class ArrayExpressionOperators {
             }
           }
         ]
-      }
+      },
+        queryOutput: {
+            collection: "films",
+            limit:100,
+            projection: {
+                aggr: {
+                    $first: "$Actors"
+                }
+
+            }
+        }
     },
 
     in: {
@@ -235,7 +245,7 @@ class ArrayExpressionOperators {
     },
 
     size: {
-      query: "select size(`Actors`) as aggr from `films`",
+      query: "select arraySize(`Actors`) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [
@@ -251,7 +261,7 @@ class ArrayExpressionOperators {
     },
 
     slice: {
-      query: "select slice(`Actors`, 2) as aggr from `films`",
+      query: "select arraySlice(`Actors`, 2) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [
@@ -269,7 +279,7 @@ class ArrayExpressionOperators {
     },
 
     zip: {
-      query: "select zip(`Actors`, `Actors`) as aggr from `films`",
+      query: "select arrayZip(`Actors`, `Actors`) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [
