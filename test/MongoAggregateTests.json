@@ -71,29 +71,15 @@
   {
     "query": "select ceiling(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
-    "output": {
-      "collections": ["films"],
-      "pipeline": [
-        {
-          "$limit": 100
-        }
-      ]
-    }
+    "output": {"pipeline":[{"$project":{"aggr":{"$ceil":"$Replacement Cost"}}}],"collections":["films"]}
   },
   {
     "query": "select `Replacement Cost` / 10 / 2 as aggr from `films`",
     "type": "aggregate",
-    "output": {
-      "collections": ["films"],
-      "pipeline": [
-        {
-          "$limit": 100
-        }
-      ]
-    }
+    "output": {"pipeline":[{"$project":{"aggr":{"$divide":[{"$divide":["$Replacement Cost",10]},2]}}}],"collections":["films"]}
   },
   {
-    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
+    "query": "select `Address.City` as City,avg(arraySize(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
       "collections": ["customers"],
@@ -107,27 +93,89 @@
           }
         },
         {
-          "$project": {
-            "City": "$Address.City",
-            "Rentals": 1
-          }
-        },
-        {
           "$group": {
-            "_id": {
-              "City":"$City"},
+            "_id": {"City":"$Address.City"},
             "AvgRentals": {
               "$avg": {
                 "$size": "$Rentals"
               }
-              }
+            }
           }
         },
         {
-          "$projection": {
+          "$project": {
             "City": "$_id.City",
             "AvgRentals": 1,
-            "_id":-1
+            "_id":0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select  `Address.Country` as Country,avg(arraySize(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {"City":"$Address.Country"},
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Country": "$_id.Country",
+            "AvgRentals": 1,
+            "_id":0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select  `Address.Country` as Country,`Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
+    "type": "aggregate",
+    "output": {
+      "collections": ["customers"],
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {"Country":"$Address.Country","City":"$Address.City"},
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Country": "$_id.Country",
+            "City": "$_id.City",
+            "AvgRentals": 1,
+            "_id":0
           }
         }
       ]
@@ -192,28 +240,6 @@
             "Rental": "$Rentals"
 
           }
-        }
-      ]
-    }
-  },
-  {
-    "query": "select `First Name`,`Last Name`,unwind(`Rentals`) from `customers`",
-    "type": "aggregate",
-    "output": {
-      "collections": ["customers"],
-      "pipeline": [
-        {
-          "$unwind": "$Rentals"
-        },{
-          "$project": {
-            "First Name":1,
-            "Last Name": 1,
-            "Rental": "$Rentals"
-
-          }
-        },{
-          "$mergeObjects": ["$First Name","$Last Name","$Retnal"]
-
         }
       ]
     }

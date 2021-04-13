@@ -94,7 +94,7 @@ describe('Client Queries', function () {
                 let errors=0;
                 for (const test of tests) {
                     try {
-                        const parsedQuery = SQLParser.parseSQL(test.query, test.type);
+                        const parsedQuery = SQLParser.makeMongoAggregate(test.query);
                         let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                         results = await results.toArray()
 
