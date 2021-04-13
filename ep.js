@@ -125,4 +125,10 @@ const SQLParser = require('./lib/SQLParser.js');
 // FROM holidays
 // WHERE year = 2018)`, 'aggregate')
 
+
+// r = SQLParser.parseSQL("select (log10(3) * floor(a) + 1) as s from collection")
+// r = SQLParser.parseSQL("select cast(123 as Int) as s from collection")
+r = SQLParser.parseSQL("SELECT *, convert(id, int) as idConv FROM customers")
+// r = SQLParser.parseSQL("select count(*) as theCount from collection")
+
 console.log(JSON.stringify(r, null, 2))
