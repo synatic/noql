@@ -245,7 +245,7 @@ class ArrayExpressionOperators {
     },
 
     size: {
-      query: "select arraySize(`Actors`) as aggr from `films`",
+      query: "select arrayLength(`Actors`) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [

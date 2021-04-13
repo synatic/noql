@@ -154,15 +154,15 @@ describe('SQL Parser', function () {
         })
 
         it('should nt allow where functions ', function () {
-            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and arraySize(Rentals)<90"), "Invalid can query")
+            assert(!SQLParser.canQuery(" select * from `films` where arrayLength(Rentals)>10 and arrayLength(Rentals)<90"), "Invalid can query")
         })
 
         it('should nt allow where functions with complex where ', function () {
-            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)"), "Invalid can query")
+            assert(!SQLParser.canQuery(" select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)"), "Invalid can query")
         })
 
         it('should not allow with sub query ', function () {
-            assert(!SQLParser.canQuery(" select * from (select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)) as t"), "Invalid can query")
+            assert(!SQLParser.canQuery(" select * from (select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)) as t"), "Invalid can query")
         })
 
     });
@@ -172,18 +172,22 @@ describe('SQL Parser', function () {
             it(t.query,function(){
                 if (t.error) {
                     try {
-                        SQLParser.parseSQL(t.query);
+                        SQLParser.makeMongoQuery(t.query);
                         assert(false,'No error')
                     } catch (exp) {
                         assert.equal(exp.message,t.error)
                     }
                 } else {
+                    let err=null;
+                    let parsedQuery;
                     try {
-                        let parsedQuery = SQLParser.parseSQL(t.query);
-                        assert($equal(t.output, parsedQuery),JSON.stringify(parsedQuery))
+                        parsedQuery = SQLParser.makeMongoQuery(t.query);
+
                     } catch (exp) {
-                        assert(false,exp.message)
+                        err=exp.message;
                     }
+                    assert(!err,err)
+                    assert.deepEqual(t.output, parsedQuery,"Invalid parse")
 
                 }
             })
@@ -219,15 +223,6 @@ describe('SQL Parser', function () {
 
     });
 
-    it('should parse plain query', function () {
-
-        assert.throws(() => { SQLParser.parseSQL("select sum(cnt) from `global-test`") }, Error, "Invalid parse");
-
-        assert.throws(() => { SQLParser.parseSQL("select case when x=1 then 1 else 0 end as d from `global-test`") }, Error, "Invalid parse");
-
-        assert.throws(() => { SQLParser.parseSQL("select subtract(convert('1','int'),abs(`a`)) from `global-test`") }, Error, "Invalid parse");
-
-    });
 
     it('should parse plain query 2', function () {
         assert.deepEqual(SQLParser.parseSQL("select `a.b` as Id ,Name from `global-test` where `a.b`>1"), {

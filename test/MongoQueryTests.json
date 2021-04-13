@@ -168,7 +168,7 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
-    "query": "SELECT abs(id + arraySize(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
+    "query": "SELECT abs(id + arrayLength(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -198,7 +198,7 @@
     }
   },
   {
-    "query": "SELECT ceiling(id + arraySize(Rentals) + 1) as testComplex FROM customers",
+    "query": "SELECT ceiling(id + arrayLength(Rentals) + 1) as testComplex FROM customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -242,9 +242,59 @@
         ]
       }
       }
+    },
+  {
+    "query": "select sum(id) as d from `customers`",
+    "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
+  },
+  {
+    "query": "select id,`First Name`,`Last Name`,arraySum(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":1,
+        "First Name":1,
+        "Last Name":1,
+        "totalPayments":{
+          "$reduce":{
+          "input": "$Rentals",
+          "initialValue": 0,
+          "in": {
+            "$sum": ["$$value",{
+              "$reduce":{
+                "input": "$$this.Payments",
+                "initialValue": 0,
+                "in": {
+                  "$sum": ["$$value", "$$this.Amount" ]
+                }
+              }
+            }]}
+        }
+        }
+      }
     }
-
-
+  },
+  {
+    "query": "select id,`First Name`,`Last Name`,arraySum(`Rentals`,'filmId') as totalIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":1,
+        "First Name":1,
+        "Last Name":1,
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  }
 ]
 
 
