@@ -15,7 +15,7 @@ describe('SQL Parser', function () {
 
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
         it('should parse simple sql', function () {
-            let ast=SQLParser.parseSQLtoAST('select * from `collection`')
+            let {ast}=SQLParser.parseSQLtoAST('select * from `collection`')
             assert(ast.from[0].table==='collection',"Invalid from")
         })
 
@@ -84,6 +84,7 @@ describe('SQL Parser', function () {
             }
             assert(false,'No error')
         })
+
 
     })
 
@@ -158,6 +159,10 @@ describe('SQL Parser', function () {
 
         it('should nt allow where functions with complex where ', function () {
             assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)"), "Invalid can query")
+        })
+
+        it('should not allow with sub query ', function () {
+            assert(!SQLParser.canQuery(" select * from (select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)) as t"), "Invalid can query")
         })
 
     });

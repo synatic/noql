@@ -231,16 +231,7 @@
     "output": {
       "collections": ["customers"],
       "pipeline": [
-        {
-          "$unwind": "$Rentals"
-        },{
-          "$project": {
-            "First Name":1,
-            "Last Name": 1,
-            "Rental": "$Rentals"
-
-          }
-        }
+        {"$unwind":"$Rentals"},{"$project":{"First Name":1,"Last Name":1,"Rental":"$Rentals"}}
       ]
     }
   }
