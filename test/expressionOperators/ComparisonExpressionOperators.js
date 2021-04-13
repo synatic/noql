@@ -2,7 +2,7 @@ class ComparisonExpressionOperators {
   static tests = {
     cmp: {
       query: "select cmp(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -20,7 +20,7 @@ class ComparisonExpressionOperators {
 
     eq: {
       query: "select eq(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -38,7 +38,7 @@ class ComparisonExpressionOperators {
 
     gt: {
       query: "select gt(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -56,7 +56,7 @@ class ComparisonExpressionOperators {
 
     gte: {
       query: "select gte(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -71,10 +71,10 @@ class ComparisonExpressionOperators {
         ]
       }
     },
-    
+
     lt: {
       query: "select lt(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -89,10 +89,10 @@ class ComparisonExpressionOperators {
         ]
       }
     },
-    
+
     lte: {
       query: "select lte(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -107,10 +107,10 @@ class ComparisonExpressionOperators {
         ]
       }
     },
-    
+
     ne: {
       query: "select ne(`Replacement Cost`, 29) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {

@@ -167,101 +167,55 @@ describe('SQL Parser', function () {
 
     });
 
-    it('should run query tests', function () {
-        let results = _queryTests.map(t => {
-            if (t.error) {
-                try {
-                    SQLParser.parseSQL(t.query);
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: "Error condition not met"
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: exp.message === t.error,
-                        error: exp.message !== t.error ? `${exp.message} != ${t.error}` : null
-                    };
+    describe('should run query tests', function () {
+        for(let t of _queryTests) {
+            it(t.query,function(){
+                if (t.error) {
+                    try {
+                        SQLParser.parseSQL(t.query);
+                        assert(false,'No error')
+                    } catch (exp) {
+                        assert.equal(exp.message,t.error)
+                    }
+                } else {
+                    try {
+                        let parsedQuery = SQLParser.parseSQL(t.query);
+                        assert($equal(t.output, parsedQuery),JSON.stringify(parsedQuery))
+                    } catch (exp) {
+                        assert(false,exp.message)
+                    }
+
                 }
-            } else {
-                try {
-                    let parsedQuery = SQLParser.parseSQL(t.query);
-                    return {
-                        query: t.query,
-                        passed: $equal(t.output, parsedQuery),
-                        error: !$equal(t.output, parsedQuery) ? JSON.stringify(parsedQuery) : null
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: exp.message
-                    };
-                }
+            })
 
-            }
-        });
 
-        results.forEach(r => {
-            if (r.passed) {
-                console.log(`\u2714 ${r.query}`);
-            } else {
-                console.error(`\u2716 ${r.query} ${r.error || ""}`);
-            }
-
-        })
-
-        assert.equal(results.filter(r => !r.passed).length, 0, "Mongo Query parsing errors")
+        }
 
     });
 
-    it('should run aggregate tests', function () {
-        let results = _aggregateTests.map(t => {
-            if (t.error) {
-                try {
-                    SQLParser.makeMongoAggregate(t.query);
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: "Error condition not met"
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: exp.message === t.error,
-                        error: exp.message !== t.error ? `${exp.message} != ${t.error}` : null
-                    };
+    describe('should run aggregate tests', function () {
+        for(let t of _aggregateTests) {
+            it(t.query,function(){
+                if (t.error) {
+                    try {
+                        SQLParser.parseSQL(t.query);
+                        assert(false,'No error')
+                    } catch (exp) {
+                        assert.equal(exp.message,t.error)
+                    }
+                } else {
+                    try {
+                        let parsedQuery = SQLParser.makeMongoAggregate(t.query);
+                        assert($equal(t.output, parsedQuery),JSON.stringify(parsedQuery))
+                    } catch (exp) {
+                        assert(false,exp.message)
+                    }
+
                 }
-            } else {
-                try {
-                    let parsedQuery = SQLParser.makeMongoAggregate(t.query);
-                    return {
-                        query: t.query,
-                        passed: $equal(t.output, parsedQuery),
-                        error: !$equal(t.output, parsedQuery) ? JSON.stringify(parsedQuery) : null
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: exp.message
-                    };
-                }
+            })
 
-            }
-        });
 
-        results.forEach(r => {
-            if (r.passed) {
-                console.log(`\u2714 ${r.query}`);
-            } else {
-                console.error(`\u2716 ${r.query} ${r.error || ""}`);
-            }
-
-        })
-
-        assert.equal(results.filter(r => !r.passed).length, 0, "Mongo Query parsing errors")
+        }
 
     });
 
@@ -413,44 +367,21 @@ describe('SQL Parser', function () {
     describe('Arithmetic Expression Operators', function () {
         for (const [key, value] of Object.entries(arithmeticExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                }
             });
-        }
-        {
-            // // it('should parse aggregate 1', function () {
-            // //     assert.deepEqual(SQLParser.makeMongoAggregate("select state,avg(`Replacement Cost`) as avgAge from `films` group by `state`"), {
-            // //         "collections": ["films"],
-            // //         pipeline: [
-            // //             {
-            // //                 $match: {
-            // //                     state: "a"
-            // //                 }
-            // //             },
-            // //             {
-
-            // //                 $group: {
-            // //                     _id: { state: "$state" },
-            // //                     avgAge: {
-            // //                         $avg: "$age"
-            // //                     }
-            // //                 }
-            // //             }, {
-            // //                 $projection: {
-            // //                     "state": "$_id.state",
-            // //                     avgAge: 1,
-            // //                     _id: -1
-            // //                 }
-            // //             }
-            // //         ]
-            // //     }, "Invalid parse");
-            // // });
         }
     });
 
     describe('Array Expression Operators', function () {
         for (const [key, value] of Object.entries(arrayExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                }
             });
         }
     });
@@ -458,7 +389,10 @@ describe('SQL Parser', function () {
     describe('Boolean Expression Operators', function () {
         for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                }
             });
         }
     });
@@ -466,7 +400,10 @@ describe('SQL Parser', function () {
     describe('Comparison Expression Operators', function () {
         for (const [key, value] of Object.entries(comparisonExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.aggregateOutput, "Invalid parse");
+                }
             });
         }
     });
