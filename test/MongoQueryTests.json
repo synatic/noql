@@ -248,7 +248,7 @@
     "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
   },
   {
-    "query": "select id,`First Name`,`Last Name`,arraySum(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
+    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -276,7 +276,7 @@
     }
   },
   {
-    "query": "select id,`First Name`,`Last Name`,arraySum(`Rentals`,'filmId') as totalIdRentals from customers",
+    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,'filmId') as totalIdRentals from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -296,7 +296,7 @@
     }
   },
   {
-    "query": "select arraySum((select arraySum(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
+    "query": "select sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -306,14 +306,26 @@
     }
   },
   {
-    "query": "select id,(select `Film Title` as Title,arraySum(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
+    "query": "select id,(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
       "projection": {"id":1,"Rentals":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}
 
     }
+  },
+  {
+    "query": "select id,firstInArray(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rental from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"id":1,"Rental":{"$first":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}}
+
+
+
+    }
   }
+
 
 
 

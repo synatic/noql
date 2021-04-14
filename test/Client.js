@@ -54,7 +54,6 @@ describe('Client Queries', function () {
         });
     });
 
-
         describe('run query tests', function (done) {
             (async () => {
                 const tests = _queryTests.filter(q => !!q.query && !q.error);

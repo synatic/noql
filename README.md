@@ -1,22 +1,42 @@
 # sql-to-mongo
-Converts SQL queries to Mongo find or aggregation pipelines
+Converts SQL Queries to Mongo find statements or aggregation pipelines
 
-Requires as for functions and sub queries
+
 
 
 Supported methods
 
 
 
+###Notes
+As with monogo, case sensitive
+
+Requires as for functions and sub queries
+
+``
+select 
+``
+
 ###Array Methods
+use sub-select to query array fields in collections
+``
+ select (select * from ArrayField) as t from `customers`
+``
+####sumArray
+Sums the values in an array given an array field or sub-select and the field to sum
 
-use select subquery (select * from ArrayField)
+``
+select sumArray(`Rentals`,'fileId') as totalFileIds from `customers`
+``
 
-####arraySum
-####arrayFirst
-####arrayLast
-####arraySort
-####arraySlice
+e.g. with sub select
+
+``
+select id,`First Name`,`Last Name`,sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers
+``
+
+####firstInArray
+####lastInArray
 
 
 ## Unsupported
@@ -26,3 +46,4 @@ case statements
 
 CTE's
 
+##Mongo Example Usage
