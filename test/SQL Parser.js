@@ -202,19 +202,21 @@ describe('SQL Parser', function () {
             it(t.query,function(){
                 if (t.error) {
                     try {
-                        SQLParser.parseSQL(t.query);
+                        SQLParser.makeMongoAggregate(t.query);
                         assert(false,'No error')
                     } catch (exp) {
                         assert.equal(exp.message,t.error)
                     }
                 } else {
+                    let err=null;
+                    let parsedQuery;
                     try {
-                        let parsedQuery = SQLParser.makeMongoAggregate(t.query);
-                        assert($equal(t.output, parsedQuery),JSON.stringify(parsedQuery))
+                        parsedQuery = SQLParser.makeMongoAggregate(t.query);
                     } catch (exp) {
-                        assert(false,exp.message)
+                        err=exp.message;
                     }
-
+                    assert(!err,err)
+                    assert.deepEqual(t.output, parsedQuery,"Invalid parse")
                 }
             })
 
