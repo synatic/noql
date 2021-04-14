@@ -103,7 +103,11 @@
       }
     }
   },
+  {
+    "query": "select cast(1+`id` as varchar) as `id` from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":{"$convert":{"input":{"$add":[1,"$id"]},"to":"string"}}}}
 
+  },
 
   {
     "query": "select sum(`Replacement Cost`,2)  from `films`",
