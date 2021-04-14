@@ -72,6 +72,40 @@
     }
   },
   {
+    "query": "select cast(abs(`id`) as decimal) as `id` from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": {
+          "$convert": {
+            "input": {
+              "$abs": "$id"
+            },
+            "to": "decimal"
+          }
+        }
+      }
+    }
+  },
+  {
+    "query": "select cast('123' as int) as `id` from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": {
+          "$convert": {
+            "input": "123",
+            "to": "int"
+          }
+        }
+      }
+    }
+  },
+
+
+  {
     "query": "select sum(`Replacement Cost`,2)  from `films`",
     "error": "Requires as for function:sum"
   },
@@ -129,29 +163,9 @@
   },
   {
     "query": "select subtract(convert('1','int'),abs(`Replacement Cost`)) as d,Title from `films`",
-    "output": {
-      "collection": "films",
-      "limit": 100,
-      "projection": {
-        "Title": 1,
-        "d": {
-          "$subtract": [
-            {
-              "$convert": {
-                "input": {
-                  "$literal": "1"
-                },
-                "to": "int"
-              }
-            },
-            {
-              "$abs": "$Replacement Cost"
-            }
-          ]
-        }
-      }
-    }
-  },
+    "output": {"limit":100,"collection":"films","projection":{"d":{"$subtract":[{"$convert":{"input":{"$literal":"1"},"to":"int"}},{"$abs":"$Replacement Cost"}]},"Title":1}}
+
+    },
   {
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
     "output": {

@@ -187,7 +187,7 @@ describe('SQL Parser', function () {
                         err=exp.message;
                     }
                     assert(!err,err)
-                    assert.deepEqual(t.output, parsedQuery,"Invalid parse")
+                    assert.deepEqual(parsedQuery,t.output,"Invalid parse")
 
                 }
             })
@@ -216,7 +216,7 @@ describe('SQL Parser', function () {
                         err=exp.message;
                     }
                     assert(!err,err)
-                    assert.deepEqual(t.output, parsedQuery,"Invalid parse")
+                    assert.deepEqual(parsedQuery,t.output,"Invalid parse")
                 }
             })
 
