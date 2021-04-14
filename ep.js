@@ -128,7 +128,9 @@ const SQLParser = require('./lib/SQLParser.js');
 
 // r = SQLParser.parseSQL("select (log10(3) * floor(a) + 1) as s from collection")
 // r = SQLParser.parseSQL("select cast(123 as Int) as s from collection")
-r = SQLParser.parseSQL("SELECT *, convert(id, int) as idConv FROM customers")
+// r = SQLParser.parseSQL("SELECT *, convert(id, int) as idConv FROM customers")
 // r = SQLParser.parseSQL("select count(*) as theCount from collection")
+r = SQLParser.parseSQL("select * from (select id,First Name,Last Name,arrayLength(Rentals,'id') as rentalCount from customers) as t")
+// r = SQLParser.parseSQL("select id, `First Name`,`Last Name`,sumArray(Rentals,filmId) as totalIdRentals from customers")
 
 console.log(JSON.stringify(r, null, 2))
