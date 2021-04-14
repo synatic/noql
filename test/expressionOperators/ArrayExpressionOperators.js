@@ -2,7 +2,7 @@ class ArrayExpressionOperators {
   static tests = {
     arrayElemAt: {
       query: "select arrayElemAt(`Actors`, 0) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -20,7 +20,7 @@ class ArrayExpressionOperators {
 
     arrayToObject: {
       query: "select arrayToObject(`Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -36,7 +36,7 @@ class ArrayExpressionOperators {
 
     concatArrays: {
       query: "select concatArrays(`Actors`, `Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -54,7 +54,7 @@ class ArrayExpressionOperators {
 
     filter: {
       query: "select filter(`Actors`, `Acts`, ) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -71,8 +71,8 @@ class ArrayExpressionOperators {
     },
 
     first: {
-      query: "select first(`Actors`) as aggr from `films`",
-      output: {
+      query: "select arrayFirst(`Actors`) as aggr from `films`",
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -83,12 +83,22 @@ class ArrayExpressionOperators {
             }
           }
         ]
-      }
+      },
+        queryOutput: {
+            collection: "films",
+            limit:100,
+            projection: {
+                aggr: {
+                    $first: "$Actors"
+                }
+
+            }
+        }
     },
 
     in: {
       query: "select in(123, `Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -106,14 +116,14 @@ class ArrayExpressionOperators {
 
     indexOfArray: {
       query: "select indexOfArray(`Actors`, 123) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
             $project: {
               aggr: {
                 $indexOfArray: [
-                  "$Actors", 123 
+                  "$Actors", 123
                 ]
               }
             }
@@ -124,7 +134,7 @@ class ArrayExpressionOperators {
 
     isArray: {
       query: "select isArray(`Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -140,7 +150,7 @@ class ArrayExpressionOperators {
 
     last: {
       query: "select last(`Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -156,7 +166,7 @@ class ArrayExpressionOperators {
 
     map: {
       query: "select map(`Actors`, ) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -172,7 +182,7 @@ class ArrayExpressionOperators {
 
     objectToArray: {
       query: "select objectToArray(`Address`) as aggr from `customers`",
-      output: {
+      aggregateOutput: {
         collections: ["customers"],
         pipeline: [
           {
@@ -188,7 +198,7 @@ class ArrayExpressionOperators {
 
     range: {
       query: "select range(`Address`, ) as aggr from `customers`",
-      output: {
+      aggregateOutput: {
         collections: ["customers"],
         pipeline: [
           {
@@ -204,7 +214,7 @@ class ArrayExpressionOperators {
 
     reduce: {
       query: "select reduce(`Address`, ) as aggr from `customers`",
-      output: {
+      aggregateOutput: {
         collections: ["customers"],
         pipeline: [
           {
@@ -220,7 +230,7 @@ class ArrayExpressionOperators {
 
     reverseArray: {
       query: "select reverseArray(`Actors`) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -235,8 +245,8 @@ class ArrayExpressionOperators {
     },
 
     size: {
-      query: "select size(`Actors`) as aggr from `films`",
-      output: {
+      query: "select arrayLength(`Actors`) as aggr from `films`",
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -251,8 +261,8 @@ class ArrayExpressionOperators {
     },
 
     slice: {
-      query: "select slice(`Actors`, 2) as aggr from `films`",
-      output: {
+      query: "select arraySlice(`Actors`, 2) as aggr from `films`",
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -269,8 +279,8 @@ class ArrayExpressionOperators {
     },
 
     zip: {
-      query: "select zip(`Actors`, `Actors`) as aggr from `films`",
-      output: {
+      query: "select arrayZip(`Actors`, `Actors`) as aggr from `films`",
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {

@@ -2,7 +2,7 @@ class BooleanExpressionOperators {
   static tests = {
     and: {
       query: "select and(true, 0) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -16,11 +16,11 @@ class BooleanExpressionOperators {
           }
         ]
       }
-    }, 
+    },
 
     not: {
       query: "select not(true, 0) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {
@@ -34,11 +34,11 @@ class BooleanExpressionOperators {
           }
         ]
       }
-    }, 
+    },
 
     or: {
       query: "select or(true, 0) as aggr from `films`",
-      output: {
+      aggregateOutput: {
         collections: ["films"],
         pipeline: [
           {

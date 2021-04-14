@@ -15,7 +15,7 @@ describe('SQL Parser', function () {
 
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
         it('should parse simple sql', function () {
-            let ast=SQLParser.parseSQLtoAST('select * from `collection`')
+            let {ast}=SQLParser.parseSQLtoAST('select * from `collection`')
             assert(ast.from[0].table==='collection',"Invalid from")
         })
 
@@ -85,6 +85,7 @@ describe('SQL Parser', function () {
             assert(false,'No error')
         })
 
+
     })
 
     describe('should test can query: SQLParser.canQuery', function () {
@@ -153,122 +154,75 @@ describe('SQL Parser', function () {
         })
 
         it('should nt allow where functions ', function () {
-            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and arraySize(Rentals)<90"), "Invalid can query")
+            assert(!SQLParser.canQuery(" select * from `films` where arrayLength(Rentals)>10 and arrayLength(Rentals)<90"), "Invalid can query")
         })
 
         it('should nt allow where functions with complex where ', function () {
-            assert(!SQLParser.canQuery(" select * from `films` where arraySize(Rentals)>10 and (id=10 or arraySize(Rentals)<90)"), "Invalid can query")
+            assert(!SQLParser.canQuery(" select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)"), "Invalid can query")
+        })
+
+        it('should not allow with sub query ', function () {
+            assert(!SQLParser.canQuery(" select * from (select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)) as t"), "Invalid can query")
         })
 
     });
 
-    it('should run query tests', function () {
-        let results = _queryTests.map(t => {
-            if (t.error) {
-                try {
-                    SQLParser.parseSQL(t.query);
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: "Error condition not met"
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: exp.message === t.error,
-                        error: exp.message !== t.error ? `${exp.message} != ${t.error}` : null
-                    };
+    describe('should run query tests', function () {
+        for(let t of _queryTests) {
+            it(t.query,function(){
+                if (t.error) {
+                    try {
+                        SQLParser.makeMongoQuery(t.query);
+                        assert(false,'No error')
+                    } catch (exp) {
+                        assert.equal(exp.message,t.error)
+                    }
+                } else {
+                    let err=null;
+                    let parsedQuery;
+                    try {
+                        parsedQuery = SQLParser.makeMongoQuery(t.query);
+
+                    } catch (exp) {
+                        err=exp.message;
+                    }
+                    assert(!err,err)
+                    assert.deepEqual(t.output, parsedQuery,"Invalid parse")
+
                 }
-            } else {
-                try {
-                    let parsedQuery = SQLParser.parseSQL(t.query);
-                    return {
-                        query: t.query,
-                        passed: $equal(t.output, parsedQuery),
-                        error: !$equal(t.output, parsedQuery) ? JSON.stringify(parsedQuery) : null
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: exp.message
-                    };
-                }
+            })
 
-            }
-        });
 
-        results.forEach(r => {
-            if (r.passed) {
-                console.log(`\u2714 ${r.query}`);
-            } else {
-                console.error(`\u2716 ${r.query} ${r.error || ""}`);
-            }
-
-        })
-
-        assert.equal(results.filter(r => !r.passed).length, 0, "Mongo Query parsing errors")
+        }
 
     });
 
-    it('should run aggregate tests', function () {
-        let results = _aggregateTests.map(t => {
-            if (t.error) {
-                try {
-                    SQLParser.makeMongoAggregate(t.query);
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: "Error condition not met"
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: exp.message === t.error,
-                        error: exp.message !== t.error ? `${exp.message} != ${t.error}` : null
-                    };
+    describe('should run aggregate tests', function () {
+        for(let t of _aggregateTests) {
+            it(t.query,function(){
+                if (t.error) {
+                    try {
+                        SQLParser.parseSQL(t.query);
+                        assert(false,'No error')
+                    } catch (exp) {
+                        assert.equal(exp.message,t.error)
+                    }
+                } else {
+                    try {
+                        let parsedQuery = SQLParser.makeMongoAggregate(t.query);
+                        assert($equal(t.output, parsedQuery),JSON.stringify(parsedQuery))
+                    } catch (exp) {
+                        assert(false,exp.message)
+                    }
+
                 }
-            } else {
-                try {
-                    let parsedQuery = SQLParser.makeMongoAggregate(t.query);
-                    return {
-                        query: t.query,
-                        passed: $equal(t.output, parsedQuery),
-                        error: !$equal(t.output, parsedQuery) ? JSON.stringify(parsedQuery) : null
-                    };
-                } catch (exp) {
-                    return {
-                        query: t.query,
-                        passed: false,
-                        error: exp.message
-                    };
-                }
+            })
 
-            }
-        });
 
-        results.forEach(r => {
-            if (r.passed) {
-                console.log(`\u2714 ${r.query}`);
-            } else {
-                console.error(`\u2716 ${r.query} ${r.error || ""}`);
-            }
-
-        })
-
-        assert.equal(results.filter(r => !r.passed).length, 0, "Mongo Query parsing errors")
+        }
 
     });
 
-    it('should parse plain query', function () {
-
-        assert.throws(() => { SQLParser.parseSQL("select sum(cnt) from `global-test`") }, Error, "Invalid parse");
-
-        assert.throws(() => { SQLParser.parseSQL("select case when x=1 then 1 else 0 end as d from `global-test`") }, Error, "Invalid parse");
-
-        assert.throws(() => { SQLParser.parseSQL("select subtract(convert('1','int'),abs(`a`)) from `global-test`") }, Error, "Invalid parse");
-
-    });
 
     it('should parse plain query 2', function () {
         assert.deepEqual(SQLParser.parseSQL("select `a.b` as Id ,Name from `global-test` where `a.b`>1"), {
@@ -391,61 +345,27 @@ describe('SQL Parser', function () {
         }, "Invalid parse");
 
 
-        assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE user_id like "bc%"`), {
-            limit: 100,
-            collection: 'people',
-            query: { user_id: { '$regex': "^bc", '$options': 'i' } }
-        }, "Invalid parse");
 
-        assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" ORDER BY user_id ASC`), {
-            limit: 100,
-            collection: 'people',
-            query: { status: 'A' },
-            sort: { user_id: 1 }
-        }, "Invalid parse");
     });
 
     describe('Arithmetic Expression Operators', function () {
         for (const [key, value] of Object.entries(arithmeticExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                }
             });
-        }
-        {
-            // // it('should parse aggregate 1', function () {
-            // //     assert.deepEqual(SQLParser.makeMongoAggregate("select state,avg(`Replacement Cost`) as avgAge from `films` group by `state`"), {
-            // //         "collections": ["films"],
-            // //         pipeline: [
-            // //             {
-            // //                 $match: {
-            // //                     state: "a"
-            // //                 }
-            // //             },
-            // //             {
-
-            // //                 $group: {
-            // //                     _id: { state: "$state" },
-            // //                     avgAge: {
-            // //                         $avg: "$age"
-            // //                     }
-            // //                 }
-            // //             }, {
-            // //                 $projection: {
-            // //                     "state": "$_id.state",
-            // //                     avgAge: 1,
-            // //                     _id: -1
-            // //                 }
-            // //             }
-            // //         ]
-            // //     }, "Invalid parse");
-            // // });
         }
     });
 
     describe('Array Expression Operators', function () {
         for (const [key, value] of Object.entries(arrayExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                }
             });
         }
     });
@@ -453,7 +373,10 @@ describe('SQL Parser', function () {
     describe('Boolean Expression Operators', function () {
         for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                }
             });
         }
     });
@@ -461,7 +384,10 @@ describe('SQL Parser', function () {
     describe('Comparison Expression Operators', function () {
         for (const [key, value] of Object.entries(comparisonExpressionOperators.tests)) {
             it(key, function () {
-                assert.deepStrictEqual(SQLParser.parseSQL(value.query, value.type), value.output, "Invalid parse");
+                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                if(value.queryOutput) {
+                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                }
             });
         }
     });

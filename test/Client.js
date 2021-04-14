@@ -54,65 +54,67 @@ describe('Client Queries', function () {
         });
     });
 
-    describe('SQL Query Parser', function () {
-        it('run query tests', function (done) {
+        describe('run query tests', function (done) {
             (async () => {
                 const tests = _queryTests.filter(q => !!q.query && !q.error);
-                let errors=0;
                 for (const test of tests) {
-                    try {
-                        const parsedQuery = SQLParser.parseSQL(test.query);
-                        if (parsedQuery.count) {
-                            const count = await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query || null);
-                            console.log(`\u2714 ${test.query} ${count}`);
-                        } else {
-                            let find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, { projection: parsedQuery.projection });
-                            if (parsedQuery.sort) {
-                                find.sort(parsedQuery.sort)
+                    it(test.query,function(done){
+                        (async () => {
+                            try {
+                                const parsedQuery = SQLParser.parseSQL(test.query);
+                                if (parsedQuery.count) {
+                                    const count = await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query || null);
+                                    console.log(`${count}`);
+                                } else {
+                                    let find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, {projection: parsedQuery.projection});
+                                    if (parsedQuery.sort) {
+                                        find.sort(parsedQuery.sort)
+                                    }
+                                    if (parsedQuery.limit) {
+                                        find.limit(parsedQuery.limit)
+                                    }
+                                    const results = await find.toArray();
+                                    console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+                                }
+                                done();
+                            } catch (exp) {
+                                done(exp ? exp.message : null);
                             }
-                            if (parsedQuery.limit) {
-                                find.limit(parsedQuery.limit)
-                            }
-                            const results = await find.toArray();
-                            console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
-                        }
-                    } catch (exp) {
-                        errors++;
-                        console.error(`\u2716 ${test.query} ${exp.message || ""}`);
-                    }
-
+                        })()
+                    });
                 }
-                done(errors>0?"Error exeucting queries":null);
-            })()
+                done();
+            })();
 
 
         });
 
-        it('run aggregate tests', function (done) {
+        describe('run aggregate tests', function (done) {
             (async () => {
                 const tests = _aggregateTests.filter(q => !!q.query && !q.error);
-                let errors=0;
                 for (const test of tests) {
-                    try {
-                        const parsedQuery = SQLParser.parseSQL(test.query, test.type);
-                        let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                        results = await results.toArray()
+                    it(test.query,function(done){
+                        (async () => {
+                            try {
+                                const parsedQuery = SQLParser.makeMongoAggregate(test.query);
+                                let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                                results = await results.toArray()
 
-                        console.log(`\u2714 ${test.query} | count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
-
-                    } catch (exp) {
-                        errors++;
-                        console.error(`\u2716 ${test.query} ${exp.message || ""}`);
-                    }
-
+                                console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+                                done();
+                            } catch (exp) {
+                                done(exp ? exp.message : null);
+                            }
+                        })();
+                    });
                 }
-                done(errors>0?"Error exeucting queries":null);
+                done();
             })()
 
 
         });
 
-    });
+
 
     describe('Arithmetic Expression Operators', function () {
         for (const [key, test] of Object.entries(arithmeticExpressionOperators.tests)) {
@@ -130,5 +132,4 @@ describe('Client Queries', function () {
             });
         }
     });
-
 });

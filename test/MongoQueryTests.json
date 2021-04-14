@@ -29,6 +29,16 @@
     }
   },
   {
+    "query": "SELECT * FROM customers WHERE `Address.Country`='Japan' ORDER BY id desc",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "query": { "Address.Country": "Japan" },
+      "sort": { "id" : -1 }
+    }
+
+  },
+  {
     "query": "select `Replacement Value` as Value,Description from `films`",
     "output": {
       "collection": "films",
@@ -158,7 +168,7 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
-    "query": "SELECT abs(id + arraySize(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
+    "query": "SELECT abs(id + arrayLength(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -188,7 +198,7 @@
     }
   },
   {
-    "query": "SELECT ceiling(id + arraySize(Rentals) + 1) as testComplex FROM customers",
+    "query": "SELECT ceiling(id + arrayLength(Rentals) + 1) as testComplex FROM customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -232,7 +242,91 @@
         ]
       }
       }
+    },
+  {
+    "query": "select sum(id) as d from `customers`",
+    "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
+  },
+  {
+    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":1,
+        "First Name":1,
+        "Last Name":1,
+        "totalPayments":{
+          "$reduce":{
+          "input": "$Rentals",
+          "initialValue": 0,
+          "in": {
+            "$sum": ["$$value",{
+              "$reduce":{
+                "input": "$$this.Payments",
+                "initialValue": 0,
+                "in": {
+                  "$sum": ["$$value", "$$this.Amount" ]
+                }
+              }
+            }]}
+        }
+        }
+      }
     }
+  },
+  {
+    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,'filmId') as totalIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":1,
+        "First Name":1,
+        "Last Name":1,
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "query": "select sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"t":{"$reduce":{"input":{"$map":{"input":"$Rentals","in":{"total":{"$reduce":{"input":"$$this.Payments","initialValue":
+      0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}},"initialValue":0,"in":{"$sum":["$$value","$$this.total"]}}}}
+
+    }
+  },
+  {
+    "query": "select id,(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"id":1,"Rentals":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}
+
+    }
+  },
+  {
+    "query": "select id,firstInArray(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rental from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"id":1,"Rental":{"$first":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}}
+
+
+
+    }
+  }
+
+
 
 
 ]
