@@ -294,7 +294,29 @@
         }
       }
     }
+  },
+  {
+    "query": "select arraySum((select arraySum(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"t":{"$reduce":{"input":{"$map":{"input":"$Rentals","in":{"total":{"$reduce":{"input":"$$this.Payments","initialValue":
+      0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}},"initialValue":0,"in":{"$sum":["$$value","$$this.total"]}}}}
+
+    }
+  },
+  {
+    "query": "select id,(select `Film Title` as Title,arraySum(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"id":1,"Rentals":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}
+
+    }
   }
+
+
+
 ]
 
 

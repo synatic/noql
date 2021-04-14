@@ -7,6 +7,18 @@ Requires as for functions and sub queries
 Supported methods
 
 
+
+###Array Methods
+
+use select subquery (select * from ArrayField)
+
+####arraySum
+####arrayFirst
+####arrayLast
+####arraySort
+####arraySlice
+
+
 ## Unsupported
 over
 
