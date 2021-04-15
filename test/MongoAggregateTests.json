@@ -61,6 +61,27 @@
     }
   },
   {
+    "query": "select id,Title,Rating from `films` where abs(id)=1",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [{"$match":{"$expr":{"$eq":[{"$abs":"$id"},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}]
+    }
+  },
+  {
+    "query": "select id,Title,Rating from `films` where abs(id)=1 or abs(id)=2",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [{"$match":{"$or":[{"$expr":{"$eq":[{"$abs":"$id"},1]}},{"$expr":{"$eq":[{"$abs":"$id"},2]}}]}},{"$project":{"id":1,"Title":1,"Rating":1}}]
+    }
+  },
+  {
+    "query": "select id,Title,Rating from `films` where sumArray((select id as total from customers),'total') =1",
+    "type": "aggregate",
+    "output": {"pipeline":[{"$match":{"$expr":{"$eq":[{"$reduce":{"input":{"$map":{"input":"$customers","in":{"total":"$$this.id"}}},"initialValue":0,"in":{"$sum":["$$value","$$this.total"]}}},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}],"collections":["customers","films"]}
+  },
+  {
     "query": "select `Replacement Cost` + 10 as aggr from `films`",
     "type": "aggregate",
     "output": {

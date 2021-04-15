@@ -165,6 +165,12 @@ describe('SQL Parser', function () {
             assert(!SQLParser.canQuery(" select * from (select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)) as t"), "Invalid can query")
         })
 
+        it('should not allow with where on sub query ', function () {
+            assert(!SQLParser.canQuery("select id,Title,Rating,sumArray((select salesId as total from Rentals),'total') as resultTotal from `customers` where resultTotal > 1 and id<10"), "Invalid can query")
+        })
+
+
+
     });
 
     describe('should run query tests', function () {
@@ -298,14 +304,14 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
-            query: { status: 'A' }
+            query: { status: {$eq:'A'} }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
             projection: { user_id: 1, status: 1 },
-            query: { status: 'A' }
+            query: { status: {$eq:'A' }}
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status != "A"`), {
@@ -317,14 +323,14 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" AND age = 50`), {
             limit: 100,
             collection: 'people',
-            query: { status: 'A', age: 50 }
+            query: { status: {$eq:'A'}, age: {$eq:50 }}
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" OR age = 50`), {
             limit: 100,
             collection: 'people',
             query: {
-                '$or': [{ status: 'A' }, { age: 50 }]
+                '$or': [{ status: {$eq:'A' }}, { age:{$eq: 50} }]
             }
         }, "Invalid parse");
 

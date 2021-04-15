@@ -33,7 +33,8 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "query": { "Address.Country": "Japan" },
+      "query": { "Address.Country": {
+        "$eq": "Japan" }},
       "sort": { "id" : -1 }
     }
 
@@ -255,7 +256,9 @@
             }
           },
           {
-            "id": 5
+            "id": {
+              "$eq": 5
+            }
           }
         ]
       }
