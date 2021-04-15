@@ -85,6 +85,16 @@ describe('SQL Parser', function () {
             assert(false,'No error')
         })
 
+        it('should fail on non table from', function () {
+            try{
+                let ast=SQLParser.parseSQLtoAST("select * from (select * from `films`)");
+
+            }catch(exp){
+                return assert.equal(exp.message,'Initial from must be a collection reference')
+            }
+            assert(false,'No error')
+        })
+
 
     })
 
@@ -161,9 +171,6 @@ describe('SQL Parser', function () {
             assert(!SQLParser.canQuery(" select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)"), "Invalid can query")
         })
 
-        it('should not allow with sub query ', function () {
-            assert(!SQLParser.canQuery(" select * from (select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)) as t"), "Invalid can query")
-        })
 
         it('should not allow with where on sub query ', function () {
             assert(!SQLParser.canQuery("select id,Title,Rating,sumArray((select salesId as total from Rentals),'total') as resultTotal from `customers` where resultTotal > 1 and id<10"), "Invalid can query")

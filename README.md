@@ -99,3 +99,7 @@ case statements
 CTE's
 
 IN fixed value list
+
+from SubQuery (select * from (select * from customers)). First item must be a named collection
+
+Sorting array in sub select, user unwind
