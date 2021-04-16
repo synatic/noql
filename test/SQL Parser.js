@@ -210,8 +210,38 @@ describe('SQL Parser', function () {
 
     });
 
+    describe('should run query tests as aggregate tests', function () {
+        for(let t of _queryTests.filter(t=>!t.error)) {
+            it(t.query,function(){
+
+                let err=null;
+                let parsedQuery;
+                let parsedAggregate;
+                try {
+                    parsedQuery = SQLParser.makeMongoQuery(t.query);
+                    parsedAggregate = SQLParser.makeMongoAggregate(t.query);
+                } catch (exp) {
+                    err=exp.message;
+                }
+                assert(!err,err);
+                let pipeline=[];
+                if(parsedQuery.query)pipeline.push({$match:parsedQuery.query});
+                if(parsedQuery.projection)pipeline.push({$project:parsedQuery.projection});
+                if(parsedQuery.sort)pipeline.push({$sort:parsedQuery.sort});
+                assert.deepEqual(parsedAggregate, {
+                    collections:[parsedQuery.collection],
+                    pipeline:pipeline
+                },"Invalid parse")
+
+            })
+
+
+        }
+
+    });
+
     describe('should run aggregate tests', function () {
-        for(let t of _aggregateTests) {
+          for(let t of _aggregateTests) {
             it(t.query,function(){
                 if (t.error) {
                     try {

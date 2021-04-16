@@ -9,7 +9,7 @@ npm i @synatic/sql-to-mongo --save
 
 ##Usage
 ```
-const SQLMongoParser=require('@synatic/sql-to-mongo'');
+const SQLMongoParser=require('@synatic/sql-to-mongo');
 ```
 
 ###parseSQL
@@ -24,13 +24,16 @@ const SQLMongoParser=require('@synatic/sql-to-mongo'');
 
 
 ##Notes
-As with monogo, case sensitive
+As with MongoDB column names and strings are case sensitive.
+
 Follows mySQL Syntax
+
 Requires as for functions and sub queries
-Mongo 3.6
 ```
-select 
+select abs(-1) as `absId` from `customers`
 ```
+Supports Mongo 3.6 or greater
+
 
 ##Supported SQL Statements
 
@@ -83,8 +86,11 @@ select id,`First Name`,`Last Name`,sumArray((select sumArray(`Payments`,'Amount'
 
 ####firstInArray ($first)
 ####lastInArray ($last)
-####isArray
-
+####isArray ($isArray)
+Returns true if the field or expression is an Array
+```
+select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`
+```
 ####Map ($map) - Not fully supported
 Use sub select
 ```
@@ -96,12 +102,19 @@ Use sub select
 select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
 ##Unsupported SQL Statements
-over
+Over
 
 CTE's
 
-IN fixed value list
+IN fixed value list (not supported by AST parser)
 
-from SubQuery (select * from (select * from customers)). First item must be a named collection
+From SubQuery as first statement: (select * from (select * from customers)). First item must be a named collection
 
 Sorting array in sub select, user unwind
+
+Selecting on a calculated column by name
+```
+select id,Title,Rating,abs(id) as absId from `films` where absId=1
+--wont work, need to specify again as per SQL standards:
+select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
+```

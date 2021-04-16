@@ -90,6 +90,11 @@
     }
   },
   {
+    "query": "select id,Title,Rating,abs(id*-1) as absId from `films`",
+    "output": {"limit":100,"collection":"films","projection":{"id":1,"Title":1,"Rating":1,"absId":{"$abs":{"$multiply":["$id",-1]}}}}
+
+  },
+  {
     "query": "select cast('123' as int) as `id` from `customers`",
     "output": {
       "collection": "customers",

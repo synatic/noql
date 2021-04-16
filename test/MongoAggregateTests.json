@@ -69,6 +69,14 @@
     }
   },
   {
+    "query": "select id,Title,Rating,abs(id) as absId from `films` where absId=1",
+    "type": "aggregate",
+    "output": {
+      "collections": ["films"],
+      "pipeline": [{"$match":{"$expr":{"$eq":[{"$abs":"$id"},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}]
+    }
+  },
+  {
     "query": "select id,Title,Rating from `films` where abs(id)=1 or abs(id)=2",
     "type": "aggregate",
     "output": {

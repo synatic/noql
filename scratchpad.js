@@ -2,7 +2,9 @@ const SQLParser=require('./lib/SQLParser');
 
 
 //select id,(select count(*) as count from Rentals) as totalRentals from customers
-let parsedVal=SQLParser.makeMongoQuery("select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`")
+
+let parsedVal=SQLParser.makeMongoAggregate("select Title as Name,Description from `films`")
+//let parsedVal=SQLParser.makeMongoQuery("select makeObject(id,firstInArray(Rentals)) as `$$ROOT` from `customers`")
 //let parsedVal=SQLParser.makeMongoAggregate("select * from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id') from customers )")
 //let parsedVal=SQLParser.makeMongoAggregate("select `Address.Country` as Country,sum(id) as totalId from customers group by `Address.Country`")
 //let parsedVal=SQLParser.makeMongoQuery("select (log10(3) * floor(a) +1) as s from collection")
