@@ -46,6 +46,10 @@ select (select * from Rentals) as t from `customers` limit 10 offset 2
 
 ###Sub Queries
 
+###Case Statements
+
+
+
 ###Cast
 Supports cast operations to the MySQL types: VARCHAR, INT, DECIMAL, DATETIME, DECIMAL
 ```
@@ -61,10 +65,10 @@ select convert(`id`,'string') as d `films`
 
 ###Mathematical Functions
 
-###Array Methods
-use sub-select to query array fields in collections
+###Arrays
+Use sub-select to query array fields in collections
 ```
- select (select * from Rentals) as t from `customers`
+ select (select * from Rentals where staffId=2) as t from `customers`
 ```
 ####sumArray
 Sums the values in an array given an array field or sub-select and the field to sum
@@ -93,8 +97,6 @@ select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
 ##Unsupported SQL Statements
 over
-
-case statements
 
 CTE's
 

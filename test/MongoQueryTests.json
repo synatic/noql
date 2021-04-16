@@ -149,7 +149,7 @@
     }
   },
   {
-    "query": "select `First Name` as Name,arrayFirst(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
+    "query": "select `First Name` as Name,firstInArray(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
     "output": {
       "collection": "customers",
       "limit": 10,
@@ -192,6 +192,24 @@
       "collection": "customers",
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
+  {
+    "query": "select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":1,"test":{"$cond":{"if":{"$eq":["$id",3]},"then":"1","else":{"$cond":{"if":{"$eq":["$id",2]},"then":"1","else":0}}}}}}
+  },
+  {
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
+    "output": {
+      "limit": 10,
+      "skip": 2,
+      "collection": "customers",
+      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+  },
+  {
+    "query": "select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":1,"test":{"$cond":{"if":{"$isArray":"$Rentals"},"then":"Yes","else":"No"}}}}
+
+  },
+
   {
     "query": "SELECT abs(id + lengthOfArray(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
     "output": {
