@@ -134,6 +134,5 @@ const SQLParser = require('./lib/SQLParser.js');
 // r = SQLParser.makeMongoQuery("select cast(1+`id` as varchar) as `id` from `customers`")
 
 // r = SQLParser.parseSQL("select * from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals) as rentalCount from customers) as t")
-r = SQLParser.parseSQL("select * from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals) from customers ) as t1 inner join (select id,`First Name`,lengthOfArray(Rentals) from films ) as t2 on `t2.id`=`t1.id`")
-
+r = SQLParser.parseSQL("select * from customers as t1 inner join (select id,`First Name`,lengthOfArray(Rentals) as lengthOfArray from customers) as t2 on `t1.id`=`t2.id`")
 console.log(JSON.stringify(r, null, 2))
