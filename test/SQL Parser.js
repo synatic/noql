@@ -5,94 +5,94 @@ const $equal = require('deep-equal');
 const _queryTests = require('./MongoQueryTests.json');
 const _aggregateTests = require('./MongoAggregateTests.json');
 
-const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
-const arrayExpressionOperators = require('./expressionOperators/ArrayExpressionOperators')
-const booleanExpressionOperators = require('./expressionOperators/BooleanExpressionOperators')
-const comparisonExpressionOperators = require('./expressionOperators/ComparisonExpressionOperators')
+const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators.json')
+const arrayExpressionOperators = require('./expressionOperators/ArrayExpressionOperators.json')
+const booleanExpressionOperators = require('./expressionOperators/BooleanExpressionOperators.json')
+const comparisonExpressionOperators = require('./expressionOperators/ComparisonExpressionOperators.json')
 
 
 describe('SQL Parser', function () {
 
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
         it('should parse simple sql', function () {
-            let {ast}=SQLParser.parseSQLtoAST('select * from `collection`')
-            assert(ast.from[0].table==='collection',"Invalid from")
+            let { ast } = SQLParser.parseSQLtoAST('select * from `collection`')
+            assert(ast.from[0].table === 'collection', "Invalid from")
         })
 
         it('should return an ast when ast passed', function () {
-            let ast=SQLParser.parseSQLtoAST('select * from `collection`')
-            let ast2=SQLParser.parseSQLtoAST(ast)
-            assert(ast===ast2,"Invalid returns from ast")
+            let ast = SQLParser.parseSQLtoAST('select * from `collection`')
+            let ast2 = SQLParser.parseSQLtoAST(ast)
+            assert(ast === ast2, "Invalid returns from ast")
         })
 
         it('should fail if no collection passed', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST('select 1');
+            try {
+                let ast = SQLParser.parseSQLtoAST('select 1');
 
-            }catch(exp){
-                return assert.equal(exp.message,"SQL statement requires at least 1 collection","Invalid error message")
+            } catch (exp) {
+                return assert.equal(exp.message, "SQL statement requires at least 1 collection", "Invalid error message")
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on an invalid statement', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select *  `collection`");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select *  `collection`");
 
-            }catch(exp){
-                return assert.equal(exp.message,'1:11 - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GROUP", "HAVING", "LIMIT", "ORDER", "UNION", "WHERE", [ \\t\\n\\r], or end of input but "`" found.')
+            } catch (exp) {
+                return assert.equal(exp.message, '1:11 - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GROUP", "HAVING", "LIMIT", "ORDER", "UNION", "WHERE", [ \\t\\n\\r], or end of input but "`" found.')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on an invalid statement 2', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select * from `collection` with unwind");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select * from `collection` with unwind");
 
-            }catch(exp){
-                return assert.equal(exp.message,'1:32 - Expected [A-Za-z0-9_] but " " found.')
+            } catch (exp) {
+                return assert.equal(exp.message, '1:32 - Expected [A-Za-z0-9_] but " " found.')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on no as with function', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select Name,sum(`Replacement Cost`,2)  from `films`");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select Name,sum(`Replacement Cost`,2)  from `films`");
 
-            }catch(exp){
-                return assert.equal(exp.message,'Requires as for function:sum')
+            } catch (exp) {
+                return assert.equal(exp.message, 'Requires as for function:sum')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on no as with binary expr', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select Name,a>b from `films`");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select Name,a>b from `films`");
 
-            }catch(exp){
-                return assert.equal(exp.message,'Requires as for binary_expr')
+            } catch (exp) {
+                return assert.equal(exp.message, 'Requires as for binary_expr')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on no as with aggr func', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select sum(a) from `films`");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select sum(a) from `films`");
 
-            }catch(exp){
-                return assert.equal(exp.message,'Requires as for aggr_func:SUM')
+            } catch (exp) {
+                return assert.equal(exp.message, 'Requires as for aggr_func:SUM')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
         it('should fail on non table from', function () {
-            try{
-                let ast=SQLParser.parseSQLtoAST("select * from (select * from `films`)");
+            try {
+                let ast = SQLParser.parseSQLtoAST("select * from (select * from `films`)");
 
-            }catch(exp){
-                return assert.equal(exp.message,'Initial from must be a collection reference')
+            } catch (exp) {
+                return assert.equal(exp.message, 'Initial from must be a collection reference')
             }
-            assert(false,'No error')
+            assert(false, 'No error')
         })
 
 
@@ -181,26 +181,26 @@ describe('SQL Parser', function () {
     });
 
     describe('should run query tests', function () {
-        for(let t of _queryTests) {
-            it(t.query,function(){
+        for (let t of _queryTests) {
+            it(t.query, function () {
                 if (t.error) {
                     try {
                         SQLParser.makeMongoQuery(t.query);
-                        assert(false,'No error')
+                        assert(false, 'No error')
                     } catch (exp) {
-                        assert.equal(exp.message,t.error)
+                        assert.equal(exp.message, t.error)
                     }
                 } else {
-                    let err=null;
+                    let err = null;
                     let parsedQuery;
                     try {
                         parsedQuery = SQLParser.makeMongoQuery(t.query);
 
                     } catch (exp) {
-                        err=exp.message;
+                        err = exp.message;
                     }
-                    assert(!err,err)
-                    assert.deepEqual(parsedQuery,t.output,"Invalid parse")
+                    assert(!err, err)
+                    assert.deepEqual(parsedQuery, t.output, "Invalid parse")
 
                 }
             })
@@ -211,27 +211,27 @@ describe('SQL Parser', function () {
     });
 
     describe('should run query tests as aggregate tests', function () {
-        for(let t of _queryTests.filter(t=>!t.error)) {
-            it(t.query,function(){
+        for (let t of _queryTests.filter(t => !t.error)) {
+            it(t.query, function () {
 
-                let err=null;
+                let err = null;
                 let parsedQuery;
                 let parsedAggregate;
                 try {
                     parsedQuery = SQLParser.makeMongoQuery(t.query);
                     parsedAggregate = SQLParser.makeMongoAggregate(t.query);
                 } catch (exp) {
-                    err=exp.message;
+                    err = exp.message;
                 }
-                assert(!err,err);
-                let pipeline=[];
-                if(parsedQuery.query)pipeline.push({$match:parsedQuery.query});
-                if(parsedQuery.projection)pipeline.push({$project:parsedQuery.projection});
-                if(parsedQuery.sort)pipeline.push({$sort:parsedQuery.sort});
+                assert(!err, err);
+                let pipeline = [];
+                if (parsedQuery.query) pipeline.push({ $match: parsedQuery.query });
+                if (parsedQuery.projection) pipeline.push({ $project: parsedQuery.projection });
+                if (parsedQuery.sort) pipeline.push({ $sort: parsedQuery.sort });
                 assert.deepEqual(parsedAggregate, {
-                    collections:[parsedQuery.collection],
-                    pipeline:pipeline
-                },"Invalid parse")
+                    collections: [parsedQuery.collection],
+                    pipeline: pipeline
+                }, "Invalid parse")
 
             })
 
@@ -241,25 +241,25 @@ describe('SQL Parser', function () {
     });
 
     describe('should run aggregate tests', function () {
-          for(let t of _aggregateTests) {
-            it(t.query,function(){
+        for (let t of _aggregateTests) {
+            it(t.query, function () {
                 if (t.error) {
                     try {
                         SQLParser.makeMongoAggregate(t.query);
-                        assert(false,'No error')
+                        assert(false, 'No error')
                     } catch (exp) {
-                        assert.equal(exp.message,t.error)
+                        assert.equal(exp.message, t.error)
                     }
                 } else {
-                    let err=null;
+                    let err = null;
                     let parsedQuery;
                     try {
                         parsedQuery = SQLParser.makeMongoAggregate(t.query);
                     } catch (exp) {
-                        err=exp.message;
+                        err = exp.message;
                     }
-                    assert(!err,err)
-                    assert.deepEqual(parsedQuery,t.output,"Invalid parse")
+                    assert(!err, err)
+                    assert.deepEqual(parsedQuery, t.output, "Invalid parse")
                 }
             })
 
@@ -341,14 +341,14 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
-            query: { status: {$eq:'A'} }
+            query: { status: { $eq: 'A' } }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
             projection: { user_id: 1, status: 1 },
-            query: { status: {$eq:'A' }}
+            query: { status: { $eq: 'A' } }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status != "A"`), {
@@ -360,14 +360,14 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" AND age = 50`), {
             limit: 100,
             collection: 'people',
-            query: { status: {$eq:'A'}, age: {$eq:50 }}
+            query: { status: { $eq: 'A' }, age: { $eq: 50 } }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" OR age = 50`), {
             limit: 100,
             collection: 'people',
             query: {
-                '$or': [{ status: {$eq:'A' }}, { age:{$eq: 50} }]
+                '$or': [{ status: { $eq: 'A' } }, { age: { $eq: 50 } }]
             }
         }, "Invalid parse");
 
@@ -394,46 +394,55 @@ describe('SQL Parser', function () {
     });
 
     describe('Arithmetic Expression Operators', function () {
-        for (const [key, value] of Object.entries(arithmeticExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
+        for (let index = 0; index < arithmeticExpressionOperators.length; index++) {
+            for (const [key, value] of Object.entries(arithmeticExpressionOperators[index])) {
+                it(key, function () {
+                    assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                    if (value.queryOutput) {
+                        assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                    }
+                });
+            }
         }
     });
 
     describe('Array Expression Operators', function () {
-        for (const [key, value] of Object.entries(arrayExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
+        for (let index = 0; index < arrayExpressionOperators.length; index++) {
+            for (const [key, value] of Object.entries(arrayExpressionOperators[index])) {
+                it(key, function () {
+                    assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                    if (value.queryOutput) {
+                        assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                    }
+                });
+            }
         }
     });
 
     describe('Boolean Expression Operators', function () {
-        for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
+        for (let index = 0; index < booleanExpressionOperators.length; index++) {
+            for (const [key, value] of Object.entries(booleanExpressionOperators[index])) {
+                it(key, function () {
+                    assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                    if (value.queryOutput) {
+                        assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                    }
+                });
+            }
         }
     });
 
     describe('Comparison Expression Operators', function () {
-        for (const [key, value] of Object.entries(comparisonExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
+        for (let index = 0; index < comparisonExpressionOperators.length; index++) {
+            for (const [key, value] of Object.entries(comparisonExpressionOperators[index])) {
+
+                it(key, function () {
+                    assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
+                    if (value.queryOutput) {
+                        assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
+                    }
+                });
+            }
         }
     });
 });
