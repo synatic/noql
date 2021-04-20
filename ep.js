@@ -23,9 +23,8 @@ const SQLParser = require('./lib/SQLParser.js');
 // const r = SQLParser.parseSQL("select `collA.field3`, `collB.field3`, count(*) from collA inner join collB on `collA.field1` = `collB.field2` where `collA.date` > 12 group by `collA.field3`, `collB.field3` having count(*) > 250 order by `collA.field3`, `collB.field3`", 'aggregate');
 
 
-// const r = SQLParser.parseSQL("select a.* from coll as a from table2 as t2 inner join table1 as t1", "aggregate");
-
-// const r = SQLParser.parseSQL("select a,b,unwind(c) as c,c.a,c.b from `table` as t1  inner join `table2` as t2  on a=b", 'aggregate');
+// const r = SQLParser.parseSQL("select `a.*` from coll as a from table2 as t2 inner join table1 as t1 on `t1.a`=`t2.b`", "aggregate");
+// const r = SQLParser.parseSQL("select a,b,unwind(c) as c,`c.a`,`c.b` from `table` as t1  inner join `table2` as t2  on `t1.a`=`t2.b`", 'aggregate');
 
 // let r
 // //sql-ex example 
