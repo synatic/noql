@@ -3,9 +3,10 @@
     "query": "select * from `films`",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
+      "collections": [
+        "films"
+      ],
       "pipeline": [
-
       ]
     }
   },
@@ -13,7 +14,9 @@
     "query": "select * from `films` limit 10",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
+      "collections": [
+        "films"
+      ],
       "pipeline": [
         {
           "$limit": 10
@@ -25,7 +28,9 @@
     "query": "select * from `films` limit 10 offset 5",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
+      "collections": [
+        "films"
+      ],
       "pipeline": [
         {
           "$limit": 10
@@ -40,15 +45,26 @@
     "query": "select Title,Rating from `films`",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
-      "pipeline": [{"$project":{"Title":1,"Rating":1}}]
+      "collections": [
+        "films"
+      ],
+      "pipeline": [
+        {
+          "$project": {
+            "Title": "$Title",
+            "Rating": "$Rating"
+          }
+        }
+      ]
     }
   },
   {
     "query": "select abs(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
+      "collections": [
+        "films"
+      ],
       "pipeline": [
         {
           "$project": {
@@ -64,154 +80,190 @@
     "query": "select id,Title,Rating from `films` where abs(id)=1",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
-      "pipeline": [{"$match":{"$expr":{"$eq":[{"$abs":"$id"},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}]
-    }
-  },
-  {
-    "query": "select id,Title,Rating,abs(id) as absId from `films` where absId=1",
-    "type": "aggregate",
-    "output": {
-      "collections": ["films"],
-      "pipeline": [{"$match":{"$expr":{"$eq":[{"$abs":"$id"},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}]
+      "collections": [
+        "films"
+      ],
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$eq": [
+                {
+                  "$abs": "$id"
+                },
+                1
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "id": "$id",
+            "Title": "$Title",
+            "Rating": "$Rating"
+          }
+        }
+      ]
     }
   },
   {
     "query": "select id,Title,Rating from `films` where abs(id)=1 or abs(id)=2",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
-      "pipeline": [{"$match":{"$or":[{"$expr":{"$eq":[{"$abs":"$id"},1]}},{"$expr":{"$eq":[{"$abs":"$id"},2]}}]}},{"$project":{"id":1,"Title":1,"Rating":1}}]
+      "collections": [
+        "films"
+      ],
+      "pipeline": [
+        {
+          "$match": {
+            "$or": [
+              {
+                "$expr": {
+                  "$eq": [
+                    {
+                      "$abs": "$id"
+                    },
+                    1
+                  ]
+                }
+              },
+              {
+                "$expr": {
+                  "$eq": [
+                    {
+                      "$abs": "$id"
+                    },
+                    2
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "id": "$id",
+            "Title": "$Title",
+            "Rating": "$Rating"
+          }
+        }
+      ]
     }
   },
   {
     "query": "select id,Title,Rating from `films` where sumArray((select id as total from customers),'total') =1",
     "type": "aggregate",
-    "output": {"pipeline":[{"$match":{"$expr":{"$eq":[{"$reduce":{"input":{"$map":{"input":"$customers","in":{"total":"$$this.id"}}},"initialValue":0,"in":{"$sum":["$$value","$$this.total"]}}},1]}}},{"$project":{"id":1,"Title":1,"Rating":1}}],"collections":["customers","films"]}
+    "output": {
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$eq": [
+                {
+                  "$reduce": {
+                    "input": {
+                      "$map": {
+                        "input": "$customers",
+                        "in": {
+                          "total": "$$this.id"
+                        }
+                      }
+                    },
+                    "initialValue": 0,
+                    "in": {
+                      "$sum": [
+                        "$$value",
+                        "$$this.total"
+                      ]
+                    }
+                  }
+                },
+                1
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "id": "$id",
+            "Title": "$Title",
+            "Rating": "$Rating"
+          }
+        }
+      ],
+      "collections": [
+        "customers",
+        "films"
+      ]
+    }
   },
   {
     "query": "select `Replacement Cost` + 10 as aggr from `films`",
     "type": "aggregate",
     "output": {
-      "collections": ["films"],
-      "pipeline": [{"$project":{"aggr":{"$add":["$Replacement Cost",10]}}}]
+      "collections": [
+        "films"
+      ],
+      "pipeline": [
+        {
+          "$project": {
+            "aggr": {
+              "$add": [
+                "$Replacement Cost",
+                10
+              ]
+            }
+          }
+        }
+      ]
     }
   },
   {
     "query": "select ceiling(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
-    "output": {"pipeline":[{"$project":{"aggr":{"$ceil":"$Replacement Cost"}}}],"collections":["films"]}
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "aggr": {
+              "$ceil": "$Replacement Cost"
+            }
+          }
+        }
+      ],
+      "collections": [
+        "films"
+      ]
+    }
   },
   {
     "query": "select `Replacement Cost` / 10 / 2 as aggr from `films`",
     "type": "aggregate",
-    "output": {"pipeline":[{"$project":{"aggr":{"$divide":[{"$divide":["$Replacement Cost",10]},2]}}}],"collections":["films"]}
-  },
-  {
-    "query": "select `Address.City` as City,avg(arrayLength(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
-    "type": "aggregate",
     "output": {
-      "collections": ["customers"],
       "pipeline": [
         {
-          "$match": {
-            "First Name": {
-              "$regex": "^m",
-              "$options": "i"
-            }
-          }
-        },
-        {
-          "$group": {
-            "_id": {"City":"$Address.City"},
-            "AvgRentals": {
-              "$avg": {
-                "$size": "$Rentals"
-              }
-            }
-          }
-        },
-        {
           "$project": {
-            "City": "$_id.City",
-            "AvgRentals": 1,
-            "_id":0
+            "aggr": {
+              "$divide": [
+                {
+                  "$divide": [
+                    "$Replacement Cost",
+                    10
+                  ]
+                },
+                2
+              ]
+            }
           }
         }
+      ],
+      "collections": [
+        "films"
       ]
     }
   },
   {
-    "query": "select  `Address.Country` as Country,avg(arrayLength(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
-    "type": "aggregate",
-    "output": {
-      "collections": ["customers"],
-      "pipeline": [
-        {
-          "$match": {
-            "First Name": {
-              "$regex": "^m",
-              "$options": "i"
-            }
-          }
-        },
-        {
-          "$group": {
-            "_id": {"City":"$Address.Country"},
-            "AvgRentals": {
-              "$avg": {
-                "$size": "$Rentals"
-              }
-            }
-          }
-        },
-        {
-          "$project": {
-            "Country": "$_id.Country",
-            "AvgRentals": 1,
-            "_id":0
-          }
-        }
-      ]
-    }
-  },
-  {
-    "query": "select  `Address.Country` as Country,`Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
-    "type": "aggregate",
-    "output": {
-      "collections": ["customers"],
-      "pipeline": [
-        {
-          "$match": {
-            "First Name": {
-              "$regex": "^m",
-              "$options": "i"
-            }
-          }
-        },
-        {
-          "$group": {
-            "_id": {"Country":"$Address.Country","City":"$Address.City"},
-            "AvgRentals": {
-              "$avg": {
-                "$size": "$Rentals"
-              }
-            }
-          }
-        },
-        {
-          "$project": {
-            "Country": "$_id.Country",
-            "City": "$_id.City",
-            "AvgRentals": 1,
-            "_id":0
-          }
-        }
-      ]
-    }
-  },
-  {
-    "query": "select `Address.City` as City,avg(size(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
+    "query": "select `Address.City` as City,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
       "collections": [
@@ -227,15 +279,9 @@
           }
         },
         {
-          "$project": {
-            "City": "$Address.City",
-            "Rentals": 1
-          }
-        },
-        {
           "$group": {
             "_id": {
-              "City": "$City"
+              "City": "$Address.City"
             },
             "AvgRentals": {
               "$avg": {
@@ -245,25 +291,399 @@
           }
         },
         {
-          "$projection": {
+          "$project": {
             "City": "$_id.City",
-            "AvgRentals": 1,
-            "_id": -1
+            "AvgRentals": "$AvgRentals",
+            "_id": 0
           }
         }
       ]
     }
   },
   {
-    "query": "select `First Name`,`Last Name`,unwind(`Rentals`) as Rental from `customers`",
+    "query": "select  `Address.Country` as Country,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
     "type": "aggregate",
     "output": {
-      "collections": ["customers"],
+      "collections": [
+        "customers"
+      ],
       "pipeline": [
-        {"$unwind":"$Rentals"},{"$project":{"First Name":1,"Last Name":1,"Rental":"$Rentals"}}
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Country": "$Address.Country"
+            },
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Country": "$_id.Country",
+            "AvgRentals": "$AvgRentals",
+            "_id": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select  `Address.Country` as Country,`Address.City` as City,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
+    "type": "aggregate",
+    "output": {
+      "collections": [
+        "customers"
+      ],
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Country": "$Address.Country",
+              "City": "$Address.City"
+            },
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Country": "$_id.Country",
+            "City": "$_id.City",
+            "AvgRentals": "$AvgRentals",
+            "_id": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "query": "select `Address.City` as City,abs(-1) as absId from `customers` where `First Name` like 'm%' and abs(-1) >=1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            },
+            "$expr": {
+              "$gte": [
+                {
+                  "$abs": {
+                    "$multiply": [
+                      -1,
+                      1
+                    ]
+                  }
+                },
+                1
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$Address.City",
+            "absId": {
+              "$abs": {
+                "$multiply": [
+                  -1,
+                  1
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `Address.City`,modId",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            },
+            "$expr": {
+              "$gt": [
+                {
+                  "$mod": [
+                    "$id",
+                    {
+                      "$literal": 10
+                    }
+                  ]
+                },
+                1
+              ]
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "City": "$Address.City",
+              "modId": {
+                "$mod": [
+                  "$id",
+                  {
+                    "$literal": 10
+                  }
+                ]
+              }
+            },
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$_id.City",
+            "modId": "$_id.modId",
+            "_id": 0,
+            "AvgRentals": "$AvgRentals"
+          }
+        },
+        {
+          "$match": {
+            "AvgRentals": {
+              "$gt": 2
+            }
+          }
+        },
+        {
+          "$sort": {
+            "City": 1,
+            "modId": 1
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `City`,modId",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$match": {
+            "First Name": {
+              "$regex": "^m",
+              "$options": "i"
+            },
+            "$expr": {
+              "$gt": [
+                {
+                  "$mod": [
+                    "$id",
+                    {
+                      "$literal": 10
+                    }
+                  ]
+                },
+                1
+              ]
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "City": "$Address.City",
+              "modId": {
+                "$mod": [
+                  "$id",
+                  {
+                    "$literal": 10
+                  }
+                ]
+              }
+            },
+            "AvgRentals": {
+              "$avg": {
+                "$size": "$Rentals"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "City": "$_id.City",
+            "modId": "$_id.modId",
+            "_id": 0,
+            "AvgRentals": "$AvgRentals"
+          }
+        },
+        {
+          "$match": {
+            "AvgRentals": {
+              "$gt": 2
+            }
+          }
+        },
+        {
+          "$sort": {
+            "City": 1,
+            "modId": 1
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "id": "$id",
+            "First Name": "$First Name",
+            "Last Name": "$Last Name",
+            "numRentals": {
+              "$size": "$Rentals"
+            }
+          }
+        },
+        {
+          "$project": {
+            "t": "$$ROOT"
+          }
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": "$t"
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select id,`First Name`,unwind(Rentals) as Rental  from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "id": "$id",
+            "First Name": "$First Name",
+            "Rental": "$Rentals"
+          }
+        },
+        {
+          "$unwind": "$Rental"
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select id,`First Name`,unwind((select `Film Title` from Rentals)) as Rental  from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "id": "$id",
+            "First Name": "$First Name",
+            "Rental": {
+              "$map": {
+                "input": "$Rentals",
+                "in": {
+                  "Film Title": "$$this.Film Title"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$unwind": "$Rental"
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,mergeObjects(t1,t2) as `$$ROOT`  from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$project":{"t1":{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"id":"$id","Name":"$First Name"}}]}},"t2":{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"id":"$id","LastName":"$Last Name"}}]}}}},{"$replaceRoot":{"newRoot":{"$mergeObjects":["$t1","$t2"]}}}],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select t.CustomerID,t.Name,t.Rental  from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$project":{"CustomerID":"$id","Name":"$First Name","Rental":"$Rentals"}},{"$unwind":"$Rental"},{"$project":{"t":"$$ROOT"}},{"$project":{"CustomerID":"$t.CustomerID","Name":"$t.Name","Rental":"$t.Rental"}}],
+
+        "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"CustomerID":"$id","Name":"$First Name","Rental":"$Rentals"}},{"$unwind":"$Rental"},{"$project":{"t":"$$ROOT"}},{"$replaceRoot":{"newRoot":{"$mergeObjects":[{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"CustomerID":"$t.CustomerID","Name":"$t.Name"}}]}},"$t.Rental"]}}}],
+
+
+        "collections": [
+        "customers"
       ]
     }
   }
+
+
 
 
 ]

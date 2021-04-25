@@ -80,21 +80,20 @@ describe('SQL Parser', function () {
                 let ast=SQLParser.parseSQLtoAST("select sum(a) from `films`");
 
             }catch(exp){
-                return assert.equal(exp.message,'Requires as for aggr_func:SUM')
+                return assert.equal(exp.message,'Requires as for aggr_func:SUM,Requires group by for aggr_func:SUM')
             }
             assert(false,'No error')
         })
 
-        it('should fail on non table from', function () {
+        it('should fail on no group by on aggregate function', function () {
             try{
-                let ast=SQLParser.parseSQLtoAST("select * from (select * from `films`)");
+                let ast=SQLParser.parseSQLtoAST("select id,sum(a) as s from `films`");
 
             }catch(exp){
-                return assert.equal(exp.message,'Initial from must be a collection reference')
+                return assert.equal(exp.message,'Requires group by for aggr_func:SUM')
             }
             assert(false,'No error')
         })
-
 
     })
 
@@ -132,7 +131,7 @@ describe('SQL Parser', function () {
         });
 
         it('should test a simple sql with single for aggregate', function () {
-            assert(!SQLParser.canQuery('select sum(`Replacement Cost`) as s from `films`'), "Invalid can query")
+            assert(!SQLParser.canQuery('select sum(`Replacement Cost`) as s from `films` group by s'), "Invalid can query")
         });
 
         it('should test a simple sql with single sum', function () {
@@ -140,11 +139,7 @@ describe('SQL Parser', function () {
         })
 
         it('should test a simple sql with single for avg', function () {
-            assert(!SQLParser.canQuery('select avg(`Replacement Cost`) as s from `films`'), "Invalid can query")
-        })
-
-        it('should test a simple sql with single for aggregate', function () {
-            assert(!SQLParser.canQuery('select count(1) as s from `films`'), "Invalid can query")
+            assert(!SQLParser.canQuery('select id,avg(`Replacement Cost`) as s from `films` group by id'), "Invalid can query")
         })
 
         it('should test a simple sql with an expr sum', function () {
@@ -225,9 +220,13 @@ describe('SQL Parser', function () {
                 }
                 assert(!err,err);
                 let pipeline=[];
+
                 if(parsedQuery.query)pipeline.push({$match:parsedQuery.query});
                 if(parsedQuery.projection)pipeline.push({$project:parsedQuery.projection});
+
                 if(parsedQuery.sort)pipeline.push({$sort:parsedQuery.sort});
+                if(parsedQuery.limit!==100)pipeline.push({$limit:parsedQuery.limit});
+                if(parsedQuery.skip)pipeline.push({$skip:parsedQuery.skip});
                 assert.deepEqual(parsedAggregate, {
                     collections:[parsedQuery.collection],
                     pipeline:pipeline
@@ -275,7 +274,7 @@ describe('SQL Parser', function () {
             "limit": 100,
             projection: {
                 "Id": "$a.b",
-                Name: 1
+                Name: "$Name"
             },
             query: {
                 "a.b": { "$gt": 1 }
@@ -287,7 +286,7 @@ describe('SQL Parser', function () {
             "limit": 10,
             projection: {
                 "Id": "$a.b",
-                Name: 1
+                Name: "$Name"
             },
             query: {
                 "a.b": { "$gt": 1 }
@@ -300,7 +299,7 @@ describe('SQL Parser', function () {
             skip: 5,
             projection: {
                 "Id": "$a.b",
-                Name: 1
+                Name: "$Name"
             },
             query: {
                 "a.b": { "$gt": 1 }
@@ -313,7 +312,7 @@ describe('SQL Parser', function () {
             skip: 5,
             projection: {
                 "Id": "$a.b",
-                Name: 1
+                Name: "$Name"
             },
             query: {
                 "a.b": { "$gt": 1 }
@@ -329,13 +328,13 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT id, user_id, status FROM people`), {
             limit: 100,
             collection: 'people',
-            projection: { id: 1, user_id: 1, status: 1 }
+            projection: { id: "$id", user_id: "$user_id", status: "$status" }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people`), {
             limit: 100,
             collection: 'people',
-            projection: { user_id: 1, status: 1 }
+            projection: { user_id: "$user_id", status: "$status" }
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`), {
@@ -347,7 +346,7 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
-            projection: { user_id: 1, status: 1 },
+            projection: { user_id: "$user_id", status: "$status"},
             query: { status: {$eq:'A' }}
         }, "Invalid parse");
 

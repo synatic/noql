@@ -178,7 +178,7 @@ class ArithmeticExpressionOperators {
     },
 
     pow: {
-      query: "select pow(`Replacement Cost`, 10) as aggr from `films`",
+      query: "select pow(abs(`Replacement Cost`), 10) as aggr from `films`",
       aggregateOutput: {
         collections: ["films"],
         pipeline: [{

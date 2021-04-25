@@ -54,65 +54,91 @@ describe('Client Queries', function () {
         });
     });
 
-        describe('run query tests', function (done) {
-            (async () => {
-                const tests = _queryTests.filter(q => !!q.query && !q.error);
-                for (const test of tests) {
-                    it(test.query,function(done){
-                        (async () => {
-                            try {
-                                const parsedQuery = SQLParser.parseSQL(test.query);
-                                if (parsedQuery.count) {
-                                    const count = await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query || null);
-                                    console.log(`${count}`);
-                                } else {
-                                    let find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, {projection: parsedQuery.projection});
-                                    if (parsedQuery.sort) {
-                                        find.sort(parsedQuery.sort)
-                                    }
-                                    if (parsedQuery.limit) {
-                                        find.limit(parsedQuery.limit)
-                                    }
-                                    const results = await find.toArray();
-                                    console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+    describe('run query tests', function (done) {
+        (async () => {
+            const tests = _queryTests.filter(q => !!q.query && !q.error);
+            for (const test of tests) {
+                it(test.query,function(done){
+                    (async () => {
+                        try {
+                            const parsedQuery = SQLParser.parseSQL(test.query);
+                            if (parsedQuery.count) {
+                                const count = await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query || null);
+                                console.log(`${count}`);
+                            } else {
+                                let find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, {projection: parsedQuery.projection});
+                                if (parsedQuery.sort) {
+                                    find.sort(parsedQuery.sort)
                                 }
-                                done();
-                            } catch (exp) {
-                                done(exp ? exp.message : null);
-                            }
-                        })()
-                    });
-                }
-                done();
-            })();
-
-
-        });
-
-        describe('run aggregate tests', function (done) {
-            (async () => {
-                const tests = _aggregateTests.filter(q => !!q.query && !q.error);
-                for (const test of tests) {
-                    it(test.query,function(done){
-                        (async () => {
-                            try {
-                                const parsedQuery = SQLParser.makeMongoAggregate(test.query);
-                                let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                                results = await results.toArray()
-
+                                if (parsedQuery.limit) {
+                                    find.limit(parsedQuery.limit)
+                                }
+                                const results = await find.toArray();
                                 console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
-                                done();
-                            } catch (exp) {
-                                done(exp ? exp.message : null);
                             }
-                        })();
-                    });
-                }
-                done();
-            })()
+                            done();
+                        } catch (exp) {
+                            done(exp ? exp.message : null);
+                        }
+                    })()
+                });
+            }
+            done();
+        })();
 
 
-        });
+    });
+
+    describe('run query tests as aggregates' , function (done) {
+        (async () => {
+            const tests = _queryTests.filter(q => !!q.query && !q.error);
+            for (const test of tests) {
+                it(test.query,function(done){
+                    (async () => {
+                        try {
+                            const parsedQuery = SQLParser.makeMongoAggregate(test.query);
+
+                            let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                            results = await results.toArray()
+
+                            console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+                            done();
+                        } catch (exp) {
+                            done(exp ? exp.message : null);
+                        }
+                    })();
+                });
+            }
+            done();
+        })()
+
+
+    });
+
+    describe('run aggregate tests', function (done) {
+        (async () => {
+            const tests = _aggregateTests.filter(q => !!q.query && !q.error);
+            for (const test of tests) {
+                it(test.query,function(done){
+                    (async () => {
+                        try {
+                            const parsedQuery = SQLParser.makeMongoAggregate(test.query);
+                            let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                            results = await results.toArray()
+
+                            console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
+                            done();
+                        } catch (exp) {
+                            done(exp ? exp.message : null);
+                        }
+                    })();
+                });
+            }
+            done();
+        })()
+
+
+    });
 
 
 
@@ -145,7 +171,7 @@ describe('Client Queries', function () {
                                     console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ""}`);
                                 }
                             }
-                            
+
                             done();
                         } catch (exp) {
                             done(exp ? exp.message : null);
