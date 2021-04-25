@@ -392,47 +392,4 @@ describe('SQL Parser', function () {
 
     });
 
-    describe('Arithmetic Expression Operators', function () {
-        for (const [key, value] of Object.entries(arithmeticExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
-        }
-    });
-
-    describe('Array Expression Operators', function () {
-        for (const [key, value] of Object.entries(arrayExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
-        }
-    });
-
-    describe('Boolean Expression Operators', function () {
-        for (const [key, value] of Object.entries(booleanExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
-        }
-    });
-
-    describe('Comparison Expression Operators', function () {
-        for (const [key, value] of Object.entries(comparisonExpressionOperators.tests)) {
-            it(key, function () {
-                assert.deepStrictEqual(SQLParser.makeMongoAggregate(value.query,), value.aggregateOutput, "Invalid parse");
-                if(value.queryOutput) {
-                    assert.deepStrictEqual(SQLParser.makeMongoQuery(value.query), value.queryOutput, "Invalid parse");
-                }
-            });
-        }
-    });
 });

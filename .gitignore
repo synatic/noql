@@ -66,3 +66,4 @@ package-lock.json
 
 # IDE files
 .idea
+.vscode
