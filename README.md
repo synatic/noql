@@ -5,32 +5,32 @@ Converts M-SQL Queries to Mongo find statements or aggregation pipelines
 
 M-SQL is a specific way to use MySQL style queries tailored to MongoDB functions and a multilevel document paradigm. 
 
-##Notes
+## Notes
 * Supports Mongo 3.6 or greater
 * Follows mySQL Syntax
 * As with MongoDB column names and strings are case sensitive.
 
-##Installation
+## Installation
 ```
 npm i @synatic/sql-to-mongo --save
 ```
 
-##Usage
+## Usage
 ```
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 ```
 
-###parseSQL
+### parseSQL
 
-###makeMongoQuery
+### makeMongoQuery
 
-###makeMongoAggregate
+### makeMongoAggregate
 
-###canQuery
+### canQuery
 
-###parseSQLtoAST
+### parseSQLtoAST
 
-
+## M-SQL
 
   
 
@@ -48,20 +48,20 @@ select c.* from customers  as c
 
 Always prefix on joins
 
-##Supported SQL Statements
+## Supported SQL Statements
 
-###$$ROOT
+### $$ROOT
 ```
 select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t
 ```
 
-###Limit and Offset
+### Limit and Offset
 Supports MySQL style limits and offset that equates to limit and skip
 ```
 select (select * from Rentals) as t from `customers` limit 10 offset 2
 ```
 
-###Merge Fields into Object
+### Merge Fields into Object
 Only available in aggregate
 Select without table
 
@@ -79,23 +79,23 @@ Using with unwind with joins
 select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t
 ```
 
-###Group By and Having
+### Group By and Having
 
-###Joins
+### Joins
 
 hints
 first
 last
 unwind
 
-###Sub Queries
+### Sub Queries
 
-###Case Statements
-
-
+### Case Statements
 
 
-###Cast
+
+
+### Cast
 Supports cast operations to the MySQL types: VARCHAR, INT, DECIMAL, DATETIME, DECIMAL
 ```
 select cast(1+`id` as varchar) as `id` from `customers`
@@ -108,14 +108,14 @@ select convert('1','int') as d `films`
 select convert(`id`,'string') as d `films`
 ```
 
-###Mathematical Functions
+### Mathematical Functions
 
-###Arrays
+### Arrays
 Use sub-select to query array fields in collections
 ```
 select (select * from Rentals where staffId=2) as t from `customers`
 ```
-####sumArray
+#### sumArray
 Sums the values in an array given an array field or sub-select and the field to sum
 ```
 select sumArray(`Rentals`,'fileId') as totalFileIds from `customers`
@@ -125,51 +125,50 @@ e.g. with sub select
 ```
 select id,`First Name`,`Last Name`,sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers
 ```
-####avgArray
-####firstInArray ($first)
-####lastInArray ($last)
-####isArray ($isArray)
+#### avgArray
+#### firstInArray ($first)
+#### lastInArray ($last)
+#### isArray ($isArray)
 Returns true if the field or expression is an Array
 ```
 select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`
 ```
-####Map ($map) - Not fully supported
+#### Map ($map) - Not fully supported
 Use sub select
 ```
 select id,(select filmId from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
-####Slice ($slice)
+#### Slice ($slice)
 Use sub select
 ```
 select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
 
 
-###Group Methods
+### Group Methods
 sum
 avg
 max
 min
 
 
-##Unsupported SQL Statements
-Over
+### Unsupported SQL Statements
+* Over
+* CTE's
+* IN fixed value list (not supported by AST parser)
 
-CTE's
 
-IN fixed value list (not supported by AST parser)
-
-From SubQuery as first statement: (select * from (select * from customers)). First item must be a named collection
 
 Sorting array in sub select, user unwind
 
-###Selecting on a calculated column by name
+### Selecting on a calculated column by name
 Calculated columns in where statements can only be used with aggregates  
 ```
 --have to repeat select statemnt as with sql rules
 select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 ```
 
-##Function Mapping
+## Function Mapping
 
-|Mongo Function |M-SQL Function |Description  |Example  |
+| Mongo Function | M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- | ------------- |
