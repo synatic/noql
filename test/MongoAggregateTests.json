@@ -192,7 +192,6 @@
         }
       ],
       "collections": [
-        "customers",
         "films"
       ]
     }
@@ -395,7 +394,9 @@
                   "$abs": {
                     "$multiply": [
                       -1,
-                      1
+                      {
+                        "$literal": 1
+                      }
                     ]
                   }
                 },
@@ -411,7 +412,9 @@
               "$abs": {
                 "$multiply": [
                   -1,
-                  1
+                  {
+                    "$literal": 1
+                  }
                 ]
               }
             }
@@ -771,6 +774,41 @@
     "output": {
       "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","let":{"c_id":"$c.id"},"pipeline":[{"$match":{"id":{"$gt":2}}},{"$match":{"$expr":{"$eq":["$id","$$c_id"]}}}]}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$project":{"c":"$c","cn":"$cn"}}],
       "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,`customer-notes`.*,cn2.*  from customers c inner join `customer-notes|first` on `customer-notes`.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"customer-notes","localField":"c.id","foreignField":"id"}},{"$set":{"customer-notes":{"$first":"$customer-notes"}}},{"$match":{"customer-notes":{"$ne":null}}},{"$project":{"c":"$c","customer-notes":"$customer-notes","cn2":"$cn2"}}]
+      ,
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.* from customers c inner join `customer-notes|first` as cn on `cn`.id=c.id and cn.id<5",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","let":{"c_id":"$c.id"},"pipeline":[{"$match":{"$expr":{"$and":[{"$eq":["$id","$$c_id"]},{"$lt":["$id",5]}]}}}]}},{"$set":{"cn":{"$first":"$cn"}}},{"$match":{"cn":{"$ne":null}}},{"$project":{"c":"$c","cn":"$cn"}}],
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.* from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","let":{"c_id":"$c.id"},"pipeline":[{"$match":{"$expr":{"$and":[{"$eq":["$id","$$c_id"]},{"$lt":["$id",5]}]}}}]}},{"$unwind":"$cn"},{"$match":{"cn":{"$ne":null}}},{"$project":{"c":"$c","cn":"$cn"}}],
+
+        "collections": [
         "customers",
         "customer-notes"
       ]

@@ -3,8 +3,8 @@ const SQLParser=require('./lib/SQLParser');
 
 //select id,(select count(*) as count from Rentals) as totalRentals from customers
 
-let parsedVal=SQLParser.makeMongoAggregate("select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id" )
-
+let parsedVal=SQLParser.makeMongoAggregate("select c.*,cn.* from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5")
+//let parsedVal=SQLParser.makeMongoAggregate("select c.*,`customer-notes`.*,cn2.*  from customers c inner join `customer-notes` on `customer-notes|first`.id=c.id left outer join (select * from `customer-notes2` where id <3) cn2 on cn2.id=firstInArray(`customer-notes`.id)" )
 
 
 

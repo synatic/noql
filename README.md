@@ -1,6 +1,14 @@
 # sql-to-mongo
-Converts SQL Queries to Mongo find statements or aggregation pipelines
+Converts M-SQL Queries to Mongo find statements or aggregation pipelines
 
+**What is M-SQL**
+
+M-SQL is a specific way to use MySQL style queries tailored to MongoDB functions and a multilevel document paradigm. 
+
+##Notes
+* Supports Mongo 3.6 or greater
+* Follows mySQL Syntax
+* As with MongoDB column names and strings are case sensitive.
 
 ##Installation
 ```
@@ -20,19 +28,18 @@ const SQLMongoParser=require('@synatic/sql-to-mongo');
 
 ###canQuery
 
-##parseSQLtoAST
+###parseSQLtoAST
 
 
-##Notes
-As with MongoDB column names and strings are case sensitive.
 
-Follows mySQL Syntax
+  
+
 
 Requires as for functions and sub queries
 ```
 select abs(-1) as `absId` from `customers`
 ```
-Supports Mongo 3.6 or greater
+
 
 as on table requires prefixing
 ```
@@ -75,6 +82,11 @@ select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (sel
 ###Group By and Having
 
 ###Joins
+
+hints
+first
+last
+unwind
 
 ###Sub Queries
 
@@ -131,6 +143,7 @@ Use sub select
 ```
 select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
+
 
 ###Group Methods
 sum
