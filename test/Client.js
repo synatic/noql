@@ -5,6 +5,8 @@ const SQLParser = require('../lib/SQLParser.js');
 const _customers = require('./customers.json');
 const _stores = require('./stores.json');
 const _films = require('./films.json');
+const _customerNotes = require('./customer-notes.json');
+const _customerNotes2 = require('./customer-notes2.json');
 const _connectionString = "mongodb://127.0.0.1:27017";
 const _dbName = "sql-to-mongo-test";
 const _queryTests = require('./MongoQueryTests.json');
@@ -37,7 +39,13 @@ describe('Client Queries', function () {
                 await db.collection('films').bulkWrite(_films.map(d => {
                     return { insertOne: { document: d } };
                 }));
+                await db.collection('customer-notes').bulkWrite(_customerNotes.map(d => {
+                    return { insertOne: { document: d } };
+                }));
 
+                await db.collection('customer-notes2').bulkWrite(_customerNotes2.map(d => {
+                    return { insertOne: { document: d } };
+                }));
 
                 done();
             } catch (exp) {

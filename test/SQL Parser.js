@@ -177,7 +177,7 @@ describe('SQL Parser', function () {
 
     describe('should run query tests', function () {
         for(let t of _queryTests) {
-            it(t.query,function(){
+            it(`${t.name?(t.name + ':'):''}${t.query}`,function(){
                 if (t.error) {
                     try {
                         SQLParser.makeMongoQuery(t.query);
@@ -207,7 +207,7 @@ describe('SQL Parser', function () {
 
     describe('should run query tests as aggregate tests', function () {
         for(let t of _queryTests.filter(t=>!t.error)) {
-            it(t.query,function(){
+            it(`${t.name?(t.name + ':'):''}${t.query}`,function(){
 
                 let err=null;
                 let parsedQuery;
@@ -241,7 +241,7 @@ describe('SQL Parser', function () {
 
     describe('should run aggregate tests', function () {
           for(let t of _aggregateTests) {
-            it(t.query,function(){
+            it(`${t.name?(t.name + ':'):''}${t.query}`,function(){
                 if (t.error) {
                     try {
                         SQLParser.makeMongoAggregate(t.query);

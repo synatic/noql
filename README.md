@@ -34,6 +34,12 @@ select abs(-1) as `absId` from `customers`
 ```
 Supports Mongo 3.6 or greater
 
+as on table requires prefixing
+```
+select c.* from customers  as c 
+```
+
+Always prefix on joins
 
 ##Supported SQL Statements
 
@@ -95,7 +101,7 @@ select convert(`id`,'string') as d `films`
 ###Arrays
 Use sub-select to query array fields in collections
 ```
- select (select * from Rentals where staffId=2) as t from `customers`
+select (select * from Rentals where staffId=2) as t from `customers`
 ```
 ####sumArray
 Sums the values in an array given an array field or sub-select and the field to sum
@@ -150,3 +156,7 @@ Calculated columns in where statements can only be used with aggregates
 --have to repeat select statemnt as with sql rules
 select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 ```
+
+##Function Mapping
+
+|Mongo Function |M-SQL Function |Description  |Example  |

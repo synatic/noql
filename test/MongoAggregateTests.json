@@ -681,8 +681,101 @@
         "customers"
       ]
     }
-  }
+  },
+  {
+    "query": "select c.* from customers  as c",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$project":{"c":"$$ROOT"}},{
+        "$project": {
+          "c": "$c"
+        }
+      }],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select c as `$$ROOT` from customers  as c",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$project":{"c":"$$ROOT"}},{"$replaceRoot":{"newRoot":"$c"}}],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.*  from customers c inner join `customer-notes` cn on c.id=cn.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$project":{"c":"$c","cn":"$cn"}}],
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select mergeObjects(c,firstInArray(cn)) as `$$ROOT` from customers c inner join `customer-notes` cn on c.id=cn.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$replaceRoot":{"newRoot":{"$mergeObjects":["$c",{"$first":"$cn"}]}}}],
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.*,cn2.*  from customers c inner join `customer-notes` cn on c.id=cn.id inner join `customer-notes2` cn2 on cn2.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$lookup":{"from":"customer-notes2","as":"cn2","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$cn2"},0]}}},{"$project":{"c":"$c","cn":"$cn","cn2":"$cn2"}}]
+      ,
+      "collections": [
+        "customers",
+        "customer-notes",
+        "customer-notes2"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,`customer-notes`.*,cn2.*  from customers c inner join `customer-notes` on `customer-notes`.id=c.id left outer join `customer-notes2` cn2 on cn2.id=`customer-notes`.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"customer-notes","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$customer-notes"},0]}}},{"$lookup":{"from":"customer-notes2","as":"cn2","localField":"customer-notes.id","foreignField":"id"}},{"$project":{"c":"$c","customer-notes":"$customer-notes","cn2":"$cn2"}}],
+      "collections": [
+        "customers",
+        "customer-notes",
+        "customer-notes2"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.* from customers c inner join `customer-notes` cn on cn.id=c.id and (cn.id>2 or cn.id<5)",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","let":{"c_id":"$c.id"},"pipeline":[{"$match":{"$expr":{"$and":[{"$eq":["$id","$$c_id"]},{"$or":[{"$gt":["$id",2]},{"$lt":["$id",5]}]}]}}}]}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$project":{"c":"$c","cn":"$cn"}}],
 
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  },
+  {
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","let":{"c_id":"$c.id"},"pipeline":[{"$match":{"id":{"$gt":2}}},{"$match":{"$expr":{"$eq":["$id","$$c_id"]}}}]}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$project":{"c":"$c","cn":"$cn"}}],
+      "collections": [
+        "customers",
+        "customer-notes"
+      ]
+    }
+  }
 
 
 
