@@ -32,9 +32,6 @@ const SQLMongoParser=require('@synatic/sql-to-mongo');
 
 ## M-SQL
 
-  
-
-
 Requires as for functions and sub queries
 ```
 select abs(-1) as `absId` from `customers`
@@ -81,6 +78,8 @@ select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (sel
 
 ### Group By and Having
 
+
+
 ### Joins
 
 hints
@@ -93,8 +92,24 @@ unwind
 ### Case Statements
 
 
+### Aggregate Functions
+| Aggregate Function | Example |
+| ------------- | ------------- |
+| SUM | ``` select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| AVG | ``` select avg(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| MIN | ``` select min(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| MAX | ``` select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| COUNT | ``` select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 
-
+Requires group by for aggregate functions. If grouping by top level, use fake field for group by: 
+```
+select sum(`id`) as sumId  from `customers` group by `xxxx`
+ ```
+#### SUM CASE
+Sum Case logic is supported:
+```
+select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`
+```
 ### Cast
 Supports cast operations to the MySQL types: VARCHAR, INT, DECIMAL, DATETIME, DECIMAL
 ```
@@ -144,18 +159,11 @@ Use sub select
 select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 ```
 
-
-### Group Methods
-sum
-avg
-max
-min
-
-
 ### Unsupported SQL Statements
 * Over
 * CTE's
-* IN fixed value list (not supported by AST parser)
+* IN fixed value list
+* Pivot
 
 
 

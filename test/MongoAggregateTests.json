@@ -813,6 +813,96 @@
         "customer-notes"
       ]
     }
+  },
+  {
+    "query": "select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"aggrVal":{"$sum":"$id"}}},{"$project":{"City":"$_id.City","_id":0,"aggrVal":"$aggrVal"}},{"$sort":{"City":1}}],
+
+        "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select avg(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"aggrVal":{"$avg":"$id"}}},{"$project":{"City":"$_id.City","_id":0,"aggrVal":"$aggrVal"}},{"$sort":{"City":1}}],
+
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select min(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"aggrVal":{"$min":"$id"}}},{"$project":{"City":"$_id.City","_id":0,"aggrVal":"$aggrVal"}},{"$sort":{"City":1}}],
+
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"aggrVal":{"$max":"$id"}}},{"$project":{"City":"$_id.City","_id":0,"aggrVal":"$aggrVal"}},{"$sort":{"City":1}}],
+
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "query": "select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"countVal":{"$sum":1}}},{"$project":{"City":"$_id.City","_id":0,"countVal":"$countVal"}},{"$sort":{"City":1}}],
+
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Select sum case with values only",
+    "query": "select sum(case when id <50 then 1 when id >= 50 then -1 else 0 end) as sumCase,`Address.City` as City from `customers` group by `Address.City`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{"City":"$Address.City"},"sumCase":{"$sum":{"$switch":{"branches":[{"case":{"$lt":["$id",50]},"then":1},{"case":{"$gte":["$id",50]},"then":{"$multiply":[-1,{"$literal":1}]}}],"default":{"$literal":0}}}}}},{"$project":{"City":"$_id.City","_id":0,"sumCase":"$sumCase"}}]
+    ,
+
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Select sum case with fields and values",
+    "query": "select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{},"Ueda":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Ueda"]},"then":1}],"default":{"$literal":0}}}},"Tete":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Tete"]},"then":1}],"default":{"$literal":0}}}}}},{"$project":{"_id":0,"Ueda":"$Ueda","Tete":"$Tete"}}],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Test Sum Case with field",
+    "query": "select sum(case when `Address.City`='Ueda' then `id` else 0 end) as Ueda,sum(case when `Address.City`='Tete' then `id` else 0 end) as Tete from `customers` group by `xxx`",
+    "type": "aggregate",
+    "output": {
+      "pipeline":[{"$group":{"_id":{},"Ueda":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Ueda"]},"then":"$id"}],"default":{"$literal":0}}}},"Tete":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Tete"]},"then":"$id"}],"default":{"$literal":0}}}}}},{"$project":{"_id":0,"Ueda":"$Ueda","Tete":"$Tete"}}],
+      "collections": [
+        "customers"
+      ]
+    }
   }
 
 
