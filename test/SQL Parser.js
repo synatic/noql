@@ -168,7 +168,7 @@ describe('SQL Parser', function () {
 
 
         it('should not allow with where on sub query ', function () {
-            assert(!SQLParser.canQuery("select id,Title,Rating,sumArray((select salesId as total from Rentals),'total') as resultTotal from `customers` where resultTotal > 1 and id<10"), "Invalid can query")
+            assert(!SQLParser.canQuery("select id,Title,Rating,sum_Array((select salesId as total from Rentals),'total') as resultTotal from `customers` where resultTotal > 1 and id<10"), "Invalid can query")
         })
 
 

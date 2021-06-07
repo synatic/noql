@@ -1,26 +1,7 @@
 [
   {
-    "abs": {
-      "query": "select abs(`Replacement Cost`) as aggr from `films`",
-      "aggregateOutput": {
-        "collections": [
-          "films"
-        ],
-        "pipeline": [
-          {
-            "$project": {
-              "aggr": {
-                "$abs": "$Replacement Cost"
-              }
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
     "add": {
-      "query": "select `Replacement Cost` + 10 + 20 as aggr from `films`",
+      "query": "select `Replacement Cost` + 10 + 20 as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -28,7 +9,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$add": [
                   {
                     "$add": [
@@ -46,27 +27,8 @@
     }
   },
   {
-    "ceil": {
-      "query": "select ceiling(`Replacement Cost`) as aggr from `films`",
-      "aggregateOutput": {
-        "collections": [
-          "films"
-        ],
-        "pipeline": [
-          {
-            "$project": {
-              "aggr": {
-                "$ceil": "$Replacement Cost"
-              }
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
     "divide": {
-      "query": "select `Replacement Cost` / 10 / 20 as aggr from `films`",
+      "query": "select `Replacement Cost` / 10 / 20 as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -74,7 +36,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$divide": [
                   {
                     "$divide": [
@@ -93,7 +55,7 @@
   },
   {
     "exp": {
-      "query": "select exp(`Replacement Cost`) as aggr from `films`",
+      "query": "select exp(`Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -101,7 +63,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$exp": "$Replacement Cost"
               }
             }
@@ -112,7 +74,7 @@
   },
   {
     "floor": {
-      "query": "select floor(`Replacement Cost`) as aggr from `films`",
+      "query": "select floor(`Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -120,7 +82,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$floor": "$Replacement Cost"
               }
             }
@@ -131,7 +93,7 @@
   },
   {
     "ln": {
-      "query": "select log(`Replacement Cost`) as aggr from `films`",
+      "query": "select log(`Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -139,7 +101,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$ln": "$Replacement Cost"
               }
             }
@@ -150,7 +112,7 @@
   },
   {
     "log": {
-      "query": "select log(2, `Replacement Cost`) as aggr from `films`",
+      "query": "select log(2, `Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -158,7 +120,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$log": [
                   "$Replacement Cost",
                   2
@@ -172,7 +134,7 @@
   },
   {
     "log10": {
-      "query": "select log10(`Replacement Cost`) as aggr from `films`",
+      "query": "select log10(`Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -180,7 +142,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$log10": "$Replacement Cost"
               }
             }
@@ -191,7 +153,7 @@
   },
   {
     "mod": {
-      "query": "select mod(`Replacement Cost`, 10) as aggr from `films`",
+      "query": "select mod(`Replacement Cost`, 10) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -199,7 +161,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$mod": [
                   "$Replacement Cost",
                   10
@@ -213,7 +175,7 @@
   },
   {
     "multiply": {
-      "query": "select `Replacement Cost` * 10 * 20 as aggr from `films`",
+      "query": "select `Replacement Cost` * 10 * 20 as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -221,7 +183,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$multiply": [
                   {
                     "$multiply": [
@@ -240,7 +202,7 @@
   },
   {
     "pow": {
-      "query": "select pow(`Replacement Cost`, 10) as aggr from `films`",
+      "query": "select pow(`Replacement Cost`, 10) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -248,7 +210,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$pow": [
                   "$Replacement Cost",
                   10
@@ -262,7 +224,7 @@
   },
   {
     "round": {
-      "query": "select round(`Replacement Cost`, 2) as aggr from `films`",
+      "query": "select round(`Replacement Cost`, 2) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -270,7 +232,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$round": [
                   "$Replacement Cost",
                   2
@@ -284,7 +246,7 @@
   },
   {
     "sqrt": {
-      "query": "select sqrt(`Replacement Cost`) as aggr from `films`",
+      "query": "select sqrt(`Replacement Cost`) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -292,7 +254,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$sqrt": "$Replacement Cost"
               }
             }
@@ -303,7 +265,7 @@
   },
   {
     "subtract": {
-      "query": "select `Replacement Cost` - 10 - 20 as aggr from `films`",
+      "query": "select `Replacement Cost` - 10 - 20 as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -311,7 +273,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$subtract": [
                   {
                     "$subtract": [
@@ -330,7 +292,7 @@
   },
   {
     "trunc": {
-      "query": "select trunc(`Replacement Cost`, 1) as aggr from `films`",
+      "query": "select trunc(`Replacement Cost`, 1) as exprVal from `films`",
       "aggregateOutput": {
         "collections": [
           "films"
@@ -338,7 +300,7 @@
         "pipeline": [
           {
             "$project": {
-              "aggr": {
+              "exprVal": {
                 "$trunc": [
                   "$Replacement Cost",
                   1

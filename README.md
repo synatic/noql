@@ -100,7 +100,7 @@ unwind
 | MIN | ``` select min(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 | MAX | ``` select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 | COUNT | ``` select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
-
+| ADDTOSET - Not supported | Returns an array of all unique values that results from applying an expression to each document in a group of documents that share the same group by key |
 Requires group by for aggregate functions. If grouping by top level, use fake field for group by: 
 ```
 select sum(`id`) as sumId  from `customers` group by `xxxx`
@@ -130,20 +130,21 @@ Use sub-select to query array fields in collections
 ```
 select (select * from Rentals where staffId=2) as t from `customers`
 ```
-#### sumArray
-Sums the values in an array given an array field or sub-select and the field to sum
-```
-select sumArray(`Rentals`,'fileId') as totalFileIds from `customers`
-```
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| IS_ARRAY(expr) | Returns true when the field is an array | ```select id,(case when IS_ARRAY(Rentals) then 'Yes' else 'No' end) as test from `customers` ``` | 
+| SUM_ARRAY(array expr,[field]) |  Sums the values in an array given an array field or sub-select and the field to sum | ```select SUM_ARRAY(`Rentals`,'staffId') as totalStaffIds from `customers` ```  |
+|  | With sub select | ```select id,`First Name`,`Last Name`,SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers``` |
+| AVG_ARRAY(array expr,[field]) | Average the elements in an array by field | ```select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers``` |
 
-e.g. with sub select
-```
-select id,`First Name`,`Last Name`,sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers
-```
-#### avgArray
 #### firstInArray ($first)
 #### lastInArray ($last)
-#### isArray ($isArray)
+
+#### allElementsTrue
+anyElementTrue
+#### Unwind
+
+
 Returns true if the field or expression is an Array
 ```
 select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`
@@ -180,3 +181,16 @@ select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 
 | Mongo Function | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- | ------------- |
+| $abs | ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
+| $acos | ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
+| $acosh | ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
+| $add | SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
+ 
+| ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
+| $ceil | CEIL(expr) | Returns the smallest integer greater than or equal to the specified number. | ```select CEIL(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| $exp | EXP(expr) | Raises Euler's number (i.e. e ) to the specified exponent and returns the result. | ```select EXP(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| $trunc | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
+
+
+
+### Operators

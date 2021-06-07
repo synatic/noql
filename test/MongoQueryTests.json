@@ -138,6 +138,24 @@
     }
   },
   {
+    "query": "select sum(`Replacement Cost`,2,id) as s from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$add": [
+            "$Replacement Cost",
+            {
+              "$literal": 2
+            },
+            "$id"
+          ]
+        }
+      }
+    }
+  },
+  {
     "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
     "output": {
       "collection": "customers",
@@ -154,7 +172,7 @@
     }
   },
   {
-    "query": "select `First Name` as Name,firstInArray(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
+    "query": "select `First Name` as Name,FIRST_IN_ARRAY(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
     "output": {
       "collection": "customers",
       "limit": 10,
@@ -239,7 +257,7 @@
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
   {
-    "query": "select id,(case when isArray(Rentals) then 'Yes' else 'No' end) as test from `customers`",
+    "query": "select id,(case when IS_ARRAY(Rentals) then 'Yes' else 'No' end) as test from `customers`",
     "output": {"limit":100,"collection":"customers","projection":{
       "id": "$id",
       "test": {
@@ -260,7 +278,18 @@
     }}
 
   },
+  {
+    "query": "select id,IS_ARRAY(Rentals) as isArray from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{
+      "id": "$id",
+      "isArray": {
 
+            "$isArray": "$Rentals"
+
+      }
+    }}
+
+  },
   {
     "query": "SELECT abs(id + lengthOfArray(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
     "output": {
@@ -376,7 +405,8 @@
     "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
   },
   {
-    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
+    "name": "array:sum_array",
+    "query": "select id,`First Name`,`Last Name`,SUM_ARRAY(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -404,7 +434,8 @@
     }
   },
   {
-    "query": "select id,`First Name`,`Last Name`,sumArray(`Rentals`,'filmId') as totalIdRentals from customers",
+    "name": "array:sum_array",
+    "query": "select id,`First Name`,`Last Name`,SUM_ARRAY(`Rentals`,'filmId') as totalIdRentals from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -424,7 +455,8 @@
     }
   },
   {
-    "query": "select sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
+    "name": "array:sum_array",
+    "query": "select SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -434,7 +466,8 @@
     }
   },
   {
-    "query": "select id,(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
+    "name": "array:sum_array",
+    "query": "select id,(select `Film Title` as Title,SUM_ARRAY(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -443,7 +476,8 @@
     }
   },
   {
-    "query": "select id,firstInArray(select `Film Title` as Title,sumArray(`Payments`,'Amount') as totalPayment from `Rentals`) as Rental from customers",
+    "name": "array:sum_array",
+    "query": "select id,FIRST_IN_ARRAY(select `Film Title` as Title,SUM_ARRAY(`Payments`,'Amount') as totalPayment from `Rentals`) as Rental from customers",
     "output": {
       "limit": 100,
       "collection": "customers",
@@ -452,11 +486,199 @@
 
 
     }
+  },
+  {
+    "name": "array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Arithmetic:abs",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$abs": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select abs(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ceil",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$ceil": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ceiling(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:exp",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$exp": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select exp(`Replacement Cost`) as exprVal from `films`"
+  },
+
+  {
+    "name": "Arithmetic:trunc",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost",
+            {
+              "$literal": 1
+            }
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select trunc(`Replacement Cost`, 1) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:trunc2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select trunc(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:acos",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$acos": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select acos(`Replacement Cost`) as exprVal from `films`"
+  },{
+  "name": "Arithmetic:acos2",
+  "output": {
+    "limit": 100,
+    "projection": {
+      "exprVal": {
+        "$acos": {
+          "$literal": 0.35
+        }
+      }
+    },
+    "collection": "films"
+  },
+  "query": "select acos(0.35) as exprVal from `films`"
+},
+
+  {
+    "name": "Arithmetic:acosh",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$acosh": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select acosh(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:acosh2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$acosh": {
+            "$literal": 0.35
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select acosh(0.35) as exprVal from `films`"
   }
-
-
-
-
 ]
 
 
