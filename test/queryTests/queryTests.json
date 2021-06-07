@@ -236,6 +236,14 @@
       "collection": "customers",
       "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
   },
+  {
+    "name": "IN list",
+    "query": "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10",
+    "output": {
+      "limit": 10,
+      "collection": "customers",
+      "query": {"Address.City":{"$in":["Japan","Pakistan"]}}}
+  },
    {
     "query": "select * from `films` where id<90 and (id>10 or id=5)",
     "output": {
@@ -381,6 +389,8 @@
     },
     "query": "select acosh(1.2) as exprVal from `films`"
   }
+
+
 ]
 
 

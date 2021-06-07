@@ -367,8 +367,51 @@
     "query": "select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`",
     "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$zip":{"inputs":[{"$map":{"input":"$Rentals","in":"$$this.Film Title"}},{"$range":[{"$literal":0},{"$literal":10},{"$literal":2}]}]}}}}
 
-  }
+  },
+  {
+    "name": "Array:CONCAT_ARRAYS",
+    "query": "select id,CONCAT_ARRAYS((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$concatArrays":[{"$map":{"input":"$Rentals","in":"$$this.Film Title"}},{"$range":[{"$literal":0},{"$literal":10},{"$literal":2}]}]}}
+    }
 
+  },
+  {
+    "name": "Array:OBJECT_TO_ARRAY",
+    "query": "select id,OBJECT_TO_ARRAY(`Address`) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$objectToArray":"$Address"}}    }
+
+
+  },
+  {
+    "name": "Array:ARRAY_TO_OBJECT",
+    "query": "select id,ARRAY_TO_OBJECT(OBJECT_TO_ARRAY(`Address`)) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$arrayToObject":{"$objectToArray":"$Address"}}}}
+  },
+  {
+    "name": "Array:SET_INTERSECTION",
+    "query": "select id,SET_INTERSECTION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$setIntersection":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":[1,2,3,4]}]}}}
+  },
+  {
+    "name": "Array:SET_UNION",
+    "query": "select id,SET_UNION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$setUnion":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":[1,2,3,4]}]}}}
+  },
+  {
+    "name": "Array:SET_DIFFERENCE",
+    "query": "select id,SET_DIFFERENCE((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$setDifference":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":[1,2,3,4]}]}}}
+  },
+  {
+    "name": "Array:SET_EQUALS",
+    "query": "select id,SET_EQUALS((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$setEquals":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":[1,2,3,4]}]}}}
+  },
+  {
+    "name": "Array:SET_IS_SUBSET",
+    "query": "select id,SET_IS_SUBSET((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$setIsSubset":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":[1,2,3,4]}]}}}
+  }
 ]
 
 

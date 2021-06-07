@@ -1,7 +1,7 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 
-const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/arrayOperators.json'));
+const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/objectOperators.json'),require('./queryTests/arrayOperators.json'));
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 describe('SQL Parser', function () {
