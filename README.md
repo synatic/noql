@@ -125,14 +125,41 @@ select convert(`id`,'string') as d `films`
 
 ### Mathematical Functions
 
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
+| ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
+| ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
+| SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
+
+| ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
+| CEIL(expr) | Returns the smallest integer greater than or equal to the specified number. | ```select CEIL(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| EXP(expr) | Raises Euler's number (i.e. e ) to the specified exponent and returns the result. | ```select EXP(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
+
+
+
 ### Arrays
 Use sub-select to query array fields in collections
 ```
 select (select * from Rentals where staffId=2) as t from `customers`
 ```
+Sorting array in sub select, user unwind
+'$$root' in sub select promotes the field to the value
+
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
-| IS_ARRAY(expr) | Returns true when the field is an array | ```select id,(case when IS_ARRAY(Rentals) then 'Yes' else 'No' end) as test from `customers` ``` | 
+| IS_ARRAY(array expr) | Returns true when the field is an array | ```select id,(case when IS_ARRAY(Rentals) then 'Yes' else 'No' end) as test from `customers` ``` |
+| ALL_ELEMENTS_TRUE(array expr) | Returns true when all elements in the array are true | ```select id,(case when ALL_ELEMENTS_TRUE(Rentals) then 'Yes' else 'No' end) as test from `customers` ``` | 
+| ANY_ELEMENT_TRUE(array expr) | Returns true when any element in the array is true | ```select id,(case when ANY_ELEMENT_TRUE(Rentals) then 'Yes' else 'No' end) as test from `customers` ``` |
+| SIZE_OF_ARRAY(array expr) | Returns the size of array | ```select id,SIZE_OF_ARRAY(`Rentals`) as test from `customers` ``` |
+| FIRST_IN_ARRAY(array expr) | Returns the first element of an array | ```select id,FIRST_IN_ARRAY(`Rentals`) as test from `customers` ``` |
+| LAST_IN_ARRAY(array expr) | Returns the last element of an array | ```select id,LAST_IN_ARRAY(`Rentals`) as test from `customers` ``` |
+| REVERSE_ARRAY(array expr) | Reverses the order of an array field | ```select id,REVERSE_ARRAY(`Rentals`) as test from `customers` ``` |
+| ARRAY_ELEM_AT(array expr,position) | Returns the element of an array at a position | ```select id,ARRAY_ELEM_AT(`Rentals`,5) as test from `customers` ``` |
+| INDEXOF_ARRAY(array expr,value,[start],[end]) | Returns the index of the value in the array | ```select id,INDEXOF_ARRAY((select filmId as '$$ROOT' from `Rentals`),5) as test from `customers` ``` |
+| ARRAY_RANGE(from,to,step) | Generates an array of numbers from to with the specified step | ```select id,ARRAY_RANGE(0,10,2) as test from `customers` ``` |
+| ZIP_ARRAY(array expr,...) | Transposes an array of input arrays so that the first element of the output array would be an array containing, the first element of the first input array, the first element of the second input array, etc. | ```select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers` ``` |
 | SUM_ARRAY(array expr,[field]) |  Sums the values in an array given an array field or sub-select and the field to sum | ```select SUM_ARRAY(`Rentals`,'staffId') as totalStaffIds from `customers` ```  |
 |  | With sub select | ```select id,`First Name`,`Last Name`,SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers``` |
 | AVG_ARRAY(array expr,[field]) | Average the elements in an array by field | ```select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers``` |
@@ -140,8 +167,7 @@ select (select * from Rentals where staffId=2) as t from `customers`
 #### firstInArray ($first)
 #### lastInArray ($last)
 
-#### allElementsTrue
-anyElementTrue
+
 #### Unwind
 
 
@@ -168,7 +194,7 @@ select id,(select * from `Rentals` limit 10 offset 5) as Rentals from customers
 
 
 
-Sorting array in sub select, user unwind
+
 
 ### Selecting on a calculated column by name
 Calculated columns in where statements can only be used with aggregates  
@@ -178,19 +204,6 @@ select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 ```
 
 ## Function Mapping
-
-| Mongo Function | M-SQL Function | Description | Example |
-| ------------- | ------------- | ------------- | ------------- |
-| $abs | ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
-| $acos | ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
-| $acosh | ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
-| $add | SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
- 
-| ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
-| $ceil | CEIL(expr) | Returns the smallest integer greater than or equal to the specified number. | ```select CEIL(`Replacement Cost`, 1) as exprVal from `films` ```  |
-| $exp | EXP(expr) | Raises Euler's number (i.e. e ) to the specified exponent and returns the result. | ```select EXP(`Replacement Cost`, 1) as exprVal from `films` ```  |
-| $trunc | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
-
 
 
 ### Operators

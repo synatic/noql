@@ -1,15 +1,8 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
-const $equal = require('deep-equal');
 
-const _queryTests = require('./MongoQueryTests.json');
-const _aggregateTests = require('./MongoAggregateTests.json');
-
-const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
-const arrayExpressionOperators = require('./expressionOperators/ArrayExpressionOperators')
-const booleanExpressionOperators = require('./expressionOperators/BooleanExpressionOperators')
-const comparisonExpressionOperators = require('./expressionOperators/ComparisonExpressionOperators')
-
+const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/arrayOperators.json'));
+const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 describe('SQL Parser', function () {
 

@@ -10,7 +10,7 @@ const SQLParser=require('./lib/SQLParser');
 // let parsedVal=SQLParser.makeMongoAggregate("select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`" )
 
 //select sum(case when id <10 then 1 when id > 10 then -1 else 0 end) as sumCase from `customers`
-let parsedVal=SQLParser.makeMongoQuery("select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers")
+let parsedVal=SQLParser.makeMongoQuery("select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`")
 
 //let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1")
 //let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")
@@ -20,7 +20,7 @@ let parsedVal=SQLParser.makeMongoQuery("select id,`First Name`,`Last Name`,avg_A
 //let parsedVal=SQLParser.makeMongoQuery("select (log10(3) * floor(a) +1) as s from collection")
 //select id,sum(sumArray((select sumArray(`Payments`,'Amount') as total from `Rentals`),'total')) as t from customers
 
-return console.log(JSON.stringify(parsedVal.pipeline?parsedVal.pipeline:parsedVal))
+return console.log(JSON.stringify(parsedVal.pipeline?parsedVal.pipeline:parsedVal.projection))
 
 //select * from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id') from customers ) as t inner join (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id') from customers ) as t2 on t2.id=t1.id
 

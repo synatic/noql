@@ -151,7 +151,7 @@
     }
   },
   {
-    "query": "select id,Title,Rating from `films` where sumArray((select id as total from customers),'total') =1",
+    "query": "select id,Title,Rating from `films` where sum_Array((select id as total from customers),'total') =1",
     "type": "aggregate",
     "output": {
       "pipeline": [

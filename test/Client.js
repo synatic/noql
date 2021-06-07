@@ -2,15 +2,15 @@ const { MongoClient } = require('mongodb');
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 
-const _customers = require('./customers.json');
-const _stores = require('./stores.json');
-const _films = require('./films.json');
-const _customerNotes = require('./customer-notes.json');
-const _customerNotes2 = require('./customer-notes2.json');
+const _customers = require('./exampleData/customers.json');
+const _stores = require('./exampleData/stores.json');
+const _films = require('./exampleData/films.json');
+const _customerNotes = require('./exampleData/customer-notes.json');
+const _customerNotes2 = require('./exampleData/customer-notes2.json');
 const _connectionString = "mongodb://127.0.0.1:27017";
 const _dbName = "sql-to-mongo-test";
-const _queryTests = require('./MongoQueryTests.json');
-const _aggregateTests = require('./MongoAggregateTests.json');
+const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/arrayOperators.json'));
+const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
 
@@ -66,7 +66,7 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _queryTests.filter(q => !!q.query && !q.error);
             for (const test of tests) {
-                it(test.query,function(done){
+                it(`${test.name?test.name + ':':''}${test.query}`,function(done){
                     (async () => {
                         try {
                             const parsedQuery = SQLParser.parseSQL(test.query);

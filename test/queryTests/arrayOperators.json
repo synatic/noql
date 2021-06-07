@@ -1,0 +1,374 @@
+[
+  {
+    "name": "Array:first_in_array",
+    "query": "select `First Name` as Name,FIRST_IN_ARRAY(`Rentals`) as Rental from `customers` where `id`>1 limit 10 offset 5",
+    "output": {
+      "collection": "customers",
+      "limit": 10,
+      "skip": 5,
+      "projection": {
+        "Rental": {
+          "$first": "$Rentals"
+        },
+        "Name": "$First Name"
+      },
+      "query": {
+        "id": { "$gt": 1 }
+
+      }
+    }
+  },
+  {
+    "name": "Array:is_array with case",
+    "query": "select id,(case when IS_ARRAY(Rentals) then 'Yes' else 'No' end) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{
+      "id": "$id",
+      "test": {
+        "$switch": {
+          "branches": [
+            {
+              "case": {
+                "$isArray": "$Rentals"
+              },
+              "then": "Yes"
+            }
+          ],
+          "default": {
+            "$literal": "No"
+          }
+        }
+      }
+    }}
+
+  },
+  {
+    "name": "Array:is_array",
+    "query": "select id,IS_ARRAY(Rentals) as isArray from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{
+      "id": "$id",
+      "isArray": {
+
+            "$isArray": "$Rentals"
+
+      }
+    }}
+
+  },
+  {
+    "name": "Array:SIZE_OF_ARRAY with addition",
+    "query": "SELECT abs(id + SIZE_OF_ARRAY(Rentals) + 1) as testComplex FROM customers WHERE `First Name` like '%bc%'",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      },
+      "projection": {
+        "testComplex": {
+          "$abs": {
+            "$add": [
+              {
+                "$add": [
+                  "$id",
+                  {
+                    "$size": "$Rentals"
+                  }
+                ]
+              },
+              1
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:sub select",
+    "query": "select id,Title,Rating,(select * from Rentals where staffId<10) as rentalsArr from `customers`",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "Title": "$Title",
+        "Rating": "$Rating",
+        "rentalsArr": {
+          "$map": {
+            "input": {
+              "$filter": {
+                "input": "$Rentals",
+                "cond": {
+                  "$and": [
+                    {
+                      "$lt": [
+                        "$$this.staffId",
+                        "10"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "in": "$$this"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:SIZE_OF_ARRAY with addition",
+    "query": "SELECT ceiling(id + SIZE_OF_ARRAY(Rentals) + 1) as testComplex FROM customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "testComplex": {
+        "$ceil": {
+          "$add": [
+            {
+              "$add": [
+                "$id",
+                {
+                  "$size": "$Rentals"
+                }
+              ]
+            },
+            1
+          ]
+        }
+      }
+    }
+    }
+  },
+  {
+    "name": "Array:sum_array",
+    "query": "select id,`First Name`,`Last Name`,SUM_ARRAY(`Rentals`,`Payments`,'Amount') as totalPayments from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalPayments":{
+          "$reduce":{
+          "input": "$Rentals",
+          "initialValue": 0,
+          "in": {
+            "$sum": ["$$value",{
+              "$reduce":{
+                "input": "$$this.Payments",
+                "initialValue": 0,
+                "in": {
+                  "$sum": ["$$value", "$$this.Amount" ]
+                }
+              }
+            }]}
+        }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:sum_array",
+    "query": "select id,`First Name`,`Last Name`,SUM_ARRAY(`Rentals`,'filmId') as totalIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:sum_array",
+    "query": "select SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"t":{"$reduce":{"input":{"$map":{"input":"$Rentals","in":{"total":{"$reduce":{"input":"$$this.Payments","initialValue":
+      0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}},"initialValue":0,"in":{"$sum":["$$value","$$this.total"]}}}}
+
+    }
+  },
+  {
+    "name": "Array:sum_array",
+    "query": "select id,(select `Film Title` as Title,SUM_ARRAY(`Payments`,'Amount') as totalPayment from `Rentals`) as Rentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {"id":"$id","Rentals":{"$map":{"input":"$Rentals","in":{"Title":"$$this.Film Title","totalPayment":{"$reduce":{"input":"$$this.Payments","initialValue":0,"in":{"$sum":["$$value","$$this.Amount"]}}}}}}}
+
+    }
+  },
+  {
+    "name": "Array:first_in_array",
+    "query": "select id,FIRST_IN_ARRAY(`Rentals`) as test from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$first": "$Rentals"
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:last_in_array",
+    "query": "select id,LAST_IN_ARRAY(`Rentals`) as test from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$last": "$Rentals"
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:reverse_array",
+    "query": "select id,REVERSE_ARRAY(`Rentals`) as test from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$reverseArray": "$Rentals"
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:array_elem_at",
+    "query": "select id,ARRAY_ELEM_AT(`Rentals`,5) as test from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$arrayElemAt": ["$Rentals",{
+            "$literal": 5}]
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:avg_array",
+    "query": "select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id":"$id",
+        "First Name":"$First Name",
+        "Last Name":"$Last Name",
+        "totalIdRentals":{
+          "$reduce":{
+            "input": "$Rentals",
+            "initialValue": 0,
+            "in": {
+              "$sum": ["$$value","$$this.filmId"]}
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Array:all_elements_true",
+    "query": "select id,(case when ALL_ELEMENTS_TRUE(Rentals) then 'Yes' else 'No' end) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$switch":{"branches":[{"case":{"$allElementsTrue":["$Rentals"]},"then":"Yes"}],"default":{"$literal":"No"}}}}}
+    },
+  {
+    "name": "Array:any_element_true",
+    "query": "select id,(case when ANY_ELEMENT_TRUE(Rentals) then 'Yes' else 'No' end) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$switch":{"branches":[{"case":{"$anyElementTrue":["$Rentals"]},"then":"Yes"}],"default":{"$literal":"No"}}}}}
+  },
+  {
+    "name": "Array:INDEXOF_ARRAY",
+    "query": "select id,INDEXOF_ARRAY((select filmId as '$$ROOT' from `Rentals`),22) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$indexOfArray":[{"$map":{"input":"$Rentals","in":"$$this.filmId"}},{"$literal":22}]}}}
+
+  },
+  {
+    "name": "Array:ARRAY_RANGE",
+    "query": "select id,ARRAY_RANGE(0,10,2) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$range":[{"$literal":0},{"$literal":10},{"$literal":2}]}}}
+
+  },
+  {
+    "name": "Array:ARRAY_RANGE",
+    "query": "select id,ARRAY_RANGE(0,10,2) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$range":[{"$literal":0},{"$literal":10},{"$literal":2}]}}}
+
+  },
+  {
+    "name": "Array:ZIP_ARRAY",
+    "query": "select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`",
+    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$zip":{"inputs":[{"$map":{"input":"$Rentals","in":"$$this.Film Title"}},{"$range":[{"$literal":0},{"$literal":10},{"$literal":2}]}]}}}}
+
+  }
+
+]
+
+
