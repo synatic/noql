@@ -178,10 +178,6 @@ Methods that perform operations on objects
 | MERGE_OBJECTS(expr) | Merges objects  | ```select id,MERGE_OBJECTS(`Address`,PARSE_JSON('{"val":1}')) as test from `customers` ``` |
 |  | With Sub Select | ```select id,MERGE_OBJECTS(`Address`,(select 1 as val)) as test from `customers` ```|
 
-
-
-
-
 ### Mathematical Functions
 
 | M-SQL Function | Description | Example |
@@ -189,14 +185,37 @@ Methods that perform operations on objects
 | ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
-| SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
-
-| ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
+| ASIN(expr) |  Returns the inverse sine (arc sine) of a value. | ```select ASIN(`Replacement Cost`) as exprVal from `films` ```  |
+| ASINH(expr) |  Returns the inverse hyperbolic sine (hyperbolic arc sine) of a value. | ```select ASINH(`Replacement Cost`) as exprVal from `films` ```  |
+| ATAN(expr) |  Returns the inverse tangent (arc tangent) of a value. | ```select ATAN(`Replacement Cost`) as exprVal from `films` ```  |
+| ATAN2(y,x) |  Returns the inverse tangent (arc tangent) of y / x, where y and x are the first and second values passed to the expression respectively. | ```select ATAN2(3,4) as exprVal from `films` ```  |
+| ATANH(expr) |  Returns the inverse hyperbolic tangent (hyperbolic arc tangent) of a value. | ```select ATANH(`Replacement Cost`) as exprVal from `films` ```  |
+| BINARY_SIZE(expr) |  Returns the byte size of the expression. | ```select id,BINARY_SIZE(`First Name`) as exprVal from `customers` ```  |
 | CEIL(expr) | Returns the smallest integer greater than or equal to the specified number. | ```select CEIL(`Replacement Cost`, 1) as exprVal from `films` ```  |
 | EXP(expr) | Raises Euler's number (i.e. e ) to the specified exponent and returns the result. | ```select EXP(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
 | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
 
+### Comparison Operators
+
+
 ### String Functions
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| CONCAT(expr,expr,expr...) |  Concatenates strings. | ```select CONCAT(`First Name`,':',`Last Name`) as exprVal from `customers` ```  |
+| TRIM(expr,[chars]) |  Trims string. | ```select TRIM(`First Name`,'_ -') as exprVal from `customers` ```  |
+| LTRIM(expr,[chars]) |  Left trim string. | ```select LTRIM(`First Name`,'_ -') as exprVal from `customers` ```  |
+| RTRIM(expr,[chars]) |  Right trim string. | ```select RTRIM(`First Name`,'_ -') as exprVal from `customers` ```  |
+| SUBSTR(expr,start,length) | Returns the substring of a string. | ```select SUBSTR(`First Name`,1,10) as exprVal from `customers` ```  |
+| SUBSTR_BYTES(expr,start,length) | Returns the substring of a string by bytes. | ```select SUBSTR(`First Name`,1,10) as exprVal from `customers` ```  |
+
+
+Note: + (str + str) does not work for string concatenation.
+
+### Date Functions
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| DAY(expr) |  Concatenates strings. | ```select CONCAT(`First Name`,':',`Last Name`) as exprVal from `customers` ```  |
 
 ### Unsupported SQL Statements
 * Over

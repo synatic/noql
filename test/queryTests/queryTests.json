@@ -137,24 +137,7 @@
       }
     }
   },
-  {
-    "query": "select sum(`Replacement Cost`,2,id) as s from `films`",
-    "output": {
-      "collection": "films",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$add": [
-            "$Replacement Cost",
-            {
-              "$literal": 2
-            },
-            "$id"
-          ]
-        }
-      }
-    }
-  },
+
   {
     "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
     "output": {
@@ -271,124 +254,8 @@
   {
     "query": "select sum(id) as d from `customers` group by d",
     "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
-  },
-  {
-    "name": "Arithmetic:abs",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$abs": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select abs(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:ceil",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$ceil": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select ceiling(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:exp",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$exp": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select exp(`Replacement Cost`) as exprVal from `films`"
-  },
-
-  {
-    "name": "Arithmetic:trunc",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$trunc": [
-            "$Replacement Cost",
-            {
-              "$literal": 1
-            }
-          ]
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select trunc(`Replacement Cost`, 1) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:trunc2",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$trunc": [
-            "$Replacement Cost"
-          ]
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select trunc(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:acos",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$acos": {
-            "$literal": 0.45
-          }
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select acos(0.45) as exprVal from `films`"
-  },
-
-  {
-    "name": "Arithmetic:acosh",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$acosh": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select acosh(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:acosh2",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$acosh": {
-            "$literal": 1.2
-          }
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select acosh(1.2) as exprVal from `films`"
   }
+
 
 
 ]

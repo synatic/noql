@@ -1,0 +1,90 @@
+[
+  {
+    "name": "String:CONCAT",
+    "query": "select CONCAT(`First Name`,':',`Last Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$concat":["$First Name",{"$literal":":"},"$Last Name"]}}
+
+    }
+  },
+  {
+    "name": "String:TRIM",
+    "query": "select TRIM(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{ "$trim": {
+        "input": "$First Name"
+      }}}
+
+    }
+  },
+  {
+    "name": "String:LTRIM",
+    "query": "select LTRIM(`First Name`,' ') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$ltrim": {
+        "chars": {
+          "$literal": " "
+        },
+        "input": "$First Name"
+      }}}
+
+    }
+  },
+  {
+    "name": "String:RTRIM",
+    "query": "select RTRIM(`First Name`,' ') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$rtrim": {
+        "chars": {
+          "$literal": " "
+        },
+        "input": "$First Name"
+      }}}
+
+    }
+  },
+
+  {
+    "name": "String:SUBSTR",
+    "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$substr": [
+        "$First Name",
+        {
+          "$literal": 1
+        },
+        {
+          "$literal": 10
+        }
+      ]}}
+
+    }
+  },
+  {
+    "name": "String:SUBSTR_BYTES",
+    "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$substr": [
+        "$First Name",
+        {
+          "$literal": 1
+        },{
+          "$literal": 10
+        }
+      ]}}
+
+    }
+  }
+]

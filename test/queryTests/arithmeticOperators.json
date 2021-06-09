@@ -1,0 +1,208 @@
+[
+  {
+    "name": "Arithmetic:ABS",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$abs": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ABS(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:CEIL",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$ceil": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select CEIL(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:EXP",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$exp": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select EXP(`Replacement Cost`) as exprVal from `films`"
+  },
+
+  {
+    "name": "Arithmetic:TRUNC",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost",
+            {
+              "$literal": 1
+            }
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select TRUNC(`Replacement Cost`, 1) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:TRUNC",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select TRUNC(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ACOS",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$acos": {
+            "$literal": 0.45
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ACOS(0.45) as exprVal from `films`"
+  },
+
+  {
+    "name": "Arithmetic:ACOSH",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$acosh": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ACOSH(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ASIN",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$asin": {
+            "$literal": 0.45
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ASIN(0.45) as exprVal from `films`"
+  },
+
+  {
+    "name": "Arithmetic:ASINH",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$asinh": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ASINH(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ATAN",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$atan": {
+            "$literal": 0.45
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ATAN(0.45) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ATAN2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$atan2": [{
+            "$literal": 3
+          },{
+            "$literal": 4
+          }]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ATAN2(3,4) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ATANH",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$atanh": {
+            "$literal": 0.45
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ATANH(0.45) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SUM",
+    "query": "select SUM(`Replacement Cost`,2,id) as s from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$add": [
+            "$Replacement Cost",
+            {
+              "$literal": 2
+            },
+            "$id"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "Arithmetic:BINARY_SIZE",
+    "output": {
+      "limit": 100,
+      "projection": {"id":"$id","exprVal":{"$binarySize":"$First Name"}},
+      "collection": "customers"
+    },
+    "query": "select id,BINARY_SIZE(`First Name`) as exprVal from `customers`"
+  }
+]

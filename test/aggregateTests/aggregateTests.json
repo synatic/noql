@@ -218,7 +218,7 @@
     }
   },
   {
-    "query": "select ceiling(`Replacement Cost`) as aggr from `films`",
+    "query": "select CEIL(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -262,7 +262,7 @@
     }
   },
   {
-    "query": "select `Address.City` as City,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
+    "query": "select `Address.City` as City,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
       "collections": [
@@ -300,7 +300,7 @@
     }
   },
   {
-    "query": "select  `Address.Country` as Country,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
+    "query": "select  `Address.Country` as Country,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
     "type": "aggregate",
     "output": {
       "collections": [
@@ -338,7 +338,7 @@
     }
   },
   {
-    "query": "select  `Address.Country` as Country,`Address.City` as City,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
+    "query": "select  `Address.Country` as Country,`Address.City` as City,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
     "type": "aggregate",
     "output": {
       "collections": [
@@ -427,7 +427,7 @@
     }
   },
   {
-    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `Address.City`,modId",
+    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `Address.City`,modId",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -500,7 +500,7 @@
     }
   },
   {
-    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `City`,modId",
+    "query": "select `Address.City` as City,mod(`id`, 10) as modId,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and mod(`id`, 10)  > 1 group by `Address.City`,modId having AvgRentals > 2 order by `City`,modId",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -573,7 +573,7 @@
     }
   },
   {
-    "query": "select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t",
+    "query": "select t as `$$ROOT` from (select id,`First Name`,`Last Name`,SIZE_OF_ARRAY(Rentals,'id')  as numRentals from customers) as t",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -653,7 +653,7 @@
     }
   },
   {
-    "query": "select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,mergeObjects(t1,t2) as `$$ROOT`  from customers",
+    "query": "select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`  from customers",
     "type": "aggregate",
     "output": {
       "pipeline": [{"$project":{"t1":{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"id":"$id","Name":"$First Name"}}]}},"t2":{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"id":"$id","LastName":"$Last Name"}}]}}}},{"$replaceRoot":{"newRoot":{"$mergeObjects":["$t1","$t2"]}}}],
@@ -674,7 +674,7 @@
     }
   },
   {
-    "query": "select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t",
+    "query": "select MERGE_OBJECTS((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t",
     "type": "aggregate",
     "output": {
       "pipeline":[{"$project":{"CustomerID":"$id","Name":"$First Name","Rental":"$Rentals"}},{"$unwind":"$Rental"},{"$project":{"t":"$$ROOT"}},{"$replaceRoot":{"newRoot":{"$mergeObjects":[{"$arrayToObject":{"$concatArrays":[{"$objectToArray":{"CustomerID":"$t.CustomerID","Name":"$t.Name"}}]}},"$t.Rental"]}}}],
@@ -721,7 +721,7 @@
     }
   },
   {
-    "query": "select mergeObjects(c,firstInArray(cn)) as `$$ROOT` from customers c inner join `customer-notes` cn on c.id=cn.id",
+    "query": "select MERGE_OBJECTS(c,FIRST_IN_ARRAY(cn)) as `$$ROOT` from customers c inner join `customer-notes` cn on c.id=cn.id",
     "type": "aggregate",
     "output": {
       "pipeline":[{"$project":{"c":"$$ROOT"}},{"$lookup":{"from":"customer-notes","as":"cn","localField":"c.id","foreignField":"id"}},{"$match":{"$expr":{"$gt":[{"$size":"$cn"},0]}}},{"$replaceRoot":{"newRoot":{"$mergeObjects":["$c",{"$first":"$cn"}]}}}],
