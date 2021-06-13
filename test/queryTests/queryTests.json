@@ -72,48 +72,13 @@
       }
     }
   },
-  {
-    "query": "select cast(abs(`id`) as decimal) as `id` from `customers`",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "id": {
-          "$convert": {
-            "input": {
-              "$abs": "$id"
-            },
-            "to": "decimal"
-          }
-        }
-      }
-    }
-  },
+
   {
     "query": "select id,Title,Rating,abs(id*-1) as absId from `films`",
     "output": {"limit":100,"collection":"films","projection":{"id":"$id","Title":"$Title","Rating":"$Rating","absId":{"$abs":{"$multiply":["$id",-1]}}}}
 
   },
-  {
-    "query": "select cast('123' as int) as `id` from `customers`",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "id": {
-          "$convert": {
-            "input": "123",
-            "to": "int"
-          }
-        }
-      }
-    }
-  },
-  {
-    "query": "select cast(1+`id` as varchar) as `id` from `customers`",
-    "output": {"limit":100,"collection":"customers","projection":{"id":{"$convert":{"input":{"$add":[1,"$id"]},"to":"string"}}}}
 
-  },
 
   {
     "query": "select sum(`Replacement Cost`,2)  from `films`",
@@ -158,11 +123,7 @@
     "query": "select id,Title,Rating,(select * from Rentals where `Film Title` like '%rin%' and staffId=2) as rentalsArr from `customers`",
     "output": {"limit":100,"collection":"customers","projection":{"id":"$id","Title":"$Title","Rating":"$Rating","rentalsArr":{"$map":{"input":{"$filter":{"input":"$Rentals","cond":{"$and":[{"$and":[{"$regexMatch":{"input":"$$this.Film Title","regex":"rin","options":"i"}},{"$eq":["$$this.staffId",2]}]}]}}},"in":"$$this"}}}}
    },
-  {
-    "query": "select subtract(convert('1','int'),abs(`Replacement Cost`)) as d,Title from `films`",
-    "output": {"limit":100,"collection":"films","projection":{"d":{"$subtract":[{"$convert":{"input":{"$literal":"1"},"to":"int"}},{"$abs":"$Replacement Cost"}]},"Title":"$Title"}}
 
-    },
   {
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
     "output": {

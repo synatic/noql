@@ -1,7 +1,15 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 
-const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/objectOperators.json'),require('./queryTests/arrayOperators.json'),require('./queryTests/stringOperators.json'),require('./queryTests/arithmeticOperators.json'));
+const _queryTests = [].concat(
+    require('./queryTests/queryTests.json'),
+    require('./queryTests/objectOperators.json'),
+    require('./queryTests/arrayOperators.json'),
+    require('./queryTests/stringOperators.json'),
+    require('./queryTests/dateOperators.json'),
+    require('./queryTests/arithmeticOperators.json'),
+    require('./queryTests/conversionOperators.json')
+);
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 describe('SQL Parser', function () {
@@ -271,7 +279,8 @@ describe('SQL Parser', function () {
             },
             query: {
                 "a.b": { "$gt": 1 }
-            }
+            },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepEqual(SQLParser.parseSQL("select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10"), {
@@ -283,7 +292,8 @@ describe('SQL Parser', function () {
             },
             query: {
                 "a.b": { "$gt": 1 }
-            }
+            },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepEqual(SQLParser.parseSQL("select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5"), {
@@ -296,7 +306,8 @@ describe('SQL Parser', function () {
             },
             query: {
                 "a.b": { "$gt": 1 }
-            }
+            },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepEqual(SQLParser.parseSQL("select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5"), {
@@ -310,7 +321,8 @@ describe('SQL Parser', function () {
             query: {
                 "a.b": { "$gt": 1 }
 
-            }
+            },
+            type:"query"
         }, "Invalid parse");
     });
 
@@ -321,38 +333,44 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT id, user_id, status FROM people`), {
             limit: 100,
             collection: 'people',
-            projection: { id: "$id", user_id: "$user_id", status: "$status" }
+            projection: { id: "$id", user_id: "$user_id", status: "$status" },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people`), {
             limit: 100,
             collection: 'people',
-            projection: { user_id: "$user_id", status: "$status" }
+            projection: { user_id: "$user_id", status: "$status" },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
-            query: { status: {$eq:'A'} }
+            query: { status: {$eq:'A'} },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT user_id, status FROM people WHERE status = "A"`), {
             limit: 100,
             collection: 'people',
             projection: { user_id: "$user_id", status: "$status"},
-            query: { status: {$eq:'A' }}
+            query: { status: {$eq:'A' }},
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status != "A"`), {
             limit: 100,
             collection: 'people',
-            query: { status: { '$ne': 'A' } }
+            query: { status: { '$ne': 'A' } },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" AND age = 50`), {
             limit: 100,
             collection: 'people',
-            query: { status: {$eq:'A'}, age: {$eq:50 }}
+            query: { status: {$eq:'A'}, age: {$eq:50 }},
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" OR age = 50`), {
@@ -360,25 +378,29 @@ describe('SQL Parser', function () {
             collection: 'people',
             query: {
                 '$or': [{ status: {$eq:'A' }}, { age:{$eq: 50} }]
-            }
+            },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE age > 25`), {
             limit: 100,
             collection: 'people',
-            query: { age: { '$gt': 25 } }
+            query: { age: { '$gt': 25 } },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE age < 25`), {
             limit: 100,
             collection: 'people',
-            query: { age: { '$lt': 25 } }
+            query: { age: { '$lt': 25 } },
+            type:"query"
         }, "Invalid parse");
 
         assert.deepStrictEqual(SQLParser.parseSQL(`SELECT * FROM people WHERE age > 25 and age <30`), {
             limit: 100,
             collection: 'people',
-            query: { age: { '$gt': 25, '$lt': 30 } }
+            query: { age: { '$gt': 25, '$lt': 30 } },
+            type:"query"
         }, "Invalid parse");
 
 

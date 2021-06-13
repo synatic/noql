@@ -1,4 +1,30 @@
+
 const SQLParser=require('./lib/SQLParser');
+const { MongoClient } = require('mongodb');
+console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4))
+return;
+
+
+
+(async() => {
+    try {
+        client = new MongoClient('mongodb://127.0.0.1:27017');
+        await client.connect();
+        const db = client.db('sql-to-mongo-test');
+
+        const parsedSQL=SQLParser.parseSQL("select id from `films` limit 10")
+        if(parsedSQL.type==='query'){
+            console.log(await db.collection(parsedSQL.collection).find(parsedSQL.query||{},parsedSQL.projection||{}).limit(parsedSQL.limit||50).toArray())
+        }else if(parsedSQL.type==='aggregate'){
+            console.log(await db.collection(parsedSQL.collections[0]).aggregate(parsedSQL.pipeline).toArray())
+        }
+    }catch(exp){
+        console.error(exp)
+    }
+
+})();
+
+return
 
 
 // select id,(select count(*) as count from Rentals) as totalRentals from customers

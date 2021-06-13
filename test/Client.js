@@ -9,7 +9,17 @@ const _customerNotes = require('./exampleData/customer-notes.json');
 const _customerNotes2 = require('./exampleData/customer-notes2.json');
 const _connectionString = "mongodb://127.0.0.1:27017";
 const _dbName = "sql-to-mongo-test";
-const _queryTests = [].concat(require('./queryTests/queryTests.json'),require('./queryTests/objectOperators.json'),require('./queryTests/arrayOperators.json'),require('./queryTests/stringOperators.json'),require('./queryTests/arithmeticOperators.json'));
+
+const _queryTests = [].concat(
+    require('./queryTests/queryTests.json'),
+    require('./queryTests/objectOperators.json'),
+    require('./queryTests/arrayOperators.json'),
+    require('./queryTests/stringOperators.json'),
+    require('./queryTests/dateOperators.json'),
+    require('./queryTests/arithmeticOperators.json'),
+    require('./queryTests/conversionOperators.json')
+);
+
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')

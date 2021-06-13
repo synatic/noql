@@ -1,5 +1,5 @@
 # sql-to-mongo
-Converts M-SQL Queries to Mongo find statements or aggregation pipelines
+Converts M-SQL Queries to Mongo find statements or aggregation pipelines.
 
 **What is M-SQL**
 
@@ -20,16 +20,153 @@ npm i @synatic/sql-to-mongo --save
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 ```
 
-### parseSQL
+### parseSQL(sqlStatement)
+Parses the given SQL statement to an aggregate or query depending on if a straight query is possible. 
 
-### makeMongoQuery
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
+console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4));
 
-### makeMongoAggregate
+{
+    "limit": 10,
+    "collection": "films",
+    "projection": {
+        "id": "$id"
+    },
+    "query": {
+        "id": {
+            "$gt": 10
+        }
+    },
+    "type": "query"
+}
 
+
+```
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
+console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id"),null,4));
+{
+    "pipeline": [
+        {
+            "$match": {
+                "id": {
+                    "$gt": 10
+                }
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "id": "$id"
+                }
+            }
+        },
+        {
+            "$project": {
+                "id": "$_id.id",
+                "_id": 0
+            }
+        }
+    ],
+    "collections": [
+        "films"
+    ]
+}
+```
+
+```
+const SQLParser=require('./lib/SQLParser');
+const { MongoClient } = require('mongodb');
+
+(async() => {
+    try {
+        client = new MongoClient('mongodb://127.0.0.1:27017');
+        await client.connect();
+        const db = client.db('sql-to-mongo-test');
+
+        const parsedSQL=SQLParser.parseSQL("select id from `films` limit 10")
+        if(parsedSQL.type==='query'){
+            console.log(await db.collection(parsedSQL.collection).find(parsedSQL.query||{},parsedSQL.projection||{}).limit(parsedSQL.limit||50).toArray())
+        }else if(parsedSQL.type==='aggregate'){
+            console.log(await db.collection(parsedSQL.collections[0]).aggregate(parsedSQL.pipeline).toArray())
+        }
+
+    }catch(exp){
+        console.error(exp)
+    }
+
+})();
+
+```
+### makeMongoQuery(sqlStatement)
+Generates a mongo query if possible. Will throw an exception if not possible.
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
+console.log(SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 limit 10"));
+
+{
+    "limit": 10,
+    "collection": "films",
+    "projection": {
+        "id": "$id"
+    },
+    "query": {
+        "id": {
+            "$gt": 10
+        }
+    }
+}
+
+
+```
+### makeMongoAggregate(sqlStatement)
+Generates a mongo aggregate.
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
+console.log(SQLMongoParser.makeMongoAggregate("select id from `films` group by id"));
+
+{
+    "pipeline": [
+        {
+            "$group": {
+                "_id": {
+                    "id": "$id"
+                }
+            }
+        },
+        {
+            "$project": {
+                "id": "$_id.id",
+                "_id": 0
+            }
+        }
+    ],
+    "collections": [
+        "films"
+    ]
+}
+
+```
 ### canQuery
+Returns whether a statement can be queried or an aggregate must be used.
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
 
-### parseSQLtoAST
+console.log(SQLMongoParser.canQuery("select id from `films`"));
+//true
 
+console.log(SQLMongoParser.canQuery("select id from `films` group by id"));
+//false
+
+```
+### parseSQLtoAST(sqlStatement)
+Parses a SQL statement to an AST (abstract syntax tree)
+```
+const SQLMongoParser=require('@synatic/sql-to-mongo');
+
+const ast=SQLMongoParser.parseSQLtoAST("select id from `films`");
+```
 ## M-SQL
 
 Requires as for functions and sub queries
@@ -91,18 +228,7 @@ unwind
 
 ### Case Statements
 
-### Cast
-Supports cast operations to the MySQL types: VARCHAR, INT, DECIMAL, DATETIME, DECIMAL
-```
-select cast(1+`id` as varchar) as `id` from `customers`
-select cast(abs(-1) as varchar) as `id` from `customers`
-select cast(`id` as varchar) as `id` from `customers`
-```
-Alternatively, the convert function supports the mongodb convert types: double, string, bool, date, int, objectId ,long , decimal
-```
-select convert('1','int') as d `films`
-select convert(`id`,'string') as d `films`
-```
+
 
 ### Aggregate Functions
 | Aggregate Function | Example |
@@ -198,7 +324,37 @@ Methods that perform operations on objects
 
 ### Comparison Operators
 
+### Conversion Functions
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| CONVERT(expr,to) | Converts the expression to a mongo type: 'double', 'string', 'bool', 'date', 'int', 'objectId', 'long', 'decimal' | ```select SUBTRACT(CONVERT('1','int'),ABS(`Replacement Cost`)) as d,Title from `films` ```|
+| TYPEOF(expr) | returns the mongo type of the expression | ```select TYPEOF(id) as `conv` from `customers` ``` |
+| TO_DATE(expr) | Convert the expression to a date | ```select TO_DATE('2021-12-15T00:00:00Z') as `conv` from `customers` ``` |
+| TO_STRING(expr) | Convert the expression to a date | ```select TO_STRING(`id`) as `conv` from `customers` ``` |
+| TO_INT(expr) | Convert the expression to a date | ```select TO_INT('12345') as `conv` from `customers` ``` |
+| TO_LONG(expr) | Convert the expression to a date | ```select TO_LONG('1234567891') as `conv` from `customers` ``` |
+| TO_BOOL(expr) | Convert the expression to a date | ```select TO_BOOLE('true') as `conv` from `customers` ``` |
+| TO_DECIMAL(expr) | Convert the expression to a date | ```select TO_DECIMAL('123.35') as `conv` from `customers` ``` |
+| TO_DOUBLE(expr) | Convert the expression to a date | ```select TO_DOUBLE('123.35') as `conv` from `customers` ``` |
 
+#### Cast
+Supports cast operations with the following type mappings:
+
+| MySQL Type | Mongo Type |
+| ------------- | ------------- |
+| VARCHAR | string |
+| DECIMAL | decimal |
+| INT | int |
+| DATETIME | date |
+| TIME | date |
+| FLOAT | number | 
+| CHAR | string |
+| NCHAR | string |
+```
+select cast(1+`id` as varchar) as `id` from `customers`
+select cast(abs(-1) as varchar) as `id` from `customers`
+select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
+```
 ### String Functions
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
@@ -208,14 +364,28 @@ Methods that perform operations on objects
 | RTRIM(expr,[chars]) |  Right trim string. | ```select RTRIM(`First Name`,'_ -') as exprVal from `customers` ```  |
 | SUBSTR(expr,start,length) | Returns the substring of a string. | ```select SUBSTR(`First Name`,1,10) as exprVal from `customers` ```  |
 | SUBSTR_BYTES(expr,start,length) | Returns the substring of a string by bytes. | ```select SUBSTR(`First Name`,1,10) as exprVal from `customers` ```  |
+| REPLACE(expr,find,replace) | Replaces the first instance of a search string in an input string with a replacement string.. | ```select REPLACE(`First Name`,'a','b') as exprVal from `customers` ```  |
+| REPLACE_ALL(expr,find,replace) | Replaces all instances of a search string in an input string with a replacement string. | ```select REPLACE_ALL(`First Name`,'a','b') as exprVal from `customers` ```  |
+| STRLEN(expr) | Returns the number of UTF-8 encoded bytes in the specified string. | ```select STRLEN(`First Name`) as exprVal from `customers` ```  |
+| STRLEN_CP(expr) | Returns the number of UTF-8 code points in the specified string. | ```select STRLEN_CP(`First Name`) as exprVal from `customers` ```  |
 
-
-Note: + (str + str) does not work for string concatenation.
+**Note**: + (str + str) does not work for string concatenation.
 
 ### Date Functions
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
-| DAY(expr) |  Concatenates strings. | ```select CONCAT(`First Name`,':',`Last Name`) as exprVal from `customers` ```  |
+| DATE_FROM_STRING(expr,format,timezone,onError,onNull) |  Converts a date/time string to a date object. | ```select DATE_FROM_STRING('2021-11-15T14:43:29.000Z',null,null) as exprVal from `customers` ```  |
+| DATE_TO_STRING(expr,format,timezone,onNull) |  Converts a date object to a string according to a user-specified format. | ```select DATE_TO_STRING(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,null) as exprVal from `customers` ```  |
+| DATE_TO_PARTS(expr,timezone,iso8601) | Returns a document that contains the constituent parts of a given Date value.  | ```select DATE_TO_PARTS(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,true) as exprVal from `customers` ```  |
+| DATE_FROM_PARTS(year,month,day,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent properties.  | ```select DATE_FROM_PARTS(2021,11,15) as exprVal from `customers` ```  |
+| DATE_FROM_ISO_PARTS(isoWeekYear,isoWeek,isoDayOfWeek,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent ISO properties.  | ```select DATE_FROM_ISO_PARTS(2017,6,3) as exprVal from `customers` ```  |
+| DAY_OF_WEEK(expr) | Returns the day of the week for a date as a number between 1 (Sunday) and 7 (Saturday). | ```select DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| DAY_OF_YEAR(expr) | Returns the day of the year for a date as a number between 1 and 366. | ```select DAY_OF_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| DAY_OF_MONTH(expr) | Returns the day of the month for a date as a number between 1 and 31. | ``` ```  |
+| DAY(expr) |   | ``` ```  |
+| DAY(expr) |   | ``` ```  |
+| DAY(expr) |   | ``` ```  |
+| DAY(expr) |   | ``` ```  |
 
 ### Unsupported SQL Statements
 * Over
@@ -229,7 +399,4 @@ Calculated columns in where statements can only be used with aggregates
 select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 ```
 
-## Function Mapping
 
-
-### Operators

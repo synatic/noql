@@ -71,6 +71,42 @@
     }
   },
   {
+    "name": "String:REPLACE",
+    "query": "select REPLACE(`First Name`,'a','b') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$replaceOne": {
+        "find": {
+          "$literal": "a"
+        },
+        "input": "$First Name",
+        "replacement": {
+          "$literal": "b"
+        }
+      }}}
+
+    }
+  },
+  {
+    "name": "String:REPLACE_ALL",
+    "query": "select REPLACE_ALL(`First Name`,'a','b') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$replaceAll": {
+        "find": {
+          "$literal": "a"
+        },
+        "input": "$First Name",
+        "replacement": {
+          "$literal": "b"
+        }
+      }}}
+
+    }
+  },
+  {
     "name": "String:SUBSTR_BYTES",
     "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",
     "output": {
@@ -84,6 +120,29 @@
           "$literal": 10
         }
       ]}}
+
+    }
+  },
+  {
+    "name": "String:STRLEN",
+    "query": "select STRLEN(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$strLenBytes":
+        "$First Name"}}
+
+    }
+  },
+  {
+    "name": "String:STRLEN_CP",
+    "query": "select STRLEN_CP(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$strLenCP":
+        "$First Name"
+      }}
 
     }
   }
