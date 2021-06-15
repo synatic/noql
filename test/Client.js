@@ -111,7 +111,7 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _queryTests.filter(q => !!q.query && !q.error);
             for (const test of tests) {
-                it(test.query,function(done){
+                it(`${test.name?test.name + ':':''}${test.query}`,function(done){
                     (async () => {
                         try {
                             const parsedQuery = SQLParser.makeMongoAggregate(test.query);

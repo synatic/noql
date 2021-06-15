@@ -13,66 +13,6 @@
     "query": "select ABS(`Replacement Cost`) as exprVal from `films`"
   },
   {
-    "name": "Arithmetic:CEIL",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$ceil": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select CEIL(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:EXP",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$exp": "$Replacement Cost"
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select EXP(`Replacement Cost`) as exprVal from `films`"
-  },
-
-  {
-    "name": "Arithmetic:TRUNC",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$trunc": [
-            "$Replacement Cost",
-            {
-              "$literal": 1
-            }
-          ]
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select TRUNC(`Replacement Cost`, 1) as exprVal from `films`"
-  },
-  {
-    "name": "Arithmetic:TRUNC",
-    "output": {
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$trunc": [
-            "$Replacement Cost"
-          ]
-        }
-      },
-      "collection": "films"
-    },
-    "query": "select TRUNC(`Replacement Cost`) as exprVal from `films`"
-  },
-  {
     "name": "Arithmetic:ACOS",
     "output": {
       "limit": 100,
@@ -87,7 +27,6 @@
     },
     "query": "select ACOS(0.45) as exprVal from `films`"
   },
-
   {
     "name": "Arithmetic:ACOSH",
     "output": {
@@ -116,7 +55,6 @@
     },
     "query": "select ASIN(0.45) as exprVal from `films`"
   },
-
   {
     "name": "Arithmetic:ASINH",
     "output": {
@@ -178,6 +116,311 @@
     "query": "select ATANH(0.45) as exprVal from `films`"
   },
   {
+    "name": "Arithmetic:BINARY_SIZE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$binarySize": "$First Name"
+        }
+      },
+      "collection": "customers"
+    },
+    "query": "select BINARY_SIZE(`First Name`) as exprVal from `customers`"
+  },
+  {
+    "name": "Arithmetic:CEIL",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$ceil": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select CEIL(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:DEGREES_TO_RADIANS",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$degreesToRadians": {
+            "$literal": 300
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select DEGREES_TO_RADIANS(300) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:DIVIDE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$divide": ["$Replacement Cost",{
+            "$literal": 10
+          }]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select DIVIDE(`Replacement Cost`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:EXP",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$exp": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select EXP(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:FLOOR",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$floor": "$Replacement Cost"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select FLOOR(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:LN",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$ln": "$id"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select LN(`id`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:LOG",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$log": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select LOG(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:LOG10",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$log10": "$id"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select LOG10(`id`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MAX",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$max": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select MAX(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MIN",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$min": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select MIN(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MOD",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$mod": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select MOD(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MULTIPLY",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$multiply": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select MULTIPLY(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:POW",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$pow": ["$id",{
+            "$literal":10}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select POW(`id`,10) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:RADIANS_TO_DEGREES",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$radiansToDegrees": {
+            "$literal": 0.5
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select RADIANS_TO_DEGREES(0.5) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:RAND",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$rand":{}
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select RAND() as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ROUND",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$round": ["$Replacement Cost",{
+            "$literal":1}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ROUND(`Replacement Cost`,1) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:ROUND",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$round": ["$Replacement Cost"]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select ROUND(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SIN",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$sin": {
+            "$literal": 90
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select SIN(90) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SINH",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$sinh": {
+            "$literal": 90
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select SINH(90) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SQRT",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$sqrt": "$id"
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select SQRT(`id`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SUBTRACT",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$subtract": [{
+            "$literal":10},"$id"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select SUBTRACT(10,`id`) as exprVal from `films`"
+  },
+  {
     "name": "Arithmetic:SUM",
     "query": "select SUM(`Replacement Cost`,2,id) as s from `films`",
     "output": {
@@ -194,15 +437,70 @@
           ]
         }
       }
-    }
-  },
+    }},
   {
-    "name": "Arithmetic:BINARY_SIZE",
+    "name": "Arithmetic:TAN",
     "output": {
       "limit": 100,
-      "projection": {"id":"$id","exprVal":{"$binarySize":"$First Name"}},
-      "collection": "customers"
+      "projection": {
+        "exprVal": {
+          "$tan": {
+            "$literal": 90
+          }
+        }
+      },
+      "collection": "films"
     },
-    "query": "select id,BINARY_SIZE(`First Name`) as exprVal from `customers`"
+    "query": "select TAN(90) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:TANH",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$tanh": {
+            "$literal": 90
+          }
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select TANH(90) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:TRUNC",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost",
+            {
+              "$literal": 1
+            }
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select TRUNC(`Replacement Cost`, 1) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:TRUNC",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trunc": [
+            "$Replacement Cost"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select TRUNC(`Replacement Cost`) as exprVal from `films`"
   }
+
+
 ]

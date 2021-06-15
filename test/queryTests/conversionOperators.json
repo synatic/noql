@@ -195,5 +195,51 @@
         }
       }
     }
+  },
+  {
+    "name": "Convert:IFNULL",
+    "query": "select IFNULL(id,1) as `conv` from `customers`",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "conv": {
+          "$ifNull": ["$id",{
+            "$literal":1
+        }]
+            }
+      }
+    }
+  },
+  {
+    "name": "Convert:IFNULL",
+    "query": "select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers`",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "conv": {
+          "$ifNull": [{
+            "$literal": null
+          },
+            {
+              "$arrayToObject": {
+                "$concatArrays": [
+                  {
+                    "$objectToArray": {
+                      "num": {
+                        "$literal": 1
+                      },
+                      "val": {
+                        "$literal": "a"
+                      }
+                    }
+                  }
+                ]
+              }
+            }]
+        }
+      }
+    }
   }
 ]

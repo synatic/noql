@@ -1,30 +1,5 @@
 
 const SQLParser=require('./lib/SQLParser');
-const { MongoClient } = require('mongodb');
-console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4))
-return;
-
-
-
-(async() => {
-    try {
-        client = new MongoClient('mongodb://127.0.0.1:27017');
-        await client.connect();
-        const db = client.db('sql-to-mongo-test');
-
-        const parsedSQL=SQLParser.parseSQL("select id from `films` limit 10")
-        if(parsedSQL.type==='query'){
-            console.log(await db.collection(parsedSQL.collection).find(parsedSQL.query||{},parsedSQL.projection||{}).limit(parsedSQL.limit||50).toArray())
-        }else if(parsedSQL.type==='aggregate'){
-            console.log(await db.collection(parsedSQL.collections[0]).aggregate(parsedSQL.pipeline).toArray())
-        }
-    }catch(exp){
-        console.error(exp)
-    }
-
-})();
-
-return
 
 
 // select id,(select count(*) as count from Rentals) as totalRentals from customers
@@ -36,7 +11,8 @@ return
 // let parsedVal=SQLParser.makeMongoAggregate("select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`" )
 
 // select sum(case when id <10 then 1 when id > 10 then -1 else 0 end) as sumCase from `customers`
-const parsedVal=SQLParser.makeMongoAggregate("select  `Address.Country` as Country,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`")
+// const parsedVal=SQLParser.makeMongoAggregate("select  *,YEAR(DATE_FROM_STRING(`date`)) as year from `customer-notes`")
+const parsedVal=SQLParser.makeMongoAggregate("select  *,YEAR(DATE_FROM_STRING(`date`)) as year from `customer-notes`")
 
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1")
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")

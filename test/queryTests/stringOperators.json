@@ -145,5 +145,18 @@
       }}
 
     }
+  },
+  {
+    "name": "String:SPLIT",
+    "query": "select SPLIT(`First Name`,',') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"exprVal":{"$split":["$First Name",{
+        "$literal": ","
+      }]
+      }}
+
+    }
   }
 ]

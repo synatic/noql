@@ -40,8 +40,6 @@ console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id`
     },
     "type": "query"
 }
-
-
 ```
 ```
 const SQLMongoParser=require('@synatic/sql-to-mongo');
@@ -336,6 +334,9 @@ Methods that perform operations on objects
 | TO_BOOL(expr) | Convert the expression to a date | ```select TO_BOOLE('true') as `conv` from `customers` ``` |
 | TO_DECIMAL(expr) | Convert the expression to a date | ```select TO_DECIMAL('123.35') as `conv` from `customers` ``` |
 | TO_DOUBLE(expr) | Convert the expression to a date | ```select TO_DOUBLE('123.35') as `conv` from `customers` ``` |
+| IFNULL(expr,expr) | Return the value if the expression is null | ```select IFNULL(id,1) as `conv` from `customers` ``` |
+|  | Example using select without from for object generation | <code>select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` <br> {"val":"a","num":1}</code>
+
 
 #### Cast
 Supports cast operations with the following type mappings:
@@ -368,6 +369,7 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | REPLACE_ALL(expr,find,replace) | Replaces all instances of a search string in an input string with a replacement string. | ```select REPLACE_ALL(`First Name`,'a','b') as exprVal from `customers` ```  |
 | STRLEN(expr) | Returns the number of UTF-8 encoded bytes in the specified string. | ```select STRLEN(`First Name`) as exprVal from `customers` ```  |
 | STRLEN_CP(expr) | Returns the number of UTF-8 code points in the specified string. | ```select STRLEN_CP(`First Name`) as exprVal from `customers` ```  |
+| SPLIT(expr,delimiter) | Splits the string to an array | ```select SPLIT(`First Name`,',') as exprVal from `customers` ``` | 
 
 **Note**: + (str + str) does not work for string concatenation.
 
@@ -381,16 +383,23 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | DATE_FROM_ISO_PARTS(isoWeekYear,isoWeek,isoDayOfWeek,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent ISO properties.  | ```select DATE_FROM_ISO_PARTS(2017,6,3) as exprVal from `customers` ```  |
 | DAY_OF_WEEK(expr) | Returns the day of the week for a date as a number between 1 (Sunday) and 7 (Saturday). | ```select DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | DAY_OF_YEAR(expr) | Returns the day of the year for a date as a number between 1 and 366. | ```select DAY_OF_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
-| DAY_OF_MONTH(expr) | Returns the day of the month for a date as a number between 1 and 31. | ``` ```  |
-| DAY(expr) |   | ``` ```  |
-| DAY(expr) |   | ``` ```  |
-| DAY(expr) |   | ``` ```  |
-| DAY(expr) |   | ``` ```  |
+| DAY_OF_MONTH(expr) | Returns the day of the month for a date as a number between 1 and 31. | ```select DAY_OF_MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| ISO_DAY_OF_WEEK(expr) | Returns the weekday number in ISO 8601 format, ranging from 1 (for Monday) to 7 (for Sunday). | ```select ISO_DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| ISO_WEEK(expr) | Returns the week number in ISO 8601 format, ranging from 1 to 53. Week numbers start at 1 with the week (Monday through Sunday) that contains the year's first Thursday.  | ```select ISO_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| ISO_WEEK_YEAR(expr) | Returns the year number in ISO 8601 format. The year starts with the Monday of week 1 and ends with the Sunday of the last week.  | ```select ISO_WEEK_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| HOUR(expr) | Returns the hour portion of a date as a number between 0 and 23. | ```select HOUR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| MILLISECOND(expr) | Returns the millisecond portion of a date as an integer between 0 and 999.  | ```select MILLISECOND(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| MINUTE(expr) | Returns the minute portion of a date as a number between 0 and 59. | ```select MINUTE(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| MONTH(expr) | Returns the month of a date as a number between 1 and 12. | ```select MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| SECOND(expr) | Returns the second portion of a date as a number between 0 and 59, but can be 60 to account for leap seconds. | ```select SECOND(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| WEEK(expr) | Returns the week of the year for a date as a number between 0 and 53. | ```select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
+| YEAR(expr) | Returns the year portion of a date.  | ```select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 
 ### Unsupported SQL Statements
 * Over
 * CTE's
 * Pivot
+* Union
 
 ### Selecting on a calculated column by name
 Calculated columns in where statements can only be used with aggregates  
