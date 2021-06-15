@@ -11,8 +11,10 @@ const SQLParser=require('./lib/SQLParser');
 // let parsedVal=SQLParser.makeMongoAggregate("select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`" )
 
 // select sum(case when id <10 then 1 when id > 10 then -1 else 0 end) as sumCase from `customers`
+
+const parsedVal=SQLParser.makeMongoQuery("select  AVG((select staffId as '$$ROOT' from Rentals)) as exprVal from `customer`")
 // const parsedVal=SQLParser.makeMongoAggregate("select  *,YEAR(DATE_FROM_STRING(`date`)) as year from `customer-notes`")
-const parsedVal=SQLParser.makeMongoAggregate("select  *,YEAR(DATE_FROM_STRING(`date`)) as year from `customer-notes`")
+
 
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1")
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")

@@ -1,5 +1,20 @@
 [
   {
+    "name": "Arithmetic:AVG",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$avg": ["$Replacement Cost",{
+  "$literal": 10
+}]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select AVG(`Replacement Cost`,10) as exprVal from `films`"
+  },
+  {
     "name": "Arithmetic:ABS",
     "output": {
       "limit": 100,

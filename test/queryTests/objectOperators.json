@@ -9,8 +9,6 @@
     "output": {"limit":100,"collection":"customers","projection":{"id":"$id","test":{"$mergeObjects":["$Address",{"$literal":{"val":1}}]}}},
     "query": "select id,MERGE_OBJECTS(`Address`,PARSE_JSON('{\"val\":1}')) as test from `customers`"
   }
-
-
 ]
 
 

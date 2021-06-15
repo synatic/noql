@@ -51,7 +51,6 @@
 
     }
   },
-
   {
     "name": "String:SUBSTR",
     "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",

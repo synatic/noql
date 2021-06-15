@@ -358,7 +358,8 @@
         }
       }
     }
-  }, {
+  },
+  {
   "name": "Date:WEEK",
   "query": "select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
   "output": {

@@ -306,6 +306,7 @@ Methods that perform operations on objects
 
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
+| AVG(expr,expr,...) |  Returns the average of a set of values. <br>Requires at least 2 expressions or else is treated as aggregate. | ```select AVG(`Replacement Cost`,`id`) as exprVal from `films` ```  |
 | ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
@@ -316,8 +317,28 @@ Methods that perform operations on objects
 | ATANH(expr) |  Returns the inverse hyperbolic tangent (hyperbolic arc tangent) of a value. | ```select ATANH(`Replacement Cost`) as exprVal from `films` ```  |
 | BINARY_SIZE(expr) |  Returns the byte size of the expression. | ```select id,BINARY_SIZE(`First Name`) as exprVal from `customers` ```  |
 | CEIL(expr) | Returns the smallest integer greater than or equal to the specified number. | ```select CEIL(`Replacement Cost`, 1) as exprVal from `films` ```  |
+| DEGREES_TO_RADIANS(expr) | Converts an input value measured in degrees to radians. | ```select DEGREES_TO_RADIANS(300) as exprVal from `films` ```  |
+| DIVIDE(expr,expr) | Divides one number by another and returns the result. | ```select DIVIDE(`Replacement Cost`,10) as exprVal from `films` ```  |
 | EXP(expr) | Raises Euler's number (i.e. e ) to the specified exponent and returns the result. | ```select EXP(`Replacement Cost`, 1) as exprVal from `films` ```  |
-| SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
+| FLOOR(expr) | Returns the largest integer less than or equal to the specified number. | ```select FLOOR(`Replacement Cost`) as exprVal from `films` ```  |
+| LN(expr) | Calculates the natural logarithm ln (i.e log e) of a number and returns the result as a double. | ```select LN(`id`) as exprVal from `films` ```  |
+| LOG(number,base) | Calculates the log of a number in the specified base and returns the result as a double. | ```select LOG(`id`,10) as exprVal from `films` ```  |
+| LOG10(expr) | Calculates the log base 10 of a number and returns the result as a double. | ```select LOG10(`id`) as exprVal from `films` ```  |
+| MAX(expr,expr,...) | Returns the max of a set of numbers.<br>Requires at least 2 expressions or else is treated as aggregate. | ```select MAX(`id`,10) as exprVal from `films` ```  |
+| MIN(xpr,expr,...) | Returns the min of a set of numbers.<br>Requires at least 2 expressions or else is treated as aggregate. | ```select MIN(`id`,10) as exprVal from `films` ```  |
+| MOD(expr,expr) | Divides one number by another and returns the remainder. | ```select MOD(`id`,10) as exprVal from `films` ```  |
+| MULTIPLY(expr,expr,...) | Multiplies numbers together and returns the result | ```select MULTIPLY(`id`,10) as exprVal from `films` ```  |
+| POW(expr,exponent) | Raises a number to the specified exponent and returns the result. | ```select POW(`id`,10) as exprVal from `films` ```  |
+| RADIANS_TO_DEGREES(expr) | Converts an input value measured in radians to degrees. | ```select RADIANS_TO_DEGREES(0.5) as exprVal from `films` ```  |
+| RAND(expr) | Returns a random float between 0 and 1 each time it is called. | ```select RAND() as exprVal from `films` ```  |
+| ROUND(expr,[places]) | rounds a number to a whole integer or to a specified decimal place. | ```select ROUND(`Replacement Cost`,1) as exprVal from `films` ```  |
+| SIN(expr) | Returns the sine of a value that is measured in radians. | ```select SIN(90) as exprVal from `films` ```  |
+| SINH(expr) | Returns the hyperbolic sine of a value that is measured in radians. | ```select SINH(90) as exprVal from `films` ```  |
+| SQRT(expr) | Calculates the square root of a positive number and returns the result as a double. | ```select SQRT(`id`) as exprVal from `films` ```  |
+| SUBTRACT(expr,expr) | Subtracts two numbers to return the difference, or two dates to return the difference in milliseconds, or a date and a number in milliseconds to return the resulting date. | ```select SUBTRACT(10,`id`) as exprVal from `films` ```  |
+| SUM(expr,expr,...) | Sums the values provided in the expression <br>Requires at least 2 expressions or else is treated as aggregate. | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
+| TAN(expr) | Returns the tangent of a value that is measured in radians. | ```select TAN(90) as exprVal from `films` ```  |
+| TANH(expr) | Returns the hyperbolic tangent of a value that is measured in radians. | ```select TANH(90) as exprVal from `films` ```  |
 | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
 
 ### Comparison Operators
@@ -336,7 +357,6 @@ Methods that perform operations on objects
 | TO_DOUBLE(expr) | Convert the expression to a date | ```select TO_DOUBLE('123.35') as `conv` from `customers` ``` |
 | IFNULL(expr,expr) | Return the value if the expression is null | ```select IFNULL(id,1) as `conv` from `customers` ``` |
 |  | Example using select without from for object generation | <code>select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` <br> {"val":"a","num":1}</code>
-
 
 #### Cast
 Supports cast operations with the following type mappings:
@@ -395,7 +415,7 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | WEEK(expr) | Returns the week of the year for a date as a number between 0 and 53. | ```select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | YEAR(expr) | Returns the year portion of a date.  | ```select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 
-### Unsupported SQL Statements
+### Currently Unsupported SQL Statements
 * Over
 * CTE's
 * Pivot
