@@ -515,7 +515,163 @@
       "collection": "films"
     },
     "query": "select TRUNC(`Replacement Cost`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:+",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$add": [
+            {
+              "$add": [
+                "$Replacement Cost",
+                "$id"
+              ]
+            },
+            "$Length"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` + id + Length as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:+",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$add": [
+            "$Replacement Cost",
+            "$id"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` + id as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:-",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$subtract": [
+            {
+              "$subtract": [
+                "$Replacement Cost",
+                "$id"
+              ]
+            },
+            "$Length"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` - id - Length as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:-",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$subtract": [
+            "$Replacement Cost",
+            "$id"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` - id as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:*",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$multiply": [
+            {
+              "$multiply": [
+                "$Replacement Cost",
+                "$id"
+              ]
+            },
+            "$Length"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` * id * Length as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:*",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$multiply": [
+            "$Replacement Cost",
+            "$id"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` * id as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:*",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+
+              "$divide": [
+                "$Replacement Cost",
+                "$Length"
+              ]
+
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `Replacement Cost` / Length as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:%",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+
+          "$mod": [
+            "$id",
+            "$Length"
+          ]
+
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select `id` % Length as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:brackets",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {"$divide":[{"$add":["$id","$Replacement Cost"]},"$Length"]}
+      },
+      "collection": "films"
+    },
+    "query": "select  (id + `Replacement Cost`) / Length  as exprVal from `films`"
   }
-
-
 ]

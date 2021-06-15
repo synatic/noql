@@ -341,6 +341,16 @@ Methods that perform operations on objects
 | TANH(expr) | Returns the hyperbolic tangent of a value that is measured in radians. | ```select TANH(90) as exprVal from `films` ```  |
 | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |
 
+### Mathematical Operators
+
+| M-SQL Operator | Description | Example |
+| ------------- | ------------- | ------------- |
+| + | Addition operator adds 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` + id + Length as exprVal from `films` ```
+| - | Subtraction operator subtracts 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` - id - Length as exprVal from `films` ```
+| / | Division operator divides 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` / id  as exprVal from `films` ```
+| * | Multiplication operator multiplies 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` * id * Length as exprVal from `films` ```
+| % | Modulus operator | ```select `id` % Length as exprVal from `films` ``` |
+
 ### Comparison Operators
 
 ### Conversion Functions
@@ -400,7 +410,7 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | DATE_TO_STRING(expr,format,timezone,onNull) |  Converts a date object to a string according to a user-specified format. | ```select DATE_TO_STRING(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,null) as exprVal from `customers` ```  |
 | DATE_TO_PARTS(expr,timezone,iso8601) | Returns a document that contains the constituent parts of a given Date value.  | ```select DATE_TO_PARTS(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,true) as exprVal from `customers` ```  |
 | DATE_FROM_PARTS(year,month,day,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent properties.  | ```select DATE_FROM_PARTS(2021,11,15) as exprVal from `customers` ```  |
-| DATE_FROM_ISO_PARTS(isoWeekYear,isoWeek,isoDayOfWeek,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent ISO properties.  | ```select DATE_FROM_ISO_PARTS(2017,6,3) as exprVal from `customers` ```  |
+| DATE_FROM_ISO_PARTS(isoWeekYear,isoWeek,isoDayOfWeek<br>&nbsp;&nbsp;&nbsp;&nbsp;,hour,second,minute,millisecond,timezone) | Constructs and returns a Date object given the date's constituent ISO properties.  | ```select DATE_FROM_ISO_PARTS(2017,6,3) as exprVal from `customers` ```  |
 | DAY_OF_WEEK(expr) | Returns the day of the week for a date as a number between 1 (Sunday) and 7 (Saturday). | ```select DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | DAY_OF_YEAR(expr) | Returns the day of the year for a date as a number between 1 and 366. | ```select DAY_OF_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | DAY_OF_MONTH(expr) | Returns the day of the month for a date as a number between 1 and 31. | ```select DAY_OF_MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
