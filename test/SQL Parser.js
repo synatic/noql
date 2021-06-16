@@ -9,7 +9,8 @@ const _queryTests = [].concat(
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
     require('./queryTests/conversionOperators.json'),
-    require('./queryTests/comparisonOperators.json')
+    require('./queryTests/comparisonOperators.json'),
+    require('./queryTests/columnOperators.json')
 );
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
@@ -74,23 +75,7 @@ describe('SQL Parser', function () {
             assert(false, 'No error');
         });
 
-        it('should fail on no as with aggr func', function () {
-            try {
-                let ast = SQLParser.parseSQLtoAST('select sum(a) from `films`');
-            } catch (exp) {
-                return assert.equal(exp.message, 'Requires as for aggr_func:SUM,Requires group by for aggr_func:SUM');
-            }
-            assert(false, 'No error');
-        });
 
-        it('should fail on no group by on aggregate function', function () {
-            try {
-                let ast = SQLParser.parseSQLtoAST('select id,sum(a) as s from `films`');
-            } catch (exp) {
-                return assert.equal(exp.message, 'Requires group by for aggr_func:SUM');
-            }
-            assert(false, 'No error');
-        });
     });
 
     describe('should test can query: SQLParser.canQuery', function () {

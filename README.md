@@ -181,17 +181,14 @@ select abs(-1) as `absId` from `customers`
 
 as on table requires prefixing
 ```
-select c.* from customers  as c 
+select c.* from customers as c 
 ```
 
 Always prefix on joins
 
 ## Supported SQL Statements
 
-### $$ROOT
-```
-select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t
-```
+
 
 ### Limit and Offset
 Supports MySQL style limits and offset that equates to limit and skip
@@ -230,25 +227,32 @@ unwind
 
 ### Sub Queries
 
-### Case Statements
+### Column Functions
+Methods that perform operations on columns/fields
+
+| M-SQL Function | Description | Example |
+| ------------- | ------------- | ------------- |
+| FIELD_EXISTS(expr,true/false) | Check if a field exists. Can only be used in where clauses and not as an expression  | ```select * from `films` where FIELD_EXISTS(`id`,true)``` |
 
 ### Comparison Operators
 | M-SQL Operator | Description | Example |
 | ------------- | ------------- | ------------- |
-| &gt; | Greater than | <code>select * from `films` where id > 10<br>select (id>10) as exprVal from `films` </code>
-| &lt; | Less than | <code>select * from `films` where id < 10<br>select (id<10) as exprVal from `films` </code>
-| = | Equal to | <code>select * from `films` where id = 10 <br>select (id=10) as exprVal from `films`</code> |
-| >= | Greater than or equal to | <code>select * from `films` where id >= 10<br>select (id>=10) as exprVal from `films` </code>
-| <= | Less than or equal to | <code>select * from `films` where id <= 10<br>select (id<=10) as exprVal from `films` </code> |
-| != | Not equal to | <code>select * from `films` where id != 10 <br>select (id!=10) as exprVal from `films`</code> |
-| IS NOT NULL | Is not null | <code>select * from `films` where id IS NOT NULL </code> |
-| LIKE | String like, support standard %, case insensitive | <code>select `First Name` as FName from `customers` where `First Name` Like 'M%' </code>|
-| GT | Greater than | <code>select GT(id,10) as exprVal from `films` </code>
-| LT | Less than | <code>select LT(id,10) as exprVal from `films` </code>
-| EQ | Equal to | <code>select EQ(id,10) as exprVal from `films`</code> |
-| GTE | Greater than or equal to | <code>select GTE(id,10) as exprVal from `films` </code>
-| LTE | Less than or equal to | <code>select LTE(id,10) as exprVal from `films` </code> |
-| NE | Not equal to | <code>select NE(id,10) as exprVal from `films`</code> |
+| &gt; | Greater than | <code>select * from \`films\` where id > 10<br>select (id>10) as exprVal from \`films\` </code>
+| &lt; | Less than | <code>select * from \`films\` where id < 10<br>select (id<10) as exprVal from \`films\` </code>
+| = | Equal to | <code>select * from \`films\` where id = 10 <br>select (id=10) as exprVal from \`films\`</code> |
+| >= | Greater than or equal to | <code>select * from \`films\` where id >= 10<br>select (id>=10) as exprVal from \`films\` </code>
+| <= | Less than or equal to | <code>select * from \`films\` where id <= 10<br>select (id<=10) as exprVal from \`films\` </code> |
+| != | Not equal to | <code>select * from \`films\` where id != 10 <br>select (id!=10) as exprVal from \`films\`</code> |
+| IS NOT NULL | Is not null | <code>select * from \`films\` where id IS NOT NULL </code> |
+| LIKE | String like, support standard %, case insensitive | <code>select \`First Name\` as FName from \`customers\` where \`First Name\` Like 'M%' </code>|
+| GT | Greater than | <code>select GT(id,10) as exprVal from \`films\` </code>
+| LT | Less than | <code>select LT(id,10) as exprVal from \`films\` </code>
+| EQ | Equal to | <code>select EQ(id,10) as exprVal from \`films\`</code> |
+| GTE | Greater than or equal to | <code>select GTE(id,10) as exprVal from \`films\` </code>
+| LTE | Less than or equal to | <code>select LTE(id,10) as exprVal from \`films\` </code> |
+| NE | Not equal to | <code>select NE(id,10) as exprVal from \`films\`</code> |
+| IN | In a list of values | <code>select * from \`customers\` where \`Address.City\` in ('Japan','Pakistan')</code> |
+| CASE | Case statement | <code>select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from customers</code> |
 
 ### Aggregate Functions
 | Aggregate Function | Example |
@@ -311,7 +315,10 @@ NOTE: Sorting array in sub select is not supported and will need to use unwind
 | SUM_ARRAY(array expr,[field]) |  Sums the values in an array given an array field or sub-select and the field to sum | ```select SUM_ARRAY(`Rentals`,'staffId') as totalStaffIds from `customers` ```  |
 |  | With sub select | ```select id,`First Name`,`Last Name`,SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers``` |
 | AVG_ARRAY(array expr,[field]) | Average the elements in an array by field | ```select id,`First Name`,`Last Name`,avg_ARRAY(`Rentals`,'filmId') as avgIdRentals from customers``` |
-
+| MIN(array expr) | returns the minimum of a value array e.g. [1,2,3] | ```select MIN((select filmId as `$$ROOT` from Rentals)) as s from customers ``` |
+| MAX(array expr) | returns the maximum of a value array e.g. [1,2,3] | ```select MAX((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
+| SUM(array expr) | returns the sum of a value array e.g. [1,2,3] | ```select SUM((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
+| AVG(array expr) | returns the average of a value array e.g. [1,2,3] | ```select AVG((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
 #### Unwind
 
 
@@ -324,11 +331,17 @@ Methods that perform operations on objects
 | MERGE_OBJECTS(expr) | Merges objects  | ```select id,MERGE_OBJECTS(`Address`,PARSE_JSON('{"val":1}')) as test from `customers` ``` |
 |  | With Sub Select | ```select id,MERGE_OBJECTS(`Address`,(select 1 as val)) as test from `customers` ```|
 
+#### $$ROOT
+Specifying '$$ROOT' as a column alias sets the value to root object but only works with aggregates (unless contained in array sub select)
+```
+select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t
+```
+
 ### Mathematical Functions
 
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
-| AVG(expr,expr,...) |  Returns the average of a set of values. <br>Requires at least 2 expressions or else is treated as aggregate. | ```select AVG(`Replacement Cost`,`id`) as exprVal from `films` ```  |
+| AVG(expr,expr,...) |  Returns the average of a set of values. | ```select AVG(`Replacement Cost`,`id`) as exprVal from `films` ```  |
 | ABS(expr) |  Returns the absolute value of a number. | ```select ABS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOS(expr) |  Returns the inverse cosine (arc cosine) of a value. | ```select ACOS(`Replacement Cost`) as exprVal from `films` ```  |
 | ACOSH(expr) |  Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value. | ```select ACOSH(`Replacement Cost`) as exprVal from `films` ```  |
@@ -346,8 +359,8 @@ Methods that perform operations on objects
 | LN(expr) | Calculates the natural logarithm ln (i.e log e) of a number and returns the result as a double. | ```select LN(`id`) as exprVal from `films` ```  |
 | LOG(number,base) | Calculates the log of a number in the specified base and returns the result as a double. | ```select LOG(`id`,10) as exprVal from `films` ```  |
 | LOG10(expr) | Calculates the log base 10 of a number and returns the result as a double. | ```select LOG10(`id`) as exprVal from `films` ```  |
-| MAX(expr,expr,...) | Returns the max of a set of numbers.<br>Requires at least 2 expressions or else is treated as aggregate. | ```select MAX(`id`,10) as exprVal from `films` ```  |
-| MIN(xpr,expr,...) | Returns the min of a set of numbers.<br>Requires at least 2 expressions or else is treated as aggregate. | ```select MIN(`id`,10) as exprVal from `films` ```  |
+| MAX(expr,expr,...) | Returns the max of a set of numbers. | ```select MAX(`id`,10) as exprVal from `films` ```  |
+| MIN(xpr,expr,...) | Returns the min of a set of numbers. | ```select MIN(`id`,10) as exprVal from `films` ```  |
 | MOD(expr,expr) | Divides one number by another and returns the remainder. | ```select MOD(`id`,10) as exprVal from `films` ```  |
 | MULTIPLY(expr,expr,...) | Multiplies numbers together and returns the result | ```select MULTIPLY(`id`,10) as exprVal from `films` ```  |
 | POW(expr,exponent) | Raises a number to the specified exponent and returns the result. | ```select POW(`id`,10) as exprVal from `films` ```  |
@@ -358,7 +371,7 @@ Methods that perform operations on objects
 | SINH(expr) | Returns the hyperbolic sine of a value that is measured in radians. | ```select SINH(90) as exprVal from `films` ```  |
 | SQRT(expr) | Calculates the square root of a positive number and returns the result as a double. | ```select SQRT(`id`) as exprVal from `films` ```  |
 | SUBTRACT(expr,expr) | Subtracts two numbers to return the difference, or two dates to return the difference in milliseconds, or a date and a number in milliseconds to return the resulting date. | ```select SUBTRACT(10,`id`) as exprVal from `films` ```  |
-| SUM(expr,expr,...) | Sums the values provided in the expression <br>Requires at least 2 expressions or else is treated as aggregate. | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
+| SUM(expr,expr,...) | Sums the values provided in the expression | ```select SUM(`Replacement Cost`,2,id) as s from `films` ```  |
 | TAN(expr) | Returns the tangent of a value that is measured in radians. | ```select TAN(90) as exprVal from `films` ```  |
 | TANH(expr) | Returns the hyperbolic tangent of a value that is measured in radians. | ```select TANH(90) as exprVal from `films` ```  |
 | TRUNC(expr,[places]) |  Truncates a number to a whole integer or to a specified decimal place | ```select TRUNC(`Replacement Cost`, 1) as exprVal from `films` ```  |

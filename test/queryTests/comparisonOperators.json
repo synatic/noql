@@ -214,7 +214,7 @@
     "query": "select id from `films` where id >10 and id <20"
   },
   {
-    "name": "Comparison:AND",
+    "name": "Comparison:OR",
     "output": {
       "limit": 100,
       "projection": {
@@ -263,6 +263,31 @@
       "collection": "films"
     },
     "query": "select id from `films` where id =1 or (id  > 2 and id <10)"
+  },
+  {
+    "name": "Comparison:Composite",
+    "query": "select * from `films` where id<90 and (id>10 or id=5)",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "query": {
+        "id": {
+          "$lt": 90
+        },
+        "$or": [
+          {
+            "id": {
+              "$gt": 10
+            }
+          },
+          {
+            "id": {
+              "$eq": 5
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "name": "Comparison:is NOT null",
@@ -330,5 +355,120 @@
       "collection": "customers"
     },
     "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%A'"
+  },
+  {
+    "name": "Comparison:LIKE",
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
+  },
+  {
+    "name": "Comparison:LIKE",
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
+    "output": {
+      "limit": 10,
+      "skip": 2,
+      "collection": "customers",
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
+  },
+  {
+    "name": "Query:LIKE",
+    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
+    "output": {
+      "limit": 10,
+      "skip": 2,
+      "collection": "customers",
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
+  },
+  {
+    "name": "Comparison:Case",
+    "query": "select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from `customers`",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$switch": {
+            "branches": [
+              {
+                "case": {
+                  "$eq": [
+                    "$id",
+                    3
+                  ]
+                },
+                "then": "1"
+              },
+              {
+                "case": {
+                  "$eq": [
+                    "$id",
+                    2
+                  ]
+                },
+                "then": "1"
+              }
+            ],
+            "default": {
+              "$literal": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Comparison:IN list",
+    "query": "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10",
+    "output": {
+      "limit": 10,
+      "collection": "customers",
+      "query": {
+        "Address.City": {
+          "$in": [
+            "Japan",
+            "Pakistan"
+          ]
+        }
+      }
+    }
+  }, {
+  "name": "Comparison:Composite",
+  "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
+  "output": {
+    "collection": "customers",
+    "limit": 10,
+    "skip": 5,
+    "projection": {
+      "City": "$Address.City",
+      "Name": "$First Name"
+    },
+    "query": {
+      "id": {
+        "$gt": 1
+      }
+    }
   }
+}
 ]

@@ -768,6 +768,50 @@
         }
       }
     }
+  },
+  {
+    "name": "Array:Sub select",
+    "query": "select id,Title,Rating,(select * from Rentals where `Film Title` like '%rin%' and staffId=2) as rentalsArr from `customers`",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "Title": "$Title",
+        "Rating": "$Rating",
+        "rentalsArr": {
+          "$map": {
+            "input": {
+              "$filter": {
+                "input": "$Rentals",
+                "cond": {
+                  "$and": [
+                    {
+                      "$and": [
+                        {
+                          "$regexMatch": {
+                            "input": "$$this.Film Title",
+                            "regex": "rin",
+                            "options": "i"
+                          }
+                        },
+                        {
+                          "$eq": [
+                            "$$this.staffId",
+                            2
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "in": "$$this"
+          }
+        }
+      }
+    }
   }
 ]
 

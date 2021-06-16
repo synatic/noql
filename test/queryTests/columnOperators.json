@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Columns:Exists",
+    "query": "select * from `films` where FIELD_EXISTS(`id`,true)",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "query": {
+        "$id": {
+          "$exists": {
+            "$literal": true
+          }
+        }
+      }
+    }
+  }
+]
+
+

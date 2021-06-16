@@ -1,5 +1,6 @@
 [
   {
+    "name": "Query:Basic",
     "query": "select * from `films`",
     "output": {
       "collection": "films",
@@ -7,6 +8,7 @@
     }
   },
   {
+    "name": "Query:Fields",
     "query": "select Title,Description from `films`",
     "output": {
       "collection": "films",
@@ -18,6 +20,7 @@
     }
   },
   {
+    "name": "Query:As",
     "query": "select Title as Name,Description from `films`",
     "output": {
       "collection": "films",
@@ -29,6 +32,7 @@
     }
   },
   {
+    "name": "Query:Order BY",
     "query": "SELECT * FROM customers WHERE `Address.Country`='Japan' ORDER BY id desc",
     "output": {
       "collection": "customers",
@@ -44,6 +48,7 @@
     }
   },
   {
+    "name": "Query:As",
     "query": "select `Replacement Value` as Value,Description from `films`",
     "output": {
       "collection": "films",
@@ -55,6 +60,7 @@
     }
   },
   {
+    "name": "Query:As",
     "query": "select Title as Name,Description from `films`",
     "output": {
       "collection": "films",
@@ -65,7 +71,7 @@
       }
     }
   },
-  {
+  { "name": "Query:Fixed value",
     "query": "select 'Name' as Id,Description from `films`",
     "output": {
       "collection": "films",
@@ -79,6 +85,7 @@
     }
   },
   {
+    "name": "Query:Function",
     "query": "select id,Title,Rating,abs(id*-1) as absId from `films`",
     "output": {
       "limit": 100,
@@ -99,208 +106,20 @@
     }
   },
   {
+    "name": "Query Error: Aggregate Function",
     "query": "select sum(`Replacement Cost`,2)  from `films`",
     "error": "Requires as for function:sum"
   },
+
   {
-    "query": "select sum(`Replacement Cost`,2,id) as s from `films`",
-    "output": {
-      "collection": "films",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$add": [
-            "$Replacement Cost",
-            {
-              "$literal": 2
-            },
-            "$id"
-          ]
-        }
-      }
-    }
-  },
-  {
-    "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
-    "output": {
-      "collection": "customers",
-      "limit": 10,
-      "skip": 5,
-      "projection": {
-        "City": "$Address.City",
-        "Name": "$First Name"
-      },
-      "query": {
-        "id": {
-          "$gt": 1
-        }
-      }
-    }
-  },
-  {
-    "query": "select id,Title,Rating,(select * from Rentals where `Film Title` like '%rin%' and staffId=2) as rentalsArr from `customers`",
-    "output": {
-      "limit": 100,
-      "collection": "customers",
-      "projection": {
-        "id": "$id",
-        "Title": "$Title",
-        "Rating": "$Rating",
-        "rentalsArr": {
-          "$map": {
-            "input": {
-              "$filter": {
-                "input": "$Rentals",
-                "cond": {
-                  "$and": [
-                    {
-                      "$and": [
-                        {
-                          "$regexMatch": {
-                            "input": "$$this.Film Title",
-                            "regex": "rin",
-                            "options": "i"
-                          }
-                        },
-                        {
-                          "$eq": [
-                            "$$this.staffId",
-                            2
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            },
-            "in": "$$this"
-          }
-        }
-      }
-    }
-  },
-  {
-    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
-    "output": {
-      "limit": 100,
-      "collection": "customers",
-      "query": {
-        "First Name": {
-          "$regex": "bc",
-          "$options": "i"
-        }
-      }
-    }
-  },
-  {
-    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
-    "output": {
-      "limit": 10,
-      "skip": 2,
-      "collection": "customers",
-      "query": {
-        "First Name": {
-          "$regex": "bc",
-          "$options": "i"
-        }
-      }
-    }
-  },
-  {
-    "query": "select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from `customers`",
-    "output": {
-      "limit": 100,
-      "collection": "customers",
-      "projection": {
-        "id": "$id",
-        "test": {
-          "$switch": {
-            "branches": [
-              {
-                "case": {
-                  "$eq": [
-                    "$id",
-                    3
-                  ]
-                },
-                "then": "1"
-              },
-              {
-                "case": {
-                  "$eq": [
-                    "$id",
-                    2
-                  ]
-                },
-                "then": "1"
-              }
-            ],
-            "default": {
-              "$literal": 0
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
-    "output": {
-      "limit": 10,
-      "skip": 2,
-      "collection": "customers",
-      "query": {
-        "First Name": {
-          "$regex": "bc",
-          "$options": "i"
-        }
-      }
-    }
-  },
-  {
-    "name": "IN list",
-    "query": "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10",
-    "output": {
-      "limit": 10,
-      "collection": "customers",
-      "query": {
-        "Address.City": {
-          "$in": [
-            "Japan",
-            "Pakistan"
-          ]
-        }
-      }
-    }
-  },
-  {
-    "query": "select * from `films` where id<90 and (id>10 or id=5)",
-    "output": {
-      "limit": 100,
-      "collection": "films",
-      "query": {
-        "id": {
-          "$lt": 90
-        },
-        "$or": [
-          {
-            "id": {
-              "$gt": 10
-            }
-          },
-          {
-            "id": {
-              "$eq": 5
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
+    "name": "Query Error: Aggregate",
     "query": "select sum(id) as d from `customers` group by d",
-    "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: $$ROOT",
+    "query": "select (select id,FIRST_IN_ARRAY(Rentals) as Rental) as `$$ROOT` from `customers`",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
   }
 ]
 

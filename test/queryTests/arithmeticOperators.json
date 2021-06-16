@@ -497,6 +497,78 @@
     }
   },
   {
+    "name": "Arithmetic:SUM",
+    "query": "select sum((select filmId as `$$ROOT` from Rentals)) as s from customers",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$sum": {
+            "$map": {
+              "in": "$$this.filmId",
+              "input": "$Rentals"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Arithmetic:AVG",
+    "query": "select AVG((select filmId as `$$ROOT` from Rentals)) as s from customers",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$avg": {
+            "$map": {
+              "in": "$$this.filmId",
+              "input": "$Rentals"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Arithmetic:MIN",
+    "query": "select MIN((select filmId as `$$ROOT` from Rentals)) as s from customers",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$min": {
+            "$map": {
+              "in": "$$this.filmId",
+              "input": "$Rentals"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Arithmetic:MAX",
+    "query": "select MAX((select filmId as `$$ROOT` from Rentals)) as s from customers",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$max": {
+            "$map": {
+              "in": "$$this.filmId",
+              "input": "$Rentals"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
     "name": "Arithmetic:TAN",
     "output": {
       "limit": 100,
@@ -722,5 +794,32 @@
       "collection": "films"
     },
     "query": "select  (id + `Replacement Cost`) / Length  as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:complex functions",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "s": {
+          "$add": [
+            {
+              "$multiply": [
+                {
+                  "$log10": {
+                    "$literal": 3
+                  }
+                },
+                {
+                  "$floor": "$id"
+                }
+              ]
+            },
+            1
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select (log10(3) * floor(id) +1) as s from films"
   }
 ]

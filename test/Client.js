@@ -18,12 +18,11 @@ const _queryTests = [].concat(
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
     require('./queryTests/conversionOperators.json'),
-    require('./queryTests/comparisonOperators.json')
+    require('./queryTests/comparisonOperators.json'),
+    require('./queryTests/columnOperators.json')
 );
 
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
-
-const arithmeticExpressionOperators = require('./expressionOperators/ArithmeticExpressionOperators')
 
 describe('Client Queries', function () {
     this.timeout(90000)
