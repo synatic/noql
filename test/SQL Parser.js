@@ -8,26 +8,27 @@ const _queryTests = [].concat(
     require('./queryTests/stringOperators.json'),
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
-    require('./queryTests/conversionOperators.json')
+    require('./queryTests/conversionOperators.json'),
+    require('./queryTests/comparisonOperators.json')
 );
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
 
 describe('SQL Parser', function () {
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
         it('should parse simple sql', function () {
-            let {ast} = SQLParser.parseSQLtoAST('select * from `collection`');
+            const {ast} = SQLParser.parseSQLtoAST('select * from `collection`');
             assert(ast.from[0].table === 'collection', 'Invalid from');
         });
 
         it('should return an ast when ast passed', function () {
-            let ast = SQLParser.parseSQLtoAST('select * from `collection`');
-            let ast2 = SQLParser.parseSQLtoAST(ast);
+            const ast = SQLParser.parseSQLtoAST('select * from `collection`');
+            const ast2 = SQLParser.parseSQLtoAST(ast);
             assert(ast === ast2, 'Invalid returns from ast');
         });
 
         it('should fail if no collection passed', function () {
             try {
-                let ast = SQLParser.parseSQLtoAST('select 1');
+                const ast = SQLParser.parseSQLtoAST('select 1');
             } catch (exp) {
                 return assert.equal(exp.message, 'SQL statement requires at least 1 collection', 'Invalid error message');
             }
@@ -36,7 +37,7 @@ describe('SQL Parser', function () {
 
         it('should fail on an invalid statement', function () {
             try {
-                let ast = SQLParser.parseSQLtoAST('select *  `collection`');
+                const ast = SQLParser.parseSQLtoAST('select *  `collection`');
             } catch (exp) {
                 return assert.equal(
                     exp.message,

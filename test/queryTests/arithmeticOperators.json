@@ -5,9 +5,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$avg": ["$Replacement Cost",{
-  "$literal": 10
-}]
+          "$avg": [
+            "$Replacement Cost",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -104,11 +107,14 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$atan2": [{
-            "$literal": 3
-          },{
-            "$literal": 4
-          }]
+          "$atan2": [
+            {
+              "$literal": 3
+            },
+            {
+              "$literal": 4
+            }
+          ]
         }
       },
       "collection": "films"
@@ -177,9 +183,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$divide": ["$Replacement Cost",{
-            "$literal": 10
-          }]
+          "$divide": [
+            "$Replacement Cost",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -231,8 +240,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$log": ["$id",{
-            "$literal":10}]
+          "$log": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -258,8 +271,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$max": ["$id",{
-            "$literal":10}]
+          "$max": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -272,8 +289,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$min": ["$id",{
-            "$literal":10}]
+          "$min": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -286,8 +307,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$mod": ["$id",{
-            "$literal":10}]
+          "$mod": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -300,8 +325,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$multiply": ["$id",{
-            "$literal":10}]
+          "$multiply": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -314,8 +343,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$pow": ["$id",{
-            "$literal":10}]
+          "$pow": [
+            "$id",
+            {
+              "$literal": 10
+            }
+          ]
         }
       },
       "collection": "films"
@@ -343,7 +376,7 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$rand":{}
+          "$rand": {}
         }
       },
       "collection": "films"
@@ -356,8 +389,12 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$round": ["$Replacement Cost",{
-            "$literal":1}]
+          "$round": [
+            "$Replacement Cost",
+            {
+              "$literal": 1
+            }
+          ]
         }
       },
       "collection": "films"
@@ -370,7 +407,9 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$round": ["$Replacement Cost"]
+          "$round": [
+            "$Replacement Cost"
+          ]
         }
       },
       "collection": "films"
@@ -426,8 +465,11 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$subtract": [{
-            "$literal":10},"$id"
+          "$subtract": [
+            {
+              "$literal": 10
+            },
+            "$id"
           ]
         }
       },
@@ -452,7 +494,8 @@
           ]
         }
       }
-    }},
+    }
+  },
   {
     "name": "Arithmetic:TAN",
     "output": {
@@ -633,12 +676,10 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-
-              "$divide": [
-                "$Replacement Cost",
-                "$Length"
-              ]
-
+          "$divide": [
+            "$Replacement Cost",
+            "$Length"
+          ]
         }
       },
       "collection": "films"
@@ -651,12 +692,10 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-
           "$mod": [
             "$id",
             "$Length"
           ]
-
         }
       },
       "collection": "films"
@@ -668,7 +707,17 @@
     "output": {
       "limit": 100,
       "projection": {
-        "exprVal": {"$divide":[{"$add":["$id","$Replacement Cost"]},"$Length"]}
+        "exprVal": {
+          "$divide": [
+            {
+              "$add": [
+                "$id",
+                "$Replacement Cost"
+              ]
+            },
+            "$Length"
+          ]
+        }
       },
       "collection": "films"
     },

@@ -1,0 +1,334 @@
+[
+  {
+    "name": "Comparison:=",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$eq": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id =10"
+  },
+  {
+    "name": "Comparison:=",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$eq":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id=10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:EQ",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$eq":["$id",{
+        "$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select eq(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:>",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$gt": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id >10"
+  },
+  {
+    "name": "Comparison:>",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$gt":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id>10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:GT",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$gt":["$id",{"$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select gt(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:<",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$lt": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id <10"
+  },
+  {
+    "name": "Comparison:<",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$lt":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id<10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:LT",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$lt":["$id",{"$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select lt(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:<=",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$lte": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id <=10"
+  },
+  {
+    "name": "Comparison:<=",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$lte":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id<=10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:LTE",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$lte":["$id",{"$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select lte(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:>=",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$gte": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id >=10"
+  },
+  {
+    "name": "Comparison:>=",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$gte":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id>=10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:GTE",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$gte":["$id",{
+        "$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select gte(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:!=",
+    "output": {
+      "limit": 100,
+      "query": {
+        "id": {
+          "$ne": 10
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select * from `films` where id !=10"
+  },
+  {
+    "name": "Comparison:!=",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$ne":["$id",10]}},
+      "collection": "films"
+    },
+    "query": "select (id!=10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:NE",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$ne":["$id",{"$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select ne(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:CMP",
+    "output": {
+      "limit": 100,
+      "projection": {"expr":{"$cmp":["$id",{"$literal":10}]}},
+      "collection": "films"
+    },
+    "query": "select cmp(id,10) as expr from `films`"
+  },
+  {
+    "name": "Comparison:AND",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "id": "$id"
+      },
+      "query": {
+        "id": {
+          "$gt": 10,
+          "$lt": 20
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select id from `films` where id >10 and id <20"
+  },
+  {
+    "name": "Comparison:AND",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "id": "$id"
+      },
+      "query": {
+        "$or": [
+          {
+            "id": {
+              "$eq": 1
+            }
+          },
+          {
+            "id": {
+              "$eq": 2
+            }
+          }
+        ]
+      },
+      "collection": "films"
+    },
+    "query": "select id from `films` where id =1 or id =2"
+  },
+  {
+    "name": "Comparison:Composite",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "id": "$id"
+      },
+      "query": {
+        "$or": [
+          {
+            "id": {
+              "$eq": 1
+            }
+          },
+          {
+            "id": {
+              "$gt": 2,
+              "$lt": 10
+            }
+          }
+        ]
+      },
+      "collection": "films"
+    },
+    "query": "select id from `films` where id =1 or (id  > 2 and id <10)"
+  },
+  {
+    "name": "Comparison:is NOT null",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "id": "$id"
+      },
+      "query": {
+        "id": {
+          "$ne": null
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select id from `films` where id IS NOT NULL"
+  },
+  {
+    "name": "Comparison:LIKE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "FName": "$First Name"
+      },
+      "query": {
+        "First Name": {
+          "$options": "i",
+          "$regex": "^M"
+        }
+      },
+      "collection": "customers"
+    },
+    "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%'"
+  },
+  {
+    "name": "Comparison:LIKE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "FName": "$First Name"
+      },
+      "query": {
+        "First Name": {
+          "$options": "i",
+          "$regex": "M$"
+        }
+      },
+      "collection": "customers"
+    },
+    "query": "select `First Name` as FName from `customers` where `First Name` Like '%M'"
+  },
+  {
+    "name": "Comparison:LIKE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "FName": "$First Name"
+      },
+      "query": {
+        "First Name": {
+          "$options": "i",
+          "$regex": "^M%A$"
+        }
+      },
+      "collection": "customers"
+    },
+    "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%A'"
+  }
+]

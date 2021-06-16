@@ -12,8 +12,8 @@
       "collection": "films",
       "limit": 100,
       "projection": {
-        "Title" : "$Title",
-        "Description":"$Description"
+        "Title": "$Title",
+        "Description": "$Description"
       }
     }
   },
@@ -23,7 +23,7 @@
       "collection": "films",
       "limit": 100,
       "projection": {
-        "Name" : "$Title",
+        "Name": "$Title",
         "Description": "$Description"
       }
     }
@@ -33,11 +33,15 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "query": { "Address.Country": {
-        "$eq": "Japan" }},
-      "sort": { "id" : -1 }
+      "query": {
+        "Address.Country": {
+          "$eq": "Japan"
+        }
+      },
+      "sort": {
+        "id": -1
+      }
     }
-
   },
   {
     "query": "select `Replacement Value` as Value,Description from `films`",
@@ -45,7 +49,7 @@
       "collection": "films",
       "limit": 100,
       "projection": {
-        "Value" : "$Replacement Value",
+        "Value": "$Replacement Value",
         "Description": "$Description"
       }
     }
@@ -56,8 +60,8 @@
       "collection": "films",
       "limit": 100,
       "projection": {
-        "Name" : "$Title",
-        "Description":"$Description"
+        "Name": "$Title",
+        "Description": "$Description"
       }
     }
   },
@@ -67,19 +71,33 @@
       "collection": "films",
       "limit": 100,
       "projection": {
-        "Id" : { "$literal": "Name" },
+        "Id": {
+          "$literal": "Name"
+        },
         "Description": "$Description"
       }
     }
   },
-
   {
     "query": "select id,Title,Rating,abs(id*-1) as absId from `films`",
-    "output": {"limit":100,"collection":"films","projection":{"id":"$id","Title":"$Title","Rating":"$Rating","absId":{"$abs":{"$multiply":["$id",-1]}}}}
-
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "projection": {
+        "id": "$id",
+        "Title": "$Title",
+        "Rating": "$Rating",
+        "absId": {
+          "$abs": {
+            "$multiply": [
+              "$id",
+              -1
+            ]
+          }
+        }
+      }
+    }
   },
-
-
   {
     "query": "select sum(`Replacement Cost`,2)  from `films`",
     "error": "Requires as for function:sum"
@@ -102,7 +120,6 @@
       }
     }
   },
-
   {
     "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
     "output": {
@@ -114,22 +131,67 @@
         "Name": "$First Name"
       },
       "query": {
-        "id": { "$gt": 1 }
-
+        "id": {
+          "$gt": 1
+        }
       }
     }
   },
   {
     "query": "select id,Title,Rating,(select * from Rentals where `Film Title` like '%rin%' and staffId=2) as rentalsArr from `customers`",
-    "output": {"limit":100,"collection":"customers","projection":{"id":"$id","Title":"$Title","Rating":"$Rating","rentalsArr":{"$map":{"input":{"$filter":{"input":"$Rentals","cond":{"$and":[{"$and":[{"$regexMatch":{"input":"$$this.Film Title","regex":"rin","options":"i"}},{"$eq":["$$this.staffId",2]}]}]}}},"in":"$$this"}}}}
-   },
-
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "Title": "$Title",
+        "Rating": "$Rating",
+        "rentalsArr": {
+          "$map": {
+            "input": {
+              "$filter": {
+                "input": "$Rentals",
+                "cond": {
+                  "$and": [
+                    {
+                      "$and": [
+                        {
+                          "$regexMatch": {
+                            "input": "$$this.Film Title",
+                            "regex": "rin",
+                            "options": "i"
+                          }
+                        },
+                        {
+                          "$eq": [
+                            "$$this.staffId",
+                            2
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "in": "$$this"
+          }
+        }
+      }
+    }
+  },
   {
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
     "output": {
       "limit": 100,
       "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
   },
   {
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
@@ -137,40 +199,50 @@
       "limit": 10,
       "skip": 2,
       "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
   },
   {
     "query": "select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from `customers`",
-    "output": {"limit":100,"collection":"customers","projection":{
-      "id": "$id",
-      "test": {
-        "$switch": {
-          "branches": [
-            {
-              "case": {
-                "$eq": [
-                  "$id",
-                  3
-                ]
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$switch": {
+            "branches": [
+              {
+                "case": {
+                  "$eq": [
+                    "$id",
+                    3
+                  ]
+                },
+                "then": "1"
               },
-              "then": "1"
-            },
-            {
-              "case": {
-                "$eq": [
-                  "$id",
-                  2
-                ]
-              },
-              "then": "1"
+              {
+                "case": {
+                  "$eq": [
+                    "$id",
+                    2
+                  ]
+                },
+                "then": "1"
+              }
+            ],
+            "default": {
+              "$literal": 0
             }
-          ],
-          "default": {
-            "$literal": 0
           }
         }
       }
-    }}
+    }
   },
   {
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%' limit 10 offset 2",
@@ -178,7 +250,13 @@
       "limit": 10,
       "skip": 2,
       "collection": "customers",
-      "query": { "First Name": { "$regex": "bc", "$options": "i" } }}
+      "query": {
+        "First Name": {
+          "$regex": "bc",
+          "$options": "i"
+        }
+      }
+    }
   },
   {
     "name": "IN list",
@@ -186,9 +264,17 @@
     "output": {
       "limit": 10,
       "collection": "customers",
-      "query": {"Address.City":{"$in":["Japan","Pakistan"]}}}
+      "query": {
+        "Address.City": {
+          "$in": [
+            "Japan",
+            "Pakistan"
+          ]
+        }
+      }
+    }
   },
-   {
+  {
     "query": "select * from `films` where id<90 and (id>10 or id=5)",
     "output": {
       "limit": 100,
@@ -210,15 +296,12 @@
           }
         ]
       }
-      }
-    },
+    }
+  },
   {
     "query": "select sum(id) as d from `customers` group by d",
     "error": "Query cannot cross multiple collections, have an aggregate function or contain functions in where clauses"
   }
-
-
-
 ]
 
 

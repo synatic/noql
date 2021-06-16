@@ -5,8 +5,17 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$concat":["$First Name",{"$literal":":"},"$Last Name"]}}
-
+      "projection": {
+        "exprVal": {
+          "$concat": [
+            "$First Name",
+            {
+              "$literal": ":"
+            },
+            "$Last Name"
+          ]
+        }
+      }
     }
   },
   {
@@ -15,10 +24,13 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{ "$trim": {
-        "input": "$First Name"
-      }}}
-
+      "projection": {
+        "exprVal": {
+          "$trim": {
+            "input": "$First Name"
+          }
+        }
+      }
     }
   },
   {
@@ -27,13 +39,16 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$ltrim": {
-        "chars": {
-          "$literal": " "
-        },
-        "input": "$First Name"
-      }}}
-
+      "projection": {
+        "exprVal": {
+          "$ltrim": {
+            "chars": {
+              "$literal": " "
+            },
+            "input": "$First Name"
+          }
+        }
+      }
     }
   },
   {
@@ -42,13 +57,16 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$rtrim": {
-        "chars": {
-          "$literal": " "
-        },
-        "input": "$First Name"
-      }}}
-
+      "projection": {
+        "exprVal": {
+          "$rtrim": {
+            "chars": {
+              "$literal": " "
+            },
+            "input": "$First Name"
+          }
+        }
+      }
     }
   },
   {
@@ -57,16 +75,19 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$substr": [
-        "$First Name",
-        {
-          "$literal": 1
-        },
-        {
-          "$literal": 10
+      "projection": {
+        "exprVal": {
+          "$substr": [
+            "$First Name",
+            {
+              "$literal": 1
+            },
+            {
+              "$literal": 10
+            }
+          ]
         }
-      ]}}
-
+      }
     }
   },
   {
@@ -75,16 +96,19 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$replaceOne": {
-        "find": {
-          "$literal": "a"
-        },
-        "input": "$First Name",
-        "replacement": {
-          "$literal": "b"
+      "projection": {
+        "exprVal": {
+          "$replaceOne": {
+            "find": {
+              "$literal": "a"
+            },
+            "input": "$First Name",
+            "replacement": {
+              "$literal": "b"
+            }
+          }
         }
-      }}}
-
+      }
     }
   },
   {
@@ -93,16 +117,19 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$replaceAll": {
-        "find": {
-          "$literal": "a"
-        },
-        "input": "$First Name",
-        "replacement": {
-          "$literal": "b"
+      "projection": {
+        "exprVal": {
+          "$replaceAll": {
+            "find": {
+              "$literal": "a"
+            },
+            "input": "$First Name",
+            "replacement": {
+              "$literal": "b"
+            }
+          }
         }
-      }}}
-
+      }
     }
   },
   {
@@ -111,15 +138,19 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$substr": [
-        "$First Name",
-        {
-          "$literal": 1
-        },{
-          "$literal": 10
+      "projection": {
+        "exprVal": {
+          "$substr": [
+            "$First Name",
+            {
+              "$literal": 1
+            },
+            {
+              "$literal": 10
+            }
+          ]
         }
-      ]}}
-
+      }
     }
   },
   {
@@ -128,9 +159,11 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$strLenBytes":
-        "$First Name"}}
-
+      "projection": {
+        "exprVal": {
+          "$strLenBytes": "$First Name"
+        }
+      }
     }
   },
   {
@@ -139,10 +172,11 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$strLenCP":
-        "$First Name"
-      }}
-
+      "projection": {
+        "exprVal": {
+          "$strLenCP": "$First Name"
+        }
+      }
     }
   },
   {
@@ -151,11 +185,16 @@
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {"exprVal":{"$split":["$First Name",{
-        "$literal": ","
-      }]
-      }}
-
+      "projection": {
+        "exprVal": {
+          "$split": [
+            "$First Name",
+            {
+              "$literal": ","
+            }
+          ]
+        }
+      }
     }
   }
 ]

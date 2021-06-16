@@ -17,7 +17,8 @@ const _queryTests = [].concat(
     require('./queryTests/stringOperators.json'),
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
-    require('./queryTests/conversionOperators.json')
+    require('./queryTests/conversionOperators.json'),
+    require('./queryTests/comparisonOperators.json')
 );
 
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));

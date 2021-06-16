@@ -204,10 +204,13 @@
       "collection": "customers",
       "projection": {
         "conv": {
-          "$ifNull": ["$id",{
-            "$literal":1
-        }]
+          "$ifNull": [
+            "$id",
+            {
+              "$literal": 1
             }
+          ]
+        }
       }
     }
   },
@@ -219,9 +222,10 @@
       "collection": "customers",
       "projection": {
         "conv": {
-          "$ifNull": [{
-            "$literal": null
-          },
+          "$ifNull": [
+            {
+              "$literal": null
+            },
             {
               "$arrayToObject": {
                 "$concatArrays": [
@@ -237,7 +241,8 @@
                   }
                 ]
               }
-            }]
+            }
+          ]
         }
       }
     }

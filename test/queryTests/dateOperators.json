@@ -56,7 +56,6 @@
             "iso8601": {
               "$literal": true
             }
-
           }
         }
       }
@@ -360,26 +359,26 @@
     }
   },
   {
-  "name": "Date:WEEK",
-  "query": "select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
-  "output": {
-    "collection": "customers",
-    "limit": 100,
-    "projection": {
-      "exprVal": {
-        "$week": {
-          "date": {
-            "$dateFromString": {
-              "dateString": {
-                "$literal": "2021-11-15"
+    "name": "Date:WEEK",
+    "query": "select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$week": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
               }
             }
           }
         }
       }
     }
-  }
-},
+  },
   {
     "name": "Date:YEAR",
     "query": "select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",

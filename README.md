@@ -10,6 +10,12 @@ M-SQL is a specific way to use MySQL style queries tailored to MongoDB functions
 * Follows mySQL Syntax
 * As with MongoDB column names and strings are case-sensitive.
 
+### Currently Unsupported SQL Statements
+* Over
+* CTE's
+* Pivot
+* Union
+
 ## Installation
 ```
 npm i @synatic/sql-to-mongo --save
@@ -226,16 +232,32 @@ unwind
 
 ### Case Statements
 
-
+### Comparison Operators
+| M-SQL Operator | Description | Example |
+| ------------- | ------------- | ------------- |
+| &gt; | Greater than | <code>select * from `films` where id > 10<br>select (id>10) as exprVal from `films` </code>
+| &lt; | Less than | <code>select * from `films` where id < 10<br>select (id<10) as exprVal from `films` </code>
+| = | Equal to | <code>select * from `films` where id = 10 <br>select (id=10) as exprVal from `films`</code> |
+| >= | Greater than or equal to | <code>select * from `films` where id >= 10<br>select (id>=10) as exprVal from `films` </code>
+| <= | Less than or equal to | <code>select * from `films` where id <= 10<br>select (id<=10) as exprVal from `films` </code> |
+| != | Not equal to | <code>select * from `films` where id != 10 <br>select (id!=10) as exprVal from `films`</code> |
+| IS NOT NULL | Is not null | <code>select * from `films` where id IS NOT NULL </code> |
+| LIKE | String like, support standard %, case insensitive | <code>select `First Name` as FName from `customers` where `First Name` Like 'M%' </code>|
+| GT | Greater than | <code>select GT(id,10) as exprVal from `films` </code>
+| LT | Less than | <code>select LT(id,10) as exprVal from `films` </code>
+| EQ | Equal to | <code>select EQ(id,10) as exprVal from `films`</code> |
+| GTE | Greater than or equal to | <code>select GTE(id,10) as exprVal from `films` </code>
+| LTE | Less than or equal to | <code>select LTE(id,10) as exprVal from `films` </code> |
+| NE | Not equal to | <code>select NE(id,10) as exprVal from `films`</code> |
 
 ### Aggregate Functions
 | Aggregate Function | Example |
 | ------------- | ------------- |
-| SUM | ``` select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
-| AVG | ``` select avg(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
-| MIN | ``` select min(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
-| MAX | ``` select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
-| COUNT | ``` select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| SUM | ```select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| AVG | ```select avg(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| MIN | ```select min(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| MAX | ```select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
+| COUNT | ```select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 
 Requires group by for aggregate functions. If grouping by top level, use fake field for group by: 
 ```
@@ -351,7 +373,7 @@ Methods that perform operations on objects
 | * | Multiplication operator multiplies 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` * id * Length as exprVal from `films` ```
 | % | Modulus operator | ```select `id` % Length as exprVal from `films` ``` |
 
-### Comparison Operators
+
 
 ### Conversion Functions
 | M-SQL Function | Description | Example |
@@ -425,11 +447,7 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | WEEK(expr) | Returns the week of the year for a date as a number between 0 and 53. | ```select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | YEAR(expr) | Returns the year portion of a date.  | ```select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 
-### Currently Unsupported SQL Statements
-* Over
-* CTE's
-* Pivot
-* Union
+
 
 ### Selecting on a calculated column by name
 Calculated columns in where statements can only be used with aggregates  
