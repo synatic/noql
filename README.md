@@ -188,7 +188,23 @@ Always prefix on joins
 
 ## Supported SQL Statements
 
+Functions in WHERE statements require explicit definition and can't use a computed field
+```
+--Correct
+select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by absId
 
+--Won't work
+select `Address.City` as City from `customers` where `First Name` like 'm%' and absId > 1
+```
+
+ORDER BY requires field to be part of select
+```
+--Correct
+select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by absId
+
+--Won't work
+select `Address.City` as City from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by abs(`id`)
+```
 
 ### Limit and Offset
 Supports MySQL style limits and offset that equates to limit and skip
@@ -263,10 +279,7 @@ Methods that perform operations on columns/fields
 | MAX | ```select max(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 | COUNT | ```select count(*) as countVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
 
-Requires group by for aggregate functions. If grouping by top level, use fake field for group by: 
-```
-select sum(`id`) as sumId  from `customers` group by `xxxx`
- ```
+
 #### SUM CASE
 Sum Case logic is supported:
 ```

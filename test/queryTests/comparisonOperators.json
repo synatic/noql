@@ -204,10 +204,18 @@
         "id": "$id"
       },
       "query": {
-        "id": {
-          "$gt": 10,
-          "$lt": 20
-        }
+        "$and": [
+          {
+            "id": {
+              "$gt": 10
+            }
+          },
+          {
+            "id": {
+              "$lt": 20
+            }
+          }
+        ]
       },
       "collection": "films"
     },
@@ -253,10 +261,18 @@
             }
           },
           {
-            "id": {
-              "$gt": 2,
-              "$lt": 10
-            }
+            "$and": [
+              {
+                "id": {
+                  "$gt": 2
+                }
+              },
+              {
+                "id": {
+                  "$lt": 10
+                }
+              }
+            ]
           }
         ]
       },
@@ -271,19 +287,25 @@
       "limit": 100,
       "collection": "films",
       "query": {
-        "id": {
-          "$lt": 90
-        },
-        "$or": [
+        "$and": [
           {
             "id": {
-              "$gt": 10
+              "$lt": 90
             }
           },
           {
-            "id": {
-              "$eq": 5
-            }
+            "$or": [
+              {
+                "id": {
+                  "$gt": 10
+                }
+              },
+              {
+                "id": {
+                  "$eq": 5
+                }
+              }
+            ]
           }
         ]
       }
@@ -321,6 +343,32 @@
       "collection": "customers"
     },
     "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%'"
+  },
+  {
+    "name": "Comparison:LIKE",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "FName": "$First Name"
+      },
+      "query": {
+        "$and": [
+          {
+            "First Name": {
+              "$options": "i",
+              "$regex": "^M"
+            }
+          },
+          {
+            "id": {
+              "$lt": 50
+            }
+          }
+        ]
+      },
+      "collection": "customers"
+    },
+    "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%' and id < 50"
   },
   {
     "name": "Comparison:LIKE",
@@ -453,6 +501,22 @@
         }
       }
     }
+  },
+  {
+    "name": "Comparison:NOT IN list",
+    "query": "select * from `customers` where `Address.City` not in ('Japan','Pakistan') limit 10",
+    "output": {
+      "limit": 10,
+      "collection": "customers",
+      "query": {
+        "Address.City": {
+          "$nin": [
+            "Japan",
+            "Pakistan"
+          ]
+        }
+      }
+    }
   }, {
   "name": "Comparison:Composite",
   "query": "select `Address.City` as City ,`First Name` as Name from `customers` where `id`>1 limit 10 offset 5",
@@ -470,5 +534,17 @@
       }
     }
   }
-}
+},
+  {
+    "name": "Comparison:Sum Case",
+    "query": "select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {"Ueda":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Ueda"]},"then":1}],"default":{"$literal":0}}}},
+        "Tete":{"$sum":{"$switch":{"branches":[{"case":{"$eq":["$Address.City","Tete"]},"then":1}],"default":{"$literal":0}}}}}
+    }
+  }
+
+
 ]

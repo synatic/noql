@@ -71,7 +71,8 @@
       }
     }
   },
-  { "name": "Query:Fixed value",
+  {
+    "name": "Query:Fixed value",
     "query": "select 'Name' as Id,Description from `films`",
     "output": {
       "collection": "films",
@@ -81,6 +82,80 @@
           "$literal": "Name"
         },
         "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:Function in where",
+    "query": "select * from `customers` where SIZE_OF_ARRAY(Rentals)>40 and SIZE_OF_ARRAY(Rentals)<90",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "$and": [
+          {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$Rentals"
+                },
+                40
+              ]
+            }
+          },
+          {
+            "$expr": {
+              "$lt": [
+                {
+                  "$size": "$Rentals"
+                },
+                90
+              ]
+            }
+          }
+        ]
+
+      }
+    }
+  },
+  {
+    "name": "Query:Function in where",
+    "query": "select * from `customers` where SIZE_OF_ARRAY(Rentals)>40 and (id=10 or SIZE_OF_ARRAY(Rentals)<90)",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "$and": [
+          {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$Rentals"
+                },
+                40
+              ]
+            }
+          },
+          {
+            "$or": [
+              {
+                "id": {
+                  "$eq": 10
+                }
+              },
+              {
+                "$expr": {
+                  "$lt": [
+                    {
+                      "$size": "$Rentals"
+                    },
+                    90
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       }
     }
   },
@@ -110,7 +185,6 @@
     "query": "select sum(`Replacement Cost`,2)  from `films`",
     "error": "Requires as for function:sum"
   },
-
   {
     "name": "Query Error: Aggregate",
     "query": "select sum(id) as d from `customers` group by d",

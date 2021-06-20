@@ -139,20 +139,6 @@ describe('SQL Parser', function () {
             assert(!SQLParser.canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), 'Invalid can query');
         });
 
-        it('should nt allow where functions ', function () {
-            assert(
-                !SQLParser.canQuery(' select * from `films` where arrayLength(Rentals)>10 and arrayLength(Rentals)<90'),
-                'Invalid can query'
-            );
-        });
-
-        it('should nt allow where functions with complex where ', function () {
-            assert(
-                !SQLParser.canQuery(' select * from `films` where arrayLength(Rentals)>10 and (id=10 or arrayLength(Rentals)<90)'),
-                'Invalid can query'
-            );
-        });
-
         it('should not allow with where on sub query ', function () {
             assert(
                 !SQLParser.canQuery(
@@ -382,7 +368,7 @@ describe('SQL Parser', function () {
             {
                 limit: 100,
                 collection: 'people',
-                query: {status: {$eq: 'A'}, age: {$eq: 50}},
+                query: {$and:[{status: {$eq: 'A'}}, {age: {$eq: 50}}]},
                 type: 'query',
             },
             'Invalid parse'
@@ -428,7 +414,20 @@ describe('SQL Parser', function () {
             {
                 limit: 100,
                 collection: 'people',
-                query: {age: {$gt: 25, $lt: 30}},
+                query: {
+                    "$and": [
+                        {
+                            "age": {
+                                "$gt": 25
+                            }
+                        },
+                        {
+                            "age": {
+                                "$lt": 30
+                            }
+                        }
+                    ]
+                },
                 type: 'query',
             },
             'Invalid parse'
