@@ -1,0 +1,59 @@
+name: "Build"
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [master, develop]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason"
+        required: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:4.4
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      # Skip post-install scripts here, as a malicious
+      # script could steal NODE_AUTH_TOKEN.
+      - name: Install NPM dependencies
+        run: npm install --ignore-scripts
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test-ci
+
+  pack:
+    name: NPM Pack
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      # Skip post-install scripts here, as a malicious
+      # script could steal NODE_AUTH_TOKEN.
+      - name: Install NPM dependencies
+        run: npm install --ignore-scripts --production
+
+      - name: Run NPM pack
+        run: npm pack
