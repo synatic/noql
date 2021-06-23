@@ -29,6 +29,7 @@ describe('SQL Parser', function () {
 
         it('should fail if no collection passed', function () {
             try {
+                // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST('select 1');
             } catch (exp) {
                 return assert.equal(exp.message, 'SQL statement requires at least 1 collection', 'Invalid error message');
@@ -38,6 +39,7 @@ describe('SQL Parser', function () {
 
         it('should fail on an invalid statement', function () {
             try {
+                // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST('select *  `collection`');
             } catch (exp) {
                 return assert.equal(
@@ -50,7 +52,8 @@ describe('SQL Parser', function () {
 
         it('should fail on an invalid statement 2', function () {
             try {
-                let ast = SQLParser.parseSQLtoAST('select * from `collection` with unwind');
+                // eslint-disable-next-line no-unused-vars
+                const ast = SQLParser.parseSQLtoAST('select * from `collection` with unwind');
             } catch (exp) {
                 return assert.equal(exp.message, '1:32 - Expected [A-Za-z0-9_] but " " found.');
             }
@@ -59,7 +62,8 @@ describe('SQL Parser', function () {
 
         it('should fail on no as with function', function () {
             try {
-                let ast = SQLParser.parseSQLtoAST('select Name,sum(`Replacement Cost`,2)  from `films`');
+                // eslint-disable-next-line no-unused-vars
+                const ast = SQLParser.parseSQLtoAST('select Name,sum(`Replacement Cost`,2)  from `films`');
             } catch (exp) {
                 return assert.equal(exp.message, 'Requires as for function:sum');
             }
@@ -68,7 +72,8 @@ describe('SQL Parser', function () {
 
         it('should fail on no as with binary expr', function () {
             try {
-                let ast = SQLParser.parseSQLtoAST('select Name,a>b from `films`');
+                // eslint-disable-next-line no-unused-vars
+                const ast = SQLParser.parseSQLtoAST('select Name,a>b from `films`');
             } catch (exp) {
                 return assert.equal(exp.message, 'Requires as for binary_expr');
             }
@@ -306,7 +311,7 @@ describe('SQL Parser', function () {
 
     // SQL to MongoBD Mapping examples from docs.mongobd.com
     it('SQL to MongoBD Mapping', function () {
-        //TODO ID issue shoot
+        // TODO ID issue shoot
         assert.deepStrictEqual(
             SQLParser.parseSQL(`SELECT id, user_id, status FROM people`),
             {

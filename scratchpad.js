@@ -14,8 +14,8 @@ const SQLParser=require('./lib/SQLParser');
 // select  AVG((select staffId as '$$ROOT' from Rentals)) as exprVal from `customer`")
 // const parsedVal=SQLParser.makeMongoAggregate("select  `customer-notes`.*,YEAR(DATE_FROM_STRING(`date`)) as year from `customer-notes`")
 
-//let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")
-let parsedVal=SQLParser.makeMongoAggregate("select `First Name`,`Address.City` as City,abs(-1) as absId from `customers` where `First Name` like 'm%' and abs(-1) >=1")
+// let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")
+const parsedVal=SQLParser.makeMongoAggregate("select `First Name`,`Address.City` as City,abs(-1) as absId from `customers` where `First Name` like 'm%' and abs(-1) >=1")
 
 // let parsedVal=SQLParser.makeMongoAggregate("select * from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id') from customers )")
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.Country` as Country,sum(id) as totalId from customers group by `Address.Country`")

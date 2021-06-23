@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+// eslint-disable-next-line no-unused-vars
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 
@@ -84,7 +85,7 @@ describe('Client Queries', function () {
                                 const count = await client.db(_dbName).collection(parsedQuery.collection).countDocuments(parsedQuery.query || null);
                                 console.log(`${count}`);
                             } else {
-                                let find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, {projection: parsedQuery.projection});
+                                const find = client.db(_dbName).collection(parsedQuery.collection).find(parsedQuery.query || null, {projection: parsedQuery.projection});
                                 if (parsedQuery.sort) {
                                     find.sort(parsedQuery.sort)
                                 }
