@@ -5,12 +5,12 @@ updates:
     directory: "/"
     target-branch: develop
     schedule:
-      interval: weekly
+      interval: monthly
     open-pull-requests-limit: 10
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     directory: "/"
     target-branch: develop
     schedule:
-      interval: weekly
+      interval: monthly
     open-pull-requests-limit: 10
