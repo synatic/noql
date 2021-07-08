@@ -194,7 +194,13 @@
     "name": "Query Error: $$ROOT",
     "query": "select (select id,FIRST_IN_ARRAY(Rentals) as Rental) as `$$ROOT` from `customers`",
     "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: Array aggregation",
+    "query": "select id,(select count(*) as count from Rentals) as totalRentals from customers",
+    "error": "Array sub select does not support aggregation methods"
   }
+
 ]
 
 

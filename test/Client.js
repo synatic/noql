@@ -7,6 +7,8 @@ const _stores = require('./exampleData/stores.json');
 const _films = require('./exampleData/films.json');
 const _customerNotes = require('./exampleData/customer-notes.json');
 const _customerNotes2 = require('./exampleData/customer-notes2.json');
+const _orders = require('./exampleData/orders.json');
+const _inventory = require('./exampleData/inventory.json');
 const _connectionString = "mongodb://127.0.0.1:27017";
 const _dbName = "sql-to-mongo-test";
 
@@ -22,7 +24,7 @@ const _queryTests = [].concat(
     require('./queryTests/columnOperators.json')
 );
 
-const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
+const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'),require('./aggregateTests/joins.json'));
 
 describe('Client Queries', function () {
     this.timeout(90000)
@@ -54,6 +56,14 @@ describe('Client Queries', function () {
                 }));
 
                 await db.collection('customer-notes2').bulkWrite(_customerNotes2.map(d => {
+                    return { insertOne: { document: d } };
+                }));
+
+                await db.collection('orders').bulkWrite(_orders.map(d => {
+                    return { insertOne: { document: d } };
+                }));
+
+                await db.collection('inventory').bulkWrite(_inventory.map(d => {
                     return { insertOne: { document: d } };
                 }));
 
@@ -137,7 +147,7 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _aggregateTests.filter(q => !!q.query && !q.error);
             for (const test of tests) {
-                it(test.query,function(done){
+                it(`${test.name?test.name + ':':''}${test.query}`,function(done){
                     (async () => {
                         try {
                             const parsedQuery = SQLParser.makeMongoAggregate(test.query);

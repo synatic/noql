@@ -12,7 +12,8 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
-const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'));
+const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'),require('./aggregateTests/joins.json'));
+
 
 describe('SQL Parser', function () {
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {

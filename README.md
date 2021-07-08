@@ -235,11 +235,54 @@ PARSE_JSON(json string)
 
 
 ### Joins
+Support INNER and OUTER Joins but does not unwind by default and the items are added as an array field.
 
-hints
-first
-last
-unwind
+There are several join hints to support automatically unwinding of joins: 
+* first
+* last
+* unwind
+
+``` 
+--return the first item in the array
+select * from orders inner join `inventory|first` as inventory_docs on sku=item
+
+--take the last item of the array
+select * from orders inner join `inventory|last` as inventory_docs on sku=item
+
+--unwind the array to multiple documents
+select * from orders inner join `inventory|unwind` as inventory_docs on sku=item
+
+```
+Alternatively the explicit array functions can be used:
+``` 
+--return the first item in the array
+select *,FIRST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+
+--take the last item of the array
+select *,LAST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+
+--unwind the array to multiple documents
+select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+
+```
+
+
+NOTE: In sub select on where statement does not work as a join
+``` 
+--Won't Work (from MongoDB docs)
+SELECT *, inventory_docs
+FROM orders
+WHERE inventory_docs IN (SELECT *
+FROM inventory
+WHERE sku= orders.item)
+
+--use join instead
+select *
+from orders
+inner join inventory inventory_docs
+on sku=item
+
+```
 
 ### Sub Queries
 
@@ -301,8 +344,19 @@ Slicing the array is supported by limit and offset in queries
 ```
 select (select * from Rentals where staffId=2 limit 10 offset 5) as t from `customers`
 ```
+
+
 NOTE: Sorting array in sub select is not supported and will need to use unwind
 
+``` 
+--Wont'Work 
+select id,(select * from Rentals order by id desc) as totalRentals from customers
+```
+NOTE: Aggregation functions not supported in sub select
+``` 
+--Wont'Work 
+select id,(select count(*) as count from Rentals) as totalRentals from customers
+```
 
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
@@ -349,6 +403,8 @@ Specifying '$$ROOT' as a column alias sets the value to root object but only wor
 ```
 select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t
 ```
+
+
 
 ### Mathematical Functions
 
