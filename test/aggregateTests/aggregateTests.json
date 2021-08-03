@@ -623,6 +623,7 @@
     }
   },
   {
+    "name": "Aggregate: Unwind",
     "query": "select id,`First Name`,unwind(Rentals) as Rental  from customers",
     "type": "aggregate",
     "output": {
@@ -634,8 +635,31 @@
             "Rental": "$Rentals"
           }
         },
+        {"$unset":"Rentals"},
         {
           "$unwind": "$Rental"
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: Unwind",
+    "query": "select id,`First Name`,unwind(Rentals) as Rentals  from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "id": "$id",
+            "First Name": "$First Name",
+            "Rentals": "$Rentals"
+          }
+        },
+        {
+          "$unwind": "$Rentals"
         }
       ],
       "collections": [
@@ -1371,6 +1395,49 @@
             "newRoot": "$x"
           }
         }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: sub select with where",
+    "query": "select x as '$$ROOT' from (select *,SIZE_OF_ARRAY(`Rentals`) as RentalsCount from `customers`) as x where `x`.`RentalsCount` > 20",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": [
+                "$$ROOT",
+                {
+                  "RentalsCount": {
+                    "$size": "$Rentals"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "x": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "x.RentalsCount": {
+              "$gt": 20
+            }
+          }
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": "$x"
+          }
+        }
 
 
       ],
@@ -1378,7 +1445,44 @@
         "customers"
       ]
     }
+  },
+  {
+    "name": "Aggregate: distinct",
+    "query": "select distinct `First Name`,`Last Name` from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "First Name": "$First Name",
+              "Last Name": "$Last Name"
+            }
+          }
+        },
+        {
+          "$project": {
+            "First Name": "$_id.First Name",
+            "Last Name": "$_id.Last Name",
+            "_id": 0
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: distinct with where ",
+    "query": "select distinct `First Name`,`Last Name` from customers where id<20",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [{"$match":{"id":{"$lt":20}}},{"$group":{"_id":{"First Name":"$First Name","Last Name":"$Last Name"}}},{"$project":{"First Name":"$_id.First Name","Last Name":"$_id.Last Name","_id":0}}]
+      ,
+      "collections": [
+        "customers"
+      ]
+    }
   }
-
-
 ]
