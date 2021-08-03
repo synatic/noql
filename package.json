@@ -54,7 +54,7 @@
     "moment": "^2.29.1",
     "mongodb": "^3.6.6",
     "underscore.string": "^3.3.5",
-    "mongodb-language-model": "^1.6.1",
+    "mongodb-language-model": "^2.2.0",
     "async": "^3.2.0",
     "clone-deep": "^4.0.1",
     "eslint": "^7.16.0",
