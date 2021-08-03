@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Objects:PARSE_JSON",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$arrayToObject": {
+            "$literal": [
+              {
+                "k": "val",
+                "v": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "query": "select id,ARRAY_TO_OBJECT(PARSE_JSON('[{\"k\":\"val\",\"v\":1}]')) as test from `customers`"
+  },
+  {
+    "name": "Objects:MERGE_OBJECTS",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "projection": {
+        "id": "$id",
+        "test": {
+          "$mergeObjects": [
+            "$Address",
+            {
+              "$literal": {
+                "val": 1
+              }
+            }
+          ]
+        }
+      }
+    },
+    "query": "select id,MERGE_OBJECTS(`Address`,PARSE_JSON('{\"val\":1}')) as test from `customers`"
+  }
+]
+
+

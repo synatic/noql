@@ -1,0 +1,424 @@
+[
+  {
+    "name": "Date:DATE_FROM_STRING",
+    "query": "select DATE_FROM_STRING('2021-11-15T14:43:29.000Z',null,null) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateFromString": {
+            "dateString": {
+              "$literal": "2021-11-15T14:43:29.000Z"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DATE_TO_STRING",
+    "query": "select DATE_TO_STRING(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,null) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateToString": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15T14:43:29.000Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DATE_TO_PARTS",
+    "query": "select DATE_TO_PARTS(DATE_FROM_STRING('2021-11-15T14:43:29.000Z'),null,true) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateToParts": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15T14:43:29.000Z"
+                }
+              }
+            },
+            "iso8601": {
+              "$literal": true
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DATE_FROM_STRING",
+    "query": "select DATE_FROM_STRING('2021-11-15',null,'America/New_York') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateFromString": {
+            "dateString": {
+              "$literal": "2021-11-15"
+            },
+            "timezone": {
+              "$literal": "America/New_York"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DAY_OF_MONTH",
+    "query": "select DAY_OF_MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dayOfMonth": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DATE_FROM_PARTS",
+    "query": "select DATE_FROM_PARTS(2021,11,15) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateFromParts": {
+            "day": {
+              "$literal": 15
+            },
+            "month": {
+              "$literal": 11
+            },
+            "year": {
+              "$literal": 2021
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DATE_FROM_ISO_PARTS",
+    "query": "select DATE_FROM_ISO_PARTS(2017,6,3) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dateFromParts": {
+            "isoDayOfWeek": {
+              "$literal": 3
+            },
+            "isoWeek": {
+              "$literal": 6
+            },
+            "isoWeekYear": {
+              "$literal": 2017
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DAY_OF_WEEK",
+    "query": "select DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dayOfWeek": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DAY_OF_YEAR",
+    "query": "select DAY_OF_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dayOfYear": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:ISO_DAY_OF_WEEK",
+    "query": "select ISO_DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$isoDayOfWeek": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:ISO_WEEK",
+    "query": "select ISO_WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$isoWeek": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:ISO_WEEK_YEAR",
+    "query": "select ISO_WEEK_YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$isoWeekYear": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:HOUR",
+    "query": "select HOUR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$hour": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:MILLISECOND",
+    "query": "select MILLISECOND(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$millisecond": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:MINUTE",
+    "query": "select MINUTE(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$minute": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:MONTH",
+    "query": "select MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$month": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:SECOND",
+    "query": "select SECOND(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$second": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:WEEK",
+    "query": "select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$week": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:YEAR",
+    "query": "select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$year": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Date:DAY_OF_MONTH",
+    "query": "select DAY_OF_MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$dayOfMonth": {
+            "date": {
+              "$dateFromString": {
+                "dateString": {
+                  "$literal": "2021-11-15"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

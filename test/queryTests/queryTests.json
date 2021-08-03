@@ -1,0 +1,206 @@
+[
+  {
+    "name": "Query:Basic",
+    "query": "select * from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100
+    }
+  },
+  {
+    "name": "Query:Fields",
+    "query": "select Title,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Title": "$Title",
+        "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:As",
+    "query": "select Title as Name,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Name": "$Title",
+        "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:Order BY",
+    "query": "SELECT * FROM customers WHERE `Address.Country`='Japan' ORDER BY id desc",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "query": {
+        "Address.Country": {
+          "$eq": "Japan"
+        }
+      },
+      "sort": {
+        "id": -1
+      }
+    }
+  },
+  {
+    "name": "Query:As",
+    "query": "select `Replacement Value` as Value,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Value": "$Replacement Value",
+        "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:As",
+    "query": "select Title as Name,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Name": "$Title",
+        "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:Fixed value",
+    "query": "select 'Name' as Id,Description from `films`",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Id": {
+          "$literal": "Name"
+        },
+        "Description": "$Description"
+      }
+    }
+  },
+  {
+    "name": "Query:Function in where",
+    "query": "select * from `customers` where SIZE_OF_ARRAY(Rentals)>40 and SIZE_OF_ARRAY(Rentals)<90",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "$and": [
+          {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$Rentals"
+                },
+                40
+              ]
+            }
+          },
+          {
+            "$expr": {
+              "$lt": [
+                {
+                  "$size": "$Rentals"
+                },
+                90
+              ]
+            }
+          }
+        ]
+
+      }
+    }
+  },
+  {
+    "name": "Query:Function in where",
+    "query": "select * from `customers` where SIZE_OF_ARRAY(Rentals)>40 and (id=10 or SIZE_OF_ARRAY(Rentals)<90)",
+    "output": {
+      "limit": 100,
+      "collection": "customers",
+      "query": {
+        "$and": [
+          {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$Rentals"
+                },
+                40
+              ]
+            }
+          },
+          {
+            "$or": [
+              {
+                "id": {
+                  "$eq": 10
+                }
+              },
+              {
+                "$expr": {
+                  "$lt": [
+                    {
+                      "$size": "$Rentals"
+                    },
+                    90
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Query:Function",
+    "query": "select id,Title,Rating,abs(id*-1) as absId from `films`",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "projection": {
+        "id": "$id",
+        "Title": "$Title",
+        "Rating": "$Rating",
+        "absId": {
+          "$abs": {
+            "$multiply": [
+              "$id",
+              -1
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Query Error: Aggregate Function",
+    "query": "select sum(`Replacement Cost`,2)  from `films`",
+    "error": "Requires as for function:sum"
+  },
+  {
+    "name": "Query Error: Aggregate",
+    "query": "select sum(id) as d from `customers` group by d",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: $$ROOT",
+    "query": "select (select id,FIRST_IN_ARRAY(Rentals) as Rental) as `$$ROOT` from `customers`",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: Array aggregation",
+    "query": "select id,(select count(*) as count from Rentals) as totalRentals from customers",
+    "error": "Array sub select does not support aggregation methods"
+  }
+
+]
+
+

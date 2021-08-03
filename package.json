@@ -1,0 +1,67 @@
+{
+  "name": "@synatic/sql-to-mongo",
+  "version": "0.1.0",
+  "description": "Convert SQL to mongo queries or aggregates",
+  "main": "index.js",
+  "files": [
+    "lib/",
+    "index.js"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "prettier": "prettier . --write",
+    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test-ci": "nyc --reporter text-summary mocha -- --reporter spec --check-leaks test/",
+    "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/synatic/sql-to-mongo.git"
+  },
+  "keywords": [
+    "mongodb"
+  ],
+  "author": {
+    "name": "FilePounder Inc",
+    "url": "https://www.synatic.com"
+  },
+  "contributors": [
+    {
+      "name": "Martin Naude",
+      "email": "martin@synatic.com"
+    },
+    {
+      "name": "Thiren Bunsee",
+      "email": "thiren@synatic.com"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/synatic/sql-to-mongo/issues"
+  },
+  "homepage": "https://github.com/synatic/sql-to-mongo#readme",
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "@synatic/json-magic": "0.1.1",
+    "check-types": "11.1.2",
+    "deepmerge": "4.2.2",
+    "node-sql-parser": "3.6.0"
+  },
+  "devDependencies": {
+    "deep-equal": "^2.0.5",
+    "moment": "^2.29.1",
+    "mongodb": "^3.6.6",
+    "underscore.string": "^3.3.5",
+    "mongodb-language-model": "^1.6.1",
+    "async": "^3.2.0",
+    "clone-deep": "^4.0.1",
+    "eslint": "^7.16.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^7.1.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.3.1"
+  }
+}

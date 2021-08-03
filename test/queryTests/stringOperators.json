@@ -1,0 +1,200 @@
+[
+  {
+    "name": "String:CONCAT",
+    "query": "select CONCAT(`First Name`,':',`Last Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$concat": [
+            "$First Name",
+            {
+              "$literal": ":"
+            },
+            "$Last Name"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "String:TRIM",
+    "query": "select TRIM(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$trim": {
+            "input": "$First Name"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "String:LTRIM",
+    "query": "select LTRIM(`First Name`,' ') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$ltrim": {
+            "chars": {
+              "$literal": " "
+            },
+            "input": "$First Name"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "String:RTRIM",
+    "query": "select RTRIM(`First Name`,' ') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$rtrim": {
+            "chars": {
+              "$literal": " "
+            },
+            "input": "$First Name"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "String:SUBSTR",
+    "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$substr": [
+            "$First Name",
+            {
+              "$literal": 1
+            },
+            {
+              "$literal": 10
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "String:REPLACE",
+    "query": "select REPLACE(`First Name`,'a','b') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$replaceOne": {
+            "find": {
+              "$literal": "a"
+            },
+            "input": "$First Name",
+            "replacement": {
+              "$literal": "b"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "String:REPLACE_ALL",
+    "query": "select REPLACE_ALL(`First Name`,'a','b') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$replaceAll": {
+            "find": {
+              "$literal": "a"
+            },
+            "input": "$First Name",
+            "replacement": {
+              "$literal": "b"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "String:SUBSTR_BYTES",
+    "query": "select SUBSTR(`First Name`,1,10) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$substr": [
+            "$First Name",
+            {
+              "$literal": 1
+            },
+            {
+              "$literal": 10
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "String:STRLEN",
+    "query": "select STRLEN(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$strLenBytes": "$First Name"
+        }
+      }
+    }
+  },
+  {
+    "name": "String:STRLEN_CP",
+    "query": "select STRLEN_CP(`First Name`) as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$strLenCP": "$First Name"
+        }
+      }
+    }
+  },
+  {
+    "name": "String:SPLIT",
+    "query": "select SPLIT(`First Name`,',') as exprVal from `customers`",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$split": [
+            "$First Name",
+            {
+              "$literal": ","
+            }
+          ]
+        }
+      }
+    }
+  }
+]
