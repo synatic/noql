@@ -222,12 +222,12 @@ select (select id,`First Name` as Name) as t  from customers
 ```
 Create a new Object and assign to root 
 ```
-select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,mergeObjects(t1,t2) as `$$ROOT`  from customers
+select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`  from customers
 ```
 
 Using with unwind with joins
 ```
-select mergeObjects((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t
+select MERGE_OBJECTS((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t
 ```
 PARSE_JSON(json string)
 ### Group By and Having
