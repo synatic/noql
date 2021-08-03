@@ -1,4 +1,4 @@
-{
+[{
   "query": "select t.CustomerID,t.Name,t.Rental  from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t",
   "type": "aggregate",
   "output": {
@@ -77,4 +77,5 @@
       "customers"
     ]
   }
-},
+}
+]

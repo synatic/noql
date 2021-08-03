@@ -1,4 +1,4 @@
-{
+[{
   "name": "Join: Sub Query",
   "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id",
   "type": "aggregate",
@@ -143,3 +143,4 @@
     ]
   }
 }
+]
