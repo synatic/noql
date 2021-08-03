@@ -44,7 +44,7 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@synatic/json-magic": "0.1.1",
+    "@synatic/json-magic": "0.1.2",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
     "node-sql-parser": "3.6.0"
