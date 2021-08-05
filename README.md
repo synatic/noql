@@ -1,37 +1,42 @@
 # sql-to-mongo
 Converts M-SQL Queries to Mongo find statements or aggregation pipelines.
 
-**What is M-SQL**
+What is M-SQL?
 
-M-SQL is a specific way to use MySQL style queries tailored to MongoDB functions and a multilevel document paradigm. 
+M-SQL is a specific way to use MySQL style queries tailored to MongoDB functions and a multilevel document paradigm.
 
 ## Notes
+
 * Supports Mongo 3.6 or greater
 * Follows mySQL Syntax
 * As with MongoDB column names and strings are case-sensitive.
 
 ### Currently Unsupported SQL Statements
+
 * Over
 * CTE's
 * Pivot
 * Union
 
 ## Installation
-```
+
+```bash
 npm i @synatic/sql-to-mongo --save
 ```
 
 ## Usage
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 ```
 
 ### parseSQL(sqlStatement)
+
 Parses the given SQL statement to an aggregate or query depending on if a straight query is possible. 
 
-```
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
-console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4));
+console.log(JSON.stringify(SQLMongoParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4));
 
 {
     "limit": 10,
@@ -47,7 +52,8 @@ console.log(JSON.stringify(SQLParser.parseSQL("select id from `films` where `id`
     "type": "query"
 }
 ```
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id"),null,4));
 {
@@ -79,7 +85,7 @@ console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `fi
 }
 ```
 
-```
+```js
 const SQLParser=require('./lib/SQLParser');
 const { MongoClient } = require('mongodb');
 
@@ -92,20 +98,22 @@ const { MongoClient } = require('mongodb');
         const parsedSQL=SQLParser.parseSQL("select id from `films` limit 10")
         if(parsedSQL.type==='query'){
             console.log(await db.collection(parsedSQL.collection).find(parsedSQL.query||{},parsedSQL.projection||{}).limit(parsedSQL.limit||50).toArray())
-        }else if(parsedSQL.type==='aggregate'){
+        } else if(parsedSQL.type==='aggregate'){
             console.log(await db.collection(parsedSQL.collections[0]).aggregate(parsedSQL.pipeline).toArray())
         }
 
-    }catch(exp){
+    } catch(exp){
         console.error(exp)
     }
 
 })();
+```
 
-```
 ### makeMongoQuery(sqlStatement)
+
 Generates a mongo query if possible. Will throw an exception if not possible.
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 console.log(SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 limit 10"));
 
@@ -121,14 +129,15 @@ console.log(SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 
         }
     }
 }
-
-
 ```
+
 ### makeMongoAggregate(sqlStatement)
+
 Generates a mongo aggregate.
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
-console.log(SQLMongoParser.makeMongoAggregate("select id from `films` group by id"));
+console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `films` group by id"), null, 4));
 
 {
     "pipeline": [
@@ -150,11 +159,13 @@ console.log(SQLMongoParser.makeMongoAggregate("select id from `films` group by i
         "films"
     ]
 }
+```
 
-```
 ### canQuery
+
 Returns whether a statement can be queried or an aggregate must be used.
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 
 console.log(SQLMongoParser.canQuery("select id from `films`"));
@@ -164,23 +175,67 @@ console.log(SQLMongoParser.canQuery("select id from `films` group by id"));
 //false
 
 ```
+
 ### parseSQLtoAST(sqlStatement)
+
 Parses a SQL statement to an AST (abstract syntax tree)
-```
+
+```js
 const SQLMongoParser=require('@synatic/sql-to-mongo');
 
 const ast=SQLMongoParser.parseSQLtoAST("select id from `films`");
+console.log(JSON.stringify(ast, null, 4));
+
+{
+    "tableList": [
+        "select::null::films"
+    ],
+    "columnList": [
+        "select::null::id"
+    ],
+    "ast": {
+        "with": null,
+        "type": "select",
+        "options": null,
+        "distinct": null,
+        "columns": [
+            {
+                "expr": {
+                    "type": "column_ref",
+                    "table": null,
+                    "column": "id"
+                },
+                "as": null
+            }
+        ],
+        "from": [
+            {
+                "db": null,
+                "table": "films",
+                "as": null
+            }
+        ],
+        "where": null,
+        "groupby": null,
+        "having": null,
+        "orderby": null,
+        "limit": null,
+        "for_update": null
+    }
+}
 ```
+
 ## M-SQL
 
 Requires as for functions and sub queries
-```
+
+```sql
 select abs(-1) as `absId` from `customers`
 ```
 
-
 as on table requires prefixing
-```
+
+```sql
 select c.* from customers as c 
 ```
 
@@ -189,7 +244,8 @@ Always prefix on joins
 ## Supported SQL Statements
 
 Functions in WHERE statements require explicit definition and can't use a computed field
-```
+
+```sql
 --Correct
 select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by absId
 
@@ -198,7 +254,8 @@ select `Address.City` as City from `customers` where `First Name` like 'm%' and 
 ```
 
 ORDER BY requires field to be part of select
-```
+
+```sql 
 --Correct
 select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by absId
 
@@ -207,42 +264,53 @@ select `Address.City` as City from `customers` where `First Name` like 'm%' and 
 ```
 
 ### Limit and Offset
+
 Supports MySQL style limits and offset that equates to limit and skip
-```
+
+```sql
 select (select * from Rentals) as t from `customers` limit 10 offset 2
 ```
 
 ### Merge Fields into Object
+
 Only available in aggregate
 Select without table
 
 Create a new Object
-```
+
+```sql
 select (select id,`First Name` as Name) as t  from customers
 ```
-Create a new Object and assign to root 
-```
+
+Create a new Object and assign to root
+
+```sql
 select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`  from customers
 ```
 
 Using with unwind with joins
-```
+
+```sql
 select MERGE_OBJECTS((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t
 ```
+
 PARSE_JSON(json string)
+
 ### Group By and Having
 
-
+Coming soon
 
 ### Joins
+
 Support INNER and OUTER Joins but does not unwind by default and the items are added as an array field.
 
-There are several join hints to support automatically unwinding of joins: 
+There are several join hints to support automatically unwinding of joins:
+
 * first
 * last
 * unwind
 
-``` 
+```sql
 --return the first item in the array
 select * from orders inner join `inventory|first` as inventory_docs on sku=item
 
@@ -251,10 +319,11 @@ select * from orders inner join `inventory|last` as inventory_docs on sku=item
 
 --unwind the array to multiple documents
 select * from orders inner join `inventory|unwind` as inventory_docs on sku=item
-
 ```
+
 Alternatively the explicit array functions can be used:
-``` 
+
+```sql
 --return the first item in the array
 select *,FIRST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inventory` on sku=item
 
@@ -263,12 +332,11 @@ select *,LAST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inve
 
 --unwind the array to multiple documents
 select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` on sku=item
-
 ```
 
+**NOTE**: _In sub select on where statement does not work as a join_
 
-NOTE: In sub select on where statement does not work as a join
-``` 
+```sql
 --Won't Work (from MongoDB docs)
 SELECT *, inventory_docs
 FROM orders
@@ -281,12 +349,12 @@ select *
 from orders
 inner join inventory inventory_docs
 on sku=item
-
 ```
 
 ### Sub Queries
 
 ### Column Functions
+
 Methods that perform operations on columns/fields
 
 | M-SQL Function | Description | Example |
@@ -294,6 +362,7 @@ Methods that perform operations on columns/fields
 | FIELD_EXISTS(expr,true/false) | Check if a field exists. Can only be used in where clauses and not as an expression  | ```select * from `films` where FIELD_EXISTS(`id`,true)``` |
 
 ### Comparison Operators
+
 | M-SQL Operator | Description | Example |
 | ------------- | ------------- | ------------- |
 | &gt; | Greater than | <code>select * from \`films\` where id > 10<br>select (id>10) as exprVal from \`films\` </code>
@@ -314,6 +383,7 @@ Methods that perform operations on columns/fields
 | CASE | Case statement | <code>select id,(case when id=3 then '1' when id=2 then '1' else 0 end) as test from customers</code> |
 
 ### Aggregate Functions
+
 | Aggregate Function | Example |
 | ------------- | ------------- |
 | SUM | ```select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City` ``` |
@@ -324,36 +394,45 @@ Methods that perform operations on columns/fields
 
 
 #### SUM CASE
+
 Sum Case logic is supported:
-```
+
+```sql
 select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by `xxx`
 ```
 
 ### Arrays
+
 Methods that perform operations on array fields. Can be used as part of select statements and queries. 
 
 M-SQL uses sub-selects to query array fields in collections. E.g.
-```
+
+```sql
 select (select * from Rentals where staffId=2) as t from `customers`
 ```
+
 Using '$$ROOT' in sub select promotes the field to the root value of the array
-```
+
+```sql
 select (select filmId as '$$ROOT' from Rentals where staffId=2) as t from `customers`
 ```
+
 Slicing the array is supported by limit and offset in queries
-```
+
+```sql
 select (select * from Rentals where staffId=2 limit 10 offset 5) as t from `customers`
 ```
 
+**NOTE:** _Sorting array in sub select is not supported and will need to use unwind_
 
-NOTE: Sorting array in sub select is not supported and will need to use unwind
-
-``` 
+```sql
 --Wont'Work 
 select id,(select * from Rentals order by id desc) as totalRentals from customers
 ```
-NOTE: Aggregation functions not supported in sub select
-``` 
+
+**NOTE:** _Aggregation functions not supported in sub select_
+
+```sql
 --Wont'Work 
 select id,(select count(*) as count from Rentals) as totalRentals from customers
 ```
@@ -386,10 +465,13 @@ select id,(select count(*) as count from Rentals) as totalRentals from customers
 | MAX(array expr) | returns the maximum of a value array e.g. [1,2,3] | ```select MAX((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
 | SUM(array expr) | returns the sum of a value array e.g. [1,2,3] | ```select SUM((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
 | AVG(array expr) | returns the average of a value array e.g. [1,2,3] | ```select AVG((select filmId as `$$ROOT` from Rentals)) as s from customers ``` | 
+
 #### Unwind
 
+Coming soon
 
 ### Objects
+
 Methods that perform operations on objects
 
 | M-SQL Function | Description | Example |
@@ -399,12 +481,12 @@ Methods that perform operations on objects
 |  | With Sub Select | ```select id,MERGE_OBJECTS(`Address`,(select 1 as val)) as test from `customers` ```|
 
 #### $$ROOT
+
 Specifying '$$ROOT' as a column alias sets the value to root object but only works with aggregates (unless contained in array sub select)
-```
+
+```sql
 select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rentals,'id')  as numRentals from customers) as t
 ```
-
-
 
 ### Mathematical Functions
 
@@ -455,9 +537,8 @@ select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rent
 | * | Multiplication operator multiplies 2 numbers or dates. Does not work on strings | ```select `Replacement Cost` * id * Length as exprVal from `films` ```
 | % | Modulus operator | ```select `id` % Length as exprVal from `films` ``` |
 
-
-
 ### Conversion Functions
+
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
 | CONVERT(expr,to) | Converts the expression to a mongo type: 'double', 'string', 'bool', 'date', 'int', 'objectId', 'long', 'decimal' | ```select SUBTRACT(CONVERT('1','int'),ABS(`Replacement Cost`)) as d,Title from `films` ```|
@@ -473,6 +554,7 @@ select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rent
 |  | Example using select without from for object generation | <code>select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` <br> {"val":"a","num":1}</code>
 
 #### Cast
+
 Supports cast operations with the following type mappings:
 
 | MySQL Type | Mongo Type |
@@ -485,11 +567,13 @@ Supports cast operations with the following type mappings:
 | FLOAT | number | 
 | CHAR | string |
 | NCHAR | string |
-```
+
+```sql
 select cast(1+`id` as varchar) as `id` from `customers`
 select cast(abs(-1) as varchar) as `id` from `customers`
 select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 ```
+
 ### String Functions
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
@@ -505,9 +589,10 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | STRLEN_CP(expr) | Returns the number of UTF-8 code points in the specified string. | ```select STRLEN_CP(`First Name`) as exprVal from `customers` ```  |
 | SPLIT(expr,delimiter) | Splits the string to an array | ```select SPLIT(`First Name`,',') as exprVal from `customers` ``` | 
 
-**Note**: + (str + str) does not work for string concatenation.
+**Note**: _+ (str + str) does not work for string concatenation._
 
 ### Date Functions
+
 | M-SQL Function | Description | Example |
 | ------------- | ------------- | ------------- |
 | DATE_FROM_STRING(expr,format,timezone,onError,onNull) |  Converts a date/time string to a date object. | ```select DATE_FROM_STRING('2021-11-15T14:43:29.000Z',null,null) as exprVal from `customers` ```  |
@@ -529,13 +614,11 @@ select cast('2021-01-01T00:00:00Z' as date) as `id` from `customers`
 | WEEK(expr) | Returns the week of the year for a date as a number between 0 and 53. | ```select WEEK(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 | YEAR(expr) | Returns the year portion of a date.  | ```select YEAR(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers` ```  |
 
-
-
 ### Selecting on a calculated column by name
+
 Calculated columns in where statements can only be used with aggregates  
-```
+
+```sql
 --have to repeat select statemnt as with sql rules
 select id,Title,Rating,abs(id) as absId from `films` where abs(id)=1
 ```
-
-
