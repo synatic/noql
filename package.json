@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -19,20 +19,20 @@
     "url": "git+https://github.com/synatic/sql-to-mongo.git"
   },
   "keywords": [
-    "mongodb"
+    "mongodb", "sql", "sql to mongo"
   ],
   "author": {
-    "name": "FilePounder Inc",
+    "name": "Synatic Inc",
     "url": "https://www.synatic.com"
   },
   "contributors": [
     {
       "name": "Martin Naude",
-      "email": "martin@synatic.com"
+      "url": "https://www.synatic.com"
     },
     {
       "name": "Thiren Bunsee",
-      "email": "thiren@synatic.com"
+      "url": "https://www.synatic.com"
     }
   ],
   "license": "MIT",
