@@ -52,7 +52,7 @@
   "devDependencies": {
     "deep-equal": "^2.0.5",
     "moment": "^2.29.1",
-    "mongodb": "^3.6.6",
+    "mongodb": "^4.1.2",
     "underscore.string": "^3.3.5",
     "mongodb-language-model": "^1.6.1",
     "async": "^3.2.0",
