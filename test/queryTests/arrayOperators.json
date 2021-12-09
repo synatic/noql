@@ -108,10 +108,7 @@
                 "cond": {
                   "$and": [
                     {
-                      "$lt": [
-                        "$$this.staffId",
-                        "10"
-                      ]
+                      "$lt": ["$$this.staffId", "10"]
                     }
                   ]
                 }
@@ -170,10 +167,7 @@
                     "input": "$$this.Payments",
                     "initialValue": 0,
                     "in": {
-                      "$sum": [
-                        "$$value",
-                        "$$this.Amount"
-                      ]
+                      "$sum": ["$$value", "$$this.Amount"]
                     }
                   }
                 }
@@ -199,10 +193,7 @@
             "input": "$Rentals",
             "initialValue": 0,
             "in": {
-              "$sum": [
-                "$$value",
-                "$$this.filmId"
-              ]
+              "$sum": ["$$value", "$$this.filmId"]
             }
           }
         }
@@ -227,10 +218,7 @@
                       "input": "$$this.Payments",
                       "initialValue": 0,
                       "in": {
-                        "$sum": [
-                          "$$value",
-                          "$$this.Amount"
-                        ]
+                        "$sum": ["$$value", "$$this.Amount"]
                       }
                     }
                   }
@@ -239,10 +227,7 @@
             },
             "initialValue": 0,
             "in": {
-              "$sum": [
-                "$$value",
-                "$$this.total"
-              ]
+              "$sum": ["$$value", "$$this.total"]
             }
           }
         }
@@ -267,10 +252,7 @@
                   "input": "$$this.Payments",
                   "initialValue": 0,
                   "in": {
-                    "$sum": [
-                      "$$value",
-                      "$$this.Amount"
-                    ]
+                    "$sum": ["$$value", "$$this.Amount"]
                   }
                 }
               }
@@ -361,10 +343,7 @@
             },
             "initialValue": 0,
             "in": {
-              "$avg": [
-                "$$value",
-                "$$this"
-              ]
+              "$avg": ["$$value", "$$this"]
             }
           }
         }
@@ -386,10 +365,7 @@
             "input": "$Rentals",
             "initialValue": 0,
             "in": {
-              "$avg": [
-                "$$value",
-                "$$this.filmId"
-              ]
+              "$avg": ["$$value", "$$this.filmId"]
             }
           }
         }
@@ -409,9 +385,7 @@
             "branches": [
               {
                 "case": {
-                  "$allElementsTrue": [
-                    "$Rentals"
-                  ]
+                  "$allElementsTrue": ["$Rentals"]
                 },
                 "then": "Yes"
               }
@@ -437,9 +411,7 @@
             "branches": [
               {
                 "case": {
-                  "$anyElementTrue": [
-                    "$Rentals"
-                  ]
+                  "$anyElementTrue": ["$Rentals"]
                 },
                 "then": "Yes"
               }
@@ -641,12 +613,7 @@
               }
             },
             {
-              "$literal": [
-                1,
-                2,
-                3,
-                4
-              ]
+              "$literal": [1, 2, 3, 4]
             }
           ]
         }
@@ -670,12 +637,7 @@
               }
             },
             {
-              "$literal": [
-                1,
-                2,
-                3,
-                4
-              ]
+              "$literal": [1, 2, 3, 4]
             }
           ]
         }
@@ -699,12 +661,7 @@
               }
             },
             {
-              "$literal": [
-                1,
-                2,
-                3,
-                4
-              ]
+              "$literal": [1, 2, 3, 4]
             }
           ]
         }
@@ -728,12 +685,7 @@
               }
             },
             {
-              "$literal": [
-                1,
-                2,
-                3,
-                4
-              ]
+              "$literal": [1, 2, 3, 4]
             }
           ]
         }
@@ -757,12 +709,7 @@
               }
             },
             {
-              "$literal": [
-                1,
-                2,
-                3,
-                4
-              ]
+              "$literal": [1, 2, 3, 4]
             }
           ]
         }
@@ -796,10 +743,7 @@
                           }
                         },
                         {
-                          "$eq": [
-                            "$$this.staffId",
-                            2
-                          ]
+                          "$eq": ["$$this.staffId", 2]
                         }
                       ]
                     }
@@ -814,5 +758,3 @@
     }
   }
 ]
-
-

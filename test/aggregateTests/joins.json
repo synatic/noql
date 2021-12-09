@@ -4,12 +4,12 @@
     "query": "select * from orders as o inner join `inventory` as i  on o.item=i.sku",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$project":{"o":"$$ROOT"}},{"$lookup":{"from":"inventory","as":"i","localField":"o.item","foreignField":"sku"}},{"$match":{"$expr":{"$gt":[{"$size":"$i"},0]}}}]
-      ,
-      "collections": [
-        "orders",
-        "inventory"
-      ]
+      "pipeline": [
+        {"$project": {"o": "$$ROOT"}},
+        {"$lookup": {"from": "inventory", "as": "i", "localField": "o.item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$i"}, 0]}}}
+      ],
+      "collections": ["orders", "inventory"]
     }
   },
   {
@@ -17,11 +17,12 @@
     "query": "select * from orders as o inner join `inventory` as i  on sku=item",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$project":{"o":"$$ROOT"}},{"$lookup":{"from":"inventory","as":"i","localField":"o.item","foreignField":"sku"}},{"$match":{"$expr":{"$gt":[{"$size":"$i"},0]}}}],
-      "collections": [
-        "orders",
-        "inventory"
-      ]
+      "pipeline": [
+        {"$project": {"o": "$$ROOT"}},
+        {"$lookup": {"from": "inventory", "as": "i", "localField": "o.item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$i"}, 0]}}}
+      ],
+      "collections": ["orders", "inventory"]
     }
   },
   {
@@ -29,11 +30,11 @@
     "query": "select * from orders inner join `inventory`  on sku=item",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$lookup":{"from":"inventory","as":"inventory","localField":"orders.item","foreignField":"sku"}},{"$match":{"$expr":{"$gt":[{"$size":"$inventory"},0]}}}],
-      "collections": [
-        "orders",
-        "inventory"
-      ]
+      "pipeline": [
+        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
+      ],
+      "collections": ["orders", "inventory"]
     }
   },
   {
@@ -41,12 +42,12 @@
     "query": "select * from orders inner join `inventory`  on orders.item=inventory.sku",
     "type": "aggregate",
     "output": {
-      "pipeline":[{"$lookup":{"from":"inventory","as":"inventory","localField":"orders.item","foreignField":"sku"}},{"$match":{"$expr":{"$gt":[{"$size":"$inventory"},0]}}}],
+      "pipeline": [
+        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
+      ],
 
-        "collections": [
-        "orders",
-        "inventory"
-      ]
+      "collections": ["orders", "inventory"]
     }
   },
   {
@@ -54,12 +55,11 @@
     "query": "select * from orders inner join `inventory`  on inventory.sku=orders.item",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$lookup":{"from":"inventory","as":"inventory","localField":"orders.item","foreignField":"sku"}},{"$match":{"$expr":{"$gt":[{"$size":"$inventory"},0]}}}]
-      ,
-      "collections": [
-        "orders",
-        "inventory"
-      ]
+      "pipeline": [
+        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
+      ],
+      "collections": ["orders", "inventory"]
     }
   },
   {
@@ -100,10 +100,141 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join:Simple with where",
+    "query": "select c.*,cn.*  from customers c inner join `customer-notes` cn on c.id=cn.id where cn.id>1 and c.id>2",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "localField": "c.id",
+            "foreignField": "id"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$match": {
+            "$and": [
+              {
+                "cn.id": {
+                  "$gt": 1
+                }
+              },
+              {
+                "c.id": {
+                  "$gt": 2
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join:with group by and having",
+    "query": "select c.id,sum(1) as cnt  from customers c inner join `customer-notes` cn on c.id=cn.id where cn.id>1 and c.id>2 group by c.id having cnt >2",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "localField": "c.id",
+            "foreignField": "id"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$match": {
+            "$and": [
+              {
+                "cn.id": {
+                  "$gt": 1
+                }
+              },
+              {
+                "c.id": {
+                  "$gt": 2
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "id": "$c.id"
+            },
+            "cnt": {
+              "$sum": {
+                "$literal": 1
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "cnt": "$cnt",
+            "id": "$_id.id"
+          }
+        },
+        {
+          "$match": {
+            "cnt": {
+              "$gt": 2
+            }
+          }
+        }
+      ],
+      "collections": ["customers", "customer-notes"]
     }
   },
   {
@@ -150,10 +281,7 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
     }
   },
   {
@@ -203,11 +331,7 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes",
-        "customer-notes2"
-      ]
+      "collections": ["customers", "customer-notes", "customer-notes2"]
     }
   },
   {
@@ -234,24 +358,15 @@
                   "$expr": {
                     "$and": [
                       {
-                        "$eq": [
-                          "$id",
-                          "$$c_id"
-                        ]
+                        "$eq": ["$id", "$$c_id"]
                       },
                       {
                         "$or": [
                           {
-                            "$gt": [
-                              "$id",
-                              2
-                            ]
+                            "$gt": ["$id", 2]
                           },
                           {
-                            "$lt": [
-                              "$id",
-                              5
-                            ]
+                            "$lt": ["$id", 5]
                           }
                         ]
                       }
@@ -281,10 +396,7 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
     }
   },
   {
@@ -328,10 +440,7 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
     }
   },
   {
@@ -358,16 +467,10 @@
                   "$expr": {
                     "$and": [
                       {
-                        "$eq": [
-                          "$id",
-                          "$$c_id"
-                        ]
+                        "$eq": ["$id", "$$c_id"]
                       },
                       {
-                        "$lt": [
-                          "$id",
-                          5
-                        ]
+                        "$lt": ["$id", 5]
                       }
                     ]
                   }
@@ -397,10 +500,7 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
     }
   },
   {
@@ -427,16 +527,10 @@
                   "$expr": {
                     "$and": [
                       {
-                        "$eq": [
-                          "$id",
-                          "$$c_id"
-                        ]
+                        "$eq": ["$id", "$$c_id"]
                       },
                       {
-                        "$lt": [
-                          "$id",
-                          5
-                        ]
+                        "$lt": ["$id", 5]
                       }
                     ]
                   }
@@ -462,10 +556,70 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ]
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join:Unwind hint with where",
+    "query": "select c.*,cn.* from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5 where c.id>1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$and": [
+                      {
+                        "$eq": ["$id", "$$c_id"]
+                      },
+                      {
+                        "$lt": ["$id", 5]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$unwind": "$cn"
+        },
+        {
+          "$match": {
+            "cn": {
+              "$ne": null
+            }
+          }
+        },
+        {
+          "$match": {
+            "c.id": {
+              "$gt": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+      ],
+      "collections": ["customers", "customer-notes"]
     }
   }
 ]

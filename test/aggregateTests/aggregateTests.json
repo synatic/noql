@@ -4,20 +4,16 @@
     "query": "select * from `films`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
-      "pipeline": [
-      ]
+      "collections": ["films"],
+      "pipeline": []
     }
   },
   {
+    "name": "Aggregate:Basic limit",
     "query": "select * from `films` limit 10",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$limit": 10
@@ -26,12 +22,11 @@
     }
   },
   {
+    "name": "Aggregate:Basic limit and offset",
     "query": "select * from `films` limit 10 offset 5",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$limit": 10
@@ -43,12 +38,11 @@
     }
   },
   {
+    "name": "Aggregate:Basic with select",
     "query": "select Title,Rating from `films`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$project": {
@@ -60,12 +54,11 @@
     }
   },
   {
+    "name": "Aggregate:Select function",
     "query": "select abs(`Replacement Cost`) as aggr from `films`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$project": {
@@ -81,9 +74,7 @@
     "query": "select id,Title,Rating from `films` where abs(id)=1",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$match": {
@@ -111,9 +102,7 @@
     "query": "select id,Title,Rating from `films` where abs(id)=1 or abs(id)=2",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$match": {
@@ -172,10 +161,7 @@
                     },
                     "initialValue": 0,
                     "in": {
-                      "$sum": [
-                        "$$value",
-                        "$$this.total"
-                      ]
+                      "$sum": ["$$value", "$$this.total"]
                     }
                   }
                 },
@@ -192,26 +178,19 @@
           }
         }
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
     "query": "select `Replacement Cost` + 10 as aggr from `films`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "films"
-      ],
+      "collections": ["films"],
       "pipeline": [
         {
           "$project": {
             "aggr": {
-              "$add": [
-                "$Replacement Cost",
-                10
-              ]
+              "$add": ["$Replacement Cost", 10]
             }
           }
         }
@@ -231,9 +210,7 @@
           }
         }
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -246,10 +223,7 @@
             "aggr": {
               "$divide": [
                 {
-                  "$divide": [
-                    "$Replacement Cost",
-                    10
-                  ]
+                  "$divide": ["$Replacement Cost", 10]
                 },
                 2
               ]
@@ -257,18 +231,14 @@
           }
         }
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
     "query": "select `Address.City` as City,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.City`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "customers"
-      ],
+      "collections": ["customers"],
       "pipeline": [
         {
           "$match": {
@@ -304,9 +274,7 @@
     "query": "select  `Address.Country` as Country,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Country`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "customers"
-      ],
+      "collections": ["customers"],
       "pipeline": [
         {
           "$match": {
@@ -342,9 +310,7 @@
     "query": "select  `Address.Country` as Country,`Address.City` as City,avg(SIZE_OF_ARRAY(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' group by `Address.Country`,`City`",
     "type": "aggregate",
     "output": {
-      "collections": [
-        "customers"
-      ],
+      "collections": ["customers"],
       "pipeline": [
         {
           "$match": {
@@ -397,12 +363,7 @@
                   "$gte": [
                     {
                       "$abs": {
-                        "$multiply": [
-                          -1,
-                          {
-                            "$literal": 1
-                          }
-                        ]
+                        "$literal": -1
                       }
                     },
                     1
@@ -417,20 +378,13 @@
             "City": "$Address.City",
             "absId": {
               "$abs": {
-                "$multiply": [
-                  -1,
-                  {
-                    "$literal": 1
-                  }
-                ]
+                "$literal": -1
               }
             }
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -507,9 +461,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -586,9 +538,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -617,9 +567,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -635,14 +583,14 @@
             "Rental": "$Rentals"
           }
         },
-        {"$unset":"Rentals"},
+        {
+          "$unset": "Rentals"
+        },
         {
           "$unwind": "$Rental"
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -662,9 +610,7 @@
           "$unwind": "$Rentals"
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -690,9 +636,7 @@
           "$unwind": "$Rental"
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -731,17 +675,12 @@
         {
           "$replaceRoot": {
             "newRoot": {
-              "$mergeObjects": [
-                "$t1",
-                "$t2"
-              ]
+              "$mergeObjects": ["$t1", "$t2"]
             }
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -760,9 +699,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -781,13 +718,9 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
-
-
   {
     "query": "select sum(`id`) as aggrVal,`Address.City` as City  from `customers` group by `Address.City` order by `Address.City`",
     "type": "aggregate",
@@ -816,9 +749,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -849,9 +780,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -882,9 +811,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -915,9 +842,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -948,9 +873,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -970,28 +893,15 @@
                   "branches": [
                     {
                       "case": {
-                        "$lt": [
-                          "$id",
-                          50
-                        ]
+                        "$lt": ["$id", 50]
                       },
                       "then": 1
                     },
                     {
                       "case": {
-                        "$gte": [
-                          "$id",
-                          50
-                        ]
+                        "$gte": ["$id", 50]
                       },
-                      "then": {
-                        "$multiply": [
-                          -1,
-                          {
-                            "$literal": 1
-                          }
-                        ]
-                      }
+                      "then": -1
                     }
                   ],
                   "default": {
@@ -1010,9 +920,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1030,10 +938,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Ueda"
-                        ]
+                        "$eq": ["$Address.City", "Ueda"]
                       },
                       "then": 1
                     }
@@ -1050,10 +955,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Tete"
-                        ]
+                        "$eq": ["$Address.City", "Tete"]
                       },
                       "then": 1
                     }
@@ -1074,9 +976,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1094,10 +994,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Ueda"
-                        ]
+                        "$eq": ["$Address.City", "Ueda"]
                       },
                       "then": "$id"
                     }
@@ -1114,10 +1011,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Tete"
-                        ]
+                        "$eq": ["$Address.City", "Tete"]
                       },
                       "then": "$id"
                     }
@@ -1138,9 +1032,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1151,18 +1043,14 @@
       "pipeline": [
         {
           "$group": {
-            "_id": {
-            },
+            "_id": {},
             "Ueda": {
               "$sum": {
                 "$switch": {
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Ueda"
-                        ]
+                        "$eq": ["$Address.City", "Ueda"]
                       },
                       "then": "$id"
                     }
@@ -1179,10 +1067,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Tete"
-                        ]
+                        "$eq": ["$Address.City", "Tete"]
                       },
                       "then": "$id"
                     }
@@ -1203,9 +1088,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1250,9 +1133,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1260,11 +1141,29 @@
     "query": "select c as `$$ROOT`  from (select id,`First Name`,`Last Name`,SIZE_OF_ARRAY(Rentals) as RentalCnt from customers ) as c",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$project":{"id":"$id","First Name":"$First Name","Last Name":"$Last Name","RentalCnt":{"$size":"$Rentals"}}},{"$project":{"c":"$$ROOT"}},{"$replaceRoot":{"newRoot":"$c"}}]
-      ,
-      "collections": [
-        "customers"
-      ]
+      "pipeline": [
+        {
+          "$project": {
+            "id": "$id",
+            "First Name": "$First Name",
+            "Last Name": "$Last Name",
+            "RentalCnt": {
+              "$size": "$Rentals"
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": "$c"
+          }
+        }
+      ],
+      "collections": ["customers"]
     }
   },
   {
@@ -1272,10 +1171,23 @@
     "query": "select *,SIZE_OF_ARRAY(`Rentals`) as RentalsCount from `customers`",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$replaceRoot":{"newRoot":{"$mergeObjects":["$$ROOT",{"RentalsCount":{"$size":"$Rentals"}}]}}}],
-      "collections": [
-        "customers"
-      ]
+      "pipeline": [
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": [
+                "$$ROOT",
+                {
+                  "RentalsCount": {
+                    "$size": "$Rentals"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "collections": ["customers"]
     }
   },
   {
@@ -1316,9 +1228,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1358,12 +1268,8 @@
             "newRoot": "$x"
           }
         }
-
-
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1388,9 +1294,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1398,11 +1302,31 @@
     "query": "select distinct `First Name`,`Last Name` from customers where id<20",
     "type": "aggregate",
     "output": {
-      "pipeline": [{"$match":{"id":{"$lt":20}}},{"$group":{"_id":{"First Name":"$First Name","Last Name":"$Last Name"}}},{"$project":{"First Name":"$_id.First Name","Last Name":"$_id.Last Name","_id":0}}]
-      ,
-      "collections": [
-        "customers"
-      ]
+      "pipeline": [
+        {
+          "$match": {
+            "id": {
+              "$lt": 20
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "First Name": "$First Name",
+              "Last Name": "$Last Name"
+            }
+          }
+        },
+        {
+          "$project": {
+            "First Name": "$_id.First Name",
+            "Last Name": "$_id.Last Name",
+            "_id": 0
+          }
+        }
+      ],
+      "collections": ["customers"]
     }
   }
 ]

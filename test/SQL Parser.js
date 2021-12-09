@@ -12,8 +12,7 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
-const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'),require('./aggregateTests/joins.json'));
-
+const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'), require('./aggregateTests/joins.json'));
 
 describe('SQL Parser', function () {
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
@@ -45,7 +44,7 @@ describe('SQL Parser', function () {
             } catch (exp) {
                 return assert.equal(
                     exp.message,
-                    '1:11 - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GROUP", "HAVING", "LIMIT", "ORDER", "UNION", "WHERE", [ \\t\\n\\r], or end of input but "`" found.'
+                    '1:11 - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GO", "GROUP", "HAVING", "LIMIT", "ORDER", "UNION", "WHERE", "WINDOW", [ \\t\\n\\r], or end of input but "`" found.'
                 );
             }
             assert(false, 'No error');
@@ -80,8 +79,6 @@ describe('SQL Parser', function () {
             }
             assert(false, 'No error');
         });
-
-
     });
 
     describe('should test can query: SQLParser.canQuery', function () {
@@ -374,7 +371,7 @@ describe('SQL Parser', function () {
             {
                 limit: 100,
                 collection: 'people',
-                query: {$and:[{status: {$eq: 'A'}}, {age: {$eq: 50}}]},
+                query: {$and: [{status: {$eq: 'A'}}, {age: {$eq: 50}}]},
                 type: 'query',
             },
             'Invalid parse'
@@ -421,18 +418,18 @@ describe('SQL Parser', function () {
                 limit: 100,
                 collection: 'people',
                 query: {
-                    "$and": [
+                    $and: [
                         {
-                            "age": {
-                                "$gt": 25
-                            }
+                            age: {
+                                $gt: 25,
+                            },
                         },
                         {
-                            "age": {
-                                "$lt": 30
-                            }
-                        }
-                    ]
+                            age: {
+                                $lt: 30,
+                            },
+                        },
+                    ],
                 },
                 type: 'query',
             },

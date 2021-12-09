@@ -114,7 +114,6 @@
             }
           }
         ]
-
       }
     }
   },
@@ -171,10 +170,7 @@
         "Rating": "$Rating",
         "absId": {
           "$abs": {
-            "$multiply": [
-              "$id",
-              -1
-            ]
+            "$multiply": ["$id", -1]
           }
         }
       }
@@ -200,7 +196,4 @@
     "query": "select id,(select count(*) as count from Rentals) as totalRentals from customers",
     "error": "Array sub select does not support aggregation methods"
   }
-
 ]
-
-

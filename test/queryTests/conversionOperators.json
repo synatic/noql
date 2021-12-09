@@ -69,10 +69,7 @@
         "id": {
           "$convert": {
             "input": {
-              "$add": [
-                1,
-                "$id"
-              ]
+              "$add": [1, "$id"]
             },
             "to": "string"
           }
