@@ -1,146 +1,137 @@
-[{
-  "name": "Join: Sub Query",
-  "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id",
-  "type": "aggregate",
-  "output": {
-    "pipeline": [
-      {
-        "$project": {
-          "c": "$$ROOT"
-        }
-      },
-      {
-        "$lookup": {
-          "from": "customer-notes",
-          "as": "cn",
-          "let": {
-            "c_id": "$c.id"
-          },
-          "pipeline": [
-            {
-              "$match": {
-                "id": {
-                  "$gt": 2
-                }
-              }
+[
+  {
+    "name": "Join: Sub Query",
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
             },
-            {
-              "$match": {
-                "$expr": {
-                  "$eq": [
-                    "$id",
-                    "$$c_id"
-                  ]
+            "pipeline": [
+              {
+                "$match": {
+                  "id": {
+                    "$gt": 2
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
+                  }
                 }
               }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
             }
-          ]
-        }
-      },
-      {
-        "$match": {
-          "$expr": {
-            "$gt": [
-              {
-                "$size": "$cn"
-              },
-              0
-            ]
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
           }
         }
-      },
-      {
-        "$project": {
-          "c": "$c",
-          "cn": "$cn"
-        }
-      }
-    ],
-    "collections": [
-      "customers",
-      "customer-notes"
-    ]
-  }
-},
-{
-  "name": "Join: 2 joins",
-  "query": "select c.*,cn.*,cn2.*  from customers c inner join `customer-notes` cn on c.id=cn.id inner join `customer-notes2` cn2 on cn2.id=c.id",
-  "type": "aggregate",
-  "output": {
-    "pipeline": [
-      {
-        "$project": {
-          "c": "$$ROOT"
-        }
-      },
-      {
-        "$lookup": {
-          "from": "customer-notes",
-          "as": "cn",
-          "localField": "c.id",
-          "foreignField": "id"
-        }
-      },
-      {
-        "$match": {
-          "$expr": {
-            "$gt": [
-              {
-                "$size": "$cn"
-              },
-              0
-            ]
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join: 2 joins",
+    "query": "select c.*,cn.*,cn2.*  from customers c inner join `customer-notes` cn on c.id=cn.id inner join `customer-notes2` cn2 on cn2.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "localField": "c.id",
+            "foreignField": "id"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes2",
+            "as": "cn2",
+            "localField": "c.id",
+            "foreignField": "id"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn2"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn",
+            "cn2": "$cn2"
           }
         }
-      },
-      {
-        "$lookup": {
-          "from": "customer-notes2",
-          "as": "cn2",
-          "localField": "c.id",
-          "foreignField": "id"
-        }
-      },
-      {
-        "$match": {
-          "$expr": {
-            "$gt": [
-              {
-                "$size": "$cn2"
-              },
-              0
-            ]
-          }
-        }
-      },
-      {
-        "$project": {
-          "c": "$c",
-          "cn": "$cn",
-          "cn2": "$cn2"
-        }
-      }
-    ],
-    "collections": [
-      "customers",
-      "customer-notes",
-      "customer-notes2"
-    ]
+      ],
+      "collections": ["customers", "customer-notes", "customer-notes2"]
+    }
+  },
+  {
+    "name": "Join:Unwind alternative",
+    "query": "select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` on orders.item=inventory.sku",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "item", "foreignField": "sku"}},
+        {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}},
+        {"$replaceRoot": {"newRoot": {"$mergeObjects": ["$$ROOT", {"inventory_docs": "$inventory"}]}}},
+        {"$unwind": "$inventory_docs"},
+        {"$unset": "inventory"}
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
   }
-},
-{
-  "name": "Join:Unwind alternative",
-  "query": "select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` on orders.item=inventory.sku",
-  "type": "aggregate",
-  "output": {
-    "pipeline": [
-      {"$lookup":{"from":"inventory","as":"inventory","localField":"item","foreignField":"sku"}},
-      {"$match":{"$expr":{"$gt":[{"$size":"$inventory"},0]}}},{"$replaceRoot":{"newRoot":{"$mergeObjects":["$$ROOT",{"inventory_docs":"$inventory"}]}}},{"$unwind":"$inventory_docs"},{"$unset":"inventory"}
-    ],
-    "collections": [
-      "customers",
-      "customer-notes"
-    ]
-  }
-}
 ]

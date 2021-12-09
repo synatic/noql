@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -44,10 +44,10 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@synatic/json-magic": "0.1.1",
+    "@synatic/json-magic": "^1.0.0",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "3.6.0"
+    "node-sql-parser": "4.0.2"
   },
   "devDependencies": {
     "deep-equal": "^2.0.5",
