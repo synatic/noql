@@ -556,6 +556,18 @@ select t as `$$ROOT` from (select id,`First Name`,`Last Name`,lengthOfArray(Rent
 | IFNULL(expr,expr) | Return the value if the expression is null                                                                        | `` select IFNULL(id,1) as `conv` from `customers`  ``                                                             |
 |                   | Example using select without from for object generation                                                           | <code>select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` <br> {"val":"a","num":1}</code> |
 
+Literal types in where statements using conversion functions are converted automatically e.g.:
+
+```sql
+select to_date(date) as d from customers where to_date(date) > to_date('2012-01-01')
+```
+
+Will automatically convert the date value and result in the following:
+
+```
+{"$expr":{"$gt":[{"$toDate":"$date"},new Date("2012-01-01T00:00:00.000Z")]}}
+```
+
 #### Cast
 
 Supports cast operations with the following type mappings:
