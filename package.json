@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -19,7 +19,9 @@
     "url": "git+https://github.com/synatic/sql-to-mongo.git"
   },
   "keywords": [
-    "mongodb", "sql", "sql to mongo"
+    "mongodb",
+    "sql",
+    "sql to mongo"
   ],
   "author": {
     "name": "Synatic Inc",
@@ -45,6 +47,8 @@
   },
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
+    "@synatic/type-magic": "^1.0.0",
+    "bson-objectid": "2.0.1",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
     "node-sql-parser": "4.0.2"

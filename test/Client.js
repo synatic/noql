@@ -2,6 +2,7 @@ const {MongoClient} = require('mongodb');
 // eslint-disable-next-line no-unused-vars
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
+const ObjectID = require('bson-objectid');
 
 const _customers = require('./exampleData/customers.json');
 const _stores = require('./exampleData/stores.json');
@@ -20,7 +21,7 @@ const _queryTests = [].concat(
     require('./queryTests/stringOperators.json'),
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
-    require('./queryTests/conversionOperators.json'),
+    require('./queryTests/conversionOperators.js'),
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
@@ -82,6 +83,11 @@ describe('Client Queries', function () {
                     })
                 );
 
+                const details = await db.collection('inventory').findOne({id: 1});
+                const details2 = await db.collection('inventory').findOne({_id: new ObjectID(details._id.toString())});
+                if (!details2) {
+                    throw new Error('Invalid BSOJN Parse');
+                }
                 done();
             } catch (exp) {
                 done(exp);

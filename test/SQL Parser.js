@@ -8,7 +8,7 @@ const _queryTests = [].concat(
     require('./queryTests/stringOperators.json'),
     require('./queryTests/dateOperators.json'),
     require('./queryTests/arithmeticOperators.json'),
-    require('./queryTests/conversionOperators.json'),
+    require('./queryTests/conversionOperators.js'),
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
