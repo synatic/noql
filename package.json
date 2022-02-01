@@ -48,7 +48,7 @@
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
     "@synatic/type-magic": "^1.0.0",
-    "bson-objectid": "2.0.1",
+    "bson-objectid": "2.0.2",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
     "node-sql-parser": "4.0.2"
