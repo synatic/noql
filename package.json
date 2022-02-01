@@ -51,7 +51,7 @@
     "bson-objectid": "2.0.1",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "4.0.2"
+    "node-sql-parser": "4.0.8"
   },
   "devDependencies": {
     "deep-equal": "^2.0.5",
