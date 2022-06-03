@@ -13,9 +13,7 @@ const SQLParser = require('./lib/SQLParser');
 
 // let parsedVal=SQLParser.makeMongoAggregate("select * from `customers` where id in (select id from `customer notes` where abs(id) <10) and id in (select id from `customer notes` where abs(id) <10)")
 // const parsedVal=SQLParser.makeMongoAggregate("select c.*,c2.test  from customers c inner join `customer-notes` cn on c.id=cn.id inner join `customer-notes2` cn2 on cn2.id=c.id")
-const parsedVal = SQLParser.makeMongoAggregate(
-    "select to_date(date) as d from customers where to_date(date) > to_date('2012-01-01')"
-);
+const parsedVal = SQLParser.makeMongoAggregate("select to_date(date) as d from customers where to_date(date) > to_date('2012-01-01')");
 
 // const parsedVal=SQLParser.makeMongoAggregate("Select VoucherName,Status,Sum(1) as Count,case when Status='Created' then 1 else 0 end as SortOrder from test group by VoucherName,Status order by VoucherName,Status")
 // let parsedVal=SQLParser.makeMongoAggregate("select `Address.City` as City,abs(-1) as absId,avg(lengthOfArray(`Rentals`)) as AvgRentals from `customers` where `First Name` like 'm%' and absId >1 group by `Address.City`,absId")
