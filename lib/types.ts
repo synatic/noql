@@ -1,3 +1,4 @@
+import {Column} from 'node-sql-parser';
 export interface MongoQuery {
     collection: string;
     projection?: Projection;
@@ -9,3 +10,5 @@ export interface MongoQuery {
 }
 
 export interface Projection {}
+
+export type Columns = Column[] | '*';
