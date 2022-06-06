@@ -10,5 +10,3 @@ export interface MongoQuery {
 }
 
 export interface Projection {}
-
-export type Columns = Column[] | '*';
