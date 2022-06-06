@@ -1,0 +1,11 @@
+export interface MongoQuery {
+    collection: string;
+    projection?: Projection;
+    skip?: number;
+    limit?: number;
+    query?: object;
+    sort?: object;
+    count?: boolean;
+}
+
+export interface Projection {}
