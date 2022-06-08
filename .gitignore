@@ -67,3 +67,5 @@ package-lock.json
 # IDE files
 .idea
 .vscode
+dist/
+.DS_Store

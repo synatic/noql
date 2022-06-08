@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SqlToMongo test</title>
+        <script src="../dist/index.js"></script>
+    </head>
+    <body>
+        <h1>SQL to Mongo</h1>
+        <pre id="code"></pre>
+        <script>
+            console.log({SqlToMongo});
+            try {
+                const aggregate = SqlToMongo.makeMongoAggregate(
+                    'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`'
+                );
+                console.log({aggregate});
+                const target = document.querySelector('#code');
+                target.innerHTML = JSON.stringify(aggregate, null, 4);
+            } catch (err) {
+                console.error(err);
+            }
+        </script>
+    </body>
+</html>
