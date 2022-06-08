@@ -25,7 +25,7 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
-
+const supportsArraySort = false;
 const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'), require('./aggregateTests/joins.json'));
 
 describe('Client Queries', function () {
@@ -186,5 +186,23 @@ describe('Client Queries', function () {
             }
             done();
         })();
+    });
+
+    describe('individual tests', () => {
+        it('should be able to sort an array', async (done) => {
+            if (!supportsArraySort) {
+                return done();
+            }
+            const queryText = 'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`';
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            try {
+                let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results);
+                done();
+            } catch (err) {
+                return done(err);
+            }
+        });
     });
 });

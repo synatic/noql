@@ -1,6 +1,6 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
-
+const {canQuery} = require('../lib/canQuery');
 const _queryTests = [].concat(
     require('./queryTests/queryTests.json'),
     require('./queryTests/objectOperators.json'),
@@ -81,70 +81,70 @@ describe('SQL Parser', function () {
         });
     });
 
-    describe('should test can query: SQLParser.canQuery', function () {
+    describe('should test can query: canQuery', function () {
         it('should test a simple sql', function () {
-            assert(SQLParser.canQuery('select * from `collection`'), 'Invalid can query');
+            assert(canQuery('select * from `collection`'), 'Invalid can query');
         });
 
         it('should test a simple sql with where', function () {
-            assert(SQLParser.canQuery('select * from `collection` where a=1'), 'Invalid can query');
+            assert(canQuery('select * from `collection` where a=1'), 'Invalid can query');
         });
 
         it('should test a simple sql with names', function () {
-            assert(SQLParser.canQuery('select Title,Description from `collection`'), 'Invalid can query');
+            assert(canQuery('select Title,Description from `collection`'), 'Invalid can query');
         });
 
         it('should test a simple sql with unwind', function () {
-            assert(!SQLParser.canQuery('select unwind(a) as b from `collection` where a=1'), 'Invalid can query');
+            assert(!canQuery('select unwind(a) as b from `collection` where a=1'), 'Invalid can query');
         });
 
         it('should test a simple sql with a group by', function () {
-            assert(!SQLParser.canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
+            assert(!canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
         });
 
         it('should test a simple sql with a join', function () {
-            assert(!SQLParser.canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
+            assert(!canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
         });
 
         it('should test a simple sql with single abs', function () {
-            assert(SQLParser.canQuery('select abs(`Replacement Cost`) as s from `films`'), 'Invalid can query');
+            assert(canQuery('select abs(`Replacement Cost`) as s from `films`'), 'Invalid can query');
         });
 
         it('should test a simple sql with single sum', function () {
-            assert(SQLParser.canQuery('select sum(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
+            assert(canQuery('select sum(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
         });
 
         it('should test a simple sql with single for aggregate', function () {
-            assert(!SQLParser.canQuery('select sum(`Replacement Cost`) as s from `films` group by s'), 'Invalid can query');
+            assert(!canQuery('select sum(`Replacement Cost`) as s from `films` group by s'), 'Invalid can query');
         });
 
         it('should test a simple sql with single sum', function () {
-            assert(SQLParser.canQuery('select avg(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
+            assert(canQuery('select avg(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
         });
 
         it('should test a simple sql with single for avg', function () {
-            assert(!SQLParser.canQuery('select id,avg(`Replacement Cost`) as s from `films` group by id'), 'Invalid can query');
+            assert(!canQuery('select id,avg(`Replacement Cost`) as s from `films` group by id'), 'Invalid can query');
         });
 
         it('should test a simple sql with an expr sum', function () {
-            assert(SQLParser.canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
+            assert(canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
         });
 
         it('should test a simple sql with an expr sum', function () {
-            assert(SQLParser.canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
+            assert(canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
         });
 
         it('should test a simple sql with a convert', function () {
-            assert(SQLParser.canQuery('select convert(`Replacement Cost`) as s from `films`'), 'Invalid can query');
+            assert(canQuery('select convert(`Replacement Cost`) as s from `films`'), 'Invalid can query');
         });
 
         it('should nt allow *,function ', function () {
-            assert(!SQLParser.canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), 'Invalid can query');
+            assert(!canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), 'Invalid can query');
         });
 
         it('should not allow with where on sub query ', function () {
             assert(
-                !SQLParser.canQuery(
+                !canQuery(
                     "select id,Title,Rating,sum_Array((select salesId as total from Rentals),'total') as resultTotal from `customers` where resultTotal > 1 and id<10"
                 ),
                 'Invalid can query'

@@ -8,7 +8,7 @@
   "arrowParens": "always",
   "overrides": [
     {
-      "files": ["*.json", "*.yml"],
+      "files": ["*.json", "*.yml", "*.yaml"],
       "options": {
         "singleQuote": false,
         "tabWidth": 2
