@@ -1,19 +1,9 @@
-const {MongoClient} = require('mongodb');
-// eslint-disable-next-line no-unused-vars
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 const ObjectID = require('bson-objectid');
 
-const _customers = require('./exampleData/customers.json');
-const _stores = require('./exampleData/stores.json');
-const _films = require('./exampleData/films.json');
-const _customerNotes = require('./exampleData/customer-notes.json');
-const _customerNotes2 = require('./exampleData/customer-notes2.json');
-const _orders = require('./exampleData/orders.json');
-const _inventory = require('./exampleData/inventory.json');
-const _connectionString = 'mongodb://127.0.0.1:27017';
 const _dbName = 'sql-to-mongo-test';
-
+const {setup, disconnect} = require('./mongo-client');
 const _queryTests = [].concat(
     require('./queryTests/queryTests.json'),
     require('./queryTests/objectOperators.json'),
@@ -30,58 +20,12 @@ const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'
 
 describe('Client Queries', function () {
     this.timeout(90000);
-    let client;
+    let mongoClient;
     before(function (done) {
         const run = async () => {
             try {
-                client = new MongoClient(_connectionString);
-                await client.connect();
-                const {databases} = await client.db().admin().listDatabases();
-                if (databases.findIndex((d) => d.name === _dbName) > -1) {
-                    await client.db(_dbName).dropDatabase();
-                }
-                const db = client.db(_dbName);
-
-                await db.collection('customers').bulkWrite(
-                    _customers.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-
-                await db.collection('stores').bulkWrite(
-                    _stores.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-
-                await db.collection('films').bulkWrite(
-                    _films.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-                await db.collection('customer-notes').bulkWrite(
-                    _customerNotes.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-
-                await db.collection('customer-notes2').bulkWrite(
-                    _customerNotes2.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-
-                await db.collection('orders').bulkWrite(
-                    _orders.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
-
-                await db.collection('inventory').bulkWrite(
-                    _inventory.map((d) => {
-                        return {insertOne: {document: d}};
-                    })
-                );
+                const {client, db} = await setup();
+                mongoClient = client;
 
                 const details = await db.collection('inventory').findOne({id: 1});
                 const details2 = await db.collection('inventory').findOne({_id: new ObjectID(details._id.toString())});
@@ -97,9 +41,7 @@ describe('Client Queries', function () {
     });
 
     after(function (done) {
-        client.close(() => {
-            done();
-        });
+        disconnect().then(done).catch(done);
     });
 
     describe('run query tests', function (done) {
@@ -111,13 +53,13 @@ describe('Client Queries', function () {
                         try {
                             const parsedQuery = SQLParser.parseSQL(test.query);
                             if (parsedQuery.count) {
-                                const count = await client
+                                const count = await mongoClient
                                     .db(_dbName)
                                     .collection(parsedQuery.collection)
                                     .countDocuments(parsedQuery.query || null);
                                 console.log(`${count}`);
                             } else {
-                                const find = client
+                                const find = mongoClient
                                     .db(_dbName)
                                     .collection(parsedQuery.collection)
                                     .find(parsedQuery.query || null, {projection: parsedQuery.projection});
@@ -150,7 +92,10 @@ describe('Client Queries', function () {
                         try {
                             const parsedQuery = SQLParser.makeMongoAggregate(test.query);
 
-                            let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                            let results = await mongoClient
+                                .db(_dbName)
+                                .collection(parsedQuery.collections[0])
+                                .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
 
                             console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ''}`);
@@ -173,7 +118,10 @@ describe('Client Queries', function () {
                     (async () => {
                         try {
                             const parsedQuery = SQLParser.makeMongoAggregate(test.query);
-                            let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                            let results = await mongoClient
+                                .db(_dbName)
+                                .collection(parsedQuery.collections[0])
+                                .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
 
                             console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ''}`);
@@ -196,7 +144,7 @@ describe('Client Queries', function () {
             const queryText = 'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`';
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             try {
-                let results = await client.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
                 done();
