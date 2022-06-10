@@ -152,5 +152,17 @@ describe('Client Queries', function () {
                 return done(err);
             }
         });
+        it('should be able to do a left join', async (done) => {
+            const queryText = 'select * from orders as o left join `inventory` as i  on o.item=i.sku';
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results);
+                done();
+            } catch (err) {
+                return done(err);
+            }
+        });
     });
 });
