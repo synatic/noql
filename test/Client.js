@@ -152,10 +152,24 @@ describe('Client Queries', function () {
                 return done(err);
             }
         });
-        it('should be able to do a left join', async (done) => {
+        it('should be able to do a left join', async () => {
             const queryText = 'select * from orders as o left join `inventory` as i  on o.item=i.sku';
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results);
+                return;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+
+        it('should be able to do a multipart-binary expression', async (done) => {
+            const queryText = 'select `Replacement Cost`, (log10(3) * floor(`Replacement Cost`) + 1) as S from films limit 1';
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
