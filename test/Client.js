@@ -191,5 +191,30 @@ describe('Client Queries', function () {
                 throw err;
             }
         });
+
+        it('should be able to do n level joins', async () => {
+            const queryText = `select
+                o.id as orderId
+                ,i.id as inventoryId
+                ,c.id as customerId
+                from orders as o
+                inner join \`inventory|unwind\` as i
+                on o.item=i.sku
+                inner join \`customers|unwind\` as c
+                on o.customerId=c.id`;
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results.length > 0);
+                assert(results[0].orderId);
+                assert(results[0].inventoryId);
+                assert(results[0].customerId);
+                return;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
     });
 });
