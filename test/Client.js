@@ -241,5 +241,40 @@ describe('Client Queries', function () {
                 throw err;
             }
         });
+
+        it('should be able to do a basic root unwind', async () => {
+            const queryText = `select unwind('Address') as \`$$ROOT\` from customers LIMIT 1`;
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results.length > 0);
+                assert(results[0].Address);
+                assert(results[0].City);
+                assert(results[0].Country);
+                assert(results[0].District);
+                return;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+        it('should be able to do a basic root unwind', async () => {
+            const queryText = `select 'Address' as \`$$ROOT\` from customers LIMIT 1`;
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results.length > 0);
+                assert(results[0].Address);
+                assert(results[0].City);
+                assert(results[0].Country);
+                assert(results[0].District);
+                return;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
     });
 });
