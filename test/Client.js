@@ -166,16 +166,29 @@ describe('Client Queries', function () {
             }
         });
 
-        it('should be able to do a multipart-binary expression', async (done) => {
+        it('should be able to do a multipart-binary expression', async () => {
             const queryText = 'select `Replacement Cost`, (log10(3) * floor(`Replacement Cost`) + 1) as S from films limit 1';
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
-                done();
             } catch (err) {
-                return done(err);
+                console.error(err);
+                throw err;
+            }
+        });
+
+        it('should', async () => {
+            const queryText = `SELECT *, convert(id, 'string') as idConv FROM inventory`;
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                results = await results.toArray();
+                assert(results);
+            } catch (err) {
+                console.error(err);
+                throw err;
             }
         });
     });
