@@ -179,7 +179,7 @@ describe('Client Queries', function () {
             }
         });
 
-        it('should', async () => {
+        it('should be able to do a select * computed', async () => {
             const queryText = `SELECT *, convert(id, 'string') as idConv FROM inventory`;
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
