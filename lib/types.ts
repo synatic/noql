@@ -23,8 +23,6 @@ export interface MongoQuery {
     count?: boolean;
 }
 
-export interface Projection {}
-
 export type ParserInput = TableColumnAst | string;
 export type ParserOptions = Option & {
     isArray?: boolean;
@@ -59,6 +57,8 @@ export interface PipelineFn {
     $sort?: {[key: string]: any};
     $limit?: number;
     $skip?: number;
+    $unset?: any;
+    $unwind?: any;
 }
 export interface AstLike {
     type: string;
@@ -78,3 +78,27 @@ export interface AstLike {
     set: SetList[];
     expr: any;
 }
+
+export interface ColumnParseResult {
+    replaceRoot?: {
+        $replaceRoot: {
+            newRoot: string;
+        };
+    };
+    asMapping: {column: string; as: string}[];
+    groupBy: {
+        $group: {
+            _id: {
+                [key: string]: string | {$literal: string};
+            };
+        };
+    };
+    unwind: {$unset?: string; $unwind?: string}[];
+    parsedProject: {
+        $project: {
+            [key: string]: string | {$literal: string};
+        };
+    };
+    exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
+}
+export interface Projection {}
