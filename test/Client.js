@@ -276,7 +276,17 @@ describe('Client Queries', function () {
                 throw err;
             }
         });
-        it('should be able to do a support subquery syntax', async () => {
+        it('should result in a query type when the where is not needed to be a pipeline', async () => {
+            const queryText = "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10";
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            assert(parsedQuery.type === 'query');
+        });
+        it('should result in an aggregate type when the where is not a simple query', async () => {
+            const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            assert(parsedQuery.type === 'aggregate');
+        });
+        it('should be able to support subquery syntax', async () => {
             const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
