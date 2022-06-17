@@ -276,5 +276,27 @@ describe('Client Queries', function () {
                 throw err;
             }
         });
+        it('should be able to do a support subquery syntax', async () => {
+            const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
+            const parsedQuery = SQLParser.parseSQL(queryText);
+            try {
+                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                // let results = await mongoClient
+                //     .db(_dbName)
+                //     .collection(parsedQuery.collection)
+                //     .find(parsedQuery.query)
+                //     .limit(parsedQuery.limit);
+                results = await results.toArray();
+                assert(results.length > 0);
+                assert(results[0].Address);
+                assert(results[0].City);
+                assert(results[0].Country);
+                assert(results[0].District);
+                return;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
     });
 });
