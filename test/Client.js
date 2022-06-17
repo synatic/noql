@@ -288,25 +288,90 @@ describe('Client Queries', function () {
         });
         it('should be able to support subquery syntax', async () => {
             const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
+            // const parsedQuery = SQLParser.parseSQL(queryText);
+            const parsedQuery = {
+                pipeline: [
+                    {
+                        $match: {
+                            id: {
+                                $eq: 1,
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            sku: '$sku',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'orders',
+                            localField: 'sku',
+                            foreignField: 'item',
+                            as: 'orders',
+                        },
+                    },
+                    {
+                        $unwind: {
+                            path: '$orders',
+                        },
+                    },
+                    {
+                        $replaceRoot: {
+                            newRoot: '$orders',
+                        },
+                    },
+                ],
+                collections: ['inventory'],
+                type: 'aggregate',
+            };
             try {
                 let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                // let results = await mongoClient
-                //     .db(_dbName)
-                //     .collection(parsedQuery.collection)
-                //     .find(parsedQuery.query)
-                //     .limit(parsedQuery.limit);
                 results = await results.toArray();
-                assert(results.length > 0);
-                assert(results[0].Address);
-                assert(results[0].City);
-                assert(results[0].Country);
-                assert(results[0].District);
+                assert(results.length === 1);
+                assert(results[0].id === 1);
+                assert(results[0].item === 'almonds');
+                assert(results[0].price === 12);
+                assert(results[0].quantity === 2);
+                assert(results[0].customerId === 1);
                 return;
             } catch (err) {
                 console.error(err);
                 throw err;
             }
+            // const parsedQuery = {
+            //     pipeline: [
+            //         {
+            //             $match: {
+            //                 item: {
+            //                     $in: [
+            //                         {
+            //                             $map: {
+            //                                 input: {
+            //                                     $filter: {
+            //                                         input: '$inventory',
+            //                                         cond: {
+            //                                             $and: [
+            //                                                 {
+            //                                                     $eq: ['$$this.id', 1],
+            //                                                 },
+            //                                             ],
+            //                                         },
+            //                                     },
+            //                                 },
+            //                                 in: {
+            //                                     sku: '$$this.sku',
+            //                                 },
+            //                             },
+            //                         },
+            //                     ],
+            //                 },
+            //             },
+            //         },
+            //     ],
+            //     collections: ['orders'],
+            //     type: 'aggregate',
+            // };
         });
     });
 });
