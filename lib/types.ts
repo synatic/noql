@@ -59,6 +59,7 @@ export interface PipelineFn {
     $skip?: number;
     $unset?: any;
     $unwind?: any;
+    $lookup?: any;
 }
 export interface AstLike {
     type: string;

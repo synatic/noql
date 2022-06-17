@@ -287,44 +287,19 @@ describe('Client Queries', function () {
             assert(parsedQuery.type === 'aggregate');
         });
         it('should be able to support subquery syntax', async () => {
+            // const queryText = `select sku from inventory where id=1`;
+            // const queryText = `select * from orders where item in (select sku from inventory where id in (1,2))`;
+            // const queryText = `select * from orders where item in (select sku from inventory where id in (select bob from jack))`; //crazy, but cool if it works
+            // const queryText = `select item from orders where item in (select sku from inventory where id in (1,2))`;
+            // const queryText = `select c.item from orders c where item in (select sku from inventory where id in (1,2))`;
+            // const queryText = `select c.item from orders as c where item in (select sku from inventory where id in (1,2))`;
+            // join
+            // sort
+            // limit
+            // group by
+            // const queryText = `select * from orders where item in (select sku from inventory where id=1) and sky='almonds'`;
             const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
-            // const parsedQuery = SQLParser.parseSQL(queryText);
-            const parsedQuery = {
-                pipeline: [
-                    {
-                        $match: {
-                            id: {
-                                $eq: 1,
-                            },
-                        },
-                    },
-                    {
-                        $project: {
-                            sku: '$sku',
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: 'orders',
-                            localField: 'sku',
-                            foreignField: 'item',
-                            as: 'orders',
-                        },
-                    },
-                    {
-                        $unwind: {
-                            path: '$orders',
-                        },
-                    },
-                    {
-                        $replaceRoot: {
-                            newRoot: '$orders',
-                        },
-                    },
-                ],
-                collections: ['inventory'],
-                type: 'aggregate',
-            };
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             try {
                 let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
@@ -339,39 +314,6 @@ describe('Client Queries', function () {
                 console.error(err);
                 throw err;
             }
-            // const parsedQuery = {
-            //     pipeline: [
-            //         {
-            //             $match: {
-            //                 item: {
-            //                     $in: [
-            //                         {
-            //                             $map: {
-            //                                 input: {
-            //                                     $filter: {
-            //                                         input: '$inventory',
-            //                                         cond: {
-            //                                             $and: [
-            //                                                 {
-            //                                                     $eq: ['$$this.id', 1],
-            //                                                 },
-            //                                             ],
-            //                                         },
-            //                                     },
-            //                                 },
-            //                                 in: {
-            //                                     sku: '$$this.sku',
-            //                                 },
-            //                             },
-            //                         },
-            //                     ],
-            //                 },
-            //             },
-            //         },
-            //     ],
-            //     collections: ['orders'],
-            //     type: 'aggregate',
-            // };
         });
     });
 });
