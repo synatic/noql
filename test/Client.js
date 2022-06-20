@@ -420,5 +420,40 @@ describe('Client Queries', function () {
                 }
             });
         });
+        describe('count', () => {
+            it('should be able to do a count * with a name', async () => {
+                const queryText = 'select item,count(1) as countVal from orders group by `item`';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 2);
+                    assert(results[0].countVal === 2);
+                    assert(results[1].countVal === 1);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a count * with a name', async () => {
+                const queryText = `select count(1) as countVal from orders`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length > 1);
+                    // const count = await mongoClient
+                    //     .db(_dbName)
+                    //     .collection(parsedQuery.collections)
+                    //     .countDocuments(parsedQuery.query || null);
+                    // assert(count === 3);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+        });
     });
 });

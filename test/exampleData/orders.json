@@ -14,6 +14,10 @@
     "customerId": 2
   },
   {
-    "id": 3
+    "id": 4,
+    "item": "almonds",
+    "price": 12,
+    "quantity": 4,
+    "customerId": 3
   }
 ]
