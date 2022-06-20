@@ -60,6 +60,7 @@ export interface PipelineFn {
     $unset?: any;
     $unwind?: any;
     $lookup?: any;
+    $count?: any;
 }
 export interface AstLike {
     type: string;
@@ -101,5 +102,6 @@ export interface ColumnParseResult {
         };
     };
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
+    count: {$count: string}[];
 }
 export interface Projection {}
