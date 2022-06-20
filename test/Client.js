@@ -296,7 +296,7 @@ describe('Client Queries', function () {
                 try {
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 1);
+                    assert(results.length === 2);
                     assert(results[0].id === 1);
                     assert(results[0].item === 'almonds');
                     assert(results[0].price === 12);
@@ -309,12 +309,12 @@ describe('Client Queries', function () {
                 }
             });
             it('should be able to do n level sub queries', async () => {
-                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4))`;
+                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) order by id`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 2);
+                    assert(results.length === 3);
                     assert(results[0].id === 1);
                     assert(results[0].item === 'almonds');
                     assert(results[0].price === 12);
@@ -337,7 +337,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 1);
+                    assert(results.length === 3);
                     assert(results[0].id === 1);
                     assert(results[0].item === 'almonds');
                     assert(results[0].price === 12);
@@ -355,7 +355,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 1);
+                    assert(results.length === 3);
                     assert(results[0].Product === 'almonds');
                     return;
                 } catch (err) {
@@ -369,8 +369,8 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 2);
-                    assert(results[0].item === 'pecans');
+                    assert(results.length === 3);
+                    assert(results[0].item === 'almonds');
                     return;
                 } catch (err) {
                     console.error(err);
@@ -397,7 +397,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 1);
+                    assert(results.length === 2);
                     assert(results[0].item === 'almonds');
                     return;
                 } catch (err) {
@@ -411,7 +411,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
-                    assert(results.length === 1);
+                    assert(results.length === 2);
                     assert(results[0].item === 'almonds');
                     return;
                 } catch (err) {
@@ -422,14 +422,16 @@ describe('Client Queries', function () {
         });
         describe('count', () => {
             it('should be able to do a count * with a name', async () => {
-                const queryText = 'select item,count(1) as countVal from orders group by `item`';
+                const queryText = 'select item, count(1) as countVal from orders group by `item`';
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 2);
-                    assert(results[0].countVal === 2);
-                    assert(results[1].countVal === 1);
+                    assert(results[0].item === 'pecans');
+                    assert(results[0].countVal === 1);
+                    assert(results[1].item === 'almonds');
+                    assert(results[1].countVal === 2);
                     return;
                 } catch (err) {
                     console.error(err);
