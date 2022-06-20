@@ -405,6 +405,20 @@ describe('Client Queries', function () {
                     throw err;
                 }
             });
+            it('should be able to support multiple where clauses in any order', async () => {
+                const queryText = `select * from orders where price=12 and item in (select sku from inventory where id in (1,4))`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].item === 'almonds');
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
     });
 });
