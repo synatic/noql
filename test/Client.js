@@ -287,13 +287,7 @@ describe('Client Queries', function () {
             assert(parsedQuery.type === 'aggregate');
         });
         describe('sub query', () => {
-            // const queryText = `select * from orders where item in (select sku from inventory where id in (select bob from jack))`; //crazy, but cool if it works
-            // const queryText = `select item from orders where item in (select sku from inventory where id in (1,2))`;
-            // const queryText = `select c.item from orders c where item in (select sku from inventory where id in (1,2))`;
-            // const queryText = `select c.item from orders as c where item in (select sku from inventory where id in (1,2))`;
             // join
-            // sort
-            // limit
             // group by
             // const queryText = `select * from orders where item in (select sku from inventory where id=1) and sky='almonds'`;
             it('should be able to support subquery syntax', async () => {
@@ -316,7 +310,6 @@ describe('Client Queries', function () {
             });
             it('should be able to do n level sub queries', async () => {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (1,4))`;
-
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
@@ -332,6 +325,80 @@ describe('Client Queries', function () {
                     assert(results[1].price === 20);
                     assert(results[1].quantity === 1);
                     assert(results[1].customerId === 2);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do n level sub queries that are selects', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id in (select id from orders))`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].id === 1);
+                    assert(results[0].item === 'almonds');
+                    assert(results[0].price === 12);
+                    assert(results[0].quantity === 2);
+                    assert(results[0].customerId === 1);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to support table aliases', async () => {
+                const queryText = `select c.item as Product from orders c where item in (select sku from inventory where id in (select id from orders))`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].Product === 'almonds');
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to support it with a sort', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) ORDER BY id DESC`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 2);
+                    assert(results[0].item === 'pecans');
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to support it with a limit', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) ORDER BY id DESC limit 1`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].item === 'pecans');
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to support multiple where clauses', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) and price=12`;
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].item === 'almonds');
                     return;
                 } catch (err) {
                     console.error(err);
