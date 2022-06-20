@@ -286,9 +286,7 @@ describe('Client Queries', function () {
             const parsedQuery = SQLParser.parseSQL(queryText);
             assert(parsedQuery.type === 'aggregate');
         });
-        it('should be able to support subquery syntax', async () => {
-            // const queryText = `select sku from inventory where id=1`;
-            // const queryText = `select * from orders where item in (select sku from inventory where id in (1,2))`;
+        describe('sub query', () => {
             // const queryText = `select * from orders where item in (select sku from inventory where id in (select bob from jack))`; //crazy, but cool if it works
             // const queryText = `select item from orders where item in (select sku from inventory where id in (1,2))`;
             // const queryText = `select c.item from orders c where item in (select sku from inventory where id in (1,2))`;
@@ -298,22 +296,48 @@ describe('Client Queries', function () {
             // limit
             // group by
             // const queryText = `select * from orders where item in (select sku from inventory where id=1) and sky='almonds'`;
-            const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results.length === 1);
-                assert(results[0].id === 1);
-                assert(results[0].item === 'almonds');
-                assert(results[0].price === 12);
-                assert(results[0].quantity === 2);
-                assert(results[0].customerId === 1);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+            it('should be able to support subquery syntax', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 1);
+                    assert(results[0].id === 1);
+                    assert(results[0].item === 'almonds');
+                    assert(results[0].price === 12);
+                    assert(results[0].quantity === 2);
+                    assert(results[0].customerId === 1);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do n level sub queries', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id in (1,4))`;
+
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 2);
+                    assert(results[0].id === 1);
+                    assert(results[0].item === 'almonds');
+                    assert(results[0].price === 12);
+                    assert(results[0].quantity === 2);
+                    assert(results[0].customerId === 1);
+                    assert(results[1].id === 2);
+                    assert(results[1].item === 'pecans');
+                    assert(results[1].price === 20);
+                    assert(results[1].quantity === 1);
+                    assert(results[1].customerId === 2);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
     });
 });
