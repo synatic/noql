@@ -133,9 +133,6 @@ export type ParserOptions = {
     type?: string;
 };
 
-//todo delete this
-export type ParserResult = TableColumnAst;
-
 export interface ColumnParseResult {
     replaceRoot?: {
         $replaceRoot: {
