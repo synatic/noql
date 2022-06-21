@@ -11,10 +11,9 @@ describe('Individual Tests', function () {
             });
         });
         it('should build the mongodb aggregation pipeline with a sort', () => {
-            const aggregate = SQLParser.makeMongoAggregate(
+            SQLParser.makeMongoAggregate(
                 'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`'
             );
-            console.log({aggregate});
         });
     });
 });
