@@ -48,17 +48,12 @@ export interface AST {
     expr: any;
     union?: string;
 }
-export interface Where extends Expression {
-    left: Where;
-    right: Where;
-    operator: string;
-}
 export type Columns = '*' | Column[];
 export interface Column {
     expr: Expression;
     as: string;
 }
-export type Types = 'column_ref' | 'aggr_func' | 'function' | 'binary_expr' | 'case' | 'select' | 'cast';
+export type Types = 'column_ref' | 'aggr_func' | 'function' | 'binary_expr' | 'case' | 'select' | 'cast' | 'expr_list';
 export interface Expression {
     type: Types;
     table?: string;
@@ -69,8 +64,12 @@ export interface Expression {
     value?: any;
     tableList?: string[];
     columnList?: string[];
-    ast: AST;
+    ast?: AST;
     parenthesis?: boolean;
+    expr?: Expression;
+    left?: Expression;
+    right?: Expression;
+    operator?: string;
 }
 export interface Args {
     type: 'column_ref' | 'aggr_func' | 'star';
@@ -181,7 +180,7 @@ export interface MongoQueryFunction {
     /** Doesn't seem to be used */
     parsedName?: string;
     /** function that takes in the parameters from the queries and returns the pipeline operation */
-    parse: (parameters: any) => {
+    parse: (...parameters: any) => {
         [key: string]: any;
     };
     /** specifies if this function requires an as when it's in a query, default: true */
