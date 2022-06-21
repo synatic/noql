@@ -27,7 +27,7 @@ export interface AST {
     orderby?: {
         type: 'ASC' | 'DESC';
         expr: any;
-    };
+    }[];
     limit?: {
         seperator: string;
         value: {
