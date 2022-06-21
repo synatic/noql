@@ -20,6 +20,7 @@ const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'
 
 describe('Client Queries', function () {
     this.timeout(90000);
+    /** @type {import('mongodb').MongoClient} */
     let mongoClient;
     before(function (done) {
         const run = async () => {
@@ -468,13 +469,17 @@ describe('Client Queries', function () {
             });
         });
         describe('unset', () => {
-            it('should be able to do a basic unset', async () => {
+            it('should be able to do a basic unset in a query', async () => {
                 const queryText = 'SELECT unset(_id),id,item FROM `orders`';
                 try {
                     const parsedQuery = SQLParser.parseSQL(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                    results = await results.toArray();
-                    assert(results.length === 8);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collection)
+                        .find(parsedQuery.query || null, {projection: parsedQuery.projection})
+                        .toArray();
+
+                    assert(results.length === 3);
                     return;
                 } catch (err) {
                     console.error(err);
