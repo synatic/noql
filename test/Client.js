@@ -486,6 +486,7 @@ describe('Client Queries', function () {
                         .db(_dbName)
                         .collection(parsedQuery.collection)
                         .find(parsedQuery.query || null, {projection: parsedQuery.projection})
+                        .sort()
                         .toArray();
 
                     assert(results.length === 3);

@@ -12,15 +12,46 @@ import {
     AggrFunc,
     Star,
 } from 'node-sql-parser';
-
-export interface MongoQuery {
+import type {Document, Sort} from 'mongodb';
+/** The result of the parser constructing a mongo query from SQL, if the result couldn't be a simple query and needed to be an aggregate function see ParsedMongoAggregate */
+export interface ParsedMongoQuery {
+    /** The db collection to query */
     collection: string;
-    projection?: Projection;
+    /** The projection to use for the query to get the requested fields */
+    projection?: Document;
+    /** The number of records to skip */
     skip?: number;
+    /** The number of records to limit the result set too */
     limit?: number;
-    query?: object;
-    sort?: object;
+    /** The query to use in the find*/
+    query?: Document;
+    /** The sort to apply to the query  */
+    sort?: Sort;
+    /** Tells the calling system if countDocuments should be called instead of find */
     count?: boolean;
+}
+
+/** The result of the parser constructing a mongo aggregate from SQL, if the result could be a simple query see ParsedMongoQuery */
+export interface ParsedMongoAggregate {
+    /** The pipeline steps to execute as an aggregate function */
+    pipeline: PipelineFn[];
+    /** The list of collections involved in the pipeline, the first one is the collection to execute the aggregation against */
+    collections: string[];
+}
+export interface PipelineFn {
+    $project?: {[key: string]: any};
+    $match?: {[key: string]: any};
+    $group?: {_id: any};
+    $replaceRoot?: {[key: string]: any};
+    $map?: {[key: string]: any};
+    $sort?: {[key: string]: any};
+    $limit?: number;
+    $skip?: number;
+    $unset?: any;
+    $unwind?: any;
+    $lookup?: any;
+    $count?: any;
+    $unionWith?: any;
 }
 
 export type ParserInput = TableColumnAst | string;
@@ -43,26 +74,7 @@ export interface Column {
     };
     as: string;
 }
-export interface MongoAggregate {
-    pipeline: PipelineFn[];
-    collections: any[];
-}
 
-export interface PipelineFn {
-    $project?: {[key: string]: any};
-    $match?: {[key: string]: any};
-    $group?: {_id: any};
-    $replaceRoot?: {[key: string]: any};
-    $map?: {[key: string]: any};
-    $sort?: {[key: string]: any};
-    $limit?: number;
-    $skip?: number;
-    $unset?: any;
-    $unwind?: any;
-    $lookup?: any;
-    $count?: any;
-    $unionWith?: any;
-}
 export interface AstLike {
     type: string;
     db?: string;
@@ -106,7 +118,6 @@ export interface ColumnParseResult {
     count: {$count: string}[];
     unset: string[];
 }
-export interface Projection {}
 
 export interface MongoQueryFunction {
     /** The name of the function as it will be used in sql, case insensitive, e.g. abs */
