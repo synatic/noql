@@ -1,18 +1,83 @@
-import {
-    TableColumnAst,
-    Option,
-    From,
-    With,
-    ColumnRef,
-    Dual,
-    OrderBy,
-    Limit,
-    InsertReplaceValue,
-    SetList,
-    AggrFunc,
-    Star,
-} from 'node-sql-parser';
 import type {Document, Sort} from 'mongodb';
+/**------------testing */
+export interface TableColumnAst {
+    tableList: string[];
+    columnList: string[];
+    ast: AST;
+}
+export interface AST {
+    type: string;
+    db?: string;
+    with?: {
+        name: string;
+        stmt: any[];
+        columns?: any[];
+    };
+    options?: any[];
+    distinct?: 'DISTINCT';
+    columns?: Columns;
+    from?: From[];
+    where?: any;
+    groupby?: {
+        type: 'column_ref';
+        table?: string;
+        column: string;
+    };
+    having?: any[];
+    orderby?: {
+        type: 'ASC' | 'DESC';
+        expr: any;
+    };
+    limit?: {
+        seperator: string;
+        value: {
+            type: string;
+            value: number;
+        }[];
+    };
+    table?: From[];
+    values?: {
+        type: 'expr_list';
+        value: any[];
+    }[];
+    set: {
+        column: string;
+        value: any;
+        table: string | null;
+    }[];
+    expr: any;
+    union?: string;
+}
+export type Columns = '*' | Column[];
+export interface Column {
+    expr: Expression;
+    as: string;
+}
+export interface Expression {
+    type: 'column_ref' | 'aggr_func' | 'function' | 'binary_expr' | 'case' | 'select' | 'cast';
+    table?: string | null;
+    column?: string;
+    name?: string;
+    args?: Args;
+    from?: any;
+    value?: any;
+}
+export interface Args {
+    type: 'column_ref' | 'aggr_func' | 'star';
+    table?: string | null;
+    column?: string;
+    name?: string;
+    args?: Args;
+    value?: string;
+}
+export interface From {
+    db?: string;
+    table?: string;
+    as?: string;
+    type?: 'dual';
+}
+
+/**------------end testing */
 
 export type ParsedQueryOrAggregate = ParsedMongoQuery | ParsedMongoAggregate;
 /** The result of the parser constructing a mongo query from SQL, if the result couldn't be a simple query and needed to be an aggregate function see ParsedMongoAggregate */
@@ -42,6 +107,7 @@ export interface ParsedMongoAggregate {
     collections: string[];
     type: 'aggregate';
 }
+
 export interface PipelineFn {
     $project?: {[key: string]: any};
     $match?: {[key: string]: any};
@@ -59,45 +125,16 @@ export interface PipelineFn {
 }
 
 export type ParserInput = TableColumnAst | string;
-export type ParserOptions = Option & {
+export type ParserOptions = {
     isArray?: boolean;
     /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select */
     unwindJoins?: boolean;
+    database?: string;
+    type?: string;
 };
+
+//todo delete this
 export type ParserResult = TableColumnAst;
-
-export type Columns = '*' | Column[];
-export interface Column {
-    expr: {
-        type: 'column_ref' | 'aggr_func' | 'function' | 'binary_expr' | 'case' | 'select' | 'cast';
-        table?: string | null;
-        column?: string;
-        name?: string;
-        args?: ColumnRef | AggrFunc | Star | null;
-        from?: any;
-        value?: any;
-    };
-    as: string;
-}
-
-export interface AstLike {
-    type: string;
-    db?: string;
-    with?: With | null;
-    options?: any[] | null;
-    distinct?: 'DISTINCT' | null;
-    columns?: Columns;
-    from?: Array<From | Dual | any> | null;
-    where?: any;
-    groupby?: ColumnRef[] | null;
-    having?: any[] | null;
-    orderby?: OrderBy[] | null;
-    limit?: Limit | null;
-    table?: Array<From | Dual> | null;
-    values?: InsertReplaceValue[];
-    set: SetList[];
-    expr: any;
-}
 
 export interface ColumnParseResult {
     replaceRoot?: {
@@ -141,8 +178,4 @@ export interface MongoQueryFunction {
     };
     /** specifies if this function requires an as when it's in a query, default: true */
     requiresAs?: boolean;
-}
-
-export interface Test {
-    //
 }
