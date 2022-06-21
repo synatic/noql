@@ -82,10 +82,26 @@
       {"Film Title": "APACHE DIVINE", "filmId": 31, "inventoryId": 147},
       {"Film Title": "APACHE DIVINE", "filmId": 31, "inventoryId": 148},
       {"Film Title": "APACHE DIVINE", "filmId": 31, "inventoryId": 149},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 160},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 161},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 162},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 163},
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 160
+      },
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 161
+      },
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 162
+      },
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 163
+      },
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 167},
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 168},
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 169},
@@ -241,8 +257,16 @@
       {"Film Title": "BUCKET BROTHERHOOD", "filmId": 103, "inventoryId": 468},
       {"Film Title": "BULL SHAWSHANK", "filmId": 105, "inventoryId": 476},
       {"Film Title": "BULL SHAWSHANK", "filmId": 105, "inventoryId": 477},
-      {"Film Title": "BULWORTH COMMANDMENTS", "filmId": 106, "inventoryId": 481},
-      {"Film Title": "BULWORTH COMMANDMENTS", "filmId": 106, "inventoryId": 482},
+      {
+        "Film Title": "BULWORTH COMMANDMENTS",
+        "filmId": 106,
+        "inventoryId": 481
+      },
+      {
+        "Film Title": "BULWORTH COMMANDMENTS",
+        "filmId": 106,
+        "inventoryId": 482
+      },
       {"Film Title": "BUTTERFLY CHOCOLAT", "filmId": 109, "inventoryId": 485},
       {"Film Title": "BUTTERFLY CHOCOLAT", "filmId": 109, "inventoryId": 486},
       {"Film Title": "BUTTERFLY CHOCOLAT", "filmId": 109, "inventoryId": 487},
@@ -395,16 +419,40 @@
       {"Film Title": "CONFESSIONS MAGUIRE", "filmId": 173, "inventoryId": 790},
       {"Film Title": "CONFESSIONS MAGUIRE", "filmId": 173, "inventoryId": 791},
       {"Film Title": "CONFESSIONS MAGUIRE", "filmId": 173, "inventoryId": 792},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 795},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 796},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 797},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 798},
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 795
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 796
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 797
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 798
+      },
       {"Film Title": "CONFUSED CANDLES", "filmId": 175, "inventoryId": 803},
       {"Film Title": "CONFUSED CANDLES", "filmId": 175, "inventoryId": 804},
       {"Film Title": "CONGENIALITY QUEST", "filmId": 176, "inventoryId": 808},
       {"Film Title": "CONGENIALITY QUEST", "filmId": 176, "inventoryId": 809},
-      {"Film Title": "CONNECTION MICROCOSMOS", "filmId": 178, "inventoryId": 817},
-      {"Film Title": "CONNECTION MICROCOSMOS", "filmId": 178, "inventoryId": 818},
+      {
+        "Film Title": "CONNECTION MICROCOSMOS",
+        "filmId": 178,
+        "inventoryId": 817
+      },
+      {
+        "Film Title": "CONNECTION MICROCOSMOS",
+        "filmId": 178,
+        "inventoryId": 818
+      },
       {"Film Title": "CONQUERER NUTS", "filmId": 179, "inventoryId": 819},
       {"Film Title": "CONQUERER NUTS", "filmId": 179, "inventoryId": 820},
       {"Film Title": "CONQUERER NUTS", "filmId": 179, "inventoryId": 821},
@@ -414,9 +462,21 @@
       {"Film Title": "CONTACT ANONYMOUS", "filmId": 181, "inventoryId": 827},
       {"Film Title": "CONTROL ANTHEM", "filmId": 182, "inventoryId": 832},
       {"Film Title": "CONTROL ANTHEM", "filmId": 182, "inventoryId": 833},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 834},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 835},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 836},
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 834
+      },
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 835
+      },
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 836
+      },
       {"Film Title": "CORE SUIT", "filmId": 184, "inventoryId": 840},
       {"Film Title": "CORE SUIT", "filmId": 184, "inventoryId": 841},
       {"Film Title": "COWBOY DOOM", "filmId": 185, "inventoryId": 845},
@@ -426,15 +486,39 @@
       {"Film Title": "CRAZY HOME", "filmId": 188, "inventoryId": 854},
       {"Film Title": "CRAZY HOME", "filmId": 188, "inventoryId": 855},
       {"Film Title": "CRAZY HOME", "filmId": 188, "inventoryId": 856},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 857},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 858},
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 857
+      },
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 858
+      },
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 867},
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 868},
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 869},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 873},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 874},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 875},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 876},
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 873
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 874
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 875
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 876
+      },
       {"Film Title": "CROW GREASE", "filmId": 194, "inventoryId": 881},
       {"Film Title": "CROW GREASE", "filmId": 194, "inventoryId": 882},
       {"Film Title": "CRUELTY UNFORGIVEN", "filmId": 196, "inventoryId": 885},
@@ -507,8 +591,16 @@
       {"Film Title": "DEER VIRGINIAN", "filmId": 220, "inventoryId": 988},
       {"Film Title": "DESERT POSEIDON", "filmId": 222, "inventoryId": 993},
       {"Film Title": "DESERT POSEIDON", "filmId": 222, "inventoryId": 994},
-      {"Film Title": "DESPERATE TRAINSPOTTING", "filmId": 224, "inventoryId": 1001},
-      {"Film Title": "DESPERATE TRAINSPOTTING", "filmId": 224, "inventoryId": 1002},
+      {
+        "Film Title": "DESPERATE TRAINSPOTTING",
+        "filmId": 224,
+        "inventoryId": 1001
+      },
+      {
+        "Film Title": "DESPERATE TRAINSPOTTING",
+        "filmId": 224,
+        "inventoryId": 1002
+      },
       {"Film Title": "DESTINATION JERK", "filmId": 225, "inventoryId": 1003},
       {"Film Title": "DESTINATION JERK", "filmId": 225, "inventoryId": 1004},
       {"Film Title": "DESTINATION JERK", "filmId": 225, "inventoryId": 1005},
@@ -574,10 +666,26 @@
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1136},
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1137},
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1138},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1142},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1143},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1144},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1145},
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1142
+      },
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1143
+      },
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1144
+      },
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1145
+      },
       {"Film Title": "DRIVER ANNIE", "filmId": 254, "inventoryId": 1148},
       {"Film Title": "DRIVER ANNIE", "filmId": 254, "inventoryId": 1149},
       {"Film Title": "DRIVING POLISH", "filmId": 255, "inventoryId": 1153},
@@ -657,8 +765,16 @@
       {"Film Title": "ENGLISH BULWORTH", "filmId": 285, "inventoryId": 1290},
       {"Film Title": "ENOUGH RAGING", "filmId": 286, "inventoryId": 1295},
       {"Film Title": "ENOUGH RAGING", "filmId": 286, "inventoryId": 1296},
-      {"Film Title": "ENTRAPMENT SATISFACTION", "filmId": 287, "inventoryId": 1300},
-      {"Film Title": "ENTRAPMENT SATISFACTION", "filmId": 287, "inventoryId": 1301},
+      {
+        "Film Title": "ENTRAPMENT SATISFACTION",
+        "filmId": 287,
+        "inventoryId": 1300
+      },
+      {
+        "Film Title": "ENTRAPMENT SATISFACTION",
+        "filmId": 287,
+        "inventoryId": 1301
+      },
       {"Film Title": "ESCAPE METROPOLIS", "filmId": 288, "inventoryId": 1304},
       {"Film Title": "ESCAPE METROPOLIS", "filmId": 288, "inventoryId": 1305},
       {"Film Title": "EVE RESURRECTION", "filmId": 289, "inventoryId": 1310},
@@ -732,16 +848,44 @@
       {"Film Title": "FIDELITY DEVIL", "filmId": 313, "inventoryId": 1431},
       {"Film Title": "FIGHT JAWBREAKER", "filmId": 314, "inventoryId": 1434},
       {"Film Title": "FIGHT JAWBREAKER", "filmId": 314, "inventoryId": 1435},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1445},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1446},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1447},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1448},
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1445
+      },
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1446
+      },
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1447
+      },
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1448
+      },
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1452},
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1453},
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1454},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1459},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1460},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1461},
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1459
+      },
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1460
+      },
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1461
+      },
       {"Film Title": "FLASH WARS", "filmId": 321, "inventoryId": 1466},
       {"Film Title": "FLASH WARS", "filmId": 321, "inventoryId": 1467},
       {"Film Title": "FLASH WARS", "filmId": 321, "inventoryId": 1468},
@@ -750,9 +894,21 @@
       {"Film Title": "FLATLINERS KILLER", "filmId": 322, "inventoryId": 1471},
       {"Film Title": "FLATLINERS KILLER", "filmId": 322, "inventoryId": 1472},
       {"Film Title": "FLATLINERS KILLER", "filmId": 322, "inventoryId": 1473},
-      {"Film Title": "FLINTSTONES HAPPINESS", "filmId": 324, "inventoryId": 1480},
-      {"Film Title": "FLINTSTONES HAPPINESS", "filmId": 324, "inventoryId": 1481},
-      {"Film Title": "FLINTSTONES HAPPINESS", "filmId": 324, "inventoryId": 1482},
+      {
+        "Film Title": "FLINTSTONES HAPPINESS",
+        "filmId": 324,
+        "inventoryId": 1480
+      },
+      {
+        "Film Title": "FLINTSTONES HAPPINESS",
+        "filmId": 324,
+        "inventoryId": 1481
+      },
+      {
+        "Film Title": "FLINTSTONES HAPPINESS",
+        "filmId": 324,
+        "inventoryId": 1482
+      },
       {"Film Title": "FLYING HOOK", "filmId": 326, "inventoryId": 1485},
       {"Film Title": "FLYING HOOK", "filmId": 326, "inventoryId": 1486},
       {"Film Title": "FOOL MOCKINGBIRD", "filmId": 327, "inventoryId": 1491},
@@ -762,10 +918,26 @@
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1501},
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1502},
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1503},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1507},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1508},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1509},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1510},
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1507
+      },
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1508
+      },
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1509
+      },
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1510
+      },
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1514},
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1515},
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1516},
@@ -847,10 +1019,26 @@
       {"Film Title": "GODFATHER DIARY", "filmId": 364, "inventoryId": 1669},
       {"Film Title": "GOLD RIVER", "filmId": 365, "inventoryId": 1670},
       {"Film Title": "GOLD RIVER", "filmId": 365, "inventoryId": 1671},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1674},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1675},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1676},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1677},
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1674
+      },
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1675
+      },
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1676
+      },
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1677
+      },
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1681},
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1682},
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1683},
@@ -907,8 +1095,16 @@
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1784},
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1785},
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1786},
-      {"Film Title": "GUNFIGHTER MUSSOLINI", "filmId": 389, "inventoryId": 1790},
-      {"Film Title": "GUNFIGHTER MUSSOLINI", "filmId": 389, "inventoryId": 1791},
+      {
+        "Film Title": "GUNFIGHTER MUSSOLINI",
+        "filmId": 389,
+        "inventoryId": 1790
+      },
+      {
+        "Film Title": "GUNFIGHTER MUSSOLINI",
+        "filmId": 389,
+        "inventoryId": 1791
+      },
       {"Film Title": "GUYS FALCON", "filmId": 390, "inventoryId": 1794},
       {"Film Title": "GUYS FALCON", "filmId": 390, "inventoryId": 1795},
       {"Film Title": "GUYS FALCON", "filmId": 390, "inventoryId": 1796},
@@ -951,10 +1147,26 @@
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1868},
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1869},
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1870},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1874},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1875},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1876},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1877},
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1874
+      },
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1875
+      },
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1876
+      },
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1877
+      },
       {"Film Title": "HEAVEN FREEDOM", "filmId": 410, "inventoryId": 1881},
       {"Film Title": "HEAVEN FREEDOM", "filmId": 410, "inventoryId": 1882},
       {"Film Title": "HEAVEN FREEDOM", "filmId": 410, "inventoryId": 1883},
@@ -1020,10 +1232,26 @@
       {"Film Title": "HOUSE DYNAMITE", "filmId": 437, "inventoryId": 2007},
       {"Film Title": "HUMAN GRAFFITI", "filmId": 438, "inventoryId": 2012},
       {"Film Title": "HUMAN GRAFFITI", "filmId": 438, "inventoryId": 2013},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2017},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2018},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2019},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2020},
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2017
+      },
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2018
+      },
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2019
+      },
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2020
+      },
       {"Film Title": "HUNGER ROOF", "filmId": 440, "inventoryId": 2023},
       {"Film Title": "HUNGER ROOF", "filmId": 440, "inventoryId": 2024},
       {"Film Title": "HUNTER ALTER", "filmId": 441, "inventoryId": 2027},
@@ -1059,10 +1287,26 @@
       {"Film Title": "IMAGE PRINCESS", "filmId": 453, "inventoryId": 2091},
       {"Film Title": "IMPACT ALADDIN", "filmId": 454, "inventoryId": 2094},
       {"Film Title": "IMPACT ALADDIN", "filmId": 454, "inventoryId": 2095},
-      {"Film Title": "IMPOSSIBLE PREJUDICE", "filmId": 455, "inventoryId": 2096},
-      {"Film Title": "IMPOSSIBLE PREJUDICE", "filmId": 455, "inventoryId": 2097},
-      {"Film Title": "IMPOSSIBLE PREJUDICE", "filmId": 455, "inventoryId": 2098},
-      {"Film Title": "IMPOSSIBLE PREJUDICE", "filmId": 455, "inventoryId": 2099},
+      {
+        "Film Title": "IMPOSSIBLE PREJUDICE",
+        "filmId": 455,
+        "inventoryId": 2096
+      },
+      {
+        "Film Title": "IMPOSSIBLE PREJUDICE",
+        "filmId": 455,
+        "inventoryId": 2097
+      },
+      {
+        "Film Title": "IMPOSSIBLE PREJUDICE",
+        "filmId": 455,
+        "inventoryId": 2098
+      },
+      {
+        "Film Title": "IMPOSSIBLE PREJUDICE",
+        "filmId": 455,
+        "inventoryId": 2099
+      },
       {"Film Title": "INCH JET", "filmId": 456, "inventoryId": 2100},
       {"Film Title": "INCH JET", "filmId": 456, "inventoryId": 2101},
       {"Film Title": "INDEPENDENCE HOTEL", "filmId": 457, "inventoryId": 2106},
@@ -1086,8 +1330,16 @@
       {"Film Title": "INTENTIONS EMPIRE", "filmId": 464, "inventoryId": 2147},
       {"Film Title": "INTERVIEW LIAISONS", "filmId": 465, "inventoryId": 2151},
       {"Film Title": "INTERVIEW LIAISONS", "filmId": 465, "inventoryId": 2152},
-      {"Film Title": "INTOLERABLE INTENTIONS", "filmId": 466, "inventoryId": 2156},
-      {"Film Title": "INTOLERABLE INTENTIONS", "filmId": 466, "inventoryId": 2157},
+      {
+        "Film Title": "INTOLERABLE INTENTIONS",
+        "filmId": 466,
+        "inventoryId": 2156
+      },
+      {
+        "Film Title": "INTOLERABLE INTENTIONS",
+        "filmId": 466,
+        "inventoryId": 2157
+      },
       {"Film Title": "INTRIGUE WORST", "filmId": 467, "inventoryId": 2158},
       {"Film Title": "INTRIGUE WORST", "filmId": 467, "inventoryId": 2159},
       {"Film Title": "INTRIGUE WORST", "filmId": 467, "inventoryId": 2160},
@@ -1303,10 +1555,26 @@
       {"Film Title": "METROPOLIS COMA", "filmId": 572, "inventoryId": 2605},
       {"Film Title": "METROPOLIS COMA", "filmId": 572, "inventoryId": 2606},
       {"Film Title": "METROPOLIS COMA", "filmId": 572, "inventoryId": 2607},
-      {"Film Title": "MICROCOSMOS PARADISE", "filmId": 573, "inventoryId": 2612},
-      {"Film Title": "MICROCOSMOS PARADISE", "filmId": 573, "inventoryId": 2613},
-      {"Film Title": "MICROCOSMOS PARADISE", "filmId": 573, "inventoryId": 2614},
-      {"Film Title": "MICROCOSMOS PARADISE", "filmId": 573, "inventoryId": 2615},
+      {
+        "Film Title": "MICROCOSMOS PARADISE",
+        "filmId": 573,
+        "inventoryId": 2612
+      },
+      {
+        "Film Title": "MICROCOSMOS PARADISE",
+        "filmId": 573,
+        "inventoryId": 2613
+      },
+      {
+        "Film Title": "MICROCOSMOS PARADISE",
+        "filmId": 573,
+        "inventoryId": 2614
+      },
+      {
+        "Film Title": "MICROCOSMOS PARADISE",
+        "filmId": 573,
+        "inventoryId": 2615
+      },
       {"Film Title": "MIDNIGHT WESTWARD", "filmId": 574, "inventoryId": 2616},
       {"Film Title": "MIDNIGHT WESTWARD", "filmId": 574, "inventoryId": 2617},
       {"Film Title": "MIDSUMMER GROUNDHOG", "filmId": 575, "inventoryId": 2621},
@@ -1332,10 +1600,26 @@
       {"Film Title": "MISSION ZOOLANDER", "filmId": 583, "inventoryId": 2658},
       {"Film Title": "MIXED DOORS", "filmId": 584, "inventoryId": 2661},
       {"Film Title": "MIXED DOORS", "filmId": 584, "inventoryId": 2662},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2667},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2668},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2669},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2670},
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2667
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2668
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2669
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2670
+      },
       {"Film Title": "MOD SECRETARY", "filmId": 587, "inventoryId": 2675},
       {"Film Title": "MOD SECRETARY", "filmId": 587, "inventoryId": 2676},
       {"Film Title": "MOD SECRETARY", "filmId": 587, "inventoryId": 2677},
@@ -1525,9 +1809,21 @@
       {"Film Title": "PIRATES ROXANNE", "filmId": 681, "inventoryId": 3098},
       {"Film Title": "PIRATES ROXANNE", "filmId": 681, "inventoryId": 3099},
       {"Film Title": "PIRATES ROXANNE", "filmId": 681, "inventoryId": 3100},
-      {"Film Title": "PITTSBURGH HUNCHBACK", "filmId": 682, "inventoryId": 3104},
-      {"Film Title": "PITTSBURGH HUNCHBACK", "filmId": 682, "inventoryId": 3105},
-      {"Film Title": "PITTSBURGH HUNCHBACK", "filmId": 682, "inventoryId": 3106},
+      {
+        "Film Title": "PITTSBURGH HUNCHBACK",
+        "filmId": 682,
+        "inventoryId": 3104
+      },
+      {
+        "Film Title": "PITTSBURGH HUNCHBACK",
+        "filmId": 682,
+        "inventoryId": 3105
+      },
+      {
+        "Film Title": "PITTSBURGH HUNCHBACK",
+        "filmId": 682,
+        "inventoryId": 3106
+      },
       {"Film Title": "PITY BOUND", "filmId": 683, "inventoryId": 3107},
       {"Film Title": "PITY BOUND", "filmId": 683, "inventoryId": 3108},
       {"Film Title": "PITY BOUND", "filmId": 683, "inventoryId": 3109},
@@ -1618,8 +1914,16 @@
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3292},
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3293},
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3294},
-      {"Film Title": "RESURRECTION SILVERADO", "filmId": 727, "inventoryId": 3301},
-      {"Film Title": "RESURRECTION SILVERADO", "filmId": 727, "inventoryId": 3302},
+      {
+        "Film Title": "RESURRECTION SILVERADO",
+        "filmId": 727,
+        "inventoryId": 3301
+      },
+      {
+        "Film Title": "RESURRECTION SILVERADO",
+        "filmId": 727,
+        "inventoryId": 3302
+      },
       {"Film Title": "REUNION WITCHES", "filmId": 728, "inventoryId": 3306},
       {"Film Title": "REUNION WITCHES", "filmId": 728, "inventoryId": 3307},
       {"Film Title": "REUNION WITCHES", "filmId": 728, "inventoryId": 3308},
@@ -1693,9 +1997,21 @@
       {"Film Title": "SAMURAI LION", "filmId": 760, "inventoryId": 3465},
       {"Film Title": "SAMURAI LION", "filmId": 760, "inventoryId": 3466},
       {"Film Title": "SAMURAI LION", "filmId": 760, "inventoryId": 3467},
-      {"Film Title": "SATISFACTION CONFIDENTIAL", "filmId": 763, "inventoryId": 3479},
-      {"Film Title": "SATISFACTION CONFIDENTIAL", "filmId": 763, "inventoryId": 3480},
-      {"Film Title": "SATISFACTION CONFIDENTIAL", "filmId": 763, "inventoryId": 3481},
+      {
+        "Film Title": "SATISFACTION CONFIDENTIAL",
+        "filmId": 763,
+        "inventoryId": 3479
+      },
+      {
+        "Film Title": "SATISFACTION CONFIDENTIAL",
+        "filmId": 763,
+        "inventoryId": 3480
+      },
+      {
+        "Film Title": "SATISFACTION CONFIDENTIAL",
+        "filmId": 763,
+        "inventoryId": 3481
+      },
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3484},
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3485},
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3486},
@@ -1787,8 +2103,16 @@
       {"Film Title": "SIERRA DIVIDE", "filmId": 796, "inventoryId": 3645},
       {"Film Title": "SILENCE KANE", "filmId": 797, "inventoryId": 3649},
       {"Film Title": "SILENCE KANE", "filmId": 797, "inventoryId": 3650},
-      {"Film Title": "SILVERADO GOLDFINGER", "filmId": 798, "inventoryId": 3654},
-      {"Film Title": "SILVERADO GOLDFINGER", "filmId": 798, "inventoryId": 3655},
+      {
+        "Film Title": "SILVERADO GOLDFINGER",
+        "filmId": 798,
+        "inventoryId": 3654
+      },
+      {
+        "Film Title": "SILVERADO GOLDFINGER",
+        "filmId": 798,
+        "inventoryId": 3655
+      },
       {"Film Title": "SIMON NORTH", "filmId": 799, "inventoryId": 3658},
       {"Film Title": "SIMON NORTH", "filmId": 799, "inventoryId": 3659},
       {"Film Title": "SINNERS ATLANTIS", "filmId": 800, "inventoryId": 3660},
@@ -1825,10 +2149,26 @@
       {"Film Title": "SNATCHERS MONTEZUMA", "filmId": 815, "inventoryId": 3727},
       {"Film Title": "SNATCHERS MONTEZUMA", "filmId": 815, "inventoryId": 3728},
       {"Film Title": "SNATCHERS MONTEZUMA", "filmId": 815, "inventoryId": 3729},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3730},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3731},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3732},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3733},
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3730
+      },
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3731
+      },
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3732
+      },
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3733
+      },
       {"Film Title": "SOLDIERS EVOLUTION", "filmId": 817, "inventoryId": 3737},
       {"Film Title": "SOLDIERS EVOLUTION", "filmId": 817, "inventoryId": 3738},
       {"Film Title": "SOMETHING DUCK", "filmId": 818, "inventoryId": 3739},
@@ -1868,8 +2208,16 @@
       {"Film Title": "SQUAD FISH", "filmId": 836, "inventoryId": 3819},
       {"Film Title": "SQUAD FISH", "filmId": 836, "inventoryId": 3820},
       {"Film Title": "SQUAD FISH", "filmId": 836, "inventoryId": 3821},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3825},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3826},
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3825
+      },
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3826
+      },
       {"Film Title": "STAMPEDE DISTURBING", "filmId": 840, "inventoryId": 3833},
       {"Film Title": "STAMPEDE DISTURBING", "filmId": 840, "inventoryId": 3834},
       {"Film Title": "STAMPEDE DISTURBING", "filmId": 840, "inventoryId": 3835},
@@ -1915,10 +2263,26 @@
       {"Film Title": "STRANGER STRANGERS", "filmId": 853, "inventoryId": 3911},
       {"Film Title": "STREAK RIDGEMONT", "filmId": 855, "inventoryId": 3916},
       {"Film Title": "STREAK RIDGEMONT", "filmId": 855, "inventoryId": 3917},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3920},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3921},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3922},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3923},
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3920
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3921
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3922
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3923
+      },
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3928},
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3929},
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3930},
@@ -1960,10 +2324,26 @@
       {"Film Title": "SWARM GOLD", "filmId": 870, "inventoryId": 3994},
       {"Film Title": "SWEDEN SHINING", "filmId": 871, "inventoryId": 3999},
       {"Film Title": "SWEDEN SHINING", "filmId": 871, "inventoryId": 4000},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4007},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4008},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4009},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4010},
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4007
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4008
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4009
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4010
+      },
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4015},
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4016},
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4017},
@@ -1976,10 +2356,26 @@
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4034},
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4035},
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4036},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4040},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4041},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4042},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4043},
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4040
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4041
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4042
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4043
+      },
       {"Film Title": "TENENBAUMS COMMAND", "filmId": 882, "inventoryId": 4052},
       {"Film Title": "TENENBAUMS COMMAND", "filmId": 882, "inventoryId": 4053},
       {"Film Title": "TENENBAUMS COMMAND", "filmId": 882, "inventoryId": 4054},
@@ -2014,9 +2410,21 @@
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4102},
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4103},
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4104},
-      {"Film Title": "TOMATOES HELLFIGHTERS", "filmId": 894, "inventoryId": 4109},
-      {"Film Title": "TOMATOES HELLFIGHTERS", "filmId": 894, "inventoryId": 4110},
-      {"Film Title": "TOMATOES HELLFIGHTERS", "filmId": 894, "inventoryId": 4111},
+      {
+        "Film Title": "TOMATOES HELLFIGHTERS",
+        "filmId": 894,
+        "inventoryId": 4109
+      },
+      {
+        "Film Title": "TOMATOES HELLFIGHTERS",
+        "filmId": 894,
+        "inventoryId": 4110
+      },
+      {
+        "Film Title": "TOMATOES HELLFIGHTERS",
+        "filmId": 894,
+        "inventoryId": 4111
+      },
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4114},
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4115},
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4116},
@@ -2045,9 +2453,21 @@
       {"Film Title": "TRADING PINOCCHIO", "filmId": 902, "inventoryId": 4155},
       {"Film Title": "TRAIN BUNCH", "filmId": 904, "inventoryId": 4161},
       {"Film Title": "TRAIN BUNCH", "filmId": 904, "inventoryId": 4162},
-      {"Film Title": "TRAINSPOTTING STRANGERS", "filmId": 905, "inventoryId": 4163},
-      {"Film Title": "TRAINSPOTTING STRANGERS", "filmId": 905, "inventoryId": 4164},
-      {"Film Title": "TRAINSPOTTING STRANGERS", "filmId": 905, "inventoryId": 4165},
+      {
+        "Film Title": "TRAINSPOTTING STRANGERS",
+        "filmId": 905,
+        "inventoryId": 4163
+      },
+      {
+        "Film Title": "TRAINSPOTTING STRANGERS",
+        "filmId": 905,
+        "inventoryId": 4164
+      },
+      {
+        "Film Title": "TRAINSPOTTING STRANGERS",
+        "filmId": 905,
+        "inventoryId": 4165
+      },
       {"Film Title": "TRAMP OTHERS", "filmId": 906, "inventoryId": 4166},
       {"Film Title": "TRAMP OTHERS", "filmId": 906, "inventoryId": 4167},
       {"Film Title": "TRANSLATION SUMMER", "filmId": 907, "inventoryId": 4171},
@@ -2087,11 +2507,31 @@
       {"Film Title": "UNBREAKABLE KARATE", "filmId": 920, "inventoryId": 4232},
       {"Film Title": "UNCUT SUICIDES", "filmId": 921, "inventoryId": 4235},
       {"Film Title": "UNCUT SUICIDES", "filmId": 921, "inventoryId": 4236},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4239},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4240},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4241},
-      {"Film Title": "UNFORGIVEN ZOOLANDER", "filmId": 924, "inventoryId": 4249},
-      {"Film Title": "UNFORGIVEN ZOOLANDER", "filmId": 924, "inventoryId": 4250},
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4239
+      },
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4240
+      },
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4241
+      },
+      {
+        "Film Title": "UNFORGIVEN ZOOLANDER",
+        "filmId": 924,
+        "inventoryId": 4249
+      },
+      {
+        "Film Title": "UNFORGIVEN ZOOLANDER",
+        "filmId": 924,
+        "inventoryId": 4250
+      },
       {"Film Title": "UNITED PILOT", "filmId": 925, "inventoryId": 4254},
       {"Film Title": "UNITED PILOT", "filmId": 925, "inventoryId": 4255},
       {"Film Title": "UNITED PILOT", "filmId": 925, "inventoryId": 4256},
@@ -2176,9 +2616,21 @@
       {"Film Title": "WASTELAND DIVINE", "filmId": 962, "inventoryId": 4403},
       {"Film Title": "WATCH TRACY", "filmId": 963, "inventoryId": 4404},
       {"Film Title": "WATCH TRACY", "filmId": 963, "inventoryId": 4405},
-      {"Film Title": "WATERFRONT DELIVERANCE", "filmId": 964, "inventoryId": 4409},
-      {"Film Title": "WATERFRONT DELIVERANCE", "filmId": 964, "inventoryId": 4410},
-      {"Film Title": "WATERFRONT DELIVERANCE", "filmId": 964, "inventoryId": 4411},
+      {
+        "Film Title": "WATERFRONT DELIVERANCE",
+        "filmId": 964,
+        "inventoryId": 4409
+      },
+      {
+        "Film Title": "WATERFRONT DELIVERANCE",
+        "filmId": 964,
+        "inventoryId": 4410
+      },
+      {
+        "Film Title": "WATERFRONT DELIVERANCE",
+        "filmId": 964,
+        "inventoryId": 4411
+      },
       {"Film Title": "WATERSHIP FRONTIER", "filmId": 965, "inventoryId": 4414},
       {"Film Title": "WATERSHIP FRONTIER", "filmId": 965, "inventoryId": 4415},
       {"Film Title": "WEDDING APOLLO", "filmId": 966, "inventoryId": 4416},
@@ -2234,10 +2686,26 @@
       {"Film Title": "WON DARES", "filmId": 983, "inventoryId": 4505},
       {"Film Title": "WONDERFUL DROP", "filmId": 984, "inventoryId": 4506},
       {"Film Title": "WONDERFUL DROP", "filmId": 984, "inventoryId": 4507},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4508},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4509},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4510},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4511},
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4508
+      },
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4509
+      },
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4510
+      },
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4511
+      },
       {"Film Title": "WONKA SEA", "filmId": 986, "inventoryId": 4515},
       {"Film Title": "WONKA SEA", "filmId": 986, "inventoryId": 4516},
       {"Film Title": "WONKA SEA", "filmId": 986, "inventoryId": 4517},
@@ -2378,9 +2846,21 @@
       {"Film Title": "ARABIA DOGMA", "filmId": 34, "inventoryId": 157},
       {"Film Title": "ARABIA DOGMA", "filmId": 34, "inventoryId": 158},
       {"Film Title": "ARABIA DOGMA", "filmId": 34, "inventoryId": 159},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 164},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 165},
-      {"Film Title": "ARACHNOPHOBIA ROLLERCOASTER", "filmId": 35, "inventoryId": 166},
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 164
+      },
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 165
+      },
+      {
+        "Film Title": "ARACHNOPHOBIA ROLLERCOASTER",
+        "filmId": 35,
+        "inventoryId": 166
+      },
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 171},
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 172},
       {"Film Title": "ARIZONA BANG", "filmId": 37, "inventoryId": 173},
@@ -2700,10 +3180,26 @@
       {"Film Title": "CONEHEADS SMOOCHY", "filmId": 172, "inventoryId": 789},
       {"Film Title": "CONFESSIONS MAGUIRE", "filmId": 173, "inventoryId": 793},
       {"Film Title": "CONFESSIONS MAGUIRE", "filmId": 173, "inventoryId": 794},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 799},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 800},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 801},
-      {"Film Title": "CONFIDENTIAL INTERVIEW", "filmId": 174, "inventoryId": 802},
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 799
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 800
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 801
+      },
+      {
+        "Film Title": "CONFIDENTIAL INTERVIEW",
+        "filmId": 174,
+        "inventoryId": 802
+      },
       {"Film Title": "CONFUSED CANDLES", "filmId": 175, "inventoryId": 805},
       {"Film Title": "CONFUSED CANDLES", "filmId": 175, "inventoryId": 806},
       {"Film Title": "CONFUSED CANDLES", "filmId": 175, "inventoryId": 807},
@@ -2720,9 +3216,21 @@
       {"Film Title": "CONTACT ANONYMOUS", "filmId": 181, "inventoryId": 829},
       {"Film Title": "CONTACT ANONYMOUS", "filmId": 181, "inventoryId": 830},
       {"Film Title": "CONTACT ANONYMOUS", "filmId": 181, "inventoryId": 831},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 837},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 838},
-      {"Film Title": "CONVERSATION DOWNHILL", "filmId": 183, "inventoryId": 839},
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 837
+      },
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 838
+      },
+      {
+        "Film Title": "CONVERSATION DOWNHILL",
+        "filmId": 183,
+        "inventoryId": 839
+      },
       {"Film Title": "CORE SUIT", "filmId": 184, "inventoryId": 842},
       {"Film Title": "CORE SUIT", "filmId": 184, "inventoryId": 843},
       {"Film Title": "CORE SUIT", "filmId": 184, "inventoryId": 844},
@@ -2731,10 +3239,26 @@
       {"Film Title": "CRANES RESERVOIR", "filmId": 187, "inventoryId": 851},
       {"Film Title": "CRANES RESERVOIR", "filmId": 187, "inventoryId": 852},
       {"Film Title": "CRANES RESERVOIR", "filmId": 187, "inventoryId": 853},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 859},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 860},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 861},
-      {"Film Title": "CREATURES SHAKESPEARE", "filmId": 189, "inventoryId": 862},
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 859
+      },
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 860
+      },
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 861
+      },
+      {
+        "Film Title": "CREATURES SHAKESPEARE",
+        "filmId": 189,
+        "inventoryId": 862
+      },
       {"Film Title": "CREEPERS KANE", "filmId": 190, "inventoryId": 863},
       {"Film Title": "CREEPERS KANE", "filmId": 190, "inventoryId": 864},
       {"Film Title": "CREEPERS KANE", "filmId": 190, "inventoryId": 865},
@@ -2742,10 +3266,26 @@
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 870},
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 871},
       {"Film Title": "CROOKED FROGMEN", "filmId": 191, "inventoryId": 872},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 877},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 878},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 879},
-      {"Film Title": "CROSSROADS CASUALTIES", "filmId": 193, "inventoryId": 880},
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 877
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 878
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 879
+      },
+      {
+        "Film Title": "CROSSROADS CASUALTIES",
+        "filmId": 193,
+        "inventoryId": 880
+      },
       {"Film Title": "CROW GREASE", "filmId": 194, "inventoryId": 883},
       {"Film Title": "CROW GREASE", "filmId": 194, "inventoryId": 884},
       {"Film Title": "CUPBOARD SINNERS", "filmId": 199, "inventoryId": 893},
@@ -2868,8 +3408,16 @@
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1139},
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1140},
       {"Film Title": "DREAM PICKUP", "filmId": 252, "inventoryId": 1141},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1146},
-      {"Film Title": "DRIFTER COMMANDMENTS", "filmId": 253, "inventoryId": 1147},
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1146
+      },
+      {
+        "Film Title": "DRIFTER COMMANDMENTS",
+        "filmId": 253,
+        "inventoryId": 1147
+      },
       {"Film Title": "DRIVER ANNIE", "filmId": 254, "inventoryId": 1150},
       {"Film Title": "DRIVER ANNIE", "filmId": 254, "inventoryId": 1151},
       {"Film Title": "DRIVER ANNIE", "filmId": 254, "inventoryId": 1152},
@@ -2943,8 +3491,16 @@
       {"Film Title": "ENOUGH RAGING", "filmId": 286, "inventoryId": 1297},
       {"Film Title": "ENOUGH RAGING", "filmId": 286, "inventoryId": 1298},
       {"Film Title": "ENOUGH RAGING", "filmId": 286, "inventoryId": 1299},
-      {"Film Title": "ENTRAPMENT SATISFACTION", "filmId": 287, "inventoryId": 1302},
-      {"Film Title": "ENTRAPMENT SATISFACTION", "filmId": 287, "inventoryId": 1303},
+      {
+        "Film Title": "ENTRAPMENT SATISFACTION",
+        "filmId": 287,
+        "inventoryId": 1302
+      },
+      {
+        "Film Title": "ENTRAPMENT SATISFACTION",
+        "filmId": 287,
+        "inventoryId": 1303
+      },
       {"Film Title": "ESCAPE METROPOLIS", "filmId": 288, "inventoryId": 1306},
       {"Film Title": "ESCAPE METROPOLIS", "filmId": 288, "inventoryId": 1307},
       {"Film Title": "ESCAPE METROPOLIS", "filmId": 288, "inventoryId": 1308},
@@ -2962,8 +3518,16 @@
       {"Film Title": "EXPENDABLE STALLION", "filmId": 295, "inventoryId": 1340},
       {"Film Title": "EXPENDABLE STALLION", "filmId": 295, "inventoryId": 1341},
       {"Film Title": "EXPENDABLE STALLION", "filmId": 295, "inventoryId": 1342},
-      {"Film Title": "EXTRAORDINARY CONQUERER", "filmId": 297, "inventoryId": 1347},
-      {"Film Title": "EXTRAORDINARY CONQUERER", "filmId": 297, "inventoryId": 1348},
+      {
+        "Film Title": "EXTRAORDINARY CONQUERER",
+        "filmId": 297,
+        "inventoryId": 1347
+      },
+      {
+        "Film Title": "EXTRAORDINARY CONQUERER",
+        "filmId": 297,
+        "inventoryId": 1348
+      },
       {"Film Title": "EYES DRIVING", "filmId": 298, "inventoryId": 1351},
       {"Film Title": "EYES DRIVING", "filmId": 298, "inventoryId": 1352},
       {"Film Title": "EYES DRIVING", "filmId": 298, "inventoryId": 1353},
@@ -3013,25 +3577,61 @@
       {"Film Title": "FINDING ANACONDA", "filmId": 315, "inventoryId": 1442},
       {"Film Title": "FIRE WOLVES", "filmId": 316, "inventoryId": 1443},
       {"Film Title": "FIRE WOLVES", "filmId": 316, "inventoryId": 1444},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1449},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1450},
-      {"Film Title": "FIREBALL PHILADELPHIA", "filmId": 317, "inventoryId": 1451},
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1449
+      },
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1450
+      },
+      {
+        "Film Title": "FIREBALL PHILADELPHIA",
+        "filmId": 317,
+        "inventoryId": 1451
+      },
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1455},
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1456},
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1457},
       {"Film Title": "FISH OPUS", "filmId": 319, "inventoryId": 1458},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1462},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1463},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1464},
-      {"Film Title": "FLAMINGOS CONNECTICUT", "filmId": 320, "inventoryId": 1465},
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1462
+      },
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1463
+      },
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1464
+      },
+      {
+        "Film Title": "FLAMINGOS CONNECTICUT",
+        "filmId": 320,
+        "inventoryId": 1465
+      },
       {"Film Title": "FLATLINERS KILLER", "filmId": 322, "inventoryId": 1474},
       {"Film Title": "FLATLINERS KILLER", "filmId": 322, "inventoryId": 1475},
       {"Film Title": "FLIGHT LIES", "filmId": 323, "inventoryId": 1476},
       {"Film Title": "FLIGHT LIES", "filmId": 323, "inventoryId": 1477},
       {"Film Title": "FLIGHT LIES", "filmId": 323, "inventoryId": 1478},
       {"Film Title": "FLIGHT LIES", "filmId": 323, "inventoryId": 1479},
-      {"Film Title": "FLINTSTONES HAPPINESS", "filmId": 324, "inventoryId": 1483},
-      {"Film Title": "FLINTSTONES HAPPINESS", "filmId": 324, "inventoryId": 1484},
+      {
+        "Film Title": "FLINTSTONES HAPPINESS",
+        "filmId": 324,
+        "inventoryId": 1483
+      },
+      {
+        "Film Title": "FLINTSTONES HAPPINESS",
+        "filmId": 324,
+        "inventoryId": 1484
+      },
       {"Film Title": "FLYING HOOK", "filmId": 326, "inventoryId": 1487},
       {"Film Title": "FLYING HOOK", "filmId": 326, "inventoryId": 1488},
       {"Film Title": "FLYING HOOK", "filmId": 326, "inventoryId": 1489},
@@ -3045,9 +3645,21 @@
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1504},
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1505},
       {"Film Title": "FORREST SONS", "filmId": 329, "inventoryId": 1506},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1511},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1512},
-      {"Film Title": "FORRESTER COMANCHEROS", "filmId": 330, "inventoryId": 1513},
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1511
+      },
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1512
+      },
+      {
+        "Film Title": "FORRESTER COMANCHEROS",
+        "filmId": 330,
+        "inventoryId": 1513
+      },
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1518},
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1519},
       {"Film Title": "FORWARD TEMPLE", "filmId": 331, "inventoryId": 1520},
@@ -3127,9 +3739,21 @@
       {"Film Title": "GO PURPLE", "filmId": 363, "inventoryId": 1666},
       {"Film Title": "GOLD RIVER", "filmId": 365, "inventoryId": 1672},
       {"Film Title": "GOLD RIVER", "filmId": 365, "inventoryId": 1673},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1678},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1679},
-      {"Film Title": "GOLDFINGER SENSIBILITY", "filmId": 366, "inventoryId": 1680},
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1678
+      },
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1679
+      },
+      {
+        "Film Title": "GOLDFINGER SENSIBILITY",
+        "filmId": 366,
+        "inventoryId": 1680
+      },
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1685},
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1686},
       {"Film Title": "GOLDMINE TYCOON", "filmId": 367, "inventoryId": 1687},
@@ -3183,8 +3807,16 @@
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1787},
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1788},
       {"Film Title": "GUNFIGHT MOON", "filmId": 388, "inventoryId": 1789},
-      {"Film Title": "GUNFIGHTER MUSSOLINI", "filmId": 389, "inventoryId": 1792},
-      {"Film Title": "GUNFIGHTER MUSSOLINI", "filmId": 389, "inventoryId": 1793},
+      {
+        "Film Title": "GUNFIGHTER MUSSOLINI",
+        "filmId": 389,
+        "inventoryId": 1792
+      },
+      {
+        "Film Title": "GUNFIGHTER MUSSOLINI",
+        "filmId": 389,
+        "inventoryId": 1793
+      },
       {"Film Title": "HALF OUTFIELD", "filmId": 391, "inventoryId": 1801},
       {"Film Title": "HALF OUTFIELD", "filmId": 391, "inventoryId": 1802},
       {"Film Title": "HALF OUTFIELD", "filmId": 391, "inventoryId": 1803},
@@ -3223,9 +3855,21 @@
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1871},
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1872},
       {"Film Title": "HEAD STRANGER", "filmId": 408, "inventoryId": 1873},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1878},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1879},
-      {"Film Title": "HEARTBREAKERS BRIGHT", "filmId": 409, "inventoryId": 1880},
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1878
+      },
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1879
+      },
+      {
+        "Film Title": "HEARTBREAKERS BRIGHT",
+        "filmId": 409,
+        "inventoryId": 1880
+      },
       {"Film Title": "HEAVEN FREEDOM", "filmId": 410, "inventoryId": 1884},
       {"Film Title": "HEAVEN FREEDOM", "filmId": 410, "inventoryId": 1885},
       {"Film Title": "HEAVYWEIGHTS BEAST", "filmId": 412, "inventoryId": 1892},
@@ -3297,8 +3941,16 @@
       {"Film Title": "HUMAN GRAFFITI", "filmId": 438, "inventoryId": 2014},
       {"Film Title": "HUMAN GRAFFITI", "filmId": 438, "inventoryId": 2015},
       {"Film Title": "HUMAN GRAFFITI", "filmId": 438, "inventoryId": 2016},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2021},
-      {"Film Title": "HUNCHBACK IMPOSSIBLE", "filmId": 439, "inventoryId": 2022},
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2021
+      },
+      {
+        "Film Title": "HUNCHBACK IMPOSSIBLE",
+        "filmId": 439,
+        "inventoryId": 2022
+      },
       {"Film Title": "HUNGER ROOF", "filmId": 440, "inventoryId": 2025},
       {"Film Title": "HUNGER ROOF", "filmId": 440, "inventoryId": 2026},
       {"Film Title": "HURRICANE AFFAIR", "filmId": 443, "inventoryId": 2035},
@@ -3635,10 +4287,26 @@
       {"Film Title": "MOB DUFFEL", "filmId": 585, "inventoryId": 2664},
       {"Film Title": "MOB DUFFEL", "filmId": 585, "inventoryId": 2665},
       {"Film Title": "MOB DUFFEL", "filmId": 585, "inventoryId": 2666},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2671},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2672},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2673},
-      {"Film Title": "MOCKINGBIRD HOLLYWOOD", "filmId": 586, "inventoryId": 2674},
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2671
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2672
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2673
+      },
+      {
+        "Film Title": "MOCKINGBIRD HOLLYWOOD",
+        "filmId": 586,
+        "inventoryId": 2674
+      },
       {"Film Title": "MODEL FISH", "filmId": 588, "inventoryId": 2678},
       {"Film Title": "MODEL FISH", "filmId": 588, "inventoryId": 2679},
       {"Film Title": "MODEL FISH", "filmId": 588, "inventoryId": 2680},
@@ -3980,12 +4648,36 @@
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3295},
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3296},
       {"Film Title": "REQUIEM TYCOON", "filmId": 725, "inventoryId": 3297},
-      {"Film Title": "RESERVOIR ADAPTATION", "filmId": 726, "inventoryId": 3298},
-      {"Film Title": "RESERVOIR ADAPTATION", "filmId": 726, "inventoryId": 3299},
-      {"Film Title": "RESERVOIR ADAPTATION", "filmId": 726, "inventoryId": 3300},
-      {"Film Title": "RESURRECTION SILVERADO", "filmId": 727, "inventoryId": 3303},
-      {"Film Title": "RESURRECTION SILVERADO", "filmId": 727, "inventoryId": 3304},
-      {"Film Title": "RESURRECTION SILVERADO", "filmId": 727, "inventoryId": 3305},
+      {
+        "Film Title": "RESERVOIR ADAPTATION",
+        "filmId": 726,
+        "inventoryId": 3298
+      },
+      {
+        "Film Title": "RESERVOIR ADAPTATION",
+        "filmId": 726,
+        "inventoryId": 3299
+      },
+      {
+        "Film Title": "RESERVOIR ADAPTATION",
+        "filmId": 726,
+        "inventoryId": 3300
+      },
+      {
+        "Film Title": "RESURRECTION SILVERADO",
+        "filmId": 727,
+        "inventoryId": 3303
+      },
+      {
+        "Film Title": "RESURRECTION SILVERADO",
+        "filmId": 727,
+        "inventoryId": 3304
+      },
+      {
+        "Film Title": "RESURRECTION SILVERADO",
+        "filmId": 727,
+        "inventoryId": 3305
+      },
       {"Film Title": "REUNION WITCHES", "filmId": 728, "inventoryId": 3309},
       {"Film Title": "REUNION WITCHES", "filmId": 728, "inventoryId": 3310},
       {"Film Title": "RIDER CADDYSHACK", "filmId": 729, "inventoryId": 3311},
@@ -4021,9 +4713,21 @@
       {"Film Title": "ROCKY WAR", "filmId": 739, "inventoryId": 3370},
       {"Film Title": "ROCKY WAR", "filmId": 739, "inventoryId": 3371},
       {"Film Title": "ROCKY WAR", "filmId": 739, "inventoryId": 3372},
-      {"Film Title": "ROLLERCOASTER BRINGING", "filmId": 740, "inventoryId": 3373},
-      {"Film Title": "ROLLERCOASTER BRINGING", "filmId": 740, "inventoryId": 3374},
-      {"Film Title": "ROLLERCOASTER BRINGING", "filmId": 740, "inventoryId": 3375},
+      {
+        "Film Title": "ROLLERCOASTER BRINGING",
+        "filmId": 740,
+        "inventoryId": 3373
+      },
+      {
+        "Film Title": "ROLLERCOASTER BRINGING",
+        "filmId": 740,
+        "inventoryId": 3374
+      },
+      {
+        "Film Title": "ROLLERCOASTER BRINGING",
+        "filmId": 740,
+        "inventoryId": 3375
+      },
       {"Film Title": "ROMAN PUNK", "filmId": 741, "inventoryId": 3380},
       {"Film Title": "ROMAN PUNK", "filmId": 741, "inventoryId": 3381},
       {"Film Title": "ROOM ROMAN", "filmId": 743, "inventoryId": 3384},
@@ -4086,8 +4790,16 @@
       {"Film Title": "SASSY PACKER", "filmId": 762, "inventoryId": 3476},
       {"Film Title": "SASSY PACKER", "filmId": 762, "inventoryId": 3477},
       {"Film Title": "SASSY PACKER", "filmId": 762, "inventoryId": 3478},
-      {"Film Title": "SATISFACTION CONFIDENTIAL", "filmId": 763, "inventoryId": 3482},
-      {"Film Title": "SATISFACTION CONFIDENTIAL", "filmId": 763, "inventoryId": 3483},
+      {
+        "Film Title": "SATISFACTION CONFIDENTIAL",
+        "filmId": 763,
+        "inventoryId": 3482
+      },
+      {
+        "Film Title": "SATISFACTION CONFIDENTIAL",
+        "filmId": 763,
+        "inventoryId": 3483
+      },
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3488},
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3489},
       {"Film Title": "SATURDAY LAMBS", "filmId": 764, "inventoryId": 3490},
@@ -4167,8 +4879,16 @@
       {"Film Title": "SILENCE KANE", "filmId": 797, "inventoryId": 3651},
       {"Film Title": "SILENCE KANE", "filmId": 797, "inventoryId": 3652},
       {"Film Title": "SILENCE KANE", "filmId": 797, "inventoryId": 3653},
-      {"Film Title": "SILVERADO GOLDFINGER", "filmId": 798, "inventoryId": 3656},
-      {"Film Title": "SILVERADO GOLDFINGER", "filmId": 798, "inventoryId": 3657},
+      {
+        "Film Title": "SILVERADO GOLDFINGER",
+        "filmId": 798,
+        "inventoryId": 3656
+      },
+      {
+        "Film Title": "SILVERADO GOLDFINGER",
+        "filmId": 798,
+        "inventoryId": 3657
+      },
       {"Film Title": "SINNERS ATLANTIS", "filmId": 800, "inventoryId": 3662},
       {"Film Title": "SINNERS ATLANTIS", "filmId": 800, "inventoryId": 3663},
       {"Film Title": "SINNERS ATLANTIS", "filmId": 800, "inventoryId": 3664},
@@ -4205,9 +4925,21 @@
       {"Film Title": "SNATCH SLIPPER", "filmId": 814, "inventoryId": 3724},
       {"Film Title": "SNATCH SLIPPER", "filmId": 814, "inventoryId": 3725},
       {"Film Title": "SNATCH SLIPPER", "filmId": 814, "inventoryId": 3726},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3734},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3735},
-      {"Film Title": "SNOWMAN ROLLERCOASTER", "filmId": 816, "inventoryId": 3736},
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3734
+      },
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3735
+      },
+      {
+        "Film Title": "SNOWMAN ROLLERCOASTER",
+        "filmId": 816,
+        "inventoryId": 3736
+      },
       {"Film Title": "SOMETHING DUCK", "filmId": 818, "inventoryId": 3742},
       {"Film Title": "SOMETHING DUCK", "filmId": 818, "inventoryId": 3743},
       {"Film Title": "SONS INTERVIEW", "filmId": 820, "inventoryId": 3751},
@@ -4247,9 +4979,21 @@
       {"Film Title": "SPLENDOR PATTON", "filmId": 833, "inventoryId": 3805},
       {"Film Title": "SPLENDOR PATTON", "filmId": 833, "inventoryId": 3806},
       {"Film Title": "SPLENDOR PATTON", "filmId": 833, "inventoryId": 3807},
-      {"Film Title": "SPOILERS HELLFIGHTERS", "filmId": 834, "inventoryId": 3808},
-      {"Film Title": "SPOILERS HELLFIGHTERS", "filmId": 834, "inventoryId": 3809},
-      {"Film Title": "SPOILERS HELLFIGHTERS", "filmId": 834, "inventoryId": 3810},
+      {
+        "Film Title": "SPOILERS HELLFIGHTERS",
+        "filmId": 834,
+        "inventoryId": 3808
+      },
+      {
+        "Film Title": "SPOILERS HELLFIGHTERS",
+        "filmId": 834,
+        "inventoryId": 3809
+      },
+      {
+        "Film Title": "SPOILERS HELLFIGHTERS",
+        "filmId": 834,
+        "inventoryId": 3810
+      },
       {"Film Title": "SPY MILE", "filmId": 835, "inventoryId": 3815},
       {"Film Title": "SPY MILE", "filmId": 835, "inventoryId": 3816},
       {"Film Title": "SPY MILE", "filmId": 835, "inventoryId": 3817},
@@ -4257,10 +5001,26 @@
       {"Film Title": "STAGE WORLD", "filmId": 837, "inventoryId": 3822},
       {"Film Title": "STAGE WORLD", "filmId": 837, "inventoryId": 3823},
       {"Film Title": "STAGE WORLD", "filmId": 837, "inventoryId": 3824},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3827},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3828},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3829},
-      {"Film Title": "STAGECOACH ARMAGEDDON", "filmId": 838, "inventoryId": 3830},
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3827
+      },
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3828
+      },
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3829
+      },
+      {
+        "Film Title": "STAGECOACH ARMAGEDDON",
+        "filmId": 838,
+        "inventoryId": 3830
+      },
       {"Film Title": "STALLION SUNDANCE", "filmId": 839, "inventoryId": 3831},
       {"Film Title": "STALLION SUNDANCE", "filmId": 839, "inventoryId": 3832},
       {"Film Title": "STAR OPERATION", "filmId": 841, "inventoryId": 3840},
@@ -4305,10 +5065,26 @@
       {"Film Title": "STRANGERS GRAFFITI", "filmId": 854, "inventoryId": 3915},
       {"Film Title": "STREAK RIDGEMONT", "filmId": 855, "inventoryId": 3918},
       {"Film Title": "STREAK RIDGEMONT", "filmId": 855, "inventoryId": 3919},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3924},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3925},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3926},
-      {"Film Title": "STREETCAR INTENTIONS", "filmId": 856, "inventoryId": 3927},
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3924
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3925
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3926
+      },
+      {
+        "Film Title": "STREETCAR INTENTIONS",
+        "filmId": 856,
+        "inventoryId": 3927
+      },
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3931},
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3932},
       {"Film Title": "STRICTLY SCARFACE", "filmId": 857, "inventoryId": 3933},
@@ -4347,10 +5123,26 @@
       {"Film Title": "SWEET BROTHERHOOD", "filmId": 872, "inventoryId": 4004},
       {"Film Title": "SWEET BROTHERHOOD", "filmId": 872, "inventoryId": 4005},
       {"Film Title": "SWEET BROTHERHOOD", "filmId": 872, "inventoryId": 4006},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4011},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4012},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4013},
-      {"Film Title": "SWEETHEARTS SUSPECTS", "filmId": 873, "inventoryId": 4014},
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4011
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4012
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4013
+      },
+      {
+        "Film Title": "SWEETHEARTS SUSPECTS",
+        "filmId": 873,
+        "inventoryId": 4014
+      },
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4018},
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4019},
       {"Film Title": "TALENTED HOMICIDE", "filmId": 875, "inventoryId": 4020},
@@ -4364,10 +5156,26 @@
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4037},
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4038},
       {"Film Title": "TELEGRAPH VOYAGE", "filmId": 879, "inventoryId": 4039},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4044},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4045},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4046},
-      {"Film Title": "TELEMARK HEARTBREAKERS", "filmId": 880, "inventoryId": 4047},
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4044
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4045
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4046
+      },
+      {
+        "Film Title": "TELEMARK HEARTBREAKERS",
+        "filmId": 880,
+        "inventoryId": 4047
+      },
       {"Film Title": "TEMPLE ATTRACTION", "filmId": 881, "inventoryId": 4048},
       {"Film Title": "TEMPLE ATTRACTION", "filmId": 881, "inventoryId": 4049},
       {"Film Title": "TEMPLE ATTRACTION", "filmId": 881, "inventoryId": 4050},
@@ -4395,8 +5203,16 @@
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4106},
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4107},
       {"Film Title": "TITANS JERK", "filmId": 893, "inventoryId": 4108},
-      {"Film Title": "TOMATOES HELLFIGHTERS", "filmId": 894, "inventoryId": 4112},
-      {"Film Title": "TOMATOES HELLFIGHTERS", "filmId": 894, "inventoryId": 4113},
+      {
+        "Film Title": "TOMATOES HELLFIGHTERS",
+        "filmId": 894,
+        "inventoryId": 4112
+      },
+      {
+        "Film Title": "TOMATOES HELLFIGHTERS",
+        "filmId": 894,
+        "inventoryId": 4113
+      },
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4118},
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4119},
       {"Film Title": "TOMORROW HUSTLER", "filmId": 895, "inventoryId": 4120},
@@ -4452,20 +5268,56 @@
       {"Film Title": "UNBREAKABLE KARATE", "filmId": 920, "inventoryId": 4234},
       {"Film Title": "UNCUT SUICIDES", "filmId": 921, "inventoryId": 4237},
       {"Film Title": "UNCUT SUICIDES", "filmId": 921, "inventoryId": 4238},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4242},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4243},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4244},
-      {"Film Title": "UNDEFEATED DALMATIONS", "filmId": 922, "inventoryId": 4245},
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4242
+      },
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4243
+      },
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4244
+      },
+      {
+        "Film Title": "UNDEFEATED DALMATIONS",
+        "filmId": 922,
+        "inventoryId": 4245
+      },
       {"Film Title": "UNFAITHFUL KILL", "filmId": 923, "inventoryId": 4246},
       {"Film Title": "UNFAITHFUL KILL", "filmId": 923, "inventoryId": 4247},
       {"Film Title": "UNFAITHFUL KILL", "filmId": 923, "inventoryId": 4248},
-      {"Film Title": "UNFORGIVEN ZOOLANDER", "filmId": 924, "inventoryId": 4251},
-      {"Film Title": "UNFORGIVEN ZOOLANDER", "filmId": 924, "inventoryId": 4252},
-      {"Film Title": "UNFORGIVEN ZOOLANDER", "filmId": 924, "inventoryId": 4253},
+      {
+        "Film Title": "UNFORGIVEN ZOOLANDER",
+        "filmId": 924,
+        "inventoryId": 4251
+      },
+      {
+        "Film Title": "UNFORGIVEN ZOOLANDER",
+        "filmId": 924,
+        "inventoryId": 4252
+      },
+      {
+        "Film Title": "UNFORGIVEN ZOOLANDER",
+        "filmId": 924,
+        "inventoryId": 4253
+      },
       {"Film Title": "UNITED PILOT", "filmId": 925, "inventoryId": 4257},
       {"Film Title": "UNITED PILOT", "filmId": 925, "inventoryId": 4258},
-      {"Film Title": "UNTOUCHABLES SUNRISE", "filmId": 926, "inventoryId": 4259},
-      {"Film Title": "UNTOUCHABLES SUNRISE", "filmId": 926, "inventoryId": 4260},
+      {
+        "Film Title": "UNTOUCHABLES SUNRISE",
+        "filmId": 926,
+        "inventoryId": 4259
+      },
+      {
+        "Film Title": "UNTOUCHABLES SUNRISE",
+        "filmId": 926,
+        "inventoryId": 4260
+      },
       {"Film Title": "VACATION BOONDOCK", "filmId": 930, "inventoryId": 4275},
       {"Film Title": "VACATION BOONDOCK", "filmId": 930, "inventoryId": 4276},
       {"Film Title": "VACATION BOONDOCK", "filmId": 930, "inventoryId": 4277},
@@ -4533,8 +5385,16 @@
       {"Film Title": "WATCH TRACY", "filmId": 963, "inventoryId": 4406},
       {"Film Title": "WATCH TRACY", "filmId": 963, "inventoryId": 4407},
       {"Film Title": "WATCH TRACY", "filmId": 963, "inventoryId": 4408},
-      {"Film Title": "WATERFRONT DELIVERANCE", "filmId": 964, "inventoryId": 4412},
-      {"Film Title": "WATERFRONT DELIVERANCE", "filmId": 964, "inventoryId": 4413},
+      {
+        "Film Title": "WATERFRONT DELIVERANCE",
+        "filmId": 964,
+        "inventoryId": 4412
+      },
+      {
+        "Film Title": "WATERFRONT DELIVERANCE",
+        "filmId": 964,
+        "inventoryId": 4413
+      },
       {"Film Title": "WEDDING APOLLO", "filmId": 966, "inventoryId": 4418},
       {"Film Title": "WEDDING APOLLO", "filmId": 966, "inventoryId": 4419},
       {"Film Title": "WEDDING APOLLO", "filmId": 966, "inventoryId": 4420},
@@ -4574,9 +5434,21 @@
       {"Film Title": "WOMEN DORADO", "filmId": 982, "inventoryId": 4500},
       {"Film Title": "WOMEN DORADO", "filmId": 982, "inventoryId": 4501},
       {"Film Title": "WOMEN DORADO", "filmId": 982, "inventoryId": 4502},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4512},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4513},
-      {"Film Title": "WONDERLAND CHRISTMAS", "filmId": 985, "inventoryId": 4514},
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4512
+      },
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4513
+      },
+      {
+        "Film Title": "WONDERLAND CHRISTMAS",
+        "filmId": 985,
+        "inventoryId": 4514
+      },
       {"Film Title": "WONKA SEA", "filmId": 986, "inventoryId": 4519},
       {"Film Title": "WONKA SEA", "filmId": 986, "inventoryId": 4520},
       {"Film Title": "WORDS HUNTER", "filmId": 987, "inventoryId": 4523},

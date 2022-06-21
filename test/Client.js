@@ -16,7 +16,10 @@ const _queryTests = [].concat(
     require('./queryTests/columnOperators.json')
 );
 const supportsArraySort = false;
-const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'), require('./aggregateTests/joins.json'));
+const _aggregateTests = [].concat(
+    require('./aggregateTests/aggregateTests.json'),
+    require('./aggregateTests/joins.json')
+);
 
 describe('Client Queries', function () {
     this.timeout(90000);
@@ -28,8 +31,12 @@ describe('Client Queries', function () {
                 const {client, db} = await setup();
                 mongoClient = client;
 
-                const details = await db.collection('inventory').findOne({id: 1});
-                const details2 = await db.collection('inventory').findOne({_id: new ObjectID(details._id.toString())});
+                const details = await db
+                    .collection('inventory')
+                    .findOne({id: 1});
+                const details2 = await db
+                    .collection('inventory')
+                    .findOne({_id: new ObjectID(details._id.toString())});
                 if (!details2) {
                     throw new Error('Invalid BSOJN Parse');
                 }
@@ -49,7 +56,9 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _queryTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
-                it(`${test.name ? test.name + ':' : ''}${test.query}`, function (done) {
+                it(`${test.name ? test.name + ':' : ''}${
+                    test.query
+                }`, function (done) {
                     (async () => {
                         try {
                             const parsedQuery = SQLParser.parseSQL(test.query);
@@ -63,7 +72,9 @@ describe('Client Queries', function () {
                                 const find = mongoClient
                                     .db(_dbName)
                                     .collection(parsedQuery.collection)
-                                    .find(parsedQuery.query || null, {projection: parsedQuery.projection});
+                                    .find(parsedQuery.query || null, {
+                                        projection: parsedQuery.projection,
+                                    });
                                 if (parsedQuery.sort) {
                                     find.sort(parsedQuery.sort);
                                 }
@@ -71,7 +82,13 @@ describe('Client Queries', function () {
                                     find.limit(parsedQuery.limit);
                                 }
                                 const results = await find.toArray();
-                                console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ''}`);
+                                console.log(
+                                    `count:${results.length} | ${
+                                        results[0]
+                                            ? JSON.stringify(results[0])
+                                            : ''
+                                    }`
+                                );
                             }
                             done();
                         } catch (exp) {
@@ -88,10 +105,14 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _queryTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
-                it(`${test.name ? test.name + ':' : ''}${test.query}`, function (done) {
+                it(`${test.name ? test.name + ':' : ''}${
+                    test.query
+                }`, function (done) {
                     (async () => {
                         try {
-                            const parsedQuery = SQLParser.makeMongoAggregate(test.query);
+                            const parsedQuery = SQLParser.makeMongoAggregate(
+                                test.query
+                            );
 
                             let results = await mongoClient
                                 .db(_dbName)
@@ -99,7 +120,11 @@ describe('Client Queries', function () {
                                 .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
 
-                            console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ''}`);
+                            console.log(
+                                `count:${results.length} | ${
+                                    results[0] ? JSON.stringify(results[0]) : ''
+                                }`
+                            );
                             done();
                         } catch (exp) {
                             done(exp ? exp.message : null);
@@ -115,17 +140,25 @@ describe('Client Queries', function () {
         (async () => {
             const tests = _aggregateTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
-                it(`${test.name ? test.name + ':' : ''}${test.query}`, function (done) {
+                it(`${test.name ? test.name + ':' : ''}${
+                    test.query
+                }`, function (done) {
                     (async () => {
                         try {
-                            const parsedQuery = SQLParser.makeMongoAggregate(test.query);
+                            const parsedQuery = SQLParser.makeMongoAggregate(
+                                test.query
+                            );
                             let results = await mongoClient
                                 .db(_dbName)
                                 .collection(parsedQuery.collections[0])
                                 .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
 
-                            console.log(`count:${results.length} | ${results[0] ? JSON.stringify(results[0]) : ''}`);
+                            console.log(
+                                `count:${results.length} | ${
+                                    results[0] ? JSON.stringify(results[0]) : ''
+                                }`
+                            );
                             done();
                         } catch (exp) {
                             done(exp ? exp.message : null);
@@ -142,10 +175,14 @@ describe('Client Queries', function () {
             if (!supportsArraySort) {
                 return done();
             }
-            const queryText = 'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`';
+            const queryText =
+                'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`';
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                let results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
                 done();
@@ -154,10 +191,14 @@ describe('Client Queries', function () {
             }
         });
         it('should be able to do a left join', async () => {
-            const queryText = 'select * from orders as o left join `inventory` as i  on o.item=i.sku';
+            const queryText =
+                'select * from orders as o left join `inventory` as i  on o.item=i.sku';
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                let results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
                 return;
@@ -168,10 +209,14 @@ describe('Client Queries', function () {
         });
 
         it('should be able to do a multipart-binary expression', async () => {
-            const queryText = 'select `Replacement Cost`, (log10(3) * floor(`Replacement Cost`) + 1) as S from films limit 1';
+            const queryText =
+                'select `Replacement Cost`, (log10(3) * floor(`Replacement Cost`) + 1) as S from films limit 1';
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                let results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
             } catch (err) {
@@ -184,7 +229,10 @@ describe('Client Queries', function () {
             const queryText = `SELECT *, convert(id, 'string') as idConv FROM inventory`;
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                let results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
                 assert(results);
             } catch (err) {
@@ -207,7 +255,10 @@ describe('Client Queries', function () {
                     where o.id=1`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length > 0);
                     assert(results[0].orderId);
@@ -231,7 +282,10 @@ describe('Client Queries', function () {
                     on o.customerId=c.id`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length > 0);
                     assert(results[0].orderId);
@@ -250,7 +304,10 @@ describe('Client Queries', function () {
                 const queryText = `select unwind('Address') as \`$$ROOT\` from customers LIMIT 1`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length > 0);
                     assert(results[0].Address);
@@ -267,7 +324,10 @@ describe('Client Queries', function () {
                 const queryText = `select 'Address' as \`$$ROOT\` from customers LIMIT 1`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length > 0);
                     assert(results[0].Address);
@@ -284,7 +344,8 @@ describe('Client Queries', function () {
 
         describe('sub query', () => {
             it('should result in a query type when the where is not needed to be a pipeline', async () => {
-                const queryText = "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10";
+                const queryText =
+                    "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10";
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 assert(parsedQuery.type === 'query');
             });
@@ -299,7 +360,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 2);
                     assert(results[0].id === 1);
@@ -317,7 +381,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) order by id`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 3);
                     assert(results[0].id === 1);
@@ -340,7 +407,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (select id from orders))`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 3);
                     assert(results[0].id === 1);
@@ -358,7 +428,10 @@ describe('Client Queries', function () {
                 const queryText = `select c.item as Product from orders c where item in (select sku from inventory where id in (select id from orders))`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 3);
                     assert(results[0].Product === 'almonds');
@@ -372,7 +445,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) ORDER BY id DESC`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 3);
                     assert(results[0].item === 'almonds');
@@ -386,7 +462,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) ORDER BY id DESC limit 1`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 1);
                     assert(results[0].item === 'almonds');
@@ -400,7 +479,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where item in (select sku from inventory where id in (1,4)) and price=12`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 2);
                     assert(results[0].item === 'almonds');
@@ -414,7 +496,10 @@ describe('Client Queries', function () {
                 const queryText = `select * from orders where price=12 and item in (select sku from inventory where id in (1,4))`;
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 2);
                     assert(results[0].item === 'almonds');
@@ -427,7 +512,8 @@ describe('Client Queries', function () {
         });
         describe('count', () => {
             it('should be able to do a count * with a group by', async () => {
-                const queryText = 'select item, count(1) as countVal from orders group by `item`';
+                const queryText =
+                    'select item, count(1) as countVal from orders group by `item`';
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
                     const results = await mongoClient
@@ -452,7 +538,10 @@ describe('Client Queries', function () {
                 const queryText = `select count(1) as countVal from orders`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 1);
                     assert(results[0].countVal === 3);
@@ -466,7 +555,10 @@ describe('Client Queries', function () {
                 const queryText = `select count(1) as countVal from orders where item=almonds`;
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    let results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
                     results = await results.toArray();
                     assert(results.length === 1);
                     assert(results[0].countVal === 2);
@@ -485,7 +577,9 @@ describe('Client Queries', function () {
                     const results = await mongoClient
                         .db(_dbName)
                         .collection(parsedQuery.collection)
-                        .find(parsedQuery.query || null, {projection: parsedQuery.projection})
+                        .find(parsedQuery.query || null, {
+                            projection: parsedQuery.projection,
+                        })
                         .sort()
                         .toArray();
 
@@ -498,7 +592,8 @@ describe('Client Queries', function () {
                 }
             });
             it('should be able to do a basic unset in an aggregation', async () => {
-                const queryText = 'SELECT unset(_id),id,item FROM orders where item in (select sku from inventory where id=1)';
+                const queryText =
+                    'SELECT unset(_id),id,item FROM orders where item in (select sku from inventory where id=1)';
                 try {
                     const parsedQuery = SQLParser.parseSQL(queryText);
                     const results = await mongoClient

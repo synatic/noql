@@ -6,7 +6,14 @@
     "output": {
       "pipeline": [
         {"$project": {"o": "$$ROOT"}},
-        {"$lookup": {"from": "inventory", "as": "i", "localField": "o.item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "localField": "o.item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$i"}, 0]}}}
       ],
       "collections": ["orders", "inventory"]
@@ -19,7 +26,14 @@
     "output": {
       "pipeline": [
         {"$project": {"o": "$$ROOT"}},
-        {"$lookup": {"from": "inventory", "as": "i", "localField": "o.item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "localField": "o.item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$i"}, 0]}}}
       ],
       "collections": ["orders", "inventory"]
@@ -31,7 +45,14 @@
     "type": "aggregate",
     "output": {
       "pipeline": [
-        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "inventory",
+            "localField": "orders.item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
       ],
       "collections": ["orders", "inventory"]
@@ -43,7 +64,14 @@
     "type": "aggregate",
     "output": {
       "pipeline": [
-        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "inventory",
+            "localField": "orders.item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
       ],
 
@@ -56,7 +84,14 @@
     "type": "aggregate",
     "output": {
       "pipeline": [
-        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "orders.item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "inventory",
+            "localField": "orders.item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}}
       ],
       "collections": ["orders", "inventory"]
