@@ -467,21 +467,21 @@ describe('Client Queries', function () {
                 }
             });
         });
-        // describe('unset', () => {
-        //     it('should be able to do a basic unset', async () => {
-        //         const queryText = 'SELECT unset(_id) as _id,id,item FROM `orders`';
-        //         try {
-        //             const parsedQuery = SQLParser.parseSQL(queryText);
-        //             let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-        //             results = await results.toArray();
-        //             assert(results.length === 8);
-        //             return;
-        //         } catch (err) {
-        //             console.error(err);
-        //             throw err;
-        //         }
-        //     });
-        // });
+        describe('unset', () => {
+            it('should be able to do a basic unset', async () => {
+                const queryText = 'SELECT unset(_id),id,item FROM `orders`';
+                try {
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length === 8);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+        });
         describe('Union All', () => {
             it('should be able to do a basic union all', async () => {
                 const queryText = 'SELECT o.id, o.item as product FROM `orders` o UNION ALL select i.id, i.sku as product from inventory i';
