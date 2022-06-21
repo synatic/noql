@@ -1,12 +1,13 @@
 import type {Document, Sort} from 'mongodb';
-/**------------testing */
+import type {} from 'node-sql-parser';
 export interface TableColumnAst {
-    tableList: string[];
-    columnList: string[];
+    tableList?: string[];
+    columnList?: string[];
     ast: AST;
 }
 export interface AST {
-    type: string;
+    _next?: AST;
+    type: Types;
     db?: string;
     with?: {
         name: string;
@@ -17,16 +18,16 @@ export interface AST {
     distinct?: 'DISTINCT';
     columns?: Columns;
     from?: From[];
-    where?: Where;
+    where?: Expression;
     groupby?: {
         type: 'column_ref';
         table?: string;
         column: string;
     };
-    having?: any[];
+    having?: Expression;
     orderby?: {
         type: 'ASC' | 'DESC';
-        expr: any;
+        expr: Expression;
     }[];
     limit?: {
         seperator: string;
@@ -45,7 +46,7 @@ export interface AST {
         value: any;
         table: string | null;
     }[];
-    expr: any;
+    expr: Expression;
     union?: string;
 }
 export type Columns = '*' | Column[];
@@ -53,13 +54,24 @@ export interface Column {
     expr: Expression;
     as: string;
 }
-export type Types = 'column_ref' | 'aggr_func' | 'function' | 'binary_expr' | 'case' | 'select' | 'cast' | 'expr_list';
+export type Types =
+    | 'column_ref'
+    | 'aggr_func'
+    | 'function'
+    | 'binary_expr'
+    | 'case'
+    | 'select'
+    | 'cast'
+    | 'expr_list'
+    | 'else'
+    | 'when'
+    | 'unary_expr';
 export interface Expression {
     type: Types;
     table?: string;
     column?: string;
     name?: string;
-    args?: Args;
+    args?: Expression[];
     from?: any;
     value?: any;
     tableList?: string[];
@@ -70,14 +82,9 @@ export interface Expression {
     left?: Expression;
     right?: Expression;
     operator?: string;
-}
-export interface Args {
-    type: 'column_ref' | 'aggr_func' | 'star';
-    table?: string | null;
-    column?: string;
-    name?: string;
-    args?: Args;
-    value?: string;
+    cond?: Expression;
+    result?: Expression;
+    target?: any;
 }
 export interface From {
     db?: string;
