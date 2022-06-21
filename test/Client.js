@@ -193,104 +193,108 @@ describe('Client Queries', function () {
             }
         });
 
-        it('should be able to do n level joins', async () => {
-            const queryText = `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory|unwind\` as i
-                on o.item=i.sku
-                inner join \`customers|unwind\` as c
-                on o.customerId=c.id`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results.length > 0);
-                assert(results[0].orderId);
-                assert(results[0].inventoryId);
-                assert(results[0].customerId);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-        it("should be able to do n level joins as per the example that didn't work", async () => {
-            const queryText = `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory\` as i
-                on o.item=i.sku
-                inner join \`customers\` as c
-                on o.customerId=c.id
-                where o.id=1`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results.length > 0);
-                assert(results[0].orderId);
-                assert(results[0].inventoryId);
-                assert(results[0].customerId);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+        describe('n-level joins', () => {
+            it('should be able to do n level joins without an unwind', async () => {
+                const queryText = `select
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId
+                    from orders as o
+                    inner join \`inventory\` as i
+                    on o.item=i.sku
+                    inner join \`customers\` as c
+                    on o.customerId=c.id
+                    where o.id=1`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length > 0);
+                    assert(results[0].orderId);
+                    assert(results[0].inventoryId);
+                    assert(results[0].customerId);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do n level joins with unwinds', async () => {
+                const queryText = `select
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId
+                    from orders as o
+                    inner join \`inventory|unwind\` as i
+                    on o.item=i.sku
+                    inner join \`customers|unwind\` as c
+                    on o.customerId=c.id`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length > 0);
+                    assert(results[0].orderId);
+                    assert(results[0].inventoryId);
+                    assert(results[0].customerId);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
 
-        it('should be able to do a basic root unwind', async () => {
-            const queryText = `select unwind('Address') as \`$$ROOT\` from customers LIMIT 1`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results.length > 0);
-                assert(results[0].Address);
-                assert(results[0].City);
-                assert(results[0].Country);
-                assert(results[0].District);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+        describe('Root replacement', () => {
+            it('should be able to do a basic root unwind', async () => {
+                const queryText = `select unwind('Address') as \`$$ROOT\` from customers LIMIT 1`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length > 0);
+                    assert(results[0].Address);
+                    assert(results[0].City);
+                    assert(results[0].Country);
+                    assert(results[0].District);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a basic root replacement', async () => {
+                const queryText = `select 'Address' as \`$$ROOT\` from customers LIMIT 1`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
+                    assert(results.length > 0);
+                    assert(results[0].Address);
+                    assert(results[0].City);
+                    assert(results[0].Country);
+                    assert(results[0].District);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
-        it('should be able to do a basic root unwind', async () => {
-            const queryText = `select 'Address' as \`$$ROOT\` from customers LIMIT 1`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results.length > 0);
-                assert(results[0].Address);
-                assert(results[0].City);
-                assert(results[0].Country);
-                assert(results[0].District);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-        it('should result in a query type when the where is not needed to be a pipeline', async () => {
-            const queryText = "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10";
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            assert(parsedQuery.type === 'query');
-        });
-        it('should result in an aggregate type when the where is not a simple query', async () => {
-            const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            assert(parsedQuery.type === 'aggregate');
-        });
+
         describe('sub query', () => {
+            it('should result in a query type when the where is not needed to be a pipeline', async () => {
+                const queryText = "select * from `customers` where `Address.City` in ('Japan','Pakistan') limit 10";
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                assert(parsedQuery.type === 'query');
+            });
+            it('should result in an aggregate type when the where is not a simple query', async () => {
+                const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                assert(parsedQuery.type === 'aggregate');
+            });
             // join
             // group by
-            // const queryText = `select * from orders where item in (select sku from inventory where id=1) and sky='almonds'`;
             it('should be able to support subquery syntax', async () => {
                 const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
