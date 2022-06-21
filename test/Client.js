@@ -480,6 +480,25 @@ describe('Client Queries', function () {
                         .toArray();
 
                     assert(results.length === 3);
+                    assert(results[0]._id === undefined);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a basic unset in an aggregation', async () => {
+                const queryText = 'SELECT unset(_id),id,item FROM orders where item in (select sku from inventory where id=1)';
+                try {
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+
+                    assert(results.length === 2);
+                    assert(results[0]._id === undefined);
                     return;
                 } catch (err) {
                     console.error(err);
@@ -487,19 +506,44 @@ describe('Client Queries', function () {
                 }
             });
         });
-        describe('Union All', () => {
-            it('should be able to do a basic union all', async () => {
-                const queryText = 'SELECT o.id, o.item as product FROM `orders` o UNION ALL select i.id, i.sku as product from inventory i';
-                try {
-                    const parsedQuery = SQLParser.parseSQL(queryText);
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                    results = await results.toArray();
-                    assert(results.length === 8);
-                    return;
-                } catch (err) {
-                    console.error(err);
-                    throw err;
-                }
+        describe('Union', () => {
+            describe('Union all', () => {
+                it('should be able to do a basic union all', async () => {
+                    const queryText =
+                        'SELECT unset(_id), o.id, o.item as product FROM `orders` o UNION ALL select unset(_id),i.id, i.sku as product from inventory i';
+                    try {
+                        const parsedQuery = SQLParser.parseSQL(queryText);
+                        const results = await mongoClient
+                            .db(_dbName)
+                            .collection(parsedQuery.collections[0])
+                            .aggregate(parsedQuery.pipeline)
+                            .toArray();
+                        assert(results.length === 8);
+                        return;
+                    } catch (err) {
+                        console.error(err);
+                        throw err;
+                    }
+                });
+            });
+            describe('Union', () => {
+                it('should be able to do a basic union all', async () => {
+                    const queryText =
+                        'SELECT unset(_id), o.id, o.item as product FROM `orders` o UNION select unset(_id),i.id, i.sku as product from inventory i';
+                    try {
+                        const parsedQuery = SQLParser.parseSQL(queryText);
+                        const results = await mongoClient
+                            .db(_dbName)
+                            .collection(parsedQuery.collections[0])
+                            .aggregate(parsedQuery.pipeline)
+                            .toArray();
+                        assert(results.length === 7);
+                        return;
+                    } catch (err) {
+                        console.error(err);
+                        throw err;
+                    }
+                });
             });
         });
     });

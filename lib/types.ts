@@ -61,6 +61,7 @@ export interface PipelineFn {
     $unwind?: any;
     $lookup?: any;
     $count?: any;
+    $unionWith?: any;
 }
 export interface AstLike {
     type: string;
