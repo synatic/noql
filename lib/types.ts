@@ -105,3 +105,18 @@ export interface ColumnParseResult {
     count: {$count: string}[];
 }
 export interface Projection {}
+
+export interface MongoQueryFunction {
+    /** The name of the function as it will be used in sql, case insensitive, e.g. abs */
+    name: string;
+    /** Allow the function to be used in mongo query/find and not just aggregate pipelines, default:false */
+    allowQuery?: boolean;
+    /** Specifies if it is an aggregate only function or a general function (for queries maybe?) */
+    type?: 'function' | 'aggr_func';
+    /** Doesn't seem to be used */
+    parsedName?: string;
+    /** function that takes in the parameters from the queries and returns the pipeline operation */
+    parse: (parameters: any) => {
+        [key: string]: any;
+    };
+}
