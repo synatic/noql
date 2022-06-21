@@ -171,6 +171,7 @@ describe('SQL Parser', function () {
                         err = exp.message;
                     }
                     assert(!err, err);
+                    t.output.type = t.output.type || 'query';
                     assert.deepEqual(parsedQuery, t.output, 'Invalid parse');
                 }
             });
@@ -198,11 +199,13 @@ describe('SQL Parser', function () {
                 if (parsedQuery.sort) pipeline.push({$sort: parsedQuery.sort});
                 if (parsedQuery.limit !== 100) pipeline.push({$limit: parsedQuery.limit});
                 if (parsedQuery.skip) pipeline.push({$skip: parsedQuery.skip});
+
                 assert.deepEqual(
                     parsedAggregate,
                     {
                         collections: [parsedQuery.collection],
                         pipeline: pipeline,
+                        type: 'aggregate',
                     },
                     'Invalid parse'
                 );
@@ -229,6 +232,7 @@ describe('SQL Parser', function () {
                         err = exp.message;
                     }
                     assert(!err, err);
+                    t.output.type = t.output.type || 'aggregate';
                     assert.deepEqual(parsedQuery, t.output, 'Invalid parse');
                 }
             });

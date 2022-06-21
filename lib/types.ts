@@ -13,6 +13,8 @@ import {
     Star,
 } from 'node-sql-parser';
 import type {Document, Sort} from 'mongodb';
+
+export type ParsedQueryOrAggregate = ParsedMongoQuery | ParsedMongoAggregate;
 /** The result of the parser constructing a mongo query from SQL, if the result couldn't be a simple query and needed to be an aggregate function see ParsedMongoAggregate */
 export interface ParsedMongoQuery {
     /** The db collection to query */
@@ -29,6 +31,7 @@ export interface ParsedMongoQuery {
     sort?: Sort;
     /** Tells the calling system if countDocuments should be called instead of find */
     count?: boolean;
+    type: 'query';
 }
 
 /** The result of the parser constructing a mongo aggregate from SQL, if the result could be a simple query see ParsedMongoQuery */
@@ -37,6 +40,7 @@ export interface ParsedMongoAggregate {
     pipeline: PipelineFn[];
     /** The list of collections involved in the pipeline, the first one is the collection to execute the aggregation against */
     collections: string[];
+    type: 'aggregate';
 }
 export interface PipelineFn {
     $project?: {[key: string]: any};
@@ -61,6 +65,7 @@ export type ParserOptions = Option & {
     unwindJoins?: boolean;
 };
 export type ParserResult = TableColumnAst;
+
 export type Columns = '*' | Column[];
 export interface Column {
     expr: {
@@ -136,4 +141,8 @@ export interface MongoQueryFunction {
     };
     /** specifies if this function requires an as when it's in a query, default: true */
     requiresAs?: boolean;
+}
+
+export interface Test {
+    //
 }
