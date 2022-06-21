@@ -426,13 +426,18 @@ describe('Client Queries', function () {
                 const queryText = 'select item, count(1) as countVal from orders group by `item`';
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 try {
-                    let results = await mongoClient.db(_dbName).collection(parsedQuery.collections[0]).aggregate(parsedQuery.pipeline);
-                    results = await results.toArray();
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
                     assert(results.length === 2);
-                    assert(results[0].item === 'pecans');
-                    assert(results[0].countVal === 1);
-                    assert(results[1].item === 'almonds');
-                    assert(results[1].countVal === 2);
+                    const pecans = results.find((r) => r.item === 'pecans');
+                    assert(pecans);
+                    assert(pecans.countVal === 1);
+                    const almonds = results.find((r) => r.item === 'almonds');
+                    assert(almonds);
+                    assert(almonds.countVal === 2);
                     return;
                 } catch (err) {
                     console.error(err);
