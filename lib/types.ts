@@ -5,9 +5,20 @@ export interface TableColumnAst {
     columnList?: string[];
     ast: AST;
 }
-export interface AST {
+export type ExpressionTypes =
+    | 'column_ref'
+    | 'aggr_func'
+    | 'function'
+    | 'binary_expr'
+    | 'case'
+    | 'select'
+    | 'cast'
+    | 'expr_list'
+    | 'else'
+    | 'when'
+    | 'unary_expr';
+export interface AST extends Expression {
     _next?: AST;
-    type: Types;
     db?: string;
     with?: {
         name: string;
@@ -17,7 +28,6 @@ export interface AST {
     options?: any[];
     distinct?: 'DISTINCT';
     columns?: Columns;
-    from?: From[];
     where?: Expression;
     groupby?: {
         type: 'column_ref';
@@ -36,7 +46,6 @@ export interface AST {
             value: number;
         }[];
     };
-    table?: From[];
     values?: {
         type: 'expr_list';
         value: any[];
@@ -46,33 +55,15 @@ export interface AST {
         value: any;
         table: string | null;
     }[];
-    expr: Expression;
     union?: string;
 }
-export type Columns = '*' | Column[];
-export interface Column {
-    expr: Expression;
-    as: string;
-}
-export type Types =
-    | 'column_ref'
-    | 'aggr_func'
-    | 'function'
-    | 'binary_expr'
-    | 'case'
-    | 'select'
-    | 'cast'
-    | 'expr_list'
-    | 'else'
-    | 'when'
-    | 'unary_expr';
 export interface Expression {
-    type: Types;
+    type: ExpressionTypes;
     table?: string;
     column?: string;
     name?: string;
     args?: Expression[];
-    from?: any;
+    from?: TableDefinition[];
     value?: any;
     tableList?: string[];
     columnList?: string[];
@@ -86,7 +77,14 @@ export interface Expression {
     result?: Expression;
     target?: any;
 }
-export interface From {
+
+export type Columns = '*' | Column[];
+export interface Column {
+    expr: Expression;
+    as: string;
+}
+
+export interface TableDefinition {
     db?: string;
     table?: string;
     as?: string;
