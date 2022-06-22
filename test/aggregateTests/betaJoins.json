@@ -125,9 +125,22 @@
     "type": "aggregate",
     "output": {
       "pipeline": [
-        {"$lookup": {"from": "inventory", "as": "inventory", "localField": "item", "foreignField": "sku"}},
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "inventory",
+            "localField": "item",
+            "foreignField": "sku"
+          }
+        },
         {"$match": {"$expr": {"$gt": [{"$size": "$inventory"}, 0]}}},
-        {"$replaceRoot": {"newRoot": {"$mergeObjects": ["$$ROOT", {"inventory_docs": "$inventory"}]}}},
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": ["$$ROOT", {"inventory_docs": "$inventory"}]
+            }
+          }
+        },
         {"$unwind": "$inventory_docs"},
         {"$unset": "inventory"}
       ],

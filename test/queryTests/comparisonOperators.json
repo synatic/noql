@@ -547,8 +547,26 @@
       "collection": "customers",
       "limit": 100,
       "projection": {
-        "Ueda": {"$sum": {"$switch": {"branches": [{"case": {"$eq": ["$Address.City", "Ueda"]}, "then": 1}], "default": {"$literal": 0}}}},
-        "Tete": {"$sum": {"$switch": {"branches": [{"case": {"$eq": ["$Address.City", "Tete"]}, "then": 1}], "default": {"$literal": 0}}}}
+        "Ueda": {
+          "$sum": {
+            "$switch": {
+              "branches": [
+                {"case": {"$eq": ["$Address.City", "Ueda"]}, "then": 1}
+              ],
+              "default": {"$literal": 0}
+            }
+          }
+        },
+        "Tete": {
+          "$sum": {
+            "$switch": {
+              "branches": [
+                {"case": {"$eq": ["$Address.City", "Tete"]}, "then": 1}
+              ],
+              "default": {"$literal": 0}
+            }
+          }
+        }
       }
     }
   }

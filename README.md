@@ -106,7 +106,12 @@ const {MongoClient} = require('mongodb');
                     .toArray()
             );
         } else if (parsedSQL.type === 'aggregate') {
-            console.log(await db.collection(parsedSQL.collections[0]).aggregate(parsedSQL.pipeline).toArray());
+            console.log(
+                await db
+                    .collection(parsedSQL.collections[0])
+                    .aggregate(parsedSQL.pipeline)
+                    .toArray()
+            );
         }
     } catch (exp) {
         console.error(exp);

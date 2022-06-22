@@ -8,6 +8,7 @@
     "index.js"
   ],
   "scripts": {
+    "build": "webpack --mode=production",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^1.0.13",
     "async": "^3.2.0",
+    "clean-webpack-plugin": "^4.0.0",
     "clone-deep": "^4.0.1",
     "deep-equal": "^2.0.5",
     "eslint": "^8.16.0",
@@ -77,6 +79,10 @@
     "mongodb-language-model": "^2.3.0",
     "nyc": "^15.1.0",
     "prettier": "^2.3.1",
-    "underscore.string": "^3.3.5"
-  }
+    "underscore.string": "^3.3.5",
+    "webpack": "^5.73.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "sideEffects": false
 }

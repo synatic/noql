@@ -1,1 +1,23 @@
-[{"id": 1, "item": "almonds", "price": 12, "quantity": 2}, {"id": 2, "item": "pecans", "price": 20, "quantity": 1}, {"id": 3}]
+[
+  {
+    "id": 1,
+    "item": "almonds",
+    "price": 12,
+    "quantity": 2,
+    "customerId": 1
+  },
+  {
+    "id": 2,
+    "item": "pecans",
+    "price": 20,
+    "quantity": 1,
+    "customerId": 2
+  },
+  {
+    "id": 4,
+    "item": "almonds",
+    "price": 12,
+    "quantity": 4,
+    "customerId": 3
+  }
+]

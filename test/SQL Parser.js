@@ -12,7 +12,10 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
-const _aggregateTests = [].concat(require('./aggregateTests/aggregateTests.json'), require('./aggregateTests/joins.json'));
+const _aggregateTests = [].concat(
+    require('./aggregateTests/aggregateTests.json'),
+    require('./aggregateTests/joins.json')
+);
 
 describe('SQL Parser', function () {
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
@@ -32,7 +35,11 @@ describe('SQL Parser', function () {
                 // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST('select 1');
             } catch (exp) {
-                return assert.equal(exp.message, 'SQL statement requires at least 1 collection', 'Invalid error message');
+                return assert.equal(
+                    exp.message,
+                    'SQL statement requires at least 1 collection',
+                    'Invalid error message'
+                );
             }
             assert(false, 'No error');
         });
@@ -53,9 +60,14 @@ describe('SQL Parser', function () {
         it('should fail on an invalid statement 2', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const ast = SQLParser.parseSQLtoAST('select * from `collection` with unwind');
+                const ast = SQLParser.parseSQLtoAST(
+                    'select * from `collection` with unwind'
+                );
             } catch (exp) {
-                return assert.equal(exp.message, '1:32 - Expected [A-Za-z0-9_] but " " found.');
+                return assert.equal(
+                    exp.message,
+                    '1:32 - Expected [A-Za-z0-9_] but " " found.'
+                );
             }
             assert(false, 'No error');
         });
@@ -63,9 +75,14 @@ describe('SQL Parser', function () {
         it('should fail on no as with function', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const ast = SQLParser.parseSQLtoAST('select Name,sum(`Replacement Cost`,2)  from `films`');
+                const ast = SQLParser.parseSQLtoAST(
+                    'select Name,sum(`Replacement Cost`,2)  from `films`'
+                );
             } catch (exp) {
-                return assert.equal(exp.message, 'Requires as for function:sum');
+                return assert.equal(
+                    exp.message,
+                    'Requires as for function:sum'
+                );
             }
             assert(false, 'No error');
         });
@@ -73,7 +90,9 @@ describe('SQL Parser', function () {
         it('should fail on no as with binary expr', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const ast = SQLParser.parseSQLtoAST('select Name,a>b from `films`');
+                const ast = SQLParser.parseSQLtoAST(
+                    'select Name,a>b from `films`'
+                );
             } catch (exp) {
                 return assert.equal(exp.message, 'Requires as for binary_expr');
             }
@@ -87,59 +106,113 @@ describe('SQL Parser', function () {
         });
 
         it('should test a simple sql with where', function () {
-            assert(canQuery('select * from `collection` where a=1'), 'Invalid can query');
+            assert(
+                canQuery('select * from `collection` where a=1'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with names', function () {
-            assert(canQuery('select Title,Description from `collection`'), 'Invalid can query');
+            assert(
+                canQuery('select Title,Description from `collection`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with unwind', function () {
-            assert(!canQuery('select unwind(a) as b from `collection` where a=1'), 'Invalid can query');
+            assert(
+                !canQuery('select unwind(a) as b from `collection` where a=1'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with a group by', function () {
-            assert(!canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
+            assert(
+                !canQuery(
+                    'select b,sum(a) as c from `collection` where a=1 group by b'
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with a join', function () {
-            assert(!canQuery('select b,sum(a) as c from `collection` where a=1 group by b'), 'Invalid can query');
+            assert(
+                !canQuery(
+                    'select b,sum(a) as c from `collection` where a=1 group by b'
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with single abs', function () {
-            assert(canQuery('select abs(`Replacement Cost`) as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery('select abs(`Replacement Cost`) as s from `films`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with single sum', function () {
-            assert(canQuery('select sum(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery('select sum(`Replacement Cost`,2) as s from `films`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with single for aggregate', function () {
-            assert(!canQuery('select sum(`Replacement Cost`) as s from `films` group by s'), 'Invalid can query');
+            assert(
+                !canQuery(
+                    'select sum(`Replacement Cost`) as s from `films` group by s'
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with single sum', function () {
-            assert(canQuery('select avg(`Replacement Cost`,2) as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery('select avg(`Replacement Cost`,2) as s from `films`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with single for avg', function () {
-            assert(!canQuery('select id,avg(`Replacement Cost`) as s from `films` group by id'), 'Invalid can query');
+            assert(
+                !canQuery(
+                    'select id,avg(`Replacement Cost`) as s from `films` group by id'
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with an expr sum', function () {
-            assert(canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery('select `Replacement Cost` + 2 as s from `films`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with an expr sum', function () {
-            assert(canQuery('select `Replacement Cost` + 2 as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery('select `Replacement Cost` + 2 as s from `films`'),
+                'Invalid can query'
+            );
         });
 
         it('should test a simple sql with a convert', function () {
-            assert(canQuery('select convert(`Replacement Cost`) as s from `films`'), 'Invalid can query');
+            assert(
+                canQuery(
+                    'select convert(`Replacement Cost`) as s from `films`'
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should nt allow *,function ', function () {
-            assert(!canQuery("select *,convert(`Replacement Cost`,'int') as s from `films`"), 'Invalid can query');
+            assert(
+                !canQuery(
+                    "select *,convert(`Replacement Cost`,'int') as s from `films`"
+                ),
+                'Invalid can query'
+            );
         });
 
         it('should not allow with where on sub query ', function () {
@@ -171,6 +244,7 @@ describe('SQL Parser', function () {
                         err = exp.message;
                     }
                     assert(!err, err);
+                    t.output.type = t.output.type || 'query';
                     assert.deepEqual(parsedQuery, t.output, 'Invalid parse');
                 }
             });
@@ -192,17 +266,22 @@ describe('SQL Parser', function () {
                 assert(!err, err);
                 const pipeline = [];
 
-                if (parsedQuery.query) pipeline.push({$match: parsedQuery.query});
-                if (parsedQuery.projection) pipeline.push({$project: parsedQuery.projection});
+                if (parsedQuery.query)
+                    pipeline.push({$match: parsedQuery.query});
+                if (parsedQuery.projection)
+                    pipeline.push({$project: parsedQuery.projection});
 
                 if (parsedQuery.sort) pipeline.push({$sort: parsedQuery.sort});
-                if (parsedQuery.limit !== 100) pipeline.push({$limit: parsedQuery.limit});
+                if (parsedQuery.limit !== 100)
+                    pipeline.push({$limit: parsedQuery.limit});
                 if (parsedQuery.skip) pipeline.push({$skip: parsedQuery.skip});
+
                 assert.deepEqual(
                     parsedAggregate,
                     {
                         collections: [parsedQuery.collection],
                         pipeline: pipeline,
+                        type: 'aggregate',
                     },
                     'Invalid parse'
                 );
@@ -229,6 +308,7 @@ describe('SQL Parser', function () {
                         err = exp.message;
                     }
                     assert(!err, err);
+                    t.output.type = t.output.type || 'aggregate';
                     assert.deepEqual(parsedQuery, t.output, 'Invalid parse');
                 }
             });
@@ -237,7 +317,9 @@ describe('SQL Parser', function () {
 
     it('should parse plain query 2', function () {
         assert.deepEqual(
-            SQLParser.parseSQL('select `a.b` as Id ,Name from `global-test` where `a.b`>1'),
+            SQLParser.parseSQL(
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1'
+            ),
             {
                 collection: 'global-test',
                 limit: 100,
@@ -254,7 +336,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepEqual(
-            SQLParser.parseSQL('select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10'),
+            SQLParser.parseSQL(
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10'
+            ),
             {
                 collection: 'global-test',
                 limit: 10,
@@ -271,7 +355,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepEqual(
-            SQLParser.parseSQL('select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'),
+            SQLParser.parseSQL(
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'
+            ),
             {
                 collection: 'global-test',
                 limit: 10,
@@ -289,7 +375,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepEqual(
-            SQLParser.parseSQL('select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'),
+            SQLParser.parseSQL(
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'
+            ),
             {
                 collection: 'global-test',
                 limit: 10,
@@ -344,7 +432,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT user_id, status FROM people WHERE status = "A"`),
+            SQLParser.parseSQL(
+                `SELECT user_id, status FROM people WHERE status = "A"`
+            ),
             {
                 limit: 100,
                 collection: 'people',
@@ -367,7 +457,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" AND age = 50`),
+            SQLParser.parseSQL(
+                `SELECT * FROM people WHERE status = "A" AND age = 50`
+            ),
             {
                 limit: 100,
                 collection: 'people',
@@ -378,7 +470,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A" OR age = 50`),
+            SQLParser.parseSQL(
+                `SELECT * FROM people WHERE status = "A" OR age = 50`
+            ),
             {
                 limit: 100,
                 collection: 'people',
@@ -413,7 +507,9 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE age > 25 and age <30`),
+            SQLParser.parseSQL(
+                `SELECT * FROM people WHERE age > 25 and age <30`
+            ),
             {
                 limit: 100,
                 collection: 'people',
