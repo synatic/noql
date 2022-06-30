@@ -190,7 +190,7 @@ describe('Client Queries', function () {
                 return done(err);
             }
         });
-        describe('left', () => {
+        describe('left join', () => {
             it('should be able to do a left join', async () => {
                 const queryText =
                     'select * from orders as o left join `inventory` as i  on o.item=i.sku';
@@ -651,7 +651,8 @@ describe('Client Queries', function () {
         });
         describe('unset', () => {
             it('should be able to do a basic unset in a query', async () => {
-                const queryText = 'SELECT unset(_id),id,item FROM `orders` where id in (1,2,4)';
+                const queryText =
+                    'SELECT unset(_id),id,item FROM `orders` where id in (1,2,4)';
                 try {
                     const parsedQuery = SQLParser.parseSQL(queryText);
                     const results = await mongoClient
