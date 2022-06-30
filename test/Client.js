@@ -267,6 +267,25 @@ describe('Client Queries', function () {
                     throw err;
                 }
             });
+
+            it('should be able to do a left join on special characters', async () => {
+                const queryText =
+                    'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
 
         it('should be able to do a multipart-binary expression', async () => {
