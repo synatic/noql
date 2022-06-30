@@ -587,7 +587,10 @@
           "$unset": "Rentals"
         },
         {
-          "$unwind": "$Rental"
+          "$unwind": {
+              "path": "$Rental",
+              "preserveNullAndEmptyArrays": true
+          }
         }
       ],
       "collections": ["customers"]
@@ -607,7 +610,10 @@
           }
         },
         {
-          "$unwind": "$Rentals"
+          "$unwind": {
+            "path": "$Rentals",
+            "preserveNullAndEmptyArrays": true
+          }
         }
       ],
       "collections": ["customers"]
@@ -633,7 +639,10 @@
           }
         },
         {
-          "$unwind": "$Rental"
+          "$unwind": {
+            "path": "$Rental",
+            "preserveNullAndEmptyArrays": true
+          }
         }
       ],
       "collections": ["customers"]

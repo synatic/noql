@@ -575,7 +575,10 @@
           }
         },
         {
-          "$unwind": "$cn"
+          "$unwind": {
+            "path": "$cn",
+            "preserveNullAndEmptyArrays": true
+          }
         },
         {
           "$match": {
@@ -631,7 +634,10 @@
           }
         },
         {
-          "$unwind": "$cn"
+          "$unwind": {
+            "path": "$cn",
+            "preserveNullAndEmptyArrays": true
+          }
         },
         {
           "$match": {
