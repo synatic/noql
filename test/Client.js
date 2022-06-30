@@ -190,22 +190,83 @@ describe('Client Queries', function () {
                 return done(err);
             }
         });
-        it('should be able to do a left join', async () => {
-            const queryText =
-                'select * from orders as o left join `inventory` as i  on o.item=i.sku';
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                let results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline);
-                results = await results.toArray();
-                assert(results);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+        describe('left', () => {
+            it('should be able to do a left join', async () => {
+                const queryText =
+                    'select * from orders as o left join `inventory` as i  on o.item=i.sku';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a left join with an unwind', async () => {
+                const queryText =
+                    'select * from orders as o left join `inventory|unwind` as i on o.item=i.sku';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a left join with an unwind in the query', async () => {
+                const queryText =
+                    'select o.id as OID,unwind(i) as inv from orders as o left join `inventory` i on o.item=i.sku';
+                /**
+                 * , unwind(`inventory`) as inventorySku
+                 */
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    console.log(JSON.stringify(results, null, 4));
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+
+            it('should be able to do a left join with an unwind and a case statement', async () => {
+                const queryText =
+                    "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne from orders as o left join `inventory|unwind` as i  on o.item=i.sku";
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
 
         it('should be able to do a multipart-binary expression', async () => {

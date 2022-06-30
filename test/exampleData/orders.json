@@ -19,5 +19,12 @@
     "price": 12,
     "quantity": 4,
     "customerId": 3
+  },
+  {
+    "id": 5,
+    "item": "potatoes",
+    "price": 7,
+    "quantity": 6,
+    "customerId": 5
   }
 ]
