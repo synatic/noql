@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
