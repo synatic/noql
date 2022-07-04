@@ -692,6 +692,7 @@ describe('Client Queries', function () {
                 }
             });
         });
+
         describe('Union', () => {
             describe('Union all', () => {
                 it('should be able to do a basic union all', async () => {
@@ -729,6 +730,154 @@ describe('Client Queries', function () {
                         console.error(err);
                         throw err;
                     }
+                });
+            });
+        });
+
+        describe('table alias', () => {
+            it.skip("should allow you to alias a table without an 'as' statement", async () => {
+                const queryText =
+                    'SELECT ord.specialChars FROM `orders` ord limit 4';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collection)
+                    .find(parsedQuery.query || null, {
+                        projection: parsedQuery.projection,
+                    })
+                    .limit(parsedQuery.limit)
+                    .toArray();
+                assert(results.length === 1);
+                assert(results[0].specialChars);
+            });
+        });
+        describe('join order of queries', () => {
+            it('should prase the query that was not working on prod', async () => {
+                const queryText = `SELECT
+                unset(_id)
+                ,pol.CustId
+                ,cust.CustId as c_CustId
+                ,pol.ExecCode
+                ,emp.EmpCode as emp_EmpCode
+                from \`ams360-powerbi-basicpolinfo\` pol
+                INNER join \`ams360-powerbi-customer|unwind\` cust on pol.CustId = cust.CustId
+                LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
+                limit 5`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                assert(parsedQuery);
+                const lookup1 = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup1, {
+                    from: 'ams360-powerbi-customer',
+                    foreignField: 'CustId',
+                    localField: 'pol.CustId',
+                    as: 'cust',
+                });
+                const lookup2 = parsedQuery.pipeline[4].$lookup;
+                assert.deepEqual(lookup2, {
+                    from: 'ams360-powerbi-employee',
+                    foreignField: 'EmpCode',
+                    localField: 'pol.ExecCode',
+                    as: 'emp',
+                });
+            });
+            describe('Existing example', () => {
+                it('should have the right lookup when no aliases specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only left alias is specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only right alias is specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when both aliases are specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+            });
+            describe('Existing example - reversed', () => {
+                it('should have the right lookup when no aliases specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on item=sku';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'item',
+                        localField: 'o.sku',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only left alias is specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only right alias is specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when both aliases are specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
                 });
             });
         });

@@ -1,7 +1,7 @@
 [
   {
     "name": "Join:Simple",
-    "query": "select * from orders as o inner join `inventory` as i  on o.item=i.sku",
+    "query": "select * from orders as o inner join `inventory` as i on o.item=i.sku",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -21,7 +21,7 @@
   },
   {
     "name": "Join:Simple",
-    "query": "select * from orders as o inner join `inventory` as i  on sku=item",
+    "query": "select * from orders as o inner join `inventory` as i on sku=item",
     "type": "aggregate",
     "output": {
       "pipeline": [

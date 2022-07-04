@@ -4,28 +4,28 @@
     "sku": "almonds",
     "description": "product 1",
     "instock": 120,
-    "specialChars":"^^^"
+    "specialChars": "^^^"
   },
   {
     "id": 2,
     "sku": "bread",
     "description": "product 2",
     "instock": 80,
-    "specialChars":"!!$"
+    "specialChars": "!!$"
   },
   {
     "id": 3,
     "sku": "cashews",
     "description": "product 3",
     "instock": 60,
-    "specialChars":"!!\""
+    "specialChars": "!!\""
   },
   {
     "id": 4,
     "sku": "pecans",
     "description": "product 4",
     "instock": 70,
-    "specialChars":"!!*"
+    "specialChars": "!!*"
   },
   {
     "id": 5,

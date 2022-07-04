@@ -5,7 +5,7 @@
     "price": 12,
     "quantity": 2,
     "customerId": 1,
-    "specialChars":"^^^"
+    "specialChars": "^^^"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "price": 20,
     "quantity": 1,
     "customerId": 2,
-    "specialChars":"!!$"
+    "specialChars": "!!$"
   },
   {
     "id": 4,
@@ -21,7 +21,7 @@
     "price": 12,
     "quantity": 4,
     "customerId": 3,
-    "specialChars":"!!\""
+    "specialChars": "!!\""
   },
   {
     "id": 5,
@@ -29,6 +29,6 @@
     "price": 7,
     "quantity": 6,
     "customerId": 5,
-    "specialChars":"!!*"
+    "specialChars": "!!*"
   }
 ]
