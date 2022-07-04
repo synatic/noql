@@ -588,8 +588,8 @@
         },
         {
           "$unwind": {
-              "path": "$Rental",
-              "preserveNullAndEmptyArrays": true
+            "path": "$Rental",
+            "preserveNullAndEmptyArrays": true
           }
         }
       ],
