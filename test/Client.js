@@ -919,7 +919,10 @@ describe('Client Queries', function () {
                         },
                     },
                 ];
-                assert(parsedQuery.pipeline[2].$project.OriginalExecutive.$switch.branches[0].case.$eq[0]=== '$o.item');
+                assert(
+                    parsedQuery.pipeline[2].$project.OriginalExecutive.$switch
+                        .branches[0].case.$eq[0] === '$o.item'
+                );
                 const results = await mongoClient
                     .db(_dbName)
                     .collection(parsedQuery.collections[0])
