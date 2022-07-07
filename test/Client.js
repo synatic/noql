@@ -881,5 +881,94 @@ describe('Client Queries', function () {
                 });
             });
         });
+        describe('Case statement with functions', () => {
+            it.skip('Should work when the case statement does not have backticks', async () => {
+                const queryText = `
+                SELECT
+                    o.item,
+                    o.notes,
+                    o.specialChars,
+                    (case
+                        WHEN o.item = "pecans"
+                            THEN 'Y'
+                        ELSE 'N'
+                    END)
+                    as OriginalExecutive
+                FROM orders o
+                where id=2`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const pipeline = [
+                    {$match: {id: {$eq: 2}}},
+                    {$project: {o: '$$ROOT'}},
+                    {
+                        $project: {
+                            item: '$o.item',
+                            notes: '$o.notes',
+                            specialChars: '$o.specialChars',
+                            OriginalExecutive: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: {$eq: ['$o.item', 'pecans']},
+                                            then: 'Y',
+                                        },
+                                    ],
+                                    default: {$literal: 'N'},
+                                },
+                            },
+                        },
+                    },
+                ];
+                assert(
+                    parsedQuery.pipeline[2].$project.OriginalExecutive.$switch
+                        .branches[0].case.$eq[0] === '$o.item'
+                );
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results[0].OriginalExecutive === 'Y');
+            });
+        });
+        describe('select in select', () => {
+            it('Should work without an order by on a local field', async () => {
+                const queryText = `
+                SELECT Address,
+                    SELECT \`Film Title\` from Inventory where inventoryId=1 as latestFilm
+                FROM stores
+                where _id=1`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                console.log(results);
+            });
+            it('Should work without an order by on another table', async () => {
+                const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on cn.id=c.id`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+            });
+            it('Should work with an order by on another table', async () => {
+                const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) cn on cn.id=c.id`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results[0].cn[0].id === 5);
+            });
+        });
     });
 });
