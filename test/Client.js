@@ -881,5 +881,61 @@ describe('Client Queries', function () {
                 });
             });
         });
+        describe('Case statement with functions', () => {
+            it('Should work with the example from Jonathan', async () => {
+                const queryText = `
+                SELECT
+                    o.item,
+                    o.notes,
+                    o.specialChars,
+                    (case
+                        WHEN o.item = "pecans"
+                            THEN 'bob'
+                        ELSE null
+                    END)
+                    as OriginalExecutive
+                FROM orders o
+                where id=2`;
+                //CONCAT(IFNULL(o.notes,""),', ',IFNULL(o.specialChars,""))
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                console.log(results);
+            });
+        });
+        describe('select in select',()=>{
+            it('Should work without an order by', async () => {
+                const queryText = `
+                SELECT Address,
+                    SELECT \`Film Title\` from Inventory where inventoryId=1 as latestFilm
+                FROM stores
+                where _id=1`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                console.log(results);
+            });
+            it('Should work with an order by', async () => {
+                const queryText =
+                 //'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) cn on cn.id=c.id';
+                `SELECT c.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on cn.id=c.id`;
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                console.log(results);
+            });
+        })
     });
 });
