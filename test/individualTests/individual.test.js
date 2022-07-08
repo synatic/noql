@@ -860,56 +860,57 @@ describe('Individual tests', function () {
             left join (select \`PolId\`,max(\`ChangedDate\`) as ChangedDate from \`ams360-powerbi-policytranpremium\` group by \`PolId\`) prem
                 on pol.PolId = prem.PolId`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            const manualPipeline = [
-                {$project: {pol: '$$ROOT'}},
-                {
-                    $lookup: {
-                        from: 'ams360-powerbi-policytranpremium',
-                        as: 'prem',
-                        let: {prem_PolId: '$prem.PolId'},
-                        pipeline: [
-                            {
-                                $group: {
-                                    _id: {PolId: '$PolId'},
-                                    ChangedDate: {$max: '$ChangedDate'},
-                                },
-                            },
-                            {
-                                $project: {
-                                    PolId: '$_id.PolId',
-                                    _id: 0,
-                                    ChangedDate: '$ChangedDate',
-                                },
-                            },
-                            {
-                                $match: {
-                                    $expr: {
-                                        // PROBLEM HERE
-                                        $eq: ['$pol_PolId', '$$prem_PolId'],
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                {$group: {_id: {PolId: '$pol.PolId', prem: '$prem'}}},
-                {
-                    $project: {
-                        PolId: '$_id.PolId',
-                        prem: '$_id.prem',
-                        _id: 0,
-                    },
-                },
-            ];
+
             const results = await mongoClient
                 .db(_dbName)
                 .collection(parsedQuery.collections[0])
-                .aggregate(manualPipeline)
-                // .aggregate(parsedQuery.pipeline)
+                // .aggregate(manualPipeline)
+                .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results);
             // todo
             // assert(results[0].cn[0].id === 5);
+            // const manualPipeline = [
+            //     {$project: {pol: '$$ROOT'}},
+            //     {
+            //         $lookup: {
+            //             from: 'ams360-powerbi-policytranpremium',
+            //             as: 'prem',
+            //             let: {prem_PolId: '$prem.PolId'},
+            //             pipeline: [
+            //                 {
+            //                     $group: {
+            //                         _id: {PolId: '$PolId'},
+            //                         ChangedDate: {$max: '$ChangedDate'},
+            //                     },
+            //                 },
+            //                 {
+            //                     $project: {
+            //                         PolId: '$_id.PolId',
+            //                         _id: 0,
+            //                         ChangedDate: '$ChangedDate',
+            //                     },
+            //                 },
+            //                 {
+            //                     $match: {
+            //                         $expr: {
+            //                             // PROBLEM HERE
+            //                             $eq: ['$pol_PolId', '$$prem_PolId'],
+            //                         },
+            //                     },
+            //                 },
+            //             ],
+            //         },
+            //     },
+            //     {$group: {_id: {PolId: '$pol.PolId', prem: '$prem'}}},
+            //     {
+            //         $project: {
+            //             PolId: '$_id.PolId',
+            //             prem: '$_id.prem',
+            //             _id: 0,
+            //         },
+            //     },
+            // ];
         });
     });
 });
