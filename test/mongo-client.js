@@ -6,6 +6,8 @@ const _customerNotes = require('./exampleData/customer-notes.json');
 const _customerNotes2 = require('./exampleData/customer-notes2.json');
 const _orders = require('./exampleData/orders.json');
 const _inventory = require('./exampleData/inventory.json');
+const _policies = require('./exampleData/policies.json');
+const _policyPremium = require('./exampleData/policy-premiums.json');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -62,6 +64,18 @@ async function addTestData() {
 
     await db.collection('inventory').bulkWrite(
         _inventory.map((d) => {
+            return {insertOne: {document: d}};
+        })
+    );
+
+    await db.collection('ams360-powerbi-basicpolinfo').bulkWrite(
+        _policies.map((d) => {
+            return {insertOne: {document: d}};
+        })
+    );
+
+    await db.collection('ams360-powerbi-policytranpremium').bulkWrite(
+        _policyPremium.map((d) => {
             return {insertOne: {document: d}};
         })
     );
