@@ -137,6 +137,7 @@ export interface PipelineFn {
     $lookup?: any;
     $count?: any;
     $unionWith?: any;
+    $set?: any;
 }
 
 export type ParserInput = TableColumnAst | string;
