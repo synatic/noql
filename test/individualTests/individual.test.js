@@ -812,7 +812,9 @@ describe('Individual tests', function () {
             assert(results);
         });
         it('Should work with an order by on another table', async () => {
-            const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) cn on cn.id=c.id`;
+            const queryText = `SELECT c.*,cn.*
+                FROM customers c
+                inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) cn on cn.id=c.id`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(_dbName)
@@ -836,29 +838,12 @@ describe('Individual tests', function () {
         });
 
         it('Should do the full select query correctly', async () => {
-            /**
-             * SELECT distinct
-                pol.PolId
-                --,prem.PolId as PremPol
-                --,prem.HowBilled as BillMethod
-                --,prem.EstRevenue as Revenue
-                --,prem.ChangedDate as PremDate
-                ,prem.*
-                FROM `ams360-powerbi-basicpolinfo` pol
-                left join (select `PolId`,max(`ChangedDate`) as ChangedDate--,`HowBilled`,`EstRevenue`
-                            from `ams360-powerbi-policytranpremium`
-                            group by `PolId`
-                            ) prem                                                          on pol.PolId = prem.PolId
-                where pol.RenewalRptFlag in ("C","A")
-                and pol.PolId = "691E2795-50C4-4C37-A331-EDCB38BD693B"
-             */
             const queryText = `
-            SELECT distinct
-                pol.PolId
+            SELECT pol.*
                 ,prem.*
             FROM \`ams360-powerbi-basicpolinfo\` pol
             left join (select \`PolId\`,max(\`ChangedDate\`) as ChangedDate from \`ams360-powerbi-policytranpremium\` group by \`PolId\`) prem
-                on pol.PolId = prem.PolId`;
+                on prem.PolId = pol.PolId`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
 
             const results = await mongoClient
@@ -868,49 +853,44 @@ describe('Individual tests', function () {
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results);
-            // todo
-            // assert(results[0].cn[0].id === 5);
-            // const manualPipeline = [
-            //     {$project: {pol: '$$ROOT'}},
-            //     {
-            //         $lookup: {
-            //             from: 'ams360-powerbi-policytranpremium',
-            //             as: 'prem',
-            //             let: {prem_PolId: '$prem.PolId'},
-            //             pipeline: [
-            //                 {
-            //                     $group: {
-            //                         _id: {PolId: '$PolId'},
-            //                         ChangedDate: {$max: '$ChangedDate'},
-            //                     },
-            //                 },
-            //                 {
-            //                     $project: {
-            //                         PolId: '$_id.PolId',
-            //                         _id: 0,
-            //                         ChangedDate: '$ChangedDate',
-            //                     },
-            //                 },
-            //                 {
-            //                     $match: {
-            //                         $expr: {
-            //                             // PROBLEM HERE
-            //                             $eq: ['$pol_PolId', '$$prem_PolId'],
-            //                         },
-            //                     },
-            //                 },
-            //             ],
-            //         },
-            //     },
-            //     {$group: {_id: {PolId: '$pol.PolId', prem: '$prem'}}},
-            //     {
-            //         $project: {
-            //             PolId: '$_id.PolId',
-            //             prem: '$_id.prem',
-            //             _id: 0,
-            //         },
-            //     },
-            // ];
+            assert(results[0].prem[0].ChangedDate);
+        });
+        it('Should not matter which order you use for the on clause', async () => {
+            const queryText1 = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on cn.id=c.id`;
+            const parsedQuery1 = SQLParser.makeMongoAggregate(queryText1);
+            const results1 = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery1.collections[0])
+                .aggregate(parsedQuery1.pipeline)
+                .toArray();
+            const queryText2 = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on c.id=cn.id`;
+            const parsedQuery2 = SQLParser.makeMongoAggregate(queryText2);
+            const results2 = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery2.collections[0])
+                .aggregate(parsedQuery2.pipeline)
+                .toArray();
+            assert.deepEqual(results1, results2);
+        });
+        it('Should work with reverse order of the on', async () => {
+            const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on c.id=cn.id`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+        });
+        it('scratchpad', async () => {
+            const queryText = `select c.*,cn.* from customers c inner join \`customer-notes\` cn on cn.id=c.id and (cn.id>2 or cn.id<5)`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
         });
     });
 });

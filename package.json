@@ -13,7 +13,7 @@
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",
     "prettier": "prettier . --write",
-    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test": "mocha --reporter spec --check-leaks test/",
     "test-ci": "nyc --reporter text-summary mocha -- --reporter spec --check-leaks test/",
     "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/"
   },
