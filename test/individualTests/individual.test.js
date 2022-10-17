@@ -883,7 +883,17 @@ describe('Individual tests', function () {
             assert(results.length);
         });
         it('scratchpad', async () => {
-            const queryText = `select c.*,cn.* from customers c inner join \`customer-notes\` cn on cn.id=c.id and (cn.id>2 or cn.id<5)`;
+            const queryText = `
+                select "___Ordered.id",
+                    "___Ordered.item",
+                    "___Ordered.price",
+                    "___Ordered.quantity",
+                    "___Ordered.customerId",
+                    "___Ordered.specialChars",
+                    "___Ordered.notes"
+                from "orders" "___Ordered"`;
+            // order by "___Ordered.id"
+            // limit 4096`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(_dbName)
