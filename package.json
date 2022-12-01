@@ -55,7 +55,7 @@
     "bson-objectid": "2.0.3",
     "check-types": "11.1.2",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "4.0.2"
+    "node-sql-parser": "4.6.0"
   },
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^1.0.13",
