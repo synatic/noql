@@ -882,16 +882,25 @@ describe('Individual tests', function () {
                 .toArray();
             assert(results.length);
         });
-        it('scratchpad', async () => {
+    });
+    describe('literals', () => {
+        it('Should use the literal value if it is not a table alias', async () => {
+            const queryText = `select "Name" as Id, Description from "films"`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+            assert(results[0].Id === 'Name');
+        });
+
+        it('Should use the alias for the table if one is provided', async () => {
             const queryText = `
-                select "___Ordered.id",
-                    "___Ordered.item",
-                    "___Ordered.price",
-                    "___Ordered.quantity",
-                    "___Ordered.customerId",
-                    "___Ordered.specialChars",
-                    "___Ordered.notes"
-                from "orders" "___Ordered"`;
+            select "___Table.id" as "TableId",
+                "___Table.item" as "TableItem"
+            from "orders" "___Table"`;
             // order by "___Ordered.id"
             // limit 4096`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
@@ -901,6 +910,7 @@ describe('Individual tests', function () {
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results.length);
+            assert(results[0].TableId === 1);
         });
     });
 });
