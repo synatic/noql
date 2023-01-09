@@ -24,9 +24,9 @@ describe('node-sql-parser upgrade tests', function () {
         disconnect().then(done).catch(done);
     });
 
-    it('should work after upgrading', async (done) => {
+    it('should work after upgrading', async () => {
         const queryText =
-            'select id,Title,Rating,(select * from Rentals where staffId<10) as rentalsArr from `customers`';
+            "select SUM_ARRAY((select SUM_ARRAY(`Payments`,'Amount') as total from `Rentals`),'total') as t from customers";
         try {
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
@@ -35,9 +35,9 @@ describe('node-sql-parser upgrade tests', function () {
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results);
-            done();
         } catch (err) {
-            return done(err);
+            console.error(err);
+            throw err;
         }
     });
 });
