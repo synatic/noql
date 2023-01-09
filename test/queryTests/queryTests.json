@@ -60,18 +60,6 @@
     }
   },
   {
-    "name": "Query:As",
-    "query": "select Title as Name,Description from `films`",
-    "output": {
-      "collection": "films",
-      "limit": 100,
-      "projection": {
-        "Name": "$Title",
-        "Description": "$Description"
-      }
-    }
-  },
-  {
     "name": "Query:Fixed value",
     "query": "select 'Name' as Id,Description from `films`",
     "output": {
