@@ -15,7 +15,8 @@
     "prettier": "prettier . --write",
     "test": "mocha --reporter spec --check-leaks test/",
     "test-ci": "nyc --reporter text-summary mocha -- --reporter spec --check-leaks test/",
-    "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/"
+    "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/",
+    "update": "npm-check -u"
   },
   "repository": {
     "type": "git",
@@ -78,6 +79,7 @@
     "moment": "^2.29.1",
     "mongodb": "^4.6.0",
     "mongodb-language-model": "^2.3.0",
+    "npm-check": "^6.0.1",
     "nyc": "^15.1.0",
     "prettier": "^2.3.1",
     "underscore.string": "^3.3.5",
