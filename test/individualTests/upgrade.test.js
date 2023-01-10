@@ -40,4 +40,80 @@ describe('node-sql-parser upgrade tests', function () {
             throw err;
         }
     });
+    describe('Not Like', () => {
+        describe('query part', () => {
+            it('should work with like', async () => {
+                const queryText =
+                    "select `item` as productName from `orders` where `item` Like 'alm%'";
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 2);
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should work with not like', async () => {
+                const queryText =
+                    "select `item` as productName from `orders` where `item` Not Like 'alm%'";
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 2);
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+        });
+        describe('filter condition', () => {
+            it('should work with like', async () => {
+                const queryText =
+                    "select id,`First Name`,`Last Name`,(select * from Rentals where `Film Title` like 'MUSKETEERS%') as rentalsArr from `customers` where id=1";
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 1);
+                    assert(results[0].rentalsArr.length === 1);
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should work with not like', async () => {
+                const queryText =
+                    "select id,`First Name`,`Last Name`,(select * from Rentals where `Film Title` not like 'MUSKETEERS%') as rentalsArr from `customers` where id=1";
+                try {
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                    const results = await mongoClient
+                        .db(_dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 1);
+                    assert(results[0].rentalsArr.length === 31);
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+        });
+    });
 });
