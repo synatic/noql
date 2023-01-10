@@ -2,6 +2,7 @@ const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
 const _dbName = 'sql-to-mongo-test';
 const {setup, disconnect} = require('../mongo-client');
+const $check = require('check-types');
 
 describe('node-sql-parser upgrade tests', function () {
     this.timeout(90000);
@@ -114,6 +115,66 @@ describe('node-sql-parser upgrade tests', function () {
                     throw err;
                 }
             });
+        });
+    });
+    describe('CURRENT_DATE', () => {
+        it('should return the current date in a select', async () => {
+            const queryText = `
+            SELECT CURRENT_DATE() as currDate
+            FROM orders`;
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results.length === 4);
+                assert($check.date(results[0].currDate));
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+        it('should allow other functions on current date in a select', async () => {
+            const queryText = `
+            SELECT YEAR(CURRENT_DATE()) as currDate
+            FROM orders`;
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results.length === 4);
+                assert($check.number(results[0].currDate));
+                assert(results[0].currDate.toString().length === 4);
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+        it('should allow use of current date in a where', async () => {
+            const queryText = `
+            SELECT *
+            FROM orders
+            WHERE YEAR(orderDate) = YEAR(CURRENT_DATE())`;
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(_dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results.length === 2);
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
         });
     });
 });
