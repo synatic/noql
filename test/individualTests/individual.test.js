@@ -1,6 +1,5 @@
 const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
-const ObjectID = require('bson-objectid');
 const _dbName = 'sql-to-mongo-test';
 const supportsArraySort = false;
 const {setup, disconnect} = require('../mongo-client');
@@ -293,6 +292,7 @@ describe('Individual tests', function () {
         it('should be able to support subquery syntax', async () => {
             const queryText = `select * from orders where item in (select sku from inventory where id=1)`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+
             try {
                 const results = await mongoClient
                     .db(_dbName)
@@ -912,5 +912,38 @@ describe('Individual tests', function () {
             assert(results.length);
             assert(results[0].TableId === 1);
         });
+
+        it('should work for column names in double quotes - postgresql.', async () => {
+            const queryText = `
+            select "AccountType",
+                "CalcDate"
+            from "orders"`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
+                database: 'PostgresQL',
+            });
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+            assert(results.length === 4);
+        });
+        // it('should work for column names in double quotes - mysql', async () => {
+        //     const queryText = `
+        //     select "AccountType",
+        //         "CalcDate"
+        //     from "orders"`;
+        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
+        //         database: 'MySQL',
+        //     });
+        //     const results = await mongoClient
+        //         .db(_dbName)
+        //         .collection(parsedQuery.collections[0])
+        //         .aggregate(parsedQuery.pipeline)
+        //         .toArray();
+        //     assert(results.length);
+        //     assert(results[0].TableId === 1);
+        // });
     });
 });

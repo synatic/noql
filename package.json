@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -15,7 +15,8 @@
     "prettier": "prettier . --write",
     "test": "mocha --reporter spec --check-leaks test/",
     "test-ci": "nyc --reporter text-summary mocha -- --reporter spec --check-leaks test/",
-    "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/"
+    "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/",
+    "update": "npm-check -u"
   },
   "repository": {
     "type": "git",
@@ -52,33 +53,35 @@
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
     "@synatic/type-magic": "^1.0.0",
-    "bson-objectid": "2.0.3",
-    "check-types": "11.1.2",
+    "bson-objectid": "2.0.4",
+    "check-types": "11.2.2",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "4.0.2"
+    "node-sql-parser": "4.6.4"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
     "@synatic/eslint-config-synatic-node": "^1.0.13",
     "async": "^3.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "clone-deep": "^4.0.1",
-    "deep-equal": "^2.0.5",
-    "eslint": "^8.16.0",
+    "deep-equal": "^2.2.0",
+    "eslint": "^8.31.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "^39.3.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-security": "^1.5.0",
-    "eslint-plugin-sonarjs": "^0.13.0",
+    "eslint-plugin-sonarjs": "^0.17.0",
     "mocha": "^10.0.0",
-    "moment": "^2.29.1",
-    "mongodb": "^4.6.0",
+    "moment": "^2.29.4",
+    "mongodb": "^4.13.0",
     "mongodb-language-model": "^2.3.0",
+    "npm-check": "^6.0.1",
     "nyc": "^15.1.0",
-    "prettier": "^2.3.1",
+    "prettier": "^2.8.2",
     "underscore.string": "^3.3.5",
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.5.0",

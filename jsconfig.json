@@ -5,7 +5,7 @@
     "checkJs": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["node", "jest"]
+    "types": ["node", "mocha"]
   },
   "exclude": ["node_modules"]
 }
