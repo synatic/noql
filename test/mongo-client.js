@@ -8,6 +8,7 @@ const _orders = require('./exampleData/orders.json');
 const _inventory = require('./exampleData/inventory.json');
 const _policies = require('./exampleData/policies.json');
 const _policyPremium = require('./exampleData/policy-premiums.json');
+const $check = require('check-types');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -58,7 +59,7 @@ async function addTestData() {
 
     await db.collection('orders').bulkWrite(
         _orders.map((d) => {
-            return {insertOne: {document: d}};
+            return {insertOne: {document: parseDocForDates(d)}};
         })
     );
 
@@ -79,6 +80,24 @@ async function addTestData() {
             return {insertOne: {document: d}};
         })
     );
+}
+function parseDocForDates(d, parentKey = '', parentObject = {}) {
+    // eslint-disable-next-line guard-for-in
+    for (const key in d) {
+        const value = d[key];
+        if (key === '$date') {
+            if ($check.null(value)) {
+                parentObject[parentKey] = new Date();
+            } else {
+                parentObject[parentKey] = new Date(value);
+            }
+            continue;
+        }
+        if ($check.object(value)) {
+            parseDocForDates(value, key, d);
+        }
+    }
+    return d;
 }
 
 async function dropTestDb() {

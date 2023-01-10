@@ -5,7 +5,10 @@
     "price": 12,
     "quantity": 2,
     "customerId": 1,
-    "specialChars": "^^^"
+    "specialChars": "^^^",
+    "orderDate": {
+      "$date": null
+    }
   },
   {
     "id": 2,
@@ -14,7 +17,10 @@
     "price": 20,
     "quantity": 1,
     "customerId": 2,
-    "specialChars": "!!$"
+    "specialChars": "!!$",
+    "orderDate": {
+      "$date": "2022-04-08T00:00:00.000Z"
+    }
   },
   {
     "id": 4,
@@ -22,7 +28,10 @@
     "price": 12,
     "quantity": 4,
     "customerId": 3,
-    "specialChars": "!!\""
+    "specialChars": "!!\"",
+    "orderDate": {
+      "$date": null
+    }
   },
   {
     "id": 5,
@@ -30,6 +39,9 @@
     "price": 7,
     "quantity": 6,
     "customerId": 5,
-    "specialChars": "!!*"
+    "specialChars": "!!*",
+    "orderDate": {
+      "$date": "2021-07-09T00:00:00.000Z"
+    }
   }
 ]
