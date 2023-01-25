@@ -1337,5 +1337,269 @@
       ],
       "collections": ["customers"]
     }
+  },
+  {
+    "name": "Aggregate: sum sum array",
+    "query": "select sum(sum_array(Rentals,'filmId')) as s from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$sum": {
+                "$reduce": {
+                  "input": "$Rentals",
+                  "initialValue": 0,
+                  "in": {
+                    "$sum": [
+                      "$$value",
+                      "$$this.filmId"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: sum avg array",
+    "query": "select sum(avg_array(Rentals,'filmId')) as s from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$sum": {
+                "$reduce": {
+                  "input": "$Rentals",
+                  "initialValue": 0,
+                  "in": {
+                    "$avg": [
+                      "$$value",
+                      "$$this.filmId"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+      ],
+      "collections": [
+        "customers"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: avg sum array",
+    "query": "select avg(sum_array(Rentals,'filmId')) as s from customers",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$avg": {
+                "$reduce": {
+                  "input": "$Rentals",
+                  "initialValue": 0,
+                  "in": {
+                    "$sum": [
+                      "$$value",
+                      "$$this.filmId"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: sum case",
+    "query": "select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers`",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "Ueda": {
+              "$sum": {
+                "$switch": {
+                  "branches": [
+                    {
+                      "case": {
+                        "$eq": [
+                          "$Address.City",
+                          "Ueda"
+                        ]
+                      },
+                      "then": 1
+                    }
+                  ],
+                  "default": {
+                    "$literal": 0
+                  }
+                }
+              }
+            },
+            "Tete": {
+              "$sum": {
+                "$switch": {
+                  "branches": [
+                    {
+                      "case": {
+                        "$eq": [
+                          "$Address.City",
+                          "Tete"
+                        ]
+                      },
+                      "then": 1
+                    }
+                  ],
+                  "default": {
+                    "$literal": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "Ueda": "$Ueda",
+            "Tete": "$Tete"
+          }
+        }
+
+
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: sum case",
+    "query": "select Category,sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers` group by Category",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "Ueda": {
+              "$sum": {
+                "$switch": {
+                  "branches": [
+                    {
+                      "case": {
+                        "$eq": [
+                          "$Address.City",
+                          "Ueda"
+                        ]
+                      },
+                      "then": 1
+                    }
+                  ],
+                  "default": {
+                    "$literal": 0
+                  }
+                }
+              }
+            },
+            "Tete": {
+              "$sum": {
+                "$switch": {
+                  "branches": [
+                    {
+                      "case": {
+                        "$eq": [
+                          "$Address.City",
+                          "Tete"
+                        ]
+                      },
+                      "then": 1
+                    }
+                  ],
+                  "default": {
+                    "$literal": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "Ueda": "$Ueda",
+            "Tete": "$Tete"
+          }
+        }
+
+
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: sum auto group",
+    "query": "select sum(filmId) as s from `customers`",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$sum": "$filmId"
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+      ],
+      "collections": ["customers"]
+    }
   }
 ]
