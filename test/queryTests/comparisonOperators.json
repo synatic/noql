@@ -540,34 +540,33 @@
       }
     }
   },
+
   {
-    "name": "Comparison:Sum Case",
-    "query": "select sum(case when `Address.City`='Ueda' then 1 else 0 end) as Ueda,sum(case when `Address.City`='Tete' then 1 else 0 end) as Tete from `customers`",
+    "name": "Comparison:NOT col IS NULL",
+    "query": "select * from `customers` where NOT `Address.City` IS NULL ",
     "output": {
       "collection": "customers",
       "limit": 100,
-      "projection": {
-        "Ueda": {
-          "$sum": {
-            "$switch": {
-              "branches": [
-                {"case": {"$eq": ["$Address.City", "Ueda"]}, "then": 1}
-              ],
-              "default": {"$literal": 0}
-            }
-          }
-        },
-        "Tete": {
-          "$sum": {
-            "$switch": {
-              "branches": [
-                {"case": {"$eq": ["$Address.City", "Tete"]}, "then": 1}
-              ],
-              "default": {"$literal": 0}
-            }
-          }
+      "query": {
+        "Address.City": {
+          "$ne": null
         }
       }
+
+    }
+  },
+  {
+    "name": "Comparison:IS NULL",
+    "query": "select * from `customers` where `Address.City` IS NULL ",
+    "output": {
+      "collection": "customers",
+      "limit": 100,
+      "query": {
+        "Address.City": {
+          "$eq": null
+        }
+      }
+
     }
   }
 ]

@@ -302,6 +302,158 @@
     "query": "select MIN(`id`,10) as exprVal from `films`"
   },
   {
+    "name": "Arithmetic:MIN 2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$min": [
+            "$id",
+            "$col"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select MIN(`id`,`col`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MIN Where",
+    "output": {
+      "limit": 100,
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$min": [
+                "$id",
+                "$col"
+              ]
+            },
+            0
+          ]
+        }
+      }
+    ,
+      "collection": "films"
+    },
+    "query": "select * from `films` where MIN(`id`,`col`) > 0"
+  },
+  {
+    "name": "Arithmetic:max 2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$max": [
+            "$id",
+            "$col"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select max(`id`,`col`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:MAX Where",
+    "output": {
+      "limit": 100,
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$max": [
+                "$id",
+                "$col"
+              ]
+            },
+            0
+          ]
+        }
+      }
+    ,
+      "collection": "films"
+    },
+    "query": "select * from `films` where max(`id`,`col`) > 0"
+  },
+  {
+    "name": "Arithmetic:SUM 2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$add": [
+            "$id",
+            "$col"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select SUM(`id`,`col`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:SUM Where",
+    "output": {
+      "limit": 100,
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$add": [
+                "$id",
+                "$col"
+              ]
+            },
+            0
+          ]
+        }
+      }
+    ,
+      "collection": "films"
+    },
+    "query": "select * from `films` where sum(`id`,`col`) > 0"
+  },
+  {
+    "name": "Arithmetic:SUM 2",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "exprVal": {
+          "$avg": [
+            "$id",
+            "$col"
+          ]
+        }
+      },
+      "collection": "films"
+    },
+    "query": "select avg(`id`,`col`) as exprVal from `films`"
+  },
+  {
+    "name": "Arithmetic:AVG Where",
+    "output": {
+      "limit": 100,
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$avg": [
+                "$id",
+                "$col"
+              ]
+            },
+            0
+          ]
+        }
+      }
+    ,
+      "collection": "films"
+    },
+    "query": "select * from `films` where avg(`id`,`col`) > 0"
+  },
+  {
     "name": "Arithmetic:MOD",
     "output": {
       "limit": 100,
@@ -494,78 +646,7 @@
       }
     }
   },
-  {
-    "name": "Arithmetic:SUM",
-    "query": "select sum((select filmId as `$$ROOT` from Rentals)) as s from customers",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$sum": {
-            "$map": {
-              "in": "$$this.filmId",
-              "input": "$Rentals"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "name": "Arithmetic:AVG",
-    "query": "select AVG((select filmId as `$$ROOT` from Rentals)) as s from customers",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$avg": {
-            "$map": {
-              "in": "$$this.filmId",
-              "input": "$Rentals"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "name": "Arithmetic:MIN",
-    "query": "select MIN((select filmId as `$$ROOT` from Rentals)) as s from customers",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$min": {
-            "$map": {
-              "in": "$$this.filmId",
-              "input": "$Rentals"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "name": "Arithmetic:MAX",
-    "query": "select MAX((select filmId as `$$ROOT` from Rentals)) as s from customers",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "s": {
-          "$max": {
-            "$map": {
-              "in": "$$this.filmId",
-              "input": "$Rentals"
-            }
-          }
-        }
-      }
-    }
-  },
+
   {
     "name": "Arithmetic:TAN",
     "output": {

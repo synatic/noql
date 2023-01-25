@@ -532,4 +532,105 @@ describe('SQL Parser', function () {
             'Invalid parse'
         );
     });
+
+    it('Should Unset', function () {
+        assert.deepStrictEqual(
+            SQLParser.makeMongoAggregate(`select _id,x,y from customers`, {
+                unsetId: true,
+            }),
+            {
+                collections: ['customers'],
+                pipeline: [
+                    {
+                        $project: {
+                            _id: '$_id',
+                            x: '$x',
+                            y: '$y',
+                        },
+                    },
+                ],
+                type: 'aggregate',
+            },
+            'Invalid parse'
+        );
+
+        assert.deepStrictEqual(
+            SQLParser.makeMongoAggregate(`select x,y from customers`, {
+                unsetId: true,
+            }),
+            {
+                collections: ['customers'],
+                pipeline: [
+                    {
+                        $project: {
+                            x: '$x',
+                            y: '$y',
+                        },
+                    },
+                    {$unset: '_id'},
+                ],
+                type: 'aggregate',
+            },
+            'Invalid parse'
+        );
+
+        assert.deepStrictEqual(
+            SQLParser.makeMongoAggregate(`select x,y from customers`, {
+                unsetId: false,
+            }),
+            {
+                collections: ['customers'],
+                pipeline: [
+                    {
+                        $project: {
+                            x: '$x',
+                            y: '$y',
+                        },
+                    },
+                ],
+                type: 'aggregate',
+            },
+            'Invalid parse'
+        );
+
+        assert.deepStrictEqual(
+            SQLParser.makeMongoAggregate(`select * from customers`, {
+                unsetId: true,
+            }),
+            {
+                collections: ['customers'],
+                pipeline: [],
+                type: 'aggregate',
+            },
+            'Invalid parse'
+        );
+
+        assert.deepStrictEqual(
+            SQLParser.makeMongoAggregate(
+                `select x,y from customers order by _id`,
+                {
+                    unsetId: true,
+                }
+            ),
+            {
+                collections: ['customers'],
+                pipeline: [
+                    {
+                        $project: {
+                            x: '$x',
+                            y: '$y',
+                        },
+                    },
+                    {
+                        $sort: {
+                            _id: 1,
+                        },
+                    },
+                    {$unset: '_id'},
+                ],
+                type: 'aggregate',
+            },
+            'Invalid parse'
+        );
+    });
 });

@@ -147,6 +147,8 @@ export type ParserOptions = {
     unwindJoins?: boolean;
     database?: string;
     type?: string;
+    /** force the unset of the _id field if it's not in the select list */
+    unsetId? : boolean;
 };
 
 export interface ColumnParseResult {
