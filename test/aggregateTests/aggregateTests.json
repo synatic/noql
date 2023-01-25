@@ -1353,10 +1353,7 @@
                   "input": "$Rentals",
                   "initialValue": 0,
                   "in": {
-                    "$sum": [
-                      "$$value",
-                      "$$this.filmId"
-                    ]
+                    "$sum": ["$$value", "$$this.filmId"]
                   }
                 }
               }
@@ -1369,7 +1366,6 @@
             "s": "$s"
           }
         }
-
       ],
       "collections": ["customers"]
     }
@@ -1389,10 +1385,7 @@
                   "input": "$Rentals",
                   "initialValue": 0,
                   "in": {
-                    "$avg": [
-                      "$$value",
-                      "$$this.filmId"
-                    ]
+                    "$avg": ["$$value", "$$this.filmId"]
                   }
                 }
               }
@@ -1406,9 +1399,7 @@
           }
         }
       ],
-      "collections": [
-        "customers"
-      ]
+      "collections": ["customers"]
     }
   },
   {
@@ -1426,10 +1417,7 @@
                   "input": "$Rentals",
                   "initialValue": 0,
                   "in": {
-                    "$sum": [
-                      "$$value",
-                      "$$this.filmId"
-                    ]
+                    "$sum": ["$$value", "$$this.filmId"]
                   }
                 }
               }
@@ -1442,7 +1430,6 @@
             "s": "$s"
           }
         }
-
       ],
       "collections": ["customers"]
     }
@@ -1462,10 +1449,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Ueda"
-                        ]
+                        "$eq": ["$Address.City", "Ueda"]
                       },
                       "then": 1
                     }
@@ -1482,10 +1466,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Tete"
-                        ]
+                        "$eq": ["$Address.City", "Tete"]
                       },
                       "then": 1
                     }
@@ -1505,8 +1486,6 @@
             "Tete": "$Tete"
           }
         }
-
-
       ],
       "collections": ["customers"]
     }
@@ -1528,10 +1507,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Ueda"
-                        ]
+                        "$eq": ["$Address.City", "Ueda"]
                       },
                       "then": 1
                     }
@@ -1548,10 +1524,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$eq": [
-                          "$Address.City",
-                          "Tete"
-                        ]
+                        "$eq": ["$Address.City", "Tete"]
                       },
                       "then": 1
                     }
@@ -1572,8 +1545,6 @@
             "Tete": "$Tete"
           }
         }
-
-
       ],
       "collections": ["customers"]
     }
@@ -1598,6 +1569,110 @@
             "s": "$s"
           }
         }
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: count 1",
+    "query": "select count(1) as s from `customers`",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: count *",
+    "query": "select count(*) as s from `customers`",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "s": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: count 1 with group by",
+    "query": "select col1,count(1) as s from `customers` group by col1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "col1": "$col1"
+            },
+            "s": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "col1": "$_id.col1",
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Aggregate: count 1 with group by",
+    "query": "select col1,count(*) as s from `customers` group by col1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "col1": "$col1"
+            },
+            "s": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "col1": "$_id.col1",
+            "_id": 0,
+            "s": "$s"
+          }
+        }
+
       ],
       "collections": ["customers"]
     }
