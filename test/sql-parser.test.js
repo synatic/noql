@@ -206,6 +206,13 @@ describe('SQL Parser', function () {
             );
         });
 
+        it('should not allow sub from', function () {
+            assert(
+                !canQuery('select * from (select * from `films`) f'),
+                'Invalid can query'
+            );
+        });
+
         it('should nt allow *,function ', function () {
             assert(
                 !canQuery(
@@ -213,6 +220,10 @@ describe('SQL Parser', function () {
                 ),
                 'Invalid can query'
             );
+        });
+
+        it('should test as ', function () {
+            assert(!canQuery('select * from `films` f'), 'Invalid can query');
         });
 
         it('should not allow with where on sub query ', function () {
