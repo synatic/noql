@@ -165,6 +165,51 @@
     }
   },
   {
+    "name": "Query:Number Literal in select",
+    "query": "select 1 as c0, filmId from films",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "projection": {
+        "c0": {
+          "$literal": 1
+        },
+        "filmId": "$filmId"
+      }
+    }
+  },
+  {
+    "name": "Query:Boolean Literal in select",
+    "query": "select true as c0, filmId from films",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "projection": {
+        "c0": {
+          "$literal": true
+        },
+        "filmId": "$filmId"
+      }
+    }
+  },
+  {
+    "name": "Query:date Literal in select",
+    "query": "select to_date('01-jan-2023') as c0, filmId from films",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "projection": {
+        "c0": {
+          "$toDate": {
+            "$literal": "01-jan-2023"
+          }
+        },
+        "filmId": "$filmId"
+
+      }
+    }
+  },
+  {
     "name": "Query Error: Aggregate Function",
     "query": "select sum(`Replacement Cost`,2)  from `films`",
     "error": "Requires as for function:sum"
