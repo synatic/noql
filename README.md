@@ -259,7 +259,7 @@ Functions in WHERE statements require explicit definition and can't use a comput
 select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and abs(`id`) > 1 order by absId
 
 --Won't work
-select `Address.City` as City from `customers` where `First Name` like 'm%' and absId > 1
+select `Address.City` as City,abs(`id`) as absId from `customers` where `First Name` like 'm%' and absId > 1
 ```
 
 ORDER BY requires field to be part of select

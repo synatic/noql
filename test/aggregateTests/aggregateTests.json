@@ -1676,5 +1676,95 @@
       ],
       "collections": ["customers"]
     }
+  },
+  {
+    "name": "Aggregate: case is null",
+    "query": "select filmId,\n                case\n                    when col1 is not null\n                    then col1\n                    else 0\n                end as \"t0_0\",\n                case\n                    when col2 is null\n                    then 0\n                    else 1\n                end as \"t1_0\"\n            from\n            customers\n",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "filmId": "$filmId",
+            "t0_0": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$ne": [
+                        "$col1",
+                        null
+                      ]
+                    },
+                    "then": "$col1"
+                  }
+                ],
+                "default": {
+                  "$literal": 0
+                }
+              }
+            },
+            "t1_0": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$eq": [
+                        "$col2",
+                        null
+                      ]
+                    },
+                    "then": 0
+                  }
+                ],
+                "default": {
+                  "$literal": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "collections": ["customers"]
+    }
+  },
+  {
+    "name": "Query:fix alias",
+    "query": "select f.Title,Description from films f where f.Name = \"Test\" and `Replacement Value` > 10",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "f": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "$and": [
+              {
+                "f.Name": {
+                  "$eq": "Test"
+                }
+              },
+              {
+                "f.Replacement Value": {
+                  "$gt": 10
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "Title": "$f.Title",
+            "Description": "$f.Description"
+          }
+        }
+      ],
+      "collections": [
+        "films"
+      ]
+    }
   }
 ]

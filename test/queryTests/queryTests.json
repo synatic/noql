@@ -188,5 +188,15 @@
     "name": "Query Error: aggregation in where",
     "query": "select * from customers where min(col1) >0",
     "error": "Aggregate function not allowed in where:MIN"
+  },
+  {
+    "name": "Query Error: count on query",
+    "query": "select count(1) as s from customers",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: count on query",
+    "query": "select count(*) as s from customers",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
   }
 ]
