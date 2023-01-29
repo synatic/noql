@@ -241,7 +241,9 @@ describe('SQL Parser', function () {
             it(`${t.name ? t.name + ':' : ''}${t.query}`, function () {
                 if (t.error) {
                     try {
-                        SQLParser.makeMongoQuery(t.query);
+                        SQLParser.makeMongoQuery(t.query, {
+                            database: t.database,
+                        });
                         assert(false, 'No error');
                     } catch (exp) {
                         assert.equal(exp.message, t.error);
@@ -250,7 +252,9 @@ describe('SQL Parser', function () {
                     let err = null;
                     let parsedQuery;
                     try {
-                        parsedQuery = SQLParser.makeMongoQuery(t.query);
+                        parsedQuery = SQLParser.makeMongoQuery(t.query, {
+                            database: t.database,
+                        });
                     } catch (exp) {
                         err = exp.message;
                     }
@@ -269,8 +273,12 @@ describe('SQL Parser', function () {
                 let parsedQuery;
                 let parsedAggregate;
                 try {
-                    parsedQuery = SQLParser.makeMongoQuery(t.query);
-                    parsedAggregate = SQLParser.makeMongoAggregate(t.query);
+                    parsedQuery = SQLParser.makeMongoQuery(t.query, {
+                        database: t.database,
+                    });
+                    parsedAggregate = SQLParser.makeMongoAggregate(t.query, {
+                        database: t.database,
+                    });
                 } catch (exp) {
                     err = exp.message;
                 }
