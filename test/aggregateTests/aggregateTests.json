@@ -1729,6 +1729,57 @@
     }
   },
   {
+    "name": "Aggregate:strpos",
+    "query": "  select strpos(Title,'B') as x,* from films where strpos(Title,'B') > 0",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$indexOfCP": [
+                    "$Title",
+                    {
+                      "$literal": "B"
+                    }
+                  ]
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": [
+                "$$ROOT",
+                {
+                  "x": {
+                    "$indexOfCP": [
+                      "$Title",
+                      {
+                        "$literal": "B"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+
+
+  {
     "name": "Query:fix alias",
     "query": "select f.Title,Description from films f where f.Name = \"Test\" and `Replacement Value` > 10",
     "type": "aggregate",

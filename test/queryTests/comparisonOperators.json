@@ -421,6 +421,24 @@
     "query": "select `First Name` as FName from `customers` where `First Name` Like 'M%A'"
   },
   {
+    "name": "Comparison:ILIKE",
+    "database": "PostgresQL",
+    "output": {
+      "limit": 100,
+      "projection": {
+        "FName": "$First Name"
+      },
+      "query": {
+        "First Name": {
+          "$options": "i",
+          "$regex": "^M%A$"
+        }
+      },
+      "collection": "customers"
+    },
+    "query": "select `First Name` as FName from `customers` where `First Name` ILike 'M%A'"
+  },
+  {
     "name": "Comparison:LIKE",
     "query": "SELECT * FROM customers WHERE `First Name` like '%bc%'",
     "output": {

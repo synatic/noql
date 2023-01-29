@@ -196,5 +196,87 @@
         }
       }
     }
+  },
+  {
+    "name": "String:STRPOS",
+    "query": "select strpos(Title,'B') as x,filmId from films where strpos(Title,'B') > -1",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "x": {
+          "$indexOfCP": [
+            "$Title",
+            {
+              "$literal": "B"
+            }
+          ]
+        },
+        "filmId": "$filmId"
+      },
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$indexOfCP": [
+                "$Title",
+                {
+                  "$literal": "B"
+                }
+              ]
+            },
+            -1
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "String:STARTS_WITH",
+    "query": "select starts_with(Title,'B') as x,filmId from films where starts_with(Title,'B') is true",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "x": {
+          "$regexMatch": {
+            "input": "$Title",
+            "regex": {
+              "$concat": [
+                {
+                  "$literal": "B"
+                },
+                {
+                  "$literal": "$"
+                }
+              ]
+            }
+          }
+        },
+        "filmId": "$filmId"
+      },
+      "query": {
+        "$expr": {
+          "$eq": [
+            {
+              "$regexMatch": {
+                "input": "$Title",
+                "regex": {
+                  "$concat": [
+                    {
+                      "$literal": "B"
+                    },
+                    {
+                      "$literal": "$"
+                    }
+                  ]
+                }
+              }
+            },
+            true
+          ]
+        }
+      }
+    }
   }
 ]
