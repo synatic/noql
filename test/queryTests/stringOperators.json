@@ -199,24 +199,13 @@
   },
   {
     "name": "String:STRPOS",
-    "query": "select strpos(Title,'B') as x,filmId from films where strpos(Title,'B') > -1",
+    "query": "select strpos(Title,'B') as x,filmId from films where strpos(Title,'B') > 0",
     "output": {
       "collection": "films",
       "limit": 100,
       "projection": {
         "x": {
-          "$indexOfCP": [
-            "$Title",
-            {
-              "$literal": "B"
-            }
-          ]
-        },
-        "filmId": "$filmId"
-      },
-      "query": {
-        "$expr": {
-          "$gt": [
+          "$add": [
             {
               "$indexOfCP": [
                 "$Title",
@@ -225,12 +214,110 @@
                 }
               ]
             },
-            -1
+            1
+          ]
+        },
+        "filmId": "$filmId"
+      },
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$add": [
+                {
+                  "$indexOfCP": [
+                    "$Title",
+                    {
+                      "$literal": "B"
+                    }
+                  ]
+                },
+                1
+              ]
+            },
+            0
           ]
         }
       }
     }
   },
+  {
+    "name": "String:LOCATE",
+    "query": "select locate('B',Title) as x,filmId from films where locate('B',Title) > 0",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "x": {
+          "$add": [
+            {
+              "$indexOfCP": [
+                "$Title",
+                {
+                  "$literal": "B"
+                }
+              ]
+            },
+            1
+          ]
+        },
+        "filmId": "$filmId"
+      },
+      "query": {
+        "$expr": {
+          "$gt": [
+            {
+              "$add": [
+                {
+                  "$indexOfCP": [
+                    "$Title",
+                    {
+                      "$literal": "B"
+                    }
+                  ]
+                },
+                1
+              ]
+            },
+            0
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "String:NOT STRPOS",
+    "query": "select * from films where NOT strpos(Title,'B')>0",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "query": {
+        "$nor": [
+          {
+            "$expr": {
+              "$gt": [
+                {
+                  "$add": [
+                    {
+                      "$indexOfCP": [
+                        "$Title",
+                        {
+                          "$literal": "B"
+                        }
+                      ]
+                    },
+                    1
+                  ]
+                },
+                0
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+
   {
     "name": "String:STARTS_WITH",
     "query": "select starts_with(Title,'B') as x,filmId from films where starts_with(Title,'B') is true",
