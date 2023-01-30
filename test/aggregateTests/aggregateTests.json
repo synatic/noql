@@ -1730,7 +1730,7 @@
   },
   {
     "name": "Aggregate:strpos",
-    "query": "  select strpos(Title,'B') as x,* from films where strpos(Title,'B') > 0",
+    "query": "  select strpos(Title,'B') as x,* from films where strpos(Title,'B') > 1",
     "type": "aggregate",
     "output": {
       "pipeline": [
@@ -1739,14 +1739,19 @@
             "$expr": {
               "$gt": [
                 {
-                  "$indexOfCP": [
-                    "$Title",
+                  "$add": [
                     {
-                      "$literal": "B"
-                    }
+                      "$indexOfCP": [
+                        "$Title",
+                        {
+                          "$literal": "B"
+                        }
+                      ]
+                    },
+                    1
                   ]
                 },
-                0
+                1
               ]
             }
           }
@@ -1758,11 +1763,16 @@
                 "$$ROOT",
                 {
                   "x": {
-                    "$indexOfCP": [
-                      "$Title",
+                    "$add": [
                       {
-                        "$literal": "B"
-                      }
+                        "$indexOfCP": [
+                          "$Title",
+                          {
+                            "$literal": "B"
+                          }
+                        ]
+                      },
+                      1
                     ]
                   }
                 }

@@ -586,5 +586,33 @@
       }
 
     }
+  },
+  {
+    "name": "Comparison:NOT OR",
+    "query": "select * from films where NOT (Title = 'Test' or Title = 'test2')",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "query": {
+        "$nor": [
+          {
+            "$or": [
+              {
+                "Title": {
+                  "$eq": "Test"
+                }
+              },
+              {
+                "Title": {
+                  "$eq": "test2"
+                }
+              }
+            ]
+          }
+        ]
+
+      }
+
+    }
   }
 ]
