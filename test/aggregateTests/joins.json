@@ -450,7 +450,6 @@
             "from": "customer-notes",
             "as": "cn",
             "let": {
-              "cn_id": "$cn.id",
               "c_id": "$c.id"
             },
             "pipeline": [
@@ -465,9 +464,200 @@
                 "$match": {
                   "$expr": {
                     "$eq": [
-                      "$$cn_id",
+                      "$id",
                       "$$c_id"
                     ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "cn": {
+              "$first": "$cn"
+            }
+          }
+        },
+        {
+          "$match": {
+            "cn": {
+              "$ne": null
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join: Sub Query with optimize",
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$id",
+                      "$$c_id"
+                    ]
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "id": {
+                    "$gt": 2
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join: Sub Query with optimize and first",
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize|first` on cn.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$id",
+                      "$$c_id"
+                    ]
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "id": {
+                    "$gt": 2
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "cn": {
+              "$first": "$cn"
+            }
+          }
+        },
+        {
+          "$match": {
+            "cn": {
+              "$ne": null
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join: Sub Query with optimize and first reveresed",
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize|first` on c.id=cn.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$$c_id",
+                      "$id"
+
+                    ]
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "id": {
+                    "$gt": 2
                   }
                 }
               }
