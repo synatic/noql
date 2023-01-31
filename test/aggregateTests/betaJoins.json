@@ -57,6 +57,7 @@
       "collections": ["customers", "customer-notes"]
     }
   },
+
   {
     "name": "Join: 2 joins",
     "query": "select c.*,cn.*,cn2.*  from customers c inner join `customer-notes` cn on c.id=cn.id inner join `customer-notes2` cn2 on cn2.id=c.id",

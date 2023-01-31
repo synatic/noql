@@ -435,6 +435,71 @@
     }
   },
   {
+    "name": "Join: Sub Query with hint",
+    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|first` on cn.id=c.id",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "cn_id": "$cn.id",
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "id": {
+                    "$gt": 2
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$$cn_id",
+                      "$$c_id"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "cn": {
+              "$first": "$cn"
+            }
+          }
+        },
+        {
+          "$match": {
+            "cn": {
+              "$ne": null
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+
+      ],
+      "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
     "name": "Join: First hint",
     "query": "select c.*,`customer-notes`.*,cn2.*  from customers c inner join `customer-notes|first` on `customer-notes`.id=c.id",
     "type": "aggregate",
