@@ -1827,5 +1827,46 @@
         "films"
       ]
     }
+  },
+  {
+    "name": "Query:fix alias for sum",
+    "query": "select filmId,(f.filmId + f.`Rental Duration` + 2) as val from films f where id>1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "f": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "f.id": {
+              "$gt": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "filmId": "$f.filmId",
+            "val": {
+              "$add": [
+                {
+                  "$add": [
+                    "$f.filmId",
+                    "$f.Rental Duration"
+                  ]
+                },
+                2
+              ]
+            }
+          }
+        }
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
   }
 ]
