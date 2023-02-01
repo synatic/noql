@@ -614,5 +614,24 @@
       }
 
     }
+  },
+  {
+    "name": "Comparison:NOT Like",
+    "query": "select * from films\nwhere Title not like 'Academy%'",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "query": {
+        "Title": {
+          "$not": {
+            "$regex": "^Academy",
+            "$options": "i"
+          }
+        }
+
+
+      }
+
+    }
   }
 ]
