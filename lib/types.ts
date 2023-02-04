@@ -17,6 +17,7 @@ export type ExpressionTypes =
     | 'else'
     | 'when'
     | 'unary_expr';
+
 export interface AST extends Expression {
     _next?: AST;
     db?: string;
@@ -148,7 +149,7 @@ export type ParserOptions = {
     database?: string;
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
-    unsetId? : boolean;
+    unsetId?: boolean;
 };
 
 export interface ColumnParseResult {
@@ -174,6 +175,8 @@ export interface ColumnParseResult {
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
     count: {$count: string}[];
     unset: string[];
+    countDistinct: string;
+    groupByProject?: object;
 }
 
 export interface MongoQueryFunction {

@@ -55,6 +55,7 @@
     "@synatic/type-magic": "^1.0.0",
     "bson-objectid": "2.0.4",
     "check-types": "11.2.2",
+    "clone-deep": "4.0.1",
     "deepmerge": "4.2.2",
     "node-sql-parser": "4.6.4"
   },
@@ -63,7 +64,6 @@
     "@synatic/eslint-config-synatic-node": "^1.0.13",
     "async": "^3.2.0",
     "clean-webpack-plugin": "^4.0.0",
-    "clone-deep": "^4.0.1",
     "deep-equal": "^2.2.0",
     "eslint": "^8.31.0",
     "eslint-config-google": "^0.14.0",
