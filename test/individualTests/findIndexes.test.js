@@ -38,5 +38,34 @@ describe('Find Indexes', function () {
                 [{name: 1, title: 1, col1: 1}]
             );
         });
+
+        it('should check with and and or', () => {
+            assert.deepEqual(
+                findIndexes.findIndexesOnMatch({
+                    $or: [
+                        {
+                            $and: [
+                                {
+                                    name: {
+                                        $eq: 'test',
+                                    },
+                                },
+                                {
+                                    title: {
+                                        $eq: 'test2',
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            col1: {
+                                $eq: 'test3',
+                            },
+                        },
+                    ],
+                }),
+                [{name: 1, title: 1}, {col1: 1}]
+            );
+        });
     });
 });
