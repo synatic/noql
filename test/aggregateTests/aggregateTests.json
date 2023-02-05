@@ -1787,10 +1787,8 @@
       ]
     }
   },
-
-
   {
-    "name": "Query:fix alias",
+    "name": "Aggregate:fix alias",
     "query": "select f.Title,Description from films f where f.Name = \"Test\" and `Replacement Value` > 10",
     "type": "aggregate",
     "output": {
@@ -1829,7 +1827,7 @@
     }
   },
   {
-    "name": "Query:fix alias for sum",
+    "name": "Aggregate:fix alias for sum",
     "query": "select filmId,(f.filmId + f.`Rental Duration` + 2) as val from films f where id>1",
     "type": "aggregate",
     "output": {
@@ -1868,5 +1866,523 @@
         "films"
       ]
     }
+  },
+  {
+    "name": "Aggregate:count distinct",
+    "query": "select count(distinct Rating) as disCnt from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "_countDistinctTemp": "$Rating"
+            },
+            "disCnt": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {},
+            "disCnt": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "disCnt": "$disCnt"
+          }
+        }
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate:count distinct complex aggregation",
+    "query": "select Category,count(distinct Rating)  as cntDis,count(1)  as cnt,max(`Rental Duration`) as  maxDuration,min(`Rental Duration`) as  minDuration,sum(`Length`) as  sumLength,avg(`Length`) as avgLength from films group by Category",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category",
+              "_countDistinctTemp": "$Rating"
+            },
+            "cntDis": {
+              "$sum": 1
+            },
+            "cnt": {
+              "$sum": 1
+            },
+            "maxDuration": {
+              "$max": "$Rental Duration"
+            },
+            "minDuration": {
+              "$min": "$Rental Duration"
+            },
+            "sumLength": {
+              "$sum": "$Length"
+            },
+            "avgLength": {
+              "$avg": "$Length"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Category": "$_id.Category"
+            },
+            "cntDis": {
+              "$sum": 1
+            },
+            "cnt": {
+              "$sum": "$cnt"
+            },
+            "maxDuration": {
+              "$max": "$maxDuration"
+            },
+            "minDuration": {
+              "$min": "$minDuration"
+            },
+            "sumLength": {
+              "$sum": "$sumLength"
+            },
+            "avgLength": {
+              "$avg": "$avgLength"
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "cntDis": "$cntDis",
+            "cnt": "$cnt",
+            "maxDuration": "$maxDuration",
+            "minDuration": "$minDuration",
+            "sumLength": "$sumLength",
+            "avgLength": "$avgLength"
+          }
+        }
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate:count distinct complex aggregation auto group",
+    "query": "select count(distinct Rating)  as cntDis,count(1)  as cnt,max(`Rental Duration`) as  maxDuration,min(`Rental Duration`) as  minDuration,sum(`Length`) as  sumLength,avg(`Length`) as avgLength from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "_countDistinctTemp": "$Rating"
+            },
+            "cntDis": {
+              "$sum": 1
+            },
+            "cnt": {
+              "$sum": 1
+            },
+            "maxDuration": {
+              "$max": "$Rental Duration"
+            },
+            "minDuration": {
+              "$min": "$Rental Duration"
+            },
+            "sumLength": {
+              "$sum": "$Length"
+            },
+            "avgLength": {
+              "$avg": "$Length"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {},
+            "cntDis": {
+              "$sum": 1
+            },
+            "cnt": {
+              "$sum": "$cnt"
+            },
+            "maxDuration": {
+              "$max": "$maxDuration"
+            },
+            "minDuration": {
+              "$min": "$minDuration"
+            },
+            "sumLength": {
+              "$sum": "$sumLength"
+            },
+            "avgLength": {
+              "$avg": "$avgLength"
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "cntDis": "$cntDis",
+            "cnt": "$cnt",
+            "maxDuration": "$maxDuration",
+            "minDuration": "$minDuration",
+            "sumLength": "$sumLength",
+            "avgLength": "$avgLength"
+          }
+        }
+
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: with function expression",
+    "query": "select max(`Length` + `Replacement Cost`) as totVal from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "totVal": {
+              "$max": {
+                "$add": [
+                  "$Length",
+                  "$Replacement Cost"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "totVal": "$totVal"
+          }
+        }
+
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: sum case columns",
+    "query": "select sum(case when `Length` > 0 then 1 else  `Rental Duration` end) as totVal from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "totVal": {
+              "$sum": {
+                "$switch": {
+                  "branches": [
+                    {
+                      "case": {
+                        "$gt": [
+                          "$Length",
+                          0
+                        ]
+                      },
+                      "then": 1
+                    }
+                  ],
+                  "default": "$Rental Duration"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "totVal": "$totVal"
+          }
+        }
+
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: binary expression with aggregate functions auto group",
+    "query": "select (max(`Length`) + max(`Replacement Cost`) + 1) * min(To_int(`Rental Duration`)) as totVal from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {},
+            "_tempAggregateCol_10": {
+              "$max": "$Length"
+            },
+            "_tempAggregateCol_11": {
+              "$max": "$Replacement Cost"
+            },
+            "_tempAggregateCol_5": {
+              "$min": {
+                "$toInt": "$Rental Duration"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "totVal": {
+              "$multiply": [
+                {
+                  "$add": [
+                    {
+                      "$add": [
+                        "$_tempAggregateCol_10",
+                        "$_tempAggregateCol_11"
+                      ]
+                    },
+                    1
+                  ]
+                },
+                "$_tempAggregateCol_5"
+              ]
+            },
+            "_id": 0
+          }
+        }
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: binary expression with aggregate functions group",
+    "query": "select Category,(max(`Length`) + sum(`Replacement Cost`) + 1) * min(To_int(`Rental Duration`)) as totVal from films group by Category",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "_tempAggregateCol_10": {
+              "$max": "$Length"
+            },
+            "_tempAggregateCol_11": {
+              "$sum": "$Replacement Cost"
+            },
+            "_tempAggregateCol_5": {
+              "$min": {
+                "$toInt": "$Rental Duration"
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "totVal": {
+              "$multiply": [
+                {
+                  "$add": [
+                    {
+                      "$add": [
+                        "$_tempAggregateCol_10",
+                        "$_tempAggregateCol_11"
+                      ]
+                    },
+                    1
+                  ]
+                },
+                "$_tempAggregateCol_5"
+              ]
+            },
+            "Category": "$_id.Category",
+            "_id": 0
+          }
+        }
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: binary expression with aggregate functions group and count distinct",
+    "query": "select Category,(count(distinct `Length`) + sum(`Replacement Cost`) + 1) * min(To_int(`Rental Duration`)) as totVal from films group by Category",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category",
+              "_countDistinctTemp": "$Length"
+            },
+            "_tempAggregateCol_10": {
+              "$sum": 1
+            },
+            "_tempAggregateCol_11": {
+              "$sum": "$Replacement Cost"
+            },
+            "_tempAggregateCol_5": {
+              "$min": {
+                "$toInt": "$Rental Duration"
+              }
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Category": "$_id.Category"
+            },
+            "_tempAggregateCol_10": {
+              "$sum": 1
+            },
+            "_tempAggregateCol_11": {
+              "$sum": "$_tempAggregateCol_11"
+            },
+            "_tempAggregateCol_5": {
+              "$min": "$_tempAggregateCol_5"
+            }
+          }
+        },
+        {
+          "$project": {
+            "totVal": {
+              "$multiply": [
+                {
+                  "$add": [
+                    {
+                      "$add": [
+                        "$_tempAggregateCol_10",
+                        "$_tempAggregateCol_11"
+                      ]
+                    },
+                    1
+                  ]
+                },
+                "$_tempAggregateCol_5"
+              ]
+            },
+            "Category": "$_id.Category",
+            "_id": 0
+          }
+        }
+
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
+  },
+  {
+    "name": "Aggregate: binary expression with aggregate functions group and count distinct and sub select",
+    "query": "select f.Category,(count(distinct f.`Length`) + sum(f.`Replacement Cost`) + 1) * min(To_int(f.`Rental Duration`)) as totVal from (select * from films) f group by f.Category",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "f": "$$ROOT"
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Category": "$f.Category",
+              "_countDistinctTemp": "$f.Length"
+            },
+            "_tempAggregateCol_10": {
+              "$sum": 1
+            },
+            "_tempAggregateCol_11": {
+              "$sum": "$f.Replacement Cost"
+            },
+            "_tempAggregateCol_5": {
+              "$min": {
+                "$toInt": "$f.Rental Duration"
+              }
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "Category": "$_id.Category"
+            },
+            "_tempAggregateCol_10": {
+              "$sum": 1
+            },
+            "_tempAggregateCol_11": {
+              "$sum": "$_tempAggregateCol_11"
+            },
+            "_tempAggregateCol_5": {
+              "$min": "$_tempAggregateCol_5"
+            }
+          }
+        },
+        {
+          "$project": {
+            "totVal": {
+              "$multiply": [
+                {
+                  "$add": [
+                    {
+                      "$add": [
+                        "$_tempAggregateCol_10",
+                        "$_tempAggregateCol_11"
+                      ]
+                    },
+                    1
+                  ]
+                },
+                "$_tempAggregateCol_5"
+              ]
+            },
+            "Category": "$_id.Category",
+            "_id": 0
+          }
+        }
+
+
+
+      ],
+      "collections": [
+        "films"
+      ]
+    }
   }
+
+
+
 ]
+
+
+
