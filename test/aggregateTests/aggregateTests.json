@@ -1644,7 +1644,6 @@
             "s": "$s"
           }
         }
-
       ],
       "collections": ["customers"]
     }
@@ -1672,7 +1671,6 @@
             "s": "$s"
           }
         }
-
       ],
       "collections": ["customers"]
     }
@@ -1691,10 +1689,7 @@
                 "branches": [
                   {
                     "case": {
-                      "$ne": [
-                        "$col1",
-                        null
-                      ]
+                      "$ne": ["$col1", null]
                     },
                     "then": "$col1"
                   }
@@ -1709,10 +1704,7 @@
                 "branches": [
                   {
                     "case": {
-                      "$eq": [
-                        "$col2",
-                        null
-                      ]
+                      "$eq": ["$col2", null]
                     },
                     "then": 0
                   }
@@ -1780,11 +1772,8 @@
             }
           }
         }
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -1821,9 +1810,7 @@
           }
         }
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -1850,21 +1837,15 @@
             "val": {
               "$add": [
                 {
-                  "$add": [
-                    "$f.filmId",
-                    "$f.Rental Duration"
-                  ]
+                  "$add": ["$f.filmId", "$f.Rental Duration"]
                 },
                 2
               ]
             }
           }
         }
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -1897,11 +1878,8 @@
             "disCnt": "$disCnt"
           }
         }
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -1973,11 +1951,8 @@
             "avgLength": "$avgLength"
           }
         }
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2045,12 +2020,8 @@
             "avgLength": "$avgLength"
           }
         }
-
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2064,10 +2035,7 @@
             "_id": {},
             "totVal": {
               "$max": {
-                "$add": [
-                  "$Length",
-                  "$Replacement Cost"
-                ]
+                "$add": ["$Length", "$Replacement Cost"]
               }
             }
           }
@@ -2078,12 +2046,8 @@
             "totVal": "$totVal"
           }
         }
-
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2101,10 +2065,7 @@
                   "branches": [
                     {
                       "case": {
-                        "$gt": [
-                          "$Length",
-                          0
-                        ]
+                        "$gt": ["$Length", 0]
                       },
                       "then": 1
                     }
@@ -2121,12 +2082,8 @@
             "totVal": "$totVal"
           }
         }
-
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2158,10 +2115,7 @@
                 {
                   "$add": [
                     {
-                      "$add": [
-                        "$_tempAggregateCol_10",
-                        "$_tempAggregateCol_11"
-                      ]
+                      "$add": ["$_tempAggregateCol_10", "$_tempAggregateCol_11"]
                     },
                     1
                   ]
@@ -2173,9 +2127,7 @@
           }
         }
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2209,10 +2161,7 @@
                 {
                   "$add": [
                     {
-                      "$add": [
-                        "$_tempAggregateCol_10",
-                        "$_tempAggregateCol_11"
-                      ]
+                      "$add": ["$_tempAggregateCol_10", "$_tempAggregateCol_11"]
                     },
                     1
                   ]
@@ -2224,11 +2173,8 @@
             "_id": 0
           }
         }
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2279,10 +2225,7 @@
                 {
                   "$add": [
                     {
-                      "$add": [
-                        "$_tempAggregateCol_10",
-                        "$_tempAggregateCol_11"
-                      ]
+                      "$add": ["$_tempAggregateCol_10", "$_tempAggregateCol_11"]
                     },
                     1
                   ]
@@ -2294,12 +2237,8 @@
             "_id": 0
           }
         }
-
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
     }
   },
   {
@@ -2355,10 +2294,7 @@
                 {
                   "$add": [
                     {
-                      "$add": [
-                        "$_tempAggregateCol_10",
-                        "$_tempAggregateCol_11"
-                      ]
+                      "$add": ["$_tempAggregateCol_10", "$_tempAggregateCol_11"]
                     },
                     1
                   ]
@@ -2370,19 +2306,48 @@
             "_id": 0
           }
         }
-
-
-
       ],
-      "collections": [
-        "films"
-      ]
+      "collections": ["films"]
+    }
+  },
+  {
+    "name": "Aggregate: cast in where",
+    "query": "select _.Title from films _ where cast(_.Length as double) = cast(83 as double)",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "_": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$eq": [
+                {
+                  "$convert": {
+                    "input": "$_.Length",
+                    "to": "double"
+                  }
+                },
+                {
+                  "$convert": {
+                    "input": 83,
+                    "to": "double"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "Title": "$_.Title"
+          }
+        }
+      ],
+      "collections": ["films"]
     }
   }
-
-
-
 ]
-
-
-
