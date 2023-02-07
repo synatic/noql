@@ -2349,5 +2349,108 @@
       ],
       "collections": ["films"]
     }
+  },
+  {
+    "name": "Aggregate: case with strpos",
+    "query": "select  _.Title from films _ where _.Rating = 'PG' and strpos((case when _.Category is not null  then _.Category  else '' end), 'Doc') = 1",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "_": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "$and": [
+              {
+                "_.Rating": {
+                  "$eq": "PG"
+                }
+              },
+              {
+                "$expr": {
+                  "$eq": [
+                    {
+                      "$add": [
+                        {
+                          "$indexOfCP": [
+                            {
+                              "$switch": {
+                                "branches": [
+                                  {
+                                    "case": {
+                                      "$ne": ["$_.Category", null]
+                                    },
+                                    "then": "$_.Category"
+                                  }
+                                ],
+                                "default": {
+                                  "$literal": ""
+                                }
+                              }
+                            },
+                            {
+                              "$literal": "Doc"
+                            }
+                          ]
+                        },
+                        1
+                      ]
+                    },
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "Title": "$_.Title"
+          }
+        }
+      ],
+      "collections": ["films"]
+    }
+  },
+  {
+    "name": "Aggregate: case with project alias",
+    "query": "select c.id,(case when ALL_ELEMENTS_TRUE(c.Rentals) then 'Yes' else 'No' end) as test from `customers` c",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$project": {
+            "id": "$c.id",
+            "test": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$allElementsTrue": [
+                        "$c.Rentals"
+                      ]
+                    },
+                    "then": "Yes"
+                  }
+                ],
+                "default": {
+                  "$literal": "No"
+                }
+              }
+            }
+          }
+        }
+
+      ],
+      "collections": ["customers"]
+    }
   }
 ]
