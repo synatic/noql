@@ -2452,5 +2452,83 @@
       ],
       "collections": ["customers"]
     }
+  },
+  {
+    "name": "Aggregate: case with project and binary expression",
+    "query": "select _.Title,case\nwhen cast(_.Length as double) - cast(_.`Replacement Cost` as double) is not null\nthen cast(_.Length as double) - cast(_.`Replacement Cost` as double)\nwhen Length is not null\nthen Length\nelse _.`Replacement Cost`\nend as SecondsDifference\nfrom films _",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "_": "$$ROOT"
+          }
+        },
+        {
+          "$project": {
+            "Title": "$_.Title",
+            "SecondsDifference": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$ne": [
+                        {
+                          "$subtract": [
+                            {
+                              "$convert": {
+                                "input": "$_.Length",
+                                "to": "double"
+                              }
+                            },
+                            {
+                              "$convert": {
+                                "input": "$_.Replacement Cost",
+                                "to": "double"
+                              }
+                            }
+                          ]
+                        },
+                        null
+                      ]
+                    },
+                    "then": {
+                      "$subtract": [
+                        {
+                          "$convert": {
+                            "input": "$_.Length",
+                            "to": "double"
+                          }
+                        },
+                        {
+                          "$convert": {
+                            "input": "$_.Replacement Cost",
+                            "to": "double"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "case": {
+                      "$ne": [
+                        "$Length",
+                        null
+                      ]
+                    },
+                    "then": "$Length"
+                  }
+                ],
+                "default": "$_.Replacement Cost"
+              }
+            }
+          }
+        }
+
+      ],
+      "collections": ["films"]
+    }
   }
 ]
+
+
