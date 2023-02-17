@@ -205,10 +205,62 @@
           }
         },
         "filmId": "$filmId"
-
       }
     }
   },
+  {
+    "name": "Query:abs with column",
+    "query": "select * from films where Length = abs(Length)",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "query": {
+        "$expr": {
+          "$eq": [
+            "$Length",
+            {
+              "$abs": "$Length"
+            }
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    "name": "Query:abs with column in",
+    "query": "select * from films where Length in (abs(Length))",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "query": {
+        "$expr": {
+          "$in": [
+            "$Length",
+            [
+              {
+                "$abs": "$Length"
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "Query:in with primitives",
+    "query": " select * from films where Rating in (to_string(123),'X')",
+    "output": {
+      "limit": 100,
+      "collection": "films",
+      "query": {
+        "Rating": {
+          "$in": ["123", "X"]
+        }
+      }
+    }
+  },
+
   {
     "name": "Query Error: Aggregate Function",
     "query": "select sum(`Replacement Cost`,2)  from `films`",
@@ -242,6 +294,11 @@
   {
     "name": "Query Error: count on query",
     "query": "select count(*) as s from customers",
+    "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
+  },
+  {
+    "name": "Query Error: distinct on query",
+    "query": "select distinct Rating from films",
     "error": "Query cannot cross multiple collections, have an aggregate function, contain functions in where clauses or have $$ROOT AS"
   }
 ]

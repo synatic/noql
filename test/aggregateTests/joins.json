@@ -463,10 +463,7 @@
               {
                 "$match": {
                   "$expr": {
-                    "$eq": [
-                      "$id",
-                      "$$c_id"
-                    ]
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               }
@@ -493,7 +490,6 @@
             "cn": "$cn"
           }
         }
-
       ],
       "collections": ["customers", "customer-notes"]
     }
@@ -520,10 +516,7 @@
               {
                 "$match": {
                   "$expr": {
-                    "$eq": [
-                      "$id",
-                      "$$c_id"
-                    ]
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               },
@@ -555,7 +548,6 @@
             "cn": "$cn"
           }
         }
-
       ],
       "collections": ["customers", "customer-notes"]
     }
@@ -582,10 +574,7 @@
               {
                 "$match": {
                   "$expr": {
-                    "$eq": [
-                      "$id",
-                      "$$c_id"
-                    ]
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               },
@@ -619,7 +608,6 @@
             "cn": "$cn"
           }
         }
-
       ],
       "collections": ["customers", "customer-notes"]
     }
@@ -646,11 +634,7 @@
               {
                 "$match": {
                   "$expr": {
-                    "$eq": [
-                      "$$c_id",
-                      "$id"
-
-                    ]
+                    "$eq": ["$$c_id", "$id"]
                   }
                 }
               },
@@ -684,7 +668,6 @@
             "cn": "$cn"
           }
         }
-
       ],
       "collections": ["customers", "customer-notes"]
     }
@@ -916,6 +899,185 @@
         }
       ],
       "collections": ["customers", "customer-notes"]
+    }
+  },
+  {
+    "name": "Join:with function in on 1",
+    "query": "select *  from customers c left outer join `customer-notes` `cn|first` on cn.id=convert(c.id,'int')",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$id",
+                      {
+                        "$convert": {
+                          "input": "$$c_id",
+                          "to": "int"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "cn": {
+              "$first": "$cn"
+            }
+          }
+        }
+      ],
+      "collections": ["customers", "customer-notes"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Join:with function in on 2",
+    "query": "select *  from customers c left outer join `customer-notes` `cn|first` on cn.id=to_int(c.id)",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$id",
+                      {
+                        "$toInt": "$$c_id"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "cn": {
+              "$first": "$cn"
+            }
+          }
+        }
+      ],
+      "collections": ["customers", "customer-notes"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Join:with function in on multiple",
+    "query": "select c.*,cn.* from customers c inner join `customer-notes` cn on cn.id=c.id inner join `customer-notes` cn2 on cn2.id=convert (c.id,'int')",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn",
+            "localField": "c.id",
+            "foreignField": "id"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$lookup": {
+            "from": "customer-notes",
+            "as": "cn2",
+            "let": {
+              "c_id": "$c.id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$id",
+                      {
+                        "$convert": {
+                          "input": "$$c_id",
+                          "to": "int"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$cn2"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "c": "$c",
+            "cn": "$cn"
+          }
+        }
+      ],
+      "collections": [
+        "customers",
+        "customer-notes"
+      ],
+      "type": "aggregate"
+
     }
   }
 ]

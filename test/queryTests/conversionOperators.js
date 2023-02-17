@@ -353,6 +353,19 @@ module.exports = [
         },
     },
     {
+        name: 'Query:in with primitive dates',
+        query: " select * from films where Rating in (to_date('2021-05-10'),'X')",
+        output: {
+            limit: 100,
+            collection: 'films',
+            query: {
+                Rating: {
+                    $in: [new Date('2021-05-10T00:00:00.000Z'), 'X'],
+                },
+            },
+        },
+    },
+    {
         name: 'Convert:to_objectid on where with error',
         query: "select to_objectid('61b0fdcbdee485f7c0682db6') as i from customers where _id = to_objectid('xxx')",
         error: 'Error converting xxx to ObjectId',

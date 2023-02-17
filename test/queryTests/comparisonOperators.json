@@ -570,7 +570,6 @@
           "$ne": null
         }
       }
-
     }
   },
   {
@@ -584,7 +583,6 @@
           "$eq": null
         }
       }
-
     }
   },
   {
@@ -610,9 +608,7 @@
             ]
           }
         ]
-
       }
-
     }
   },
   {
@@ -628,10 +624,59 @@
             "$options": "i"
           }
         }
-
-
       }
-
+    }
+  },
+  {
+    "name": "Case:IN list ",
+    "query": "select Title, case when Rating in ('PG','PG-13') then 'PG' else Rating end as Rating from films",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "projection": {
+        "Title": "$Title",
+        "Rating": {
+          "$switch": {
+            "branches": [
+              {
+                "case": {
+                  "$in": ["$Rating", ["PG", "PG-13"]]
+                },
+                "then": "PG"
+              }
+            ],
+            "default": "$Rating"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Case:IN list where",
+    "query": "select * from films where Length = case when Rating in ('PG','PG-13') then 100 else Length end",
+    "output": {
+      "collection": "films",
+      "limit": 100,
+      "query": {
+        "$expr": {
+          "$eq": [
+            "$Length",
+            {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$in": ["$Rating", ["PG", "PG-13"]]
+                    },
+                    "then": 100
+                  }
+                ],
+                "default": "$Length"
+              }
+            }
+          ]
+        }
+      }
     }
   }
 ]
