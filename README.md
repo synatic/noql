@@ -4,7 +4,7 @@
 
 MoQL Converts SQL statements to Mongo find statements or aggregation pipelines. MoQL supports mySQL and Postgres Syntax, and generates Mongo 3.6 or greater compatible queries.
 
-Full docs and a playground to try it out at [https://moql.synatic.dev/](https://moql.synatic.dev/)
+For full docs and a playground to try MoQL out, vist [https://moql.synatic.dev/](https://moql.synatic.dev/)
 
 ## Installation
 
