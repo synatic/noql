@@ -11,7 +11,7 @@ For full docs and a playground to try MoQL out, vist [https://moql.synatic.dev/]
 Install MoQL using the [npm install command](https://docs.npmjs.com/downloading-and-installing-packages-locally):
 
 ```bash
-npm i @synatic/sql-to-mongo --save
+npm i @synatic/sql-to-mongo
 ```
 
 ## Usage
