@@ -8,6 +8,14 @@
     }
   },
   {
+    "name": "Query:With Semicolon Terminator",
+    "query": "select * from `films`;",
+    "output": {
+      "collection": "films",
+      "limit": 100
+    }
+  },
+  {
     "name": "Query:Fields",
     "query": "select Title,Description from `films`",
     "output": {
