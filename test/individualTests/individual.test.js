@@ -929,21 +929,64 @@ describe('Individual tests', function () {
             assert(results.length);
             assert(results.length === 4);
         });
-        // it('should work for column names in double quotes - mysql', async () => {
-        //     const queryText = `
-        //     select "AccountType",
-        //         "CalcDate"
-        //     from "orders"`;
-        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
-        //         database: 'MySQL',
-        //     });
-        //     const results = await mongoClient
-        //         .db(_dbName)
-        //         .collection(parsedQuery.collections[0])
-        //         .aggregate(parsedQuery.pipeline)
-        //         .toArray();
-        //     assert(results.length);
-        //     assert(results[0].TableId === 1);
-        // });
+    });
+    describe('not in & in', () => {
+        it('should work for in subclause', async () => {
+            const queryText = `
+                        select distinct item
+                        from "orders"
+                        where id in (select id from orders where item=almonds)`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
+                database: 'PostgresQL',
+            });
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+            assert(results.length === 1);
+            assert(results[0].item === 'almonds');
+        });
+        it('should throw an error when the column is missing', async () => {
+            const queryText = `
+                        select item
+                        from "orders"
+                        where id not in (select * from orders where item=almonds)`;
+            assert.throws(() => {
+                SQLParser.makeMongoAggregate(queryText, {
+                    database: 'PostgresQL',
+                });
+            });
+        });
+        it('should throw an error when more than 1 column is specified', async () => {
+            const queryText = `
+                        select item
+                        from "orders"
+                        where id not in (select item,id from orders where item=almonds)`;
+            assert.throws(() => {
+                SQLParser.makeMongoAggregate(queryText, {
+                    database: 'PostgresQL',
+                });
+            });
+        });
+        it('should work for a valid not in query', async () => {
+            const queryText = `
+                        select item
+                        from "orders"
+                        where id not in (select id from orders where item=almonds)`;
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
+                database: 'PostgresQL',
+            });
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+            assert(results.length === 2);
+            assert(results[0].item === 'pecans');
+            assert(results[1].item === 'potatoes');
+        });
     });
 });
