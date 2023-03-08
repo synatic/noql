@@ -5,7 +5,7 @@
   "description": "MoQL converts SQL statements to mongo queries or aggregates",
 =======
   "name": "@synatic/sql-to-mongo",
-  "version": "1.1.19",
+  "version": "1.1.20",
   "description": "Convert SQL to mongo queries or aggregates",
 >>>>>>> f4be686 (1.1.19)
   "main": "index.js",
