@@ -1,5 +1,5 @@
 {
-  "name": "@synatic/synql",
+  "name": "@synatic/noql",
   "version": "1.1.22",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
