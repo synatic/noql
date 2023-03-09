@@ -55,7 +55,7 @@
   "bugs": {
     "url": "https://github.com/synatic/sql-to-mongo/issues"
   },
-  "homepage": "https://github.com/synatic/sql-to-mongo#readme",
+  "homepage": "https://noql.synatic.dev",
   "engines": {
     "node": ">=12",
     "npm": ">=5.0.0"
