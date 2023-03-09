@@ -1,6 +1,6 @@
 # NoQL - Not Only SQL
 
-![build status](https://github.com/synatic/sql-to-mongo/actions/workflows/ci-build.yml/badge.svg)
+![build status](https://github.com/synatic/noql/actions/workflows/ci-build.yml/badge.svg)
 
 NoQL Converts SQL statements to Mongo find statements or aggregation pipelines. NoQL supports mySQL and Postgres Syntax, and generates Mongo 3.6 or greater compatible queries.
 
