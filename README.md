@@ -1,7 +1,3 @@
-# Package Name Updated to @synatic/noql
-
-Please note this package is now deprecated, as it has been renamed to NoQL. You should use [`@synatic/noql`](https://www.npmjs.com/package/@synatic/noql) instead. This package will be removed in the future.
-
 # NoQL - Not Only SQL
 
 ![build status](https://github.com/synatic/sql-to-mongo/actions/workflows/ci-build.yml/badge.svg)
