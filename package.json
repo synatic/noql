@@ -1,7 +1,7 @@
 {
-  "name": "@synatic/sql-to-mongo",
-  "version": "1.1.23",
-  "description": "Convert SQL to mongo queries or aggregates",
+  "name": "@synatic/noql",
+  "version": "2.0.0",
+  "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
     "lib/",
@@ -23,9 +23,19 @@
     "url": "git+https://github.com/synatic/sql-to-mongo.git"
   },
   "keywords": [
+    "NoQL",
     "mongodb",
     "sql",
-    "sql to mongo"
+    "sql to mongo", 
+    "sql-to-nosql", 
+    "sql-to-mongo",
+    "query-translation",
+    "sql-mongo-translation", 
+    "sql-mongo-query-translation",
+    "sql-mongo-query",
+    "sql-mongo",
+    "sql-to-nosql-translation",
+    "Mongo Query Language"
   ],
   "author": {
     "name": "Synatic Inc",
@@ -41,7 +51,7 @@
       "url": "https://www.synatic.com"
     }
   ],
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/synatic/sql-to-mongo/issues"
   },
