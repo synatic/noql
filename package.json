@@ -23,9 +23,19 @@
     "url": "git+https://github.com/synatic/sql-to-mongo.git"
   },
   "keywords": [
+    "NoQL",
     "mongodb",
     "sql",
-    "sql to mongo"
+    "sql to mongo", 
+    "sql-to-nosql", 
+    "sql-to-mongo",
+    "query-translation",
+    "sql-mongo-translation", 
+    "sql-mongo-query-translation",
+    "sql-mongo-query",
+    "sql-mongo",
+    "sql-to-nosql-translation",
+    "Mongo Query Language"
   ],
   "author": {
     "name": "Synatic Inc",
