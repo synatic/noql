@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/synatic/sql-to-mongo.git"
+    "url": "git+https://github.com/synatic/noql.git"
   },
   "keywords": [
     "NoQL",
@@ -53,9 +53,9 @@
   ],
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/synatic/sql-to-mongo/issues"
+    "url": "https://github.com/synatic/noql/issues"
   },
-  "homepage": "https://github.com/synatic/sql-to-mongo#readme",
+  "homepage": "https://noql.synatic.dev",
   "engines": {
     "node": ">=12",
     "npm": ">=5.0.0"
