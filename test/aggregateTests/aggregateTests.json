@@ -2722,10 +2722,7 @@
           }
         }
       ],
-      "collections": [
-        "financial-dashboard-dgw-views--pl-details-2",
-        "financial-dashboard-dgw--bookings"
-      ],
+      "collections": ["financial-dashboard-dgw-views--pl-details-2", "financial-dashboard-dgw--bookings"],
       "type": "aggregate"
     }
   },
@@ -2747,6 +2744,138 @@
           "$project": {
             "Rating": "$_id.Rating",
             "_id": 0
+          }
+        }
+      ],
+      "collections": ["films"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Aggregate: firstn",
+    "query": "select Category,firstn(10) as t from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "t": {
+              "$firstN": {
+                "input": "$$ROOT",
+                "n": {
+                  "$literal": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "t": "$t"
+          }
+        }
+      ],
+      "collections": ["films"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Aggregate: firstn with field",
+    "query": "select Category,firstn(10,'id') as t from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "t": {
+              "$firstN": {
+                "input": "$id",
+                "n": {
+                  "$literal": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "t": "$t"
+          }
+        }
+      ],
+      "collections": ["films"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Aggregate: lastn",
+    "query": "select Category,lastn(10) as t from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "t": {
+              "$lastN": {
+                "input": "$$ROOT",
+                "n": {
+                  "$literal": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "t": "$t"
+          }
+        }
+      ],
+      "collections": ["films"],
+      "type": "aggregate"
+    }
+  },
+  {
+    "name": "Aggregate: lastn with field",
+    "query": "select Category,lastn(10,'id') as t from films",
+    "type": "aggregate",
+    "output": {
+      "pipeline": [
+        {
+          "$group": {
+            "_id": {
+              "Category": "$Category"
+            },
+            "t": {
+              "$lastN": {
+                "input": "$id",
+                "n": {
+                  "$literal": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "Category": "$_id.Category",
+            "_id": 0,
+            "t": "$t"
           }
         }
       ],
