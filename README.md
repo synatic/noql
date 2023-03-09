@@ -1,17 +1,21 @@
-# MoQL
+# Package Name Updated to @synatic/noQL
+
+Please note this package is now deprecated, as it has been renamed to NoQL. You should use [`@synatic/noQL`](https://www.npmjs.com/package/@synatic/noql) instead. This package will be removed in the future.
+
+# noQL - Not Only SQL
 
 ![build status](https://github.com/synatic/sql-to-mongo/actions/workflows/ci-build.yml/badge.svg)
 
-MoQL Converts SQL statements to Mongo find statements or aggregation pipelines. MoQL supports mySQL and Postgres Syntax, and generates Mongo 3.6 or greater compatible queries.
+noQL Converts SQL statements to Mongo find statements or aggregation pipelines. noQL supports mySQL and Postgres Syntax, and generates Mongo 3.6 or greater compatible queries.
 
-For full docs and a playground to try MoQL out, vist [https://moql.synatic.dev/](https://moql.synatic.dev/)
+For full docs and a playground to try noQL out, vist [https://noQL.synatic.dev/](https://noQL.synatic.dev/)
 
 ## Installation
 
-Install MoQL using the [npm install command](https://docs.npmjs.com/downloading-and-installing-packages-locally):
+Install noQL using the [npm install command](https://docs.npmjs.com/downloading-and-installing-packages-locally):
 
 ```bash
-npm i @synatic/sql-to-mongo
+npm i @synatic/noQL
 ```
 
 ## Usage
@@ -51,9 +55,9 @@ const {MongoClient} = require('mongodb');
 })();
 ```
 
-## MoQL Output Examples
+## noQL Output Examples
 
-MoQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. Here are some examples of the output:
+noQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. Here are some examples of the output:
 
 For a straight query: 
 
@@ -61,7 +65,7 @@ For a straight query:
 SQLMongoParser.parseSQL("select id from `films` where `id` > 10 limit 10")
 ```
 
-MoQL will output:
+noQL will output:
 ```json
 {
     "limit": 10,
@@ -84,7 +88,7 @@ For an aggregate query:
 SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id")
 ```
 
-MoQL will output:
+noQL will output:
 
 ```json
 {
@@ -123,4 +127,4 @@ MoQL will output:
 - Pivot
 - Union
 
-See more in the full docs at [https://moql.synatic.dev/](https://moql.synatic.dev/)
+See more in the full docs at [https://noQL.synatic.dev/](https://noQL.synatic.dev/)
