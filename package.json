@@ -1,6 +1,6 @@
 {
   "name": "@synatic/sql-to-mongo",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "Convert SQL to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -57,7 +57,7 @@
     "check-types": "11.2.2",
     "clone-deep": "4.0.1",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "4.6.4"
+    "node-sql-parser": "4.6.5"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
