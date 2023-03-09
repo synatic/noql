@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -26,11 +26,11 @@
     "NoQL",
     "mongodb",
     "sql",
-    "sql to mongo", 
-    "sql-to-nosql", 
+    "sql to mongo",
+    "sql-to-nosql",
     "sql-to-mongo",
     "query-translation",
-    "sql-mongo-translation", 
+    "sql-mongo-translation",
     "sql-mongo-query-translation",
     "sql-mongo-query",
     "sql-mongo",
