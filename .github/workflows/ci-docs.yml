@@ -16,6 +16,10 @@ jobs:
         with:
           key: ${{ github.ref }}
           path: .cache
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
       - name: Install NPM dependencies
         run: npm install --ignore-scripts
       - name: Run NPM build
