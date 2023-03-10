@@ -2,7 +2,7 @@ name: "Build"
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, docs-merge]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [main, develop]
