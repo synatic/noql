@@ -58,24 +58,6 @@ jobs:
       - name: Run NPM pack
         run: npm pack
 
-  dist:
-    name: Make Front End Distributable
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-      # Skip post-install scripts here, as a malicious
-      # script could steal NODE_AUTH_TOKEN.
-      - name: Install NPM dependencies
-        run: npm install --ignore-scripts
-      - name: Run NPM build
-        run: npm run build
-
   docs:
     name: Build and Publish Docs
     needs: dist
