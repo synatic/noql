@@ -4,3 +4,5 @@
 build
 coverage
 .nyc_output
+docs
+dist
