@@ -34,9 +34,8 @@ document.getElementById(`__palette_2`).addEventListener('change', setEditorTheme
 document.getElementById(`__palette_1`).addEventListener('change', setEditorTheme);
 
 playgroundButton.onclick = function () {
-
-    console.log(`isDarkModeOn: ${isDarkModeOn()}`);
-
+    
+    console.log(`Running NoQL version V${SqlToMongo.VERSION()}`)
     let noqlOutput = '';
     let shellQuery = '';
     let nodeQuery = '';
