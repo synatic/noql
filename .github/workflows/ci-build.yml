@@ -72,8 +72,7 @@ jobs:
       # Skip post-install scripts here, as a malicious
       # script could steal NODE_AUTH_TOKEN.
       - name: Install NPM dependencies
-        run: npm install --ignore-scripts --production
-
+        run: npm install --ignore-scripts
       - name: Run NPM build
         run: npm run build
 
