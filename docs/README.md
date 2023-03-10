@@ -6,6 +6,8 @@ Project board at [https://github.com/orgs/synatic/projects/11](https://github.co
 
 ## Setup
 
+Run all commands from this directory (the docs directory)
+
 Download the mkdocs-material docker image:
 
 ```bash
