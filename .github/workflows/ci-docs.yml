@@ -1,10 +1,7 @@
 name: ci 
 on:
-  push:
-    branches:
-      - master 
-      - main
-      - docs-merge
+  workflow_call:
+  
 permissions:
   contents: write
 jobs:
