@@ -1,0 +1,34 @@
+name: CI for Docs
+on:
+  workflow_call:
+  
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - uses: actions/cache@v2
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: Install NPM dependencies
+        run: npm install --ignore-scripts
+      - name: Run NPM build
+        run: npm run build
+      - name: Copy over frontend dist to docs
+        run: cp ./dist/index.js ./docs/docs/javascripts/noql/index.js
+      - name: Install mkdocs
+        run: cd docs &&pip install mkdocs-material 
+      - name: Deploy docs
+        run: cd docs && mkdocs gh-deploy --force
+
+

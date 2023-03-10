@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="26px" viewBox="0 0 32 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>synatic_logomark_FC</title>
+    <defs>
+        <linearGradient x1="78.3000984%" y1="17.9420027%" x2="-68.3643159%" y2="150.25571%" id="linearGradient-1">
+            <stop stop-color="#60C1CB" offset="0%"></stop>
+            <stop stop-color="#008FBD" offset="37.1073%"></stop>
+            <stop stop-color="#00185B" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="79.0372062%" y1="100%" x2="79.0372062%" y2="0%" id="linearGradient-2">
+            <stop stop-color="#FFC000" offset="0%"></stop>
+            <stop stop-color="#E94E1B" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="synatic_logomark_FC" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M24,0 L24,4.60289831 L6.74345874,4.60289831 C5.54699351,4.60289831 4.57480139,5.57318387 4.55547722,6.77752838 L4.55518405,6.81409456 L4.55516101,14.6144903 L24,14.614493 L24,19.2173913 L0,19.2173913 L0,6.81409456 C0,3.08840726 2.95906824,0.0610867356 6.63194331,0.000912893986 L6.74345874,0 L24,0 Z" id="Path-Copy-10" fill="url(#linearGradient-1)" fill-rule="nonzero"></path>
+        <path d="M32,6.7826087 L32,11.385507 L14.7434587,11.385507 C13.5469935,11.385507 12.5748014,12.3557926 12.5554772,13.5601371 L12.5551841,13.5967033 L12.5551474,21.397099 L32,21.3971017 L32,26 L8,26 L8,13.5967033 C8,9.87101595 10.9590682,6.84369542 14.6319433,6.78352159 L14.7434587,6.7826087 L32,6.7826087 Z" id="Path-Copy-11" fill="url(#linearGradient-2)" fill-rule="nonzero" transform="translate(20.000000, 16.391304) rotate(-180.000000) translate(-20.000000, -16.391304) "></path>
+        <rect id="Rectangle" fill="#60C1CB" fill-rule="nonzero" x="27.4285714" y="0" width="4.57142857" height="4.52173913"></rect>
+        <rect id="Rectangle-Copy-3" fill="#E94E1B" fill-rule="nonzero" x="0" y="21.4782609" width="4.57142857" height="4.52173913"></rect>
+    </g>
+</svg>
