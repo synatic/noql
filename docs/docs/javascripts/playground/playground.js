@@ -51,7 +51,7 @@ playgroundButton.onclick = function () {
     const inputSql = editor.session.getValue();
     try {
         if (document.getElementById('force-aggregate').checked) {
-            noqlOutput = SqlToMongo.makeAggregate(inputSql, { database: dbDialect });
+            noqlOutput = SqlToMongo.makeMongoAggregate(inputSql, { database: dbDialect });
         } else {
             noqlOutput = SqlToMongo.parseSQL(inputSql, { database: dbDialect });
         }
