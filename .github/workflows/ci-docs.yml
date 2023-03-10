@@ -1,4 +1,4 @@
-name: ci 
+name: CI for Docs
 on:
   workflow_call:
   
