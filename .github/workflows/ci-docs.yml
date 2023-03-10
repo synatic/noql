@@ -16,5 +16,6 @@ jobs:
         with:
           key: ${{ github.ref }}
           path: .cache
+      - run: cp ./dist/index.js ./docs/javascripts/noql/index.js
       - run: cd docs &&pip install mkdocs-material 
       - run: cd docs && mkdocs gh-deploy --force
