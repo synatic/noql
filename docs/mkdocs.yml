@@ -1,0 +1,90 @@
+site_name: NoQL
+repo_url: https://github.com/synatic/noql
+repo_name: synatic/noql
+copyright: Copyright &copy; 2023 <a href="https://synatic.com">Synatic Inc.</a>
+theme:
+  name: material
+  custom_dir: docs/overrides/
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - content.code.copy
+    - navigation.footer
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - toc.integrate
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny 
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    # # Palette toggle for automatic mode
+    # - media: "(prefers-color-scheme)"
+    #   toggle:
+    #     icon: material/brightness-auto
+    #     name: Switch to light mode
+    # # Palette toggle for light mode
+    # - media: "(prefers-color-scheme: light)"
+    #   scheme: default
+    #   toggle:
+    #     icon: material/weather-sunny 
+    #     name: Switch to dark mode
+    # # Palette toggle for dark mode
+    # - media: "(prefers-color-scheme: dark)"
+    #   scheme: slate
+    #   toggle:
+    #     icon: material/weather-night
+    #     name: Switch to light mode
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/datasynatic
+      name: Synatic on Twitter
+    - icon: fontawesome/brands/github
+      link: https://github.com/synatic/sql-to-mongo
+      name: NoQL on Github
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/15815217/
+      name: Synatic on Linkedin
+extra_css:
+  - stylesheets/extra.css
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.2/ace.js
+  - javascripts/noql/index.js
+  - javascripts/playground/nodeQueryConstructor.js
+  - javascripts/playground/shellQueryConstructor.js
+  - javascripts/playground/playground.js
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:materialx.emoji.twemoji
+nav:
+    - Home: index.md
+    - Getting Started: getting-started/index.md
+    - Reference: 
+      # - reference/index.md
+      - Parsing SQL Statements: reference/parse.md
+      - MSQL Commands: reference/m-sql.md
+      - Supported SQL Statements: reference/supported-sql-statements.md
+      - Mathematical Functions: reference/mathematical-functions.md
+      - Mathematical Operators: reference/mathematical-operators.md
+      - Conversion Functions: reference/conversion-functions.md
+    - Playground: playground/index.md
