@@ -33,8 +33,9 @@ The docs will be available at [http://localhost:8000](http://localhost:8000)
 
 ### Publishing
 
-Pushing to the `main` branch will automatically publish the docs to [https://synatic.github.io/sql-to-mongo/](https://synatic.github.io/sql-to-mongo/)
+Pushing to the `main` branch will automatically publish the docs to [https://noql.synatic.dev](https://noql.synatic.dev) 
 
+This is a github pages site, hosted on the `gh-pages` branch of this repo.
 
 ### Quirks and known issues
 

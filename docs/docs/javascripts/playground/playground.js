@@ -35,7 +35,7 @@ document.getElementById(`__palette_1`).addEventListener('change', setEditorTheme
 
 playgroundButton.onclick = function () {
     
-    console.log(`Running NoQL version V${SqlToMongo.VERSION()}`)
+    console.log(`Running NoQL version V${SqlToMongo.VERSION}`);
     let noqlOutput = '';
     let shellQuery = '';
     let nodeQuery = '';
