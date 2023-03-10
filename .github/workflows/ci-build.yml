@@ -60,6 +60,6 @@ jobs:
 
   docs:
     name: Build and Publish Docs
-    needs: dist
+    needs: build
     uses: ./.github/workflows/ci-docs.yml
 
