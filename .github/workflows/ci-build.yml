@@ -61,5 +61,5 @@ jobs:
   docs:
     name: Build and Publish Docs
     needs: build
-    uses: ./github/workflows/ci-docs.yml
+    uses: ./.github/workflows/ci-docs.yml
 
