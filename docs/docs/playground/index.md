@@ -2,15 +2,16 @@
 hide:
   - navigation
   - toc
-  - footer-navigation
   - footer
 ---
 
-<!-- <style>
-  .md-footer {
+ <style>
+  h1 {
     display: none;
   }
-</style> -->
+</style>
+
+<h1>Playspace</h1>
 
 Enter a SQL statement below to see NoQL's output, as well as the equivalent Mongo Shell query, and Node.js code.
 
