@@ -7,8 +7,8 @@ Parses the given SQL statement to a JSON output object. It automatically determi
 Example usage for a query:
 
 ```js
-const SQLMongoParser=require('@synatic/sql-to-mongo');
-console.log(JSON.stringify(SQLMongoParser.parseSQL("select id from `films` where `id` > 10 limit 10"),null,4));
+const SQLMongoParser=require('@synatic/noql');
+SQLMongoParser.parseSQL("select id from `films` where `id` > 10 limit 10", { database: 'postgresql' /* or 'mysql' */ } );
 ```
 
 Output:
@@ -32,8 +32,8 @@ Output:
 Example usage for an aggregate:
 
 ```js
-const SQLMongoParser=require('@synatic/sql-to-mongo');
-console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id"),null,4));
+const SQLMongoParser=require('@synatic/noql');
+SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id"),{ database: 'postgresql' /* or 'mysql' */ });
 
 Output:
 
@@ -72,16 +72,16 @@ Output:
 To use the output object to construct a query with `MongoClient` from the [MongoDB NodeJS Driver](https://www.npmjs.com/package/mongodb)
 
 ```js
-const SQLParser = require('@synatic/sql-to-mongo');
+const SQLParser = require('@synatic/noql');
 const {MongoClient} = require('mongodb');
 
 (async () => {
     try {
         client = new MongoClient('mongodb://127.0.0.1:27017');
         await client.connect();
-        const db = client.db('sql-to-mongo-test');
+        const db = client.db('noql-test');
 
-        const parsedSQL = SQLParser.parseSQL('select id from `films` limit 10');
+        const parsedSQL = SQLParser.parseSQL('select id from `films` limit 10', { database: 'postgresql' /* or 'mysql' */ });
         if (parsedSQL.type === 'query') {
             console.log(
                 await db
@@ -112,12 +112,12 @@ Returns `true` if a statement can be queried or `false` if an aggregate must be 
 Example usage:
 
 ```js
-const SQLMongoParser = require('@synatic/sql-to-mongo');
+const SQLMongoParser = require('@synatic/noql');
 
-console.log(SQLMongoParser.canQuery('select id from `films`'));
+SQLMongoParser.canQuery('select id from `films`');
 // Returns true
 
-console.log(SQLMongoParser.canQuery('select id from `films` group by id'));
+SQLMongoParser.canQuery('select id from `films` group by id');
 //Returns false
 ```
 
@@ -131,8 +131,8 @@ Use [`canQuery`](`#!js canQuery(sqlStatement)`) to test if a query can be create
 Example usage:
 
 ```js
-const SQLMongoParser=require('@synatic/sql-to-mongo');
-console.log(SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 limit 10"));
+const SQLMongoParser=require('@synatic/noql');
+SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 limit 10", { database: 'postgresql' /* or 'mysql' */ });
 ```
 
 ```json
@@ -155,8 +155,8 @@ console.log(SQLMongoParser.makeMongoQuery("select id from `films` where id > 10 
 Generates a mongo aggregate.
 
 ```js
-const SQLMongoParser = require('@synatic/sql-to-mongo');
-console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `films` group by id"), null, 4));
+const SQLMongoParser = require('@synatic/noql');
+SQLMongoParser.makeMongoAggregate("select id from `films` group by id", { database: 'postgresql' /* or 'mysql' */ });
 ```
 
 ```json
@@ -188,10 +188,9 @@ console.log(JSON.stringify(SQLMongoParser.makeMongoAggregate("select id from `fi
 Parses a SQL statement to an AST (abstract syntax tree)
 
 ```js
-const SQLMongoParser = require('@synatic/sql-to-mongo');
+const SQLMongoParser = require('@synatic/noql');
 
-const ast=SQLMongoParser.parseSQLtoAST("select id from `films`");
-console.log(JSON.stringify(ast, null, 4));
+SQLMongoParser.parseSQLtoAST("select id from `films`", { database: 'postgresql' /* or 'mysql' */ });
 ```
 
 Output:

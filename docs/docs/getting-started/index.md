@@ -23,7 +23,7 @@ const {MongoClient} = require('mongodb');
         await client.connect();
         const db = client.db('sql-to-mongo-test');
 
-        const parsedSQL = SQLParser.parseSQL('select id from `films` limit 10');
+        const parsedSQL = SQLParser.parseSQL('select id from `films` limit 10', { database: 'postgresql' /* or 'mysql' */ } });
         if (parsedSQL.type === 'query') {
             console.log(
                 await db
