@@ -6,6 +6,7 @@ theme:
   name: material
   custom_dir: docs/overrides/
   logo: assets/synatic.svg
+  favicon: assets/synatic-favicon.jpeg
   icon:
     repo: fontawesome/brands/github
   features:
