@@ -5,6 +5,7 @@ copyright: Copyright &copy; 2023 <a href="https://synatic.com">Synatic Inc.</a>
 theme:
   name: material
   custom_dir: docs/overrides/
+  logo: assets/synatic.svg
   icon:
     repo: fontawesome/brands/github
   features:

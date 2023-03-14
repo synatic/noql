@@ -16,8 +16,8 @@ docker pull squidfunk/mkdocs-material
 
 ## Developing
 
+To create a live preview while writing, run the following in the same directory as the `mkdocs.yml` file:
 ### Intel Macs / Windows / Linux
-To create a live preview while writing, run:
 
 ```bash
 docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material
