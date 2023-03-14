@@ -53,7 +53,7 @@ extra:
       link: https://twitter.com/datasynatic
       name: Synatic on Twitter
     - icon: fontawesome/brands/github
-      link: https://github.com/synatic/sql-to-mongo
+      link: https://github.com/synatic/noql
       name: NoQL on Github
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/15815217/
