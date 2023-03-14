@@ -26,7 +26,7 @@ const {MongoClient} = require('mongodb');
     try {
         client = new MongoClient('mongodb://127.0.0.1:27017');
         await client.connect();
-        const db = client.db('sql-to-mongo-test');
+        const db = client.db('noql-test');
 
         const parsedSQL = SQLParser.parseSQL('select id from `films` limit 10');
         if (parsedSQL.type === 'query') {
