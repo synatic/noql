@@ -78,6 +78,24 @@ module.exports = [
         },
     },
     {
+        name: 'Convert:CAST',
+        query: 'select CAST(1+`id` as text) as `id` from `customers`',
+        output: {
+            limit: 100,
+            collection: 'customers',
+            projection: {
+                id: {
+                    $convert: {
+                        input: {
+                            $add: [1, '$id'],
+                        },
+                        to: 'string',
+                    },
+                },
+            },
+        },
+    },
+    {
         name: 'Convert:TO_DATE',
         query: "select TO_DATE('2021-12-15T00:00:00Z') as `conv` from `customers`",
         output: {
