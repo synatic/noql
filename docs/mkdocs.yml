@@ -18,7 +18,7 @@ theme:
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.path
-    - toc.integrate
+    # - toc.integrate
   palette:
     # Palette toggle for light mode
     - scheme: default
@@ -88,14 +88,17 @@ nav:
       - Arrays: reference/arrays.md
       - Column Functions: reference/column-functions.md
       - Comparison Functions: reference/comparison-operators.md
+      - Conversion Functions: reference/conversion-functions.md
       - Date Functions: reference/date-functions.md
       - Joins: reference/joins.md
-      - MSQL Commands: reference/m-sql.md
-      - Object Functions: reference/object-functions.md
-      - String Functions: reference/string-functions.md
-      - Sub Queries: reference/sub-queries.md
-      - Supported SQL Statements: reference/supported-sql-statements.md
+      - Limits and Offsets: reference/limits-and-offsets.md
       - Mathematical Functions: reference/mathematical-functions.md
       - Mathematical Operators: reference/mathematical-operators.md
-      - Conversion Functions: reference/conversion-functions.md
+      - Merge Fields: reference/merge-fields.md
+      - MSQL Commands: reference/m-sql.md
+      - Object Functions: reference/object-functions.md
+      - Order By Clause: reference/order-by-clause.md
+      - String Functions: reference/string-functions.md
+      - Sub Queries: reference/sub-queries.md
+      - Where Clause: reference/where-clause.md
     - Playground: playground/index.md
