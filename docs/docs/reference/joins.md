@@ -36,19 +36,19 @@ select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` 
 
 !!! note
 
- `In` sub select on a `where` statement does not work as a join. Use a join instead.
+    `In` sub-select on a `where` clause does not work as a join. Use a join instead.
 
-```sql
---Won't Work (from MongoDB docs)
-SELECT *, inventory_docs
-FROM orders
-WHERE inventory_docs IN (SELECT *
-FROM inventory
-WHERE sku= orders.item)
-
---use join instead
-select *
-from orders
-inner join inventory inventory_docs
-on sku=item
-```
+    ```sql
+        --Won't Work (from MongoDB docs)
+        SELECT *, inventory_docs
+        FROM orders
+        WHERE inventory_docs IN (SELECT *
+        FROM inventory
+        WHERE sku= orders.item)
+        
+        --use join instead
+        select *
+        from orders
+        inner join inventory inventory_docs
+        on sku=item
+    ```
