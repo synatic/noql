@@ -62,9 +62,9 @@ playgroundButton.onclick = function () {
         document.getElementById('playground-node-result').textContent = nodeQuery;
         document.getElementById('playground-output-container').style.display = 'block';
         document.getElementById("playground-output-container").scrollIntoView({
-            behavior: 'auto',
             block: 'center',
-            inline: 'center'
+            inline: 'center', 
+            behavior: 'smooth'
         });
 
     } catch (e) {

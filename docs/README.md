@@ -10,20 +10,29 @@ Run all commands from this directory (the docs directory)
 
 Download the mkdocs-material docker image:
 
+For Intel Macs / Windows / Linux:
+
 ```bash
 docker pull squidfunk/mkdocs-material
+```
+
+For Apple Silicon Macintoshes:
+
+```bash
+docker pull ghcr.io/afritzler/mkdocs-material
 ```
 
 ## Developing
 
 To create a live preview while writing, run the following in the same directory as the `mkdocs.yml` file:
-### Intel Macs / Windows / Linux
+
+Intel Macs / Windows / Linux:
 
 ```bash
 docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material
 ```
 
-### Apple Silicon Macintoshes
+Apple Silicon Macintoshes:
 
 ```bash
 docker run --rm -it -p 8000:8000 -v ${PWD}:/docs ghcr.io/afritzler/mkdocs-material
