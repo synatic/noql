@@ -4,32 +4,38 @@ NoQL supports many methods that perform operations on array fields. They can be 
 
 NoQL uses sub-selects to query array fields in collections. E.g.
 
-```sql
-SELECT
-     (SELECT * FROM Rentals WHERE staffId=2) AS t 
-FROM 
-    `customers`
-```
+???+ example "Using sub-selects to query array fields"
+
+    ```sql
+    SELECT
+        (SELECT * FROM Rentals WHERE staffId=2) AS t 
+    FROM 
+        `customers`
+    ```
 
 Using '$$ROOT' in sub select promotes the field to the root value of the array
 
-```sql
-SELECT 
-    (SELECT filmId AS '$$ROOT' FROM Rentals WHERE staffId=2) AS t 
-FROM 
-    `customers`
-```
+???+ example "Using '$$ROOT' in sub select"
+
+    ```sql
+    SELECT 
+        (SELECT filmId AS '$$ROOT' FROM Rentals WHERE staffId=2) AS t 
+    FROM 
+        `customers`
+    ```
 
 Slicing the array is supported by limit and offset in queries
 
-```sql
-SELECT 
-    (SELECT * FROM Rentals WHERE staffId=2 LIMIT 10 OFFSET 5) AS t 
-FROM 
-    `customers`
-```
+???+ example "Slicing an array with limit and offset"
 
-!!! warning
+    ```sql
+    SELECT 
+        (SELECT * FROM Rentals WHERE staffId=2 LIMIT 10 OFFSET 5) AS t 
+    FROM 
+        `customers`
+    ```
+
+!!! warning "Sorting arrays in a sub select is not supported"
     Sorting arrays in a sub select is not supported. You will need to use unwind instead. For example:
 
     ```sql
@@ -38,6 +44,8 @@ FROM
         (SELECT * FROM Rentals ORDER BY id DESC) AS totalRentals
     FROM customers
     ```
+    
+!!! warning "Aggregation functions are not supported in a sub select"
     Aggregation functions are not supported in a sub select. For example, the following won't work
     ```sql
     --Wont'Work

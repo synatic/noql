@@ -55,21 +55,37 @@ inner join
     `inventory` on sku=item
 ```
 
-!!! note
+## Caveats
 
-    An `In` sub-select on a `where` clause does not work as a join. Use a join instead.
+
+ An `IN` sub-select on a `WHERE` clause does not work as a join. Use a join instead.
+
+
+???+ failure "Example `IN` sub-select. This won't work."
 
     ```sql
-        --Won't Work (from MongoDB docs)
-        SELECT *, inventory_docs
-        FROM orders
-        WHERE inventory_docs IN (SELECT *
-        FROM inventory
-        WHERE sku= orders.item)
+        --Won't Work
+        SELECT 
+            *, inventory_docs
+        FROM 
+            orders
+        WHERE 
+            inventory_docs IN 
+            (SELECT 
+                * FROM inventory
+            WHERE 
+                sku= orders.item
+            )
+    ```
         
-        --use join instead
-        select *
-        from orders
-        inner join inventory inventory_docs
-        on sku=item
+???+ success "Using `JOIN` instead of `IN` sub-select"
+    
+    ```sql
+    --use join instead
+    SELECT
+         *
+    FROM
+         orders
+    INNER JOIN
+        inventory inventory_docs ON sku=item
     ```

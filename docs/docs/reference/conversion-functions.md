@@ -29,7 +29,8 @@ Converts the expression to the specified mongo type: `double`, `string`, `bool`,
     ```sql 
     SELECT 
         SUBTRACT(CONVERT(‘1’,‘int’),ABS(`Replacement Cost`)) AS d,Title 
-    FROM `films`
+    FROM 
+        `films`
     ```
 
 ## IFNULL
@@ -43,7 +44,8 @@ Return the value if the expression is null.
     ```sql
     SELECT 
         IFNULL(id,1) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ???+ example "Example using select without `FROM` clause for object generation"
@@ -51,7 +53,8 @@ Return the value if the expression is null.
     ```sql
     SELECT 
         IFNULL(NULL,(select ‘a’ as val,1 as num)) AS `conv` 
-    FROM `customers` 
+    FROM 
+        `customers` 
     ```
 
 ## TO_BOOL
@@ -65,7 +68,8 @@ Convert the expression to a boolean.
     ```sql
     SELECT 
         TO_BOOL(‘true’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TO_DATE
@@ -79,7 +83,8 @@ Convert the expression to a date.
     ```sql  
     SELECT 
         TO_DATE(‘2021-12-15T00:00:00Z’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TO_DECIMAL
@@ -93,7 +98,8 @@ Convert the expression to a decimal.
     ```sql 
     SELECT 
         TO_DECIMAL(‘123.35’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TO_DOUBLE
@@ -107,7 +113,8 @@ Convert the expression to a double.
     ```sql  
     SELECT
          TO_DOUBLE(‘123.35’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
  
 ## TO_INT
@@ -121,7 +128,8 @@ Convert the expression to an integer.
     ```sql 
     SELECT 
         TO_INT(‘12345’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TO_LONG
@@ -135,7 +143,8 @@ Convert the expression to a long.
     ```sql  
     SELECT 
         TO_LONG(‘1234567891’) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TO_STRING
@@ -149,7 +158,8 @@ Convert the expression to a string.
     ```sql 
     SELECT 
         TO_STRING(`id`) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 ## TYPEOF
@@ -163,7 +173,8 @@ Returns the mongo type of the expression.
     ```sql 
     SELECT 
         TYPEOF(id) AS `conv` 
-    FROM `customers`
+    FROM 
+        `customers`
     ```
 
 
