@@ -57,7 +57,7 @@ inner join
 
 !!! note
 
-    `In` sub-select on a `where` clause does not work as a join. Use a join instead.
+    An `In` sub-select on a `where` clause does not work as a join. Use a join instead.
 
     ```sql
         --Won't Work (from MongoDB docs)
