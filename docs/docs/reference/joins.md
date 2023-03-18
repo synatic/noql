@@ -12,26 +12,47 @@ Examples:
 
 ```sql
 --return the first item in the array
-select * from orders inner join `inventory|first` as inventory_docs on sku=item
+select * 
+from orders 
+inner join 
+    `inventory|first` as inventory_docs on sku=item
 
 --take the last item of the array
-select * from orders inner join `inventory|last` as inventory_docs on sku=item
+select * 
+from 
+    orders 
+inner join 
+    `inventory|last` as inventory_docs on sku=item
 
 --unwind the array to multiple documents
-select * from orders inner join `inventory|unwind` as inventory_docs on sku=item
+select * 
+from orders 
+inner join 
+    `inventory|unwind` as inventory_docs on sku=item
 ```
 
 Alternatively the explicit array functions can be used:
 
 ```sql
 --return the first item in the array
-select *,FIRST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+select *
+    ,FIRST_IN_ARRAY(inventory) as inventory_docs 
+from orders 
+inner join `inventory` on sku=item
 
 --take the last item of the array
-select *,LAST_IN_ARRAY(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+select *
+    ,LAST_IN_ARRAY(inventory) as inventory_docs 
+from orders 
+inner join 
+    `inventory` on sku=item
 
 --unwind the array to multiple documents
-select *,UNWIND(inventory) as inventory_docs from orders inner join `inventory` on sku=item
+select *
+    ,UNWIND(inventory) as inventory_docs 
+from orders
+inner join 
+    `inventory` on sku=item
 ```
 
 !!! note
