@@ -84,7 +84,16 @@ nav:
     - Reference: 
       # - reference/index.md
       - Parsing SQL Statements: reference/parse.md
+      - Aggregate Functions: reference/aggregate-functions.md
+      - Arrays: reference/arrays.md
+      - Column Functions: reference/column-functions.md
+      - Comparison Functions: reference/comparison-operators.md
+      - Date Functions: reference/date-functions.md
+      - Joins: reference/joins.md
       - MSQL Commands: reference/m-sql.md
+      - Object Functions: reference/object-functions.md
+      - String Functions: reference/string-functions.md
+      - Sub Queries: reference/sub-queries.md
       - Supported SQL Statements: reference/supported-sql-statements.md
       - Mathematical Functions: reference/mathematical-functions.md
       - Mathematical Operators: reference/mathematical-operators.md
