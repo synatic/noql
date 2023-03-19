@@ -8,7 +8,7 @@ There are several join hints to support automatically unwinding of joins:
 - last
 - unwind
 
-Examples:
+### Examples
 
 ???+ example "Example `first` join hint"
 
