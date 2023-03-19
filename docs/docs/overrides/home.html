@@ -27,16 +27,6 @@
         height: 100%;
     }
 
-    /* .tx-container {
-        padding-top: .0rem;
-        background: linear-gradient(to bottom, var(--md-primary-fg-color), rgb(13, 3, 98) 99%,#fff 99%);
-        /* background: linear-gradient(-90deg, var(--md-primary-fg-color), rgb(13, 3, 98), var(--md-primary-fg-color), rgb(13, 3, 98)); */
-    /* background-size: 110% 110%; */
-    /* animation: gradient 15s ease infinite; */
-    /* height: 100vh; */
-    /* } */
-
-
     .tx-container {
         padding-top: .0rem;
         background-color: #3E8DB9;
@@ -78,6 +68,13 @@
         padding-right: 2.5rem;
     }
 
+    /* On screens that are 992px or less, set the background color to blue */
+    @media screen and (max-width: 992px) {
+        .tx-hero__image {
+            display: none;
+        }
+    }
+
     .tx-hero .md-button {
         margin-top: .5rem;
         margin-right: .5rem;
@@ -105,6 +102,10 @@
         transform: translateY(10%);
     }
 
+    .feature-item h2 img{
+            margin-top: 20px;
+        }
+
     .top-hr {
         margin-top: 42px;
     }
@@ -117,6 +118,7 @@
         word-break: break-word;
         background-color: var(--md-code-bg-color);
     }
+
 
     .feature-item h2 {
         /* color: #333; */
@@ -147,6 +149,10 @@
         .tx-hero h1 {
             font-size: 1.4rem
         }
+
+        .feature-item {
+            padding: 5px;
+        }
     }
 
     @media screen and (min-width:60em) {
@@ -168,6 +174,8 @@
             margin-right: 4.0rem;
             align-items: center;
         }
+
+
     }
 
     @media screen and (min-width:76.25em) {
@@ -341,10 +349,6 @@
 
             <div class="md-social">
 
-
-
-
-
                 <a href="https://twitter.com/datasynatic" target="_blank" rel="noopener" title="Synatic on Twitter"
                     class="md-social__link">
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -359,8 +363,8 @@
 
 
 
-                <a href="https://github.com/synatic/noql" target="_blank" rel="noopener"
-                    title="NoQL on Github" class="md-social__link">
+                <a href="https://github.com/synatic/noql" target="_blank" rel="noopener" title="NoQL on Github"
+                    class="md-social__link">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
                         <path
@@ -368,10 +372,6 @@
                         </path>
                     </svg>
                 </a>
-
-
-
-
 
                 <a href="https://www.linkedin.com/company/15815217/" target="_blank" rel="noopener"
                     title="Synatic on Linkedin" class="md-social__link">
