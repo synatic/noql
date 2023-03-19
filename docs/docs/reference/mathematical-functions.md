@@ -4,266 +4,510 @@ icon: material/alphabet-greek
 
 # Mathematical Functions
 
-## `#!sql AVG(expr,expr,...)`
+## `#!sql AVG`
+
+`#!sql AVG(expr,expr,...)`
 
 Returns the average of a set of values.
 
-```sql
-select AVG(`Replacement Cost`,`id`) as exprVal from `films` 
-```
 
-## ABS(expr)
+???+ example "Example `#!sql AVG` usage"
+
+    ```sql
+    SELECT
+        AVG(`Replacement Cost`,`id`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## ABS
+
+`ABS(expr)`
 
 Returns the absolute value of a number.
 
-```sql
-select ABS(`Replacement Cost`) as exprVal from `films` 
-```
+???+ example "Example `ABS` usage"
 
-## ACOS(expr)
+    ```sql
+    SELECT 
+        ABS(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## ACOS
+
+`ACOS(expr)`
 
 Returns the inverse cosine (arc cosine) of a value.
 
-```sql
-select ACOS(`Replacement Cost`) as exprVal from `films` 
-```
+???+ example "Example `ACOS` usage"
 
-## ACOSH(expr)
+    ```sql
+    SELECT 
+        ACOS(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## ACOSH
+
+`ACOSH(expr)`
 
 Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value.
 
-```sql
-select ACOSH(`Replacement Cost`) as exprVal from `films`  
-```
+???+ example "Example `ACOSH` usage"
 
-## ASIN(expr)
+    ```sql
+    SELECT 
+        ACOSH(`Replacement Cost`) AS exprVal
+    FROM 
+        `films`  
+    ```
+
+## ASIN
+
+`ASIN(expr)`
 
 Returns the inverse sine (arc sine) of a value.
 
-```sql
-select ASIN(`Replacement Cost`) as exprVal from `films`  
-```
-## ASINH(expr)
+???+ example "Example `ASIN` usage"
+
+    ```sql
+    SELECT 
+        ASIN(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films`  
+    ```
+## ASINH
+
+`ASINH(expr)`
 
 Returns the inverse hyperbolic sine (hyperbolic arc sine) of a value.
 
-```sql
-select ASINH(`Replacement Cost`) as exprVal from `films`  
+???+ example "Example `ASINH` usage"
+
+    ```sql
+    SELECT 
+        ASINH(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films`  
 ```
 
-## ATAN(expr)
+## ATAN
+
+`ATAN(expr)`
 
 Returns the inverse tangent (arc tangent) of a value.
 
-```sql
-select ATAN(`Replacement Cost`) as exprVal from `films`
-```
+???+ example "Example `ATAN` usage"
 
-## ATAN2(y,x)
+    ```sql
+    SELECT 
+        ATAN(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films`
+    ```
+
+## ATAN2
+
+`ATAN2(y,x)`
 
 Returns the inverse tangent (arc tangent) of y / x, where y and x are the first and second values passed to the expression respectively.
 
-```sql
-select ATAN2(3,4) as exprVal from `films`  
-```
+???+ example "Example `ATAN2` usage"
 
-## ATANH(expr)
+    ```sql
+    SELECT 
+        ATAN2(3,4) AS exprVal
+    FROM 
+        `films`  
+    ```
+
+## ATANH
+
+`ATANH(expr)`
 
 Returns the inverse hyperbolic tangent (hyperbolic arc tangent) of a value.
 
-```sql
-select ATANH(`Replacement Cost`) as exprVal from `films`  
-```
+???+ example "Example `ATANH` usage"
 
-## BINARY_SIZE(expr)
+    ```sql
+    SELECT 
+        ATANH(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## BINARY_SIZE
+
+`BINARY_SIZE(expr)`
 
 Returns the byte size of the expression.
 
-```sql
-select id,BINARY_SIZE(`First Name`) as exprVal from `customers` 
-```
+???+ example "Example `BINARY_SIZE` usage"
 
-## CEIL(expr)
+    ```sql
+    SELECT
+        id
+        ,BINARY_SIZE(`First Name`) as exprVal 
+    FROM 
+        `customers` 
+    ```
+
+## CEIL
+
+`CEIL(expr)`
 
 Returns the smallest integer greater than or equal to the specified number.
 
-```sql
-select CEIL(`Replacement Cost`, 1) as exprVal from `films`  
-```
+???+ example "Example `CEIL` usage"
 
-## DEGREES_TO_RADIANS(expr)
+    ```sql
+    SELECT 
+        CEIL(`Replacement Cost`, 1) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## DEGREES_TO_RADIANS
+
+`DEGREES_TO_RADIANS(expr)`
 
 Converts an input value measured in degrees to radians.
 
-```sql
-select DEGREES_TO_RADIANS(300) as exprVal from `films` 
-``` 
+???+ example "Example `DEGREES_TO_RADIANS` usage"
 
-## DIVIDE(expr,expr)
+    ```sql
+    SELECT 
+        DEGREES_TO_RADIANS(300) AS exprVal 
+    FROM 
+        `films` 
+    ``` 
+
+## DIVIDE
+
+`DIVIDE(expr,expr)`
 
 Divides one number by another and returns the result.
 
-```sql
-select DIVIDE(`Replacement Cost`,10) as exprVal from `films`  
-```
+???+ example "Example `DIVIDE` usage"
 
-## EXP(expr)
+    ```sql
+    SELECT 
+        DIVIDE(`Replacement Cost`,10) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+
+## EXP
+
+`EXP(expr)`
 
 Raises Euler's number (i.e. e ) to the specified exponent and returns the result.
 
-```sql
-select EXP(`Replacement Cost`, 1) as exprVal from `films` 
-``` 
-## FLOOR(expr)
+???+ example "Example `EXP` usage"
+
+    ```sql
+    SELECT 
+        EXP(`Replacement Cost`, 1) As exprVal 
+    FROM 
+        `films` 
+    ```
+
+## FLOOR
+
+`FLOOR(expr)`
 
 Returns the largest integer less than or equal to the specified number.
 
-```sql
-select FLOOR(`Replacement Cost`) as exprVal from `films` 
-```
+???+ example "Example `FLOOR` usage"
 
-## LN(expr)
+    ```sql
+    SELECT 
+        FLOOR(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## LN
+
+`LN(expr)`
 
 Calculates the natural logarithm ln (i.e log e) of a number and returns the result as a double.
 
-```sql
-select LN(`id`) as exprVal from `films`
-```  
-## LOG(number,base)
+???+ example "Example `LN` usage"
+
+    ```sql
+    SELECT 
+        LN(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## LOG
+
+`LOG(number,base)`
 
 Calculates the log of a number in the specified base and returns the result as a double.
 
-```sql
-select LOG(`id`,10) as exprVal from `films` 
-```
-## LOG10(expr)
+???+ example "Example `LOG` usage"
+
+    ```sql
+    SELECT 
+        LOG(`Replacement Cost`,10) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## LOG10
+
+`LOG10(expr)`
+
 Calculates the log base 10 of a number and returns the result as a double.
 
-```sql
-select LOG10(`id`) as exprVal from `films`  
-```
-## MAX(expr,expr,...)
+???+ example "Example `LOG10` usage"
+
+    ```sql
+    SELECT 
+        LOG10(`Replacement Cost`) AS exprVal 
+    FROM 
+        `films`  
+    ```
+## MAX
+
+`MAX(expr,expr,...)`
+
 Returns the max of a set of numbers.
 
-```sql
-select MAX(`id`,10) as exprVal from `films` 
+???+ example "Example `MAX` usage"
+
+    ```sql
+    SELECT 
+        MAX(`Replacement Cost`,10) AS exprVal 
+    FROM 
+        `films` 
 ```
 
-## MIN(xpr,expr,...)
+## MIN
+
+`MIN(xpr,expr,...)`
 
 Returns the min of a set of numbers.
 
-```sql
-select MIN(`id`,10) as exprVal from `films` 
-``` 
+???+ example "Example `MIN` usage"
 
-## MOD(expr,expr)
+    ```sql
+    SELECT 
+        MIN(`Replacement Cost`,10) AS exprVal
+    FROM 
+        `films` 
+    ``` 
+
+## MOD
+
+`MOD(expr,expr)`
 
 Divides one number by another and returns the remainder.
 
-```sql
-select MOD(`id`,10) as exprVal from `films`
-```
+???+ example "Example `MOD` usage"
+    ```sql
+    SELECT 
+        MOD(`Replacement Cost`,10) AS exprVal 
+    FROM 
+        `films`
+    ```
 
-## MULTIPLY(expr,expr,...)
+## MULTIPLY
+
+`MULTIPLY(expr,expr,...)`
 
 Multiplies numbers together and returns the result.
 
-```sql
-select MULTIPLY(`id`,10) as exprVal from `films` 
-```
+???+ example "Example `MULTIPLY` usage"
 
-## POW(expr,exponent)
+    ```sql
+    SELECT 
+        MULTIPLY(`Replacement Cost`,10) AS exprVal
+    FROM
+        `films`
+    ```
+
+## POW
+
+`POW(expr,exponent)`
 
 Raises a number to the specified exponent and returns the result.
 
-```sql
-select POW(`id`,10) as exprVal from `films` 
-```
+???+ example "Example `POW` usage"
+    ```sql
+    SELECT 
+        POW(`Replacement Cost`,10) AS exprVal 
+    FROM 
+        `films` 
+    ```
 
-## RADIANS_TO_DEGREES(expr)
+## RADIANS_TO_DEGREES
+
+`RADIANS_TO_DEGREES(expr)`
 
 Converts an input value measured in radians to degrees.
 
-```sql
-select RADIANS_TO_DEGREES(0.5) as exprVal from `films` 
-``` 
-## RAND(expr)
+???+ example "Example `RADIANS_TO_DEGREES` usage"
+
+    ```sql
+    SELECT 
+        RADIANS_TO_DEGREES(0.5) AS exprVal 
+    FROM 
+        `films` 
+    ``` 
+## RAND
+
+`RAND()`
 
 Returns a random float between 0 and 1 each time it is called.
 
-```sql
-select RAND() as exprVal from `films`  
-```
+???+ example "Example `RAND` usage"
 
-## ROUND(expr,[places])
+    ```sql
+    SELECT 
+        RAND() AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## ROUND
+
+`ROUND(expr,[places])`
 
 Rounds a number to a whole integer or to a specified decimal place.
 
-```sql
-select ROUND(`Replacement Cost`,1) as exprVal from `films`  
-```
+???+ example "Example `ROUND` usage"
 
-## SIN(expr)
+    ```sql
+    SELECT 
+        ROUND(`Replacement Cost`,1) AS exprVal
+    FROM 
+        `films`  
+    ```
+
+## SIN
+
+`SIN(expr)`
 
 Returns the sine of a value that is measured in radians.
 
-```sql
-select SIN(90) as exprVal from `films`  
+???+ example "Example `SIN` usage"
+
+    ```sql
+    SELECT 
+        SIN(90) AS exprVal 
+    FROM 
+        `films`  
 ```
 
-## SINH(expr)
+## SINH
+
+`SINH(expr)`
 
 Returns the hyperbolic sine of a value that is measured in radians.
 
-```sql
-select SINH(90) as exprVal from `films`  
-```
+???+ example "Example `SINH` usage"
 
-## SQRT(expr)
+    ```sql
+    SELECT 
+        SINH(90) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## SQRT
+
+`SQRT(expr)`
 
 Calculates the square root of a positive number and returns the result as a double.
 
-```sql
-select SQRT(`id`) as exprVal from `films`  
-```
+???+ example "Example `SQRT` usage"
 
-## SUBTRACT(expr,expr)
+    ```sql
+    SELECT 
+        SQRT(`id`) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## SUBTRACT
+
+`SUBTRACT(expr,expr)`
 
 Subtracts two numbers to return the difference, or two dates to return the difference in milliseconds, or a date and a number in milliseconds to return the resulting date.
 
-```sql
-select SUBTRACT(10,`id`) as exprVal from `films` 
-```
+???+ example "Example `SUBTRACT` usage"
 
-## SUM(expr,expr,...)
+    ```sql
+    SELECT 
+        SUBTRACT(10,`id`) AS exprVal 
+    FROM 
+        `films` 
+    ```
+
+## SUM
+
+`SUM(expr,expr,...)`
 
 Sums the values provided in the expression.
 
-```sql
-select SUM(`Replacement Cost`,2,id) as s from `films`  
-```
+???+ example "Example `SUM` usage"
 
-## TAN(expr)
+    ```sql
+    SELECT 
+        SUM(`Replacement Cost`,2,id) AS s 
+    FROM 
+        `films`  
+    ```
+
+## TAN
+
+`TAN(expr)`
 
 Returns the tangent of a value that is measured in radians.
 
-```sql
-select TAN(90) as exprVal from `films`  
-```
+???+ example "Example `TAN` usage"
 
-## TANH(expr)
+    ```sql
+    SELECT 
+        TAN(90) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## TANH
+
+`TANH(expr)`
 
 Returns the hyperbolic tangent of a value that is measured in radians.
 
-```sql
-select TANH(90) as exprVal from `films`  
-```
+???+ example "Example `TANH` usage"
 
-## TRUNC(expr,[places])
+    ```sql
+    SELECT 
+        TANH(90) AS exprVal 
+    FROM 
+        `films`  
+    ```
+
+## TRUNC
+
+`TRUNC(expr,[places])`
 
 Truncates a number to a whole integer or to a specified decimal place.
 
-```sql
-select TRUNC(`Replacement Cost`, 1) as exprVal from `films`
-```
+???+ example "Example `TRUNC` usage"
+
+    ```sql
+    SELECT 
+        TRUNC(`Replacement Cost`, 1) AS exprVal 
+    FROM 
+        `films`
+    ```
