@@ -1,15 +1,25 @@
 # `#!js M-SQL`
 
-Requires as for functions and sub queries
+NoQL requires `AS` for functions and sub queries
 
-```sql
-select abs(-1) as `absId` from `customers`
-```
+???+ example "Example `AS` usage"
 
-as on table requires prefixing
+    ```sql
+    SELECT 
+        ABS(-1) AS `absId` 
+    FROM 
+        `customers`
+    ```
 
-```sql
-select c.* from customers as c
-```
+Using `AS` on a table requires prefixing
 
-Always prefix on joins
+???+ example "Example `AS` usage with a table with prefixing"
+
+    ```sql
+    SELECT 
+        c.* 
+    FROM 
+        customers AS c
+    ```
+
+Always prefix on `JOIN` statements

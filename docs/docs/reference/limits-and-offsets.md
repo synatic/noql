@@ -1,7 +1,13 @@
 # Limit and Offset
 
-Supports MySQL style limits and offset that equates to limit and skip
+NoQL supports MySQL style limits and offsets that equates to `limit` and `skip` in MongoDB. For example:
 
-```sql
-select (select * from Rentals) as t from `customers` limit 10 offset 2
-```
+???+ example "Using `LIMIT` and `OFFSET`"
+
+    ```sql
+    SELECT 
+        (SELECT * FROM Rentals) AS t 
+    FROM 
+        `customers` 
+    LIMIT 10 OFFSET 2
+    ```

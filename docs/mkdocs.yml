@@ -73,6 +73,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - admonition
+  - pymdownx.details
   - pymdownx.tabbed:
       alternate_style: true 
   - pymdownx.emoji:
@@ -99,6 +101,5 @@ nav:
       - Object Functions: reference/object-functions.md
       - Order By Clause: reference/order-by-clause.md
       - String Functions: reference/string-functions.md
-      - Sub Queries: reference/sub-queries.md
       - Where Clause: reference/where-clause.md
     - Playground: playground/index.md

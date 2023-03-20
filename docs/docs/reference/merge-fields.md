@@ -1,25 +1,50 @@
 # Merge Fields into Object
 
-Only available in aggregate
-Select without table
+Only available in aggregates. Use a `SELECT` without specifying a table to create a new object.
+
+## Examples
 
 Create a new Object
 
-```sql
-select (select id,`First Name` as Name) as t  from customers
-```
+???+ example "Creating a new object"
+
+    ```sql
+    SELECT 
+        (SELECT id,`First Name` AS Name) AS t 
+    FROM 
+        customers
+    ```
 
 Create a new Object and assign to root
 
-```sql
-select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`  from customers
-```
+???+ example "Creating a new object and assigning to root"
+
+    ```sql
+    SELECT 
+        (SELECT id,`First Name` AS Name) AS t1
+        ,(SELECT id,`Last Name` AS LastName) AS t2
+        ,MERGE_OBJECTS(t1,t2) AS `$$ROOT`  
+    FROM 
+        customers
+    ```
 
 Using with unwind with joins
 
-```sql
-select MERGE_OBJECTS((select t.CustomerID,t.Name),t.Rental) as `$$ROOT` from (select id as CustomerID,`First Name` as Name,unwind(Rentals) as Rental from customers) as t
-```
+???+ example "Using with unwind with joins"
 
-PARSE_JSON(json string)
-
+    ```sql
+    SELECT 
+        MERGE_OBJECTS(
+            (SELECT 
+                t.CustomerID
+                ,t.Name
+            )
+            ,t.Rental
+            ) AS `$$ROOT` 
+    FROM 
+        (SELECT 
+            id AS CustomerID
+            ,`First Name` AS Name
+            ,UNWIND(Rentals) AS Rental 
+        FROM customers) AS t
+    ```
