@@ -13,7 +13,7 @@
 
 ## Description
 
-Generates mongo aggregate pipeline components from a SQL statement.
+Generates a mongo aggregate pipeline components from a SQL statement.
 
 If your SQL statement can be represented by a straight query, use [`makeMongoQuery`](/noql-api-reference/makeMongoQuery.md) instead. If you want NoQL to automatically choose, use [`parseSQL`](/noql-api-reference/parseSQL.md) instead.
 

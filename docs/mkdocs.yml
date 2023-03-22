@@ -96,15 +96,16 @@ nav:
       - Comparison Functions: reference/comparison-operators.md
       - Conversion Functions: reference/conversion-functions.md
       - Date Functions: reference/date-functions.md
-      - Joins: reference/joins.md
       - Limits and Offsets: reference/limits-and-offsets.md
       - Mathematical Functions: reference/mathematical-functions.md
       - Mathematical Operators: reference/mathematical-operators.md
-      - Merge Fields: reference/merge-fields.md
       - MSQL Commands: reference/m-sql.md
-      - Object Functions: reference/object-functions.md
       - String Functions: reference/string-functions.md
     - Best Practices:
-      - Order By Clause: reference/order-by-clause.md
-      - Where Clause: reference/where-clause.md
+      - Joins: best-practices/joins.md
+      - Merge Fields: best-practices/merge-fields.md
+      - Object Functions: best-practices/object-functions.md
+      - Order By Clause: best-practices/order-by-clause.md
+      - Where Clause: best-practices/where-clause.md
+
     - Playground: playground/index.md
