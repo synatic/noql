@@ -3,7 +3,7 @@ hide:
   - navigation
 ---
 
-# Getting Started
+# Quick Start
 
 
 ## Installation
@@ -16,9 +16,9 @@ npm i @synatic/noql --save
 
 ## Usage
 
-NoQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. To use the output object, construct a query with `MongoClient` from the [MongoDB NodeJS Driver](https://www.npmjs.com/package/mongodb): 
+NoQL's [`parseSQL`](/noql-api-reference/parseSQL) method outputs an object with a type, either `query` or `aggregate`, along with the components of the Mongo query. To use the output object, construct a query with `MongoClient` from the [MongoDB NodeJS Driver](https://www.npmjs.com/package/mongodb): 
 
-???+ example "Example usage with `MongoClient`"
+???+ example "Example usage of `parseSQL` with `MongoClient`"
 
     Node.js:
 
@@ -56,3 +56,4 @@ NoQL outputs an object with the type, either `query` or `aggregate`, along with 
         }
     })();
     ```
+See the [API Reference](/noql-api-reference/canQuery) for more information.

@@ -82,24 +82,30 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
 nav:
     - Home: index.md
-    - Getting Started: getting-started/index.md
-    - Reference: 
-      # - reference/index.md
-      - Parsing SQL Statements: reference/parse.md
+    - Quick Start: getting-started/index.md
+    - NoQL API:
+      - canQuery: noql-api-reference/canQuery.md
+      - makeMongoAggregate: noql-api-reference/makeMongoAggregate.md
+      - makeMongoQuery: noql-api-reference/makeMongoQuery.md
+      - parseSQL: noql-api-reference/parseSQL.md
+      - parseSQLtoAST: noql-api-reference/parseSQLtoAST.md
+    - Supported SQL Statements:
       - Aggregate Functions: reference/aggregate-functions.md
       - Arrays: reference/arrays.md
       - Column Functions: reference/column-functions.md
       - Comparison Functions: reference/comparison-operators.md
       - Conversion Functions: reference/conversion-functions.md
       - Date Functions: reference/date-functions.md
-      - Joins: reference/joins.md
       - Limits and Offsets: reference/limits-and-offsets.md
       - Mathematical Functions: reference/mathematical-functions.md
       - Mathematical Operators: reference/mathematical-operators.md
-      - Merge Fields: reference/merge-fields.md
       - MSQL Commands: reference/m-sql.md
-      - Object Functions: reference/object-functions.md
-      - Order By Clause: reference/order-by-clause.md
       - String Functions: reference/string-functions.md
-      - Where Clause: reference/where-clause.md
+    - Best Practices:
+      - Joins: best-practices/joins.md
+      - Merge Fields: best-practices/merge-fields.md
+      - Object Functions: best-practices/object-functions.md
+      - Order By Clause: best-practices/order-by-clause.md
+      - Where Clause: best-practices/where-clause.md
+
     - Playground: playground/index.md
