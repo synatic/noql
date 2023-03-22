@@ -82,10 +82,14 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
 nav:
     - Home: index.md
-    - Getting Started: getting-started/index.md
-    - Reference: 
-      # - reference/index.md
-      - Parsing SQL Statements: reference/parse.md
+    - Quick Start: getting-started/index.md
+    - NoQL API:
+      - canQuery: noql-api-reference/canQuery.md
+      - makeMongoAggregate: noql-api-reference/makeMongoAggregate.md
+      - makeMongoQuery: noql-api-reference/makeMongoQuery.md
+      - parseSQL: noql-api-reference/parseSQL.md
+      - parseSQLtoAST: noql-api-reference/parseSQLtoAST.md
+    - Supported SQL Statements:
       - Aggregate Functions: reference/aggregate-functions.md
       - Arrays: reference/arrays.md
       - Column Functions: reference/column-functions.md
@@ -99,7 +103,8 @@ nav:
       - Merge Fields: reference/merge-fields.md
       - MSQL Commands: reference/m-sql.md
       - Object Functions: reference/object-functions.md
-      - Order By Clause: reference/order-by-clause.md
       - String Functions: reference/string-functions.md
+    - Best Practices:
+      - Order By Clause: reference/order-by-clause.md
       - Where Clause: reference/where-clause.md
     - Playground: playground/index.md
