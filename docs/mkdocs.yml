@@ -48,6 +48,22 @@ theme:
     #     icon: material/weather-night
     #     name: Switch to light mode
 extra:
+  analytics:
+    provider: google
+    property: G-7VEMMQEFLN
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/thumb-down-outline
+          name: This page could be improved
+          data: 0
+          note: >- 
+            Thanks for your feedback!
   social:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/datasynatic
@@ -107,5 +123,4 @@ nav:
       - Object Functions: best-practices/object-functions.md
       - Order By Clause: best-practices/order-by-clause.md
       - Where Clause: best-practices/where-clause.md
-
     - Playground: playground/index.md
