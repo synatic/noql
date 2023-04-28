@@ -196,4 +196,14 @@ export interface MongoQueryFunction {
     };
     /** specifies if this function requires an as when it's in a query, default: true */
     requiresAs?: boolean;
+    jsonSchemaReturnType: JSONSchemaTypeName | JSONSchemaTypeName[];
 }
+
+export type JSONSchemaTypeName =
+    | 'string'
+    | 'number'
+    | 'integer'
+    | 'boolean'
+    | 'object'
+    | 'array'
+    | 'null';
