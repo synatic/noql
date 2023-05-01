@@ -57,7 +57,7 @@
     "check-types": "11.2.2",
     "clone-deep": "4.0.1",
     "deepmerge": "4.2.2",
-    "node-sql-parser": "4.6.5"
+    "node-sql-parser": "4.6.6"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
