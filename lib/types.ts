@@ -196,4 +196,36 @@ export interface MongoQueryFunction {
     };
     /** specifies if this function requires an as when it's in a query, default: true */
     requiresAs?: boolean;
+    /** Specifies if this query requires a group by */
+    forceGroup?: boolean;
+    jsonSchemaReturnType: JSONSchemaTypeName | SchemaFn;
+    //TODO Rk, would be good to have a description here and auto generate docs
 }
+
+export type JSONSchemaTypeName =
+    | 'string'
+    | 'number'
+    | 'integer'
+    | 'boolean'
+    | 'object'
+    | 'date'
+    | 'string[]'
+    | 'number[]'
+    | 'integer[]'
+    | 'boolean[]'
+    | 'object[]'
+    | 'date[]'
+    | 'null';
+
+type SchemaFn = (params: any) => {
+    /** Specifies if there is a json schema type returned or the name of the field that defines the type */
+    type: 'fieldName' | 'jsonSchemaValue';
+    jsonSchemaValue?: JSONSchemaTypeName;
+    fieldName?: 'string';
+    /** Specifies if the result will be an array of the field type, should not apply to jsonSchemaValue */
+    isArray?: boolean;
+};
+
+export type JsonSchemaTypeMap = {
+    [key: string]: JSONSchemaTypeName;
+};
