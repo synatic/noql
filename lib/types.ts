@@ -229,3 +229,29 @@ type SchemaFn = (params: any) => {
 export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
+
+export interface FlattenedSchema {
+    /** The path to the field within the document/json object */
+    path: string;
+    /** The JsonSchema type */
+    type: JSONSchemaTypeName | JSONSchemaTypeName[];
+    /** The JsonSchema format if it's a string */
+    format?: string | 'date-time' | 'mongoid';
+    /** Specifies if the field is an array or not */
+    isArray: boolean;
+    /** Specifies if it's a required field or not */
+    required: boolean;
+}
+
+export interface ResultSchema extends FlattenedSchema {
+    /** The order for this result, lowest should come first */
+    order: number;
+    /** the collection from which this column comes */
+    collectionName: string;
+    /** If the column has an "as" name, it will be here */
+    as?: string;
+}
+
+export type GetSchemaFunction = (
+    collectionName: string
+) => Promise<FlattenedSchema[]>;
