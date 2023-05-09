@@ -191,7 +191,7 @@ describe('metadata', () => {
                     });
                     it('number result, field set', async () => {
                         const queryString =
-                            'select _id, firstn(1,"rentals") as itemSplit from customers';
+                            'select _id, firstn(1,"numberArray") as itemSplit from function-test-data';
                         const ast = parseSQLtoAST(queryString, {
                             database: 'PostgresQL',
                         });
@@ -203,10 +203,9 @@ describe('metadata', () => {
                         assert.deepStrictEqual(schema.length, 2);
                         const itemSplit = schema[1];
                         assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                        assert.deepStrictEqual(itemSplit.type, 'object');
+                        assert.deepStrictEqual(itemSplit.type, 'integer');
                         assert.deepStrictEqual(itemSplit.isArray, true);
                     });
-                    // not object
                 });
                 it('split', async () => {
                     const queryString =
