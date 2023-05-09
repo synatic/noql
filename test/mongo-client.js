@@ -59,7 +59,7 @@ async function addTestData() {
         const data = JSON.parse(dataString);
         await db.collection(collectionName).bulkWrite(
             data.map((d) => {
-                return {insertOne: {document: d}};
+                return {insertOne: {document: parseDocForDates(d)}};
             })
         );
         await generateSchema(data, collectionName);
