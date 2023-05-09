@@ -9,6 +9,7 @@ const _inventory = require('./exampleData/inventory.json');
 const _policies = require('./exampleData/policies.json');
 const _policyPremium = require('./exampleData/policy-premiums.json');
 const $check = require('check-types');
+const $schema = require('@synatic/schema-magic');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -23,6 +24,31 @@ async function connect() {
     db = client.db(dbName);
 }
 
+/**
+ *
+ * @param {object[]} values
+ * @param {string} collectionName
+ */
+async function generateSchema(values, collectionName) {
+    if (!client || !db) {
+        throw new Error('Call connect before addTestData');
+    }
+    const schema = $schema.mergeSchemas(
+        values
+            .slice(0, 10)
+            .filter((v) => Boolean)
+            .map((v) => $schema.generateSchemaFromJSON(v))
+    );
+    const flattenedSchema = $schema.flattenSchema(schema, {
+        additionalProperties: ['displayOptions'],
+    });
+    console.log(schema, flattenedSchema);
+    await db.collection('schemas').insertOne({
+        collectionName,
+        schema,
+        flattenedSchema,
+    });
+}
 async function addTestData() {
     if (!client || !db) {
         throw new Error('Call connect before addTestData');
@@ -33,41 +59,49 @@ async function addTestData() {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_customers, 'customers');
 
     await db.collection('stores').bulkWrite(
         _stores.map((d) => {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_stores, 'stores');
 
     await db.collection('films').bulkWrite(
         _films.map((d) => {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_films, 'films');
+
     await db.collection('customer-notes').bulkWrite(
         _customerNotes.map((d) => {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_customerNotes, 'customer-note');
 
     await db.collection('customer-notes2').bulkWrite(
         _customerNotes2.map((d) => {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_customerNotes2, 'customer-notes2');
 
     await db.collection('orders').bulkWrite(
         _orders.map((d) => {
             return {insertOne: {document: parseDocForDates(d)}};
         })
     );
+    await generateSchema(_orders, 'orders');
 
     await db.collection('inventory').bulkWrite(
         _inventory.map((d) => {
             return {insertOne: {document: d}};
         })
     );
+    await generateSchema(_inventory, 'inventory');
 
     await db.collection('ams360-powerbi-basicpolinfo').bulkWrite(
         _policies.map((d) => {
