@@ -134,82 +134,27 @@ describe('metadata', () => {
             assert.deepStrictEqual(_idField.type, 'string');
         });
         describe('functions', () => {
-            describe('static return types', () => {
-                it('should be able to generate a schema for a specific field that is a function with an alias', async () => {
-                    const queryString =
-                        'select _id, TRIM(`item`) as trimmedItem from orders';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
-                    const schema = await getResultSchema(
-                        ast,
-                        queryString,
-                        getSchema
-                    );
-                    assert.deepStrictEqual(schema.length, 2);
-                    const trimmedItem = schema[1];
-                    assert.deepStrictEqual(trimmedItem.as, 'trimmedItem');
-                    assert.deepStrictEqual(trimmedItem.type, 'string');
-                    assert.deepStrictEqual(trimmedItem.isArray, false);
+            it('trim', async () => {
+                const queryString =
+                    'select _id, TRIM(`item`) as trimmedItem from orders';
+                const ast = parseSQLtoAST(queryString, {
+                    database: 'PostgresQL',
                 });
+                const schema = await getResultSchema(
+                    ast,
+                    queryString,
+                    getSchema
+                );
+                assert.deepStrictEqual(schema.length, 2);
+                const trimmedItem = schema[1];
+                assert.deepStrictEqual(trimmedItem.as, 'trimmedItem');
+                assert.deepStrictEqual(trimmedItem.type, 'string');
+                assert.deepStrictEqual(trimmedItem.isArray, false);
             });
-            describe('parameter based return types', () => {
-                describe('firstn', () => {
-                    it('object result, no field set', async () => {
-                        const queryString =
-                            'select _id, firstn(1) as itemSplit from customers';
-                        const ast = parseSQLtoAST(queryString, {
-                            database: 'PostgresQL',
-                        });
-                        const schema = await getResultSchema(
-                            ast,
-                            queryString,
-                            getSchema
-                        );
-                        assert.deepStrictEqual(schema.length, 2);
-                        const itemSplit = schema[1];
-                        assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                        assert.deepStrictEqual(itemSplit.type, 'object');
-                        assert.deepStrictEqual(itemSplit.isArray, true);
-                    });
-                    it('object result, field set', async () => {
-                        const queryString =
-                            'select _id, firstn(1,"rentals") as itemSplit from customers';
-                        const ast = parseSQLtoAST(queryString, {
-                            database: 'PostgresQL',
-                        });
-                        const schema = await getResultSchema(
-                            ast,
-                            queryString,
-                            getSchema
-                        );
-                        assert.deepStrictEqual(schema.length, 2);
-                        const itemSplit = schema[1];
-                        assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                        assert.deepStrictEqual(itemSplit.type, 'object');
-                        assert.deepStrictEqual(itemSplit.isArray, true);
-                    });
-                    it('number result, field set', async () => {
-                        const queryString =
-                            'select _id, firstn(1,"numberArray") as itemSplit from function-test-data';
-                        const ast = parseSQLtoAST(queryString, {
-                            database: 'PostgresQL',
-                        });
-                        const schema = await getResultSchema(
-                            ast,
-                            queryString,
-                            getSchema
-                        );
-                        assert.deepStrictEqual(schema.length, 2);
-                        const itemSplit = schema[1];
-                        assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                        assert.deepStrictEqual(itemSplit.type, 'integer');
-                        assert.deepStrictEqual(itemSplit.isArray, true);
-                    });
-                });
-                it('split', async () => {
+            describe('firstn', () => {
+                it('object result, no field set', async () => {
                     const queryString =
-                        'select _id, SPLIT(`item`,",") as itemSplit from orders';
+                        'select _id, firstn(1) as itemSplit from customers';
                     const ast = parseSQLtoAST(queryString, {
                         database: 'PostgresQL',
                     });
@@ -221,10 +166,360 @@ describe('metadata', () => {
                     assert.deepStrictEqual(schema.length, 2);
                     const itemSplit = schema[1];
                     assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                    assert.deepStrictEqual(itemSplit.type, 'string');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+                it('object result, field set', async () => {
+                    const queryString =
+                        'select _id, firstn(1,"rentals") as itemSplit from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+                it('number result, field set', async () => {
+                    const queryString =
+                        'select _id, firstn(1,"numberArray") as itemSplit from function-test-data';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                    assert.deepStrictEqual(itemSplit.type, 'integer');
                     assert.deepStrictEqual(itemSplit.isArray, true);
                 });
             });
+            it('split', async () => {
+                const queryString =
+                    'select _id, SPLIT(`item`,",") as itemSplit from orders';
+                const ast = parseSQLtoAST(queryString, {
+                    database: 'PostgresQL',
+                });
+                const schema = await getResultSchema(
+                    ast,
+                    queryString,
+                    getSchema
+                );
+                assert.deepStrictEqual(schema.length, 2);
+                const itemSplit = schema[1];
+                assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                assert.deepStrictEqual(itemSplit.type, 'string');
+                assert.deepStrictEqual(itemSplit.isArray, true);
+            });
+            describe('lastn', () => {
+                it('object result, no field set', async () => {
+                    const queryString =
+                        'select _id, lastn(1) as itemSplit from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+                it('object result, field set', async () => {
+                    const queryString =
+                        'select _id, lastn(1,"rentals") as itemSplit from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+                it('number result, field set', async () => {
+                    const queryString =
+                        'select _id, lastn(1,"numberArray") as itemSplit from function-test-data';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'itemSplit');
+                    assert.deepStrictEqual(itemSplit.type, 'integer');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('convert', () => {
+                it('to int', async () => {
+                    const queryString =
+                        'select _id, convert(Phone,"int") as converted from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'converted');
+                    assert.deepStrictEqual(itemSplit.type, 'number');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('ifNull', async () => {
+                it('should work if a static value is set', async () => {
+                    const queryString =
+                        'select _id, ifNull(Phone,"555-555-5555") as nullGuard from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'nullGuard');
+                    assert.deepStrictEqual(itemSplit.type, 'string');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+                it('should work if a select value is set', async () => {
+                    const queryString =
+                        'select _id, ifNull(Phone,(SELECT "A" as val)) as nullGuard from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'nullGuard');
+                    assert.deepStrictEqual(itemSplit.type, 'string');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('first_in_array', () => {
+                it('should work for a basic first_in_array', async () => {
+                    const queryString =
+                        'select _id,FIRST_IN_ARRAY(`Rentals`) as Rental from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'Rental');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('last_in_array', () => {
+                it('should work for a basic last_in_array', async () => {
+                    const queryString =
+                        'select _id,last_in_array(`Rentals`) as Rental from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'Rental');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('reverse_array', () => {
+                it('should work for a basic reverse_array', async () => {
+                    const queryString =
+                        'select _id,reverse_array(`Rentals`) as Rental from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'Rental');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('array_elem_at', () => {
+                it('should work for a basic array_elem_at', async () => {
+                    const queryString =
+                        'select _id,array_elem_at(`Rentals`,0) as Rental from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'Rental');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('array_range', () => {
+                it('should work for a basic array_elem_at', async () => {
+                    const queryString =
+                        'select _id,ARRAY_RANGE(0,10,2) as test from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'number');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('zip_array', () => {
+                it('should work for a basic zip_array', async () => {
+                    const queryString =
+                        'select _id, ZIP_ARRAY((select `Film Title` as "$$ROOT" from `Rentals`),ARRAY_RANGE(0,10,2)) as test from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('concat_arrays', () => {
+                it('should work for a basic concat_arrays', async () => {
+                    const queryString =
+                        'select _id, concat_arrays((select `Film Title` as "$$ROOT" from `Rentals`),ARRAY_RANGE(0,10,2)) as test from customers';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('object_to_array', () => {
+                it('should work for a basic object_to_array', async () => {
+                    const queryString =
+                        'select id,OBJECT_TO_ARRAY(`Address`) as test from `customers`';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('array_to_object', () => {
+                it('should work for a basic array_to_object', async () => {
+                    const queryString =
+                        'select id,ARRAY_TO_OBJECT(PARSE_JSON(\'[{"k":"val","v":1}]\')) as test from `customers`';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('set_union', () => {
+                it('should work for a basic array_to_object', async () => {
+                    const queryString =
+                        "select id,SET_UNION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`";
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 2);
+                    const itemSplit = schema[1];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            //
         });
 
         // functions
@@ -234,7 +529,6 @@ describe('metadata', () => {
          * multiple functions "select id,ARRAY_TO_OBJECT(PARSE_JSON('[{\"k\":\"val\",\"v\":1}]')) as test from `customers`"
          * replacing root complex "select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`
          * gets field select SPLIT(`First Name`,',') as exprVal from `customers`
-         * wtf select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`
          * $unset
          */
     });
