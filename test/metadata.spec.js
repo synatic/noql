@@ -60,6 +60,51 @@ describe('metadata', () => {
             assert.deepStrictEqual(_idField.required, false);
             assert.deepStrictEqual(_idField.type, 'string');
         });
+        // it('should include the _id column even if not selected', async () => {
+        //     const queryString = 'select id from orders';
+        //     const ast = parseSQLtoAST(queryString, {
+        //         database: 'PostgresQL',
+        //     });
+        //     const schema = await getResultSchema(ast, queryString, getSchema);
+        //     assert.deepStrictEqual(schema.length, 2);
+        //     const _idField = schema[0];
+        //     assert.ok(!_idField.as);
+        //     assert.deepStrictEqual(_idField.collectionName, 'orders');
+        //     assert.deepStrictEqual(_idField.format, 'mongoid');
+        //     assert.deepStrictEqual(_idField.isArray, false);
+        //     assert.deepStrictEqual(_idField.order, 0);
+        //     assert.deepStrictEqual(_idField.path, '_id');
+        //     assert.deepStrictEqual(_idField.required, false);
+        //     assert.deepStrictEqual(_idField.type, 'string');
+        // });
+        // it('should not include the _id if it is explicitly unset', async () => {
+        //     const queryString = 'select id, unset(_id) from orders';
+        //     const ast = parseSQLtoAST(queryString, {
+        //         database: 'PostgresQL',
+        //     });
+        //     const schema = await getResultSchema(ast, queryString, getSchema);
+        //     assert.deepStrictEqual(schema.length, 1);
+        //     const _idField = schema[0];
+        //     assert.ok(!_idField.as);
+        //     assert.deepStrictEqual(_idField.collectionName, 'orders');
+        //     assert.deepStrictEqual(_idField.format, 'mongoid');
+        //     assert.deepStrictEqual(_idField.isArray, false);
+        //     assert.deepStrictEqual(_idField.order, 0);
+        //     assert.deepStrictEqual(_idField.path, '_id');
+        //     assert.deepStrictEqual(_idField.required, false);
+        //     assert.deepStrictEqual(_idField.type, 'string');
+        // });
+        // TODO TEST for table.*, table2.*
+        it('should be able to generate a schema for a * query with field specified', async () => {
+            const queryString = 'select _id, * from orders';
+            const ast = parseSQLtoAST(queryString, {
+                database: 'PostgresQL',
+            });
+            const schema = await getResultSchema(ast, queryString, getSchema);
+            assert.deepStrictEqual(schema.length, 10);
+            const _idColumn = schema[8];
+            assert.deepStrictEqual(_idColumn.path, '_id');
+        });
         it('should be able to generate a schema for multiple specific fields', async () => {
             const queryString = 'select _id,item from orders';
             const ast = parseSQLtoAST(queryString, {
@@ -531,6 +576,32 @@ describe('metadata', () => {
          * gets field select SPLIT(`First Name`,',') as exprVal from `customers`
          * $unset
          */
+    });
+
+    describe('with joins', () => {
+        it('should be able to generate a schema for a * query', async () => {
+            const queryString =
+                'select * from orders inner join `inventory` on sku=item';
+            const ast = parseSQLtoAST(queryString, {
+                database: 'PostgresQL',
+            });
+            const schema = await getResultSchema(ast, queryString, getSchema);
+            assert.deepStrictEqual(schema.length, 15);
+            const _idColumn = schema[7];
+            assert.deepStrictEqual(_idColumn.path, '_id');
+        });
+        // it('should return the first tables column when there are two columns with the same name', async () => {
+        //     const queryString =
+        //         'select id from orders inner join `inventory` on sku=item';
+        //     const ast = parseSQLtoAST(queryString, {
+        //         database: 'PostgresQL',
+        //     });
+        //     const schema = await getResultSchema(ast, queryString, getSchema);
+        //     assert.deepStrictEqual(schema.length, 1);
+        //     const _idColumn = schema[0];
+        //     assert.deepStrictEqual(_idColumn.path, 'id');
+        //     assert.deepStrictEqual(_idColumn.collectionName, 'orders');
+        // });
     });
     async function getSchema(collectionName) {
         const doc = await database

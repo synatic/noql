@@ -242,6 +242,9 @@ export interface FlattenedSchema {
     /** Specifies if it's a required field or not */
     required: boolean;
 }
+export interface FlattenedSchemas {
+    [key: string]: FlattenedSchema[];
+}
 
 export interface ResultSchema extends FlattenedSchema {
     /** The order for this result, lowest should come first */
