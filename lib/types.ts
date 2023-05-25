@@ -63,7 +63,7 @@ export interface Expression {
     table?: string;
     column?: string;
     name?: string;
-    args?: Expression[];
+    args?: Expression | Expression[];
     from?: TableDefinition[];
     value?: any;
     tableList?: string[];
@@ -217,15 +217,16 @@ export type JSONSchemaTypeName =
     | 'date[]'
     | 'null';
 
-type SchemaFn = (params: any) => {
+type SchemaFn = (params: any) => SchemaFnResult | SchemaFnResult[];
+
+export interface SchemaFnResult {
     /** Specifies if there is a json schema type returned or the name of the field that defines the type */
-    type: 'fieldName' | 'jsonSchemaValue';
+    type: 'fieldName' | 'jsonSchemaValue' | 'unset';
     jsonSchemaValue?: JSONSchemaTypeName;
     fieldName?: 'string';
     /** Specifies if the result will be an array of the field type, should not apply to jsonSchemaValue */
     isArray?: boolean;
-};
-
+}
 export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
