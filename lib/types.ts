@@ -174,7 +174,7 @@ export interface ColumnParseResult {
     };
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
     count: {$count: string}[];
-    unset: string[];
+    unset: {$unset: string[]};
     countDistinct: string;
     groupByProject?: object;
 }
