@@ -60,41 +60,33 @@ describe('metadata', () => {
             assert.deepStrictEqual(_idField.required, false);
             assert.deepStrictEqual(_idField.type, 'string');
         });
-        // it('should include the _id column even if not selected', async () => {
-        //     const queryString = 'select id from orders';
-        //     const ast = parseSQLtoAST(queryString, {
-        //         database: 'PostgresQL',
-        //     });
-        //     const schema = await getResultSchema(ast, queryString, getSchema);
-        //     assert.deepStrictEqual(schema.length, 2);
-        //     const _idField = schema[0];
-        //     assert.ok(!_idField.as);
-        //     assert.deepStrictEqual(_idField.collectionName, 'orders');
-        //     assert.deepStrictEqual(_idField.format, 'mongoid');
-        //     assert.deepStrictEqual(_idField.isArray, false);
-        //     assert.deepStrictEqual(_idField.order, 0);
-        //     assert.deepStrictEqual(_idField.path, '_id');
-        //     assert.deepStrictEqual(_idField.required, false);
-        //     assert.deepStrictEqual(_idField.type, 'string');
-        // });
-        // it('should not include the _id if it is explicitly unset', async () => {
-        //     const queryString = 'select id, unset(_id) from orders';
-        //     const ast = parseSQLtoAST(queryString, {
-        //         database: 'PostgresQL',
-        //     });
-        //     const schema = await getResultSchema(ast, queryString, getSchema);
-        //     assert.deepStrictEqual(schema.length, 1);
-        //     const _idField = schema[0];
-        //     assert.ok(!_idField.as);
-        //     assert.deepStrictEqual(_idField.collectionName, 'orders');
-        //     assert.deepStrictEqual(_idField.format, 'mongoid');
-        //     assert.deepStrictEqual(_idField.isArray, false);
-        //     assert.deepStrictEqual(_idField.order, 0);
-        //     assert.deepStrictEqual(_idField.path, '_id');
-        //     assert.deepStrictEqual(_idField.required, false);
-        //     assert.deepStrictEqual(_idField.type, 'string');
-        // });
-        // test unset on other column names
+        it('should include the _id column even if not selected', async () => {
+            const queryString = 'select id from orders';
+            const ast = parseSQLtoAST(queryString, {
+                database: 'PostgresQL',
+            });
+            const schema = await getResultSchema(ast, queryString, getSchema);
+            assert.deepStrictEqual(schema.length, 2);
+            const _idField = schema[0];
+            assert.ok(!_idField.as);
+            assert.deepStrictEqual(_idField.collectionName, 'orders');
+            assert.deepStrictEqual(_idField.format, 'mongoid');
+            assert.deepStrictEqual(_idField.isArray, false);
+            assert.deepStrictEqual(_idField.order, 0);
+            assert.deepStrictEqual(_idField.path, '_id');
+            assert.deepStrictEqual(_idField.required, false);
+            assert.deepStrictEqual(_idField.type, 'string');
+        });
+        it('should not include the _id if it is explicitly unset', async () => {
+            const queryString = 'select id, unset(_id) from orders';
+            const ast = parseSQLtoAST(queryString, {
+                database: 'PostgresQL',
+            });
+            const schema = await getResultSchema(ast, queryString, getSchema);
+            assert.deepStrictEqual(schema.length, 1);
+            const _idField = schema.find((s) => s.path === '_id');
+            assert.ok(!_idField);
+        });
         // TODO TEST for table.*, table2.*
         it('should be able to generate a schema for a * query with field specified', async () => {
             const queryString = 'select _id, * from orders';
@@ -508,63 +500,63 @@ describe('metadata', () => {
                     assert.deepStrictEqual(itemSplit.isArray, true);
                 });
             });
-            // describe('object_to_array', () => {
-            //     it('should work for a basic object_to_array', async () => {
-            //         const queryString =
-            //             'select id,OBJECT_TO_ARRAY(`Address`) as test from `customers`';
-            //         const ast = parseSQLtoAST(queryString, {
-            //             database: 'PostgresQL',
-            //         });
-            //         const schema = await getResultSchema(
-            //             ast,
-            //             queryString,
-            //             getSchema
-            //         );
-            //         assert.deepStrictEqual(schema.length, 3);
-            //         const itemSplit = schema[2];
-            //         assert.deepStrictEqual(itemSplit.as, 'test');
-            //         assert.deepStrictEqual(itemSplit.type, 'object');
-            //         assert.deepStrictEqual(itemSplit.isArray, true);
-            //     });
-            // });
-            // describe('array_to_object', () => {
-            //     it('should work for a basic array_to_object', async () => {
-            //         const queryString =
-            //             'select id,ARRAY_TO_OBJECT(PARSE_JSON(\'[{"k":"val","v":1}]\')) as test from `customers`';
-            //         const ast = parseSQLtoAST(queryString, {
-            //             database: 'PostgresQL',
-            //         });
-            //         const schema = await getResultSchema(
-            //             ast,
-            //             queryString,
-            //             getSchema
-            //         );
-            //         assert.deepStrictEqual(schema.length, 3);
-            //         const itemSplit = schema[2];
-            //         assert.deepStrictEqual(itemSplit.as, 'test');
-            //         assert.deepStrictEqual(itemSplit.type, 'object');
-            //         assert.deepStrictEqual(itemSplit.isArray, false);
-            //     });
-            // });
-            // describe('set_union', () => {
-            //     it('should work for a basic array_to_object', async () => {
-            //         const queryString =
-            //             "select id,SET_UNION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`";
-            //         const ast = parseSQLtoAST(queryString, {
-            //             database: 'PostgresQL',
-            //         });
-            //         const schema = await getResultSchema(
-            //             ast,
-            //             queryString,
-            //             getSchema
-            //         );
-            //         assert.deepStrictEqual(schema.length, 3);
-            //         const itemSplit = schema[2];
-            //         assert.deepStrictEqual(itemSplit.as, 'test');
-            //         assert.deepStrictEqual(itemSplit.type, 'object');
-            //         assert.deepStrictEqual(itemSplit.isArray, true);
-            //     });
-            // });
+            describe('object_to_array', () => {
+                it('should work for a basic object_to_array', async () => {
+                    const queryString =
+                        'select id,OBJECT_TO_ARRAY(`Address`) as test from `customers`';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 3);
+                    const itemSplit = schema[2];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
+            describe('array_to_object', () => {
+                it('should work for a basic array_to_object', async () => {
+                    const queryString =
+                        'select id,ARRAY_TO_OBJECT(PARSE_JSON(\'[{"k":"val","v":1}]\')) as test from `customers`';
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 3);
+                    const itemSplit = schema[2];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+            });
+            describe('set_union', () => {
+                it('should work for a basic array_to_object', async () => {
+                    const queryString =
+                        "select id,SET_UNION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`";
+                    const ast = parseSQLtoAST(queryString, {
+                        database: 'PostgresQL',
+                    });
+                    const schema = await getResultSchema(
+                        ast,
+                        queryString,
+                        getSchema
+                    );
+                    assert.deepStrictEqual(schema.length, 3);
+                    const itemSplit = schema[2];
+                    assert.deepStrictEqual(itemSplit.as, 'test');
+                    assert.deepStrictEqual(itemSplit.type, 'object');
+                    assert.deepStrictEqual(itemSplit.isArray, true);
+                });
+            });
             describe('unset', () => {
                 it('should work when unsetting a single field even if it would not have been in the result set', async () => {
                     const queryString = 'select _id, unset(`item`) from orders';
@@ -629,6 +621,7 @@ describe('metadata', () => {
                     assert.ok(!itemField);
                     const priceField = schema.find((s) => s.path === 'price');
                     assert.ok(!priceField);
+                    assert.deepStrictEqual(schema[6].order, 6);
                 });
             });
             //
