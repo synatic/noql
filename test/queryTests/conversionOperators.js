@@ -242,19 +242,11 @@ module.exports = [
                             $literal: null,
                         },
                         {
-                            $arrayToObject: {
-                                $concatArrays: [
-                                    {
-                                        $objectToArray: {
-                                            num: {
-                                                $literal: 1,
-                                            },
-                                            val: {
-                                                $literal: 'a',
-                                            },
-                                        },
-                                    },
-                                ],
+                            num: {
+                                $literal: 1,
+                            },
+                            val: {
+                                $literal: 'a',
                             },
                         },
                     ],
