@@ -1,25 +1,34 @@
 const {getResultSchema} = require('../lib/metadata');
 // @ts-ignore
-const {parseSQLtoAST} = require('../lib/SQLParser');
+const {parseSQLtoAST, makeMongoAggregate} = require('../lib/SQLParser');
 const {
     ColumnDoesNotExistError,
     TableDoesNotExistError,
 } = require('../lib/errors');
 const assert = require('assert');
 const {setup, disconnect} = require('./mongo-client');
+// @ts-ignore
+const {_jsonSchemaTypeMapping} = require('../lib/MongoFunctions');
 
+/**
+ * @typedef {import('../lib/types').ResultSchema} ResultSchema
+ * @typedef {import('mongodb').Document} Document
+ */
 describe('metadata', () => {
     /** @type {import('mongodb').MongoClient} */
     let mongoClient;
     /** @type {import('mongodb').Db} */
     let database;
+    /** @type {string} */
+    let databaseName;
     before(function (done) {
         this.timeout(90000);
         const run = async () => {
             try {
-                const {client, db} = await setup();
+                const {client, db, dbName} = await setup();
                 mongoClient = client;
                 database = db;
+                databaseName = dbName;
                 done();
             } catch (exp) {
                 done(exp);
@@ -171,6 +180,22 @@ describe('metadata', () => {
             assert.deepStrictEqual(_idField.required, false);
             assert.deepStrictEqual(_idField.type, 'string');
         });
+        it('should be able to do a replace root query', async () => {
+            const queryString =
+                'select t as `$$ROOT` from (select id, `First Name` from customers limit 1) as t';
+            const {schema, results} = await getEstimatedSchemaAndResults(
+                queryString
+            );
+            compareSchemaWithResults(schema, results);
+        });
+        // it('should be able to generate a schema for a a replace root query', async () => {
+        //     const queryString =
+        //         'select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT` from customers limit 1';
+        //     const {schema, results} = await getEstimatedSchemaAndResults(
+        //         queryString
+        //     );
+        //     compareSchemaWithResults(schema, results);
+        // });
         describe('functions', () => {
             it('trim', async () => {
                 const queryString =
@@ -632,9 +657,7 @@ describe('metadata', () => {
         // nested fields
         /**
          * multiple functions "select id,ARRAY_TO_OBJECT(PARSE_JSON('[{\"k\":\"val\",\"v\":1}]')) as test from `customers`"
-         * replacing root complex "select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT`
-         * gets field select SPLIT(`First Name`,',') as exprVal from `customers`
-         * $unset
+         * replacing root complex "
          */
     });
 
@@ -650,23 +673,105 @@ describe('metadata', () => {
             const _idColumn = schema[7];
             assert.deepStrictEqual(_idColumn.path, '_id');
         });
-        // it('should return the first tables column when there are two columns with the same name', async () => {
-        //     const queryString =
-        //         'select id from orders inner join `inventory` on sku=item';
-        //     const ast = parseSQLtoAST(queryString, {
-        //         database: 'PostgresQL',
-        //     });
-        //     const schema = await getResultSchema(ast, queryString, getSchema);
-        //     assert.deepStrictEqual(schema.length, 1);
-        //     const _idColumn = schema[0];
-        //     assert.deepStrictEqual(_idColumn.path, 'id');
-        //     assert.deepStrictEqual(_idColumn.collectionName, 'orders');
-        // });
+        it('should return the first tables column when there are two columns with the same name', async () => {
+            const queryString =
+                'select id from orders inner join `inventory` on sku=item limit 1';
+            const {schema, results} = await getEstimatedSchemaAndResults(
+                queryString
+            );
+            compareSchemaWithResults(schema, results);
+            assert.deepStrictEqual(schema.length, 2);
+            const _idColumn = schema[1];
+            assert.deepStrictEqual(_idColumn.path, 'id');
+            assert.deepStrictEqual(_idColumn.collectionName, 'orders');
+        });
     });
+
     async function getSchema(collectionName) {
         const doc = await database
             .collection('schemas')
             .findOne({collectionName});
         return doc.flattenedSchema;
+    }
+
+    /**
+     *
+     * @param {string} queryString
+     * @returns {Promise<{schema:ResultSchema[],results:Document[],errors:Error[]}>}
+     */
+    async function getEstimatedSchemaAndResults(queryString) {
+        /** @type {Error[]} */
+        const errors = [];
+        /** @type {ResultSchema[]} */
+        let schema = [];
+        try {
+            const ast = parseSQLtoAST(queryString, {
+                database: 'PostgresQL',
+            });
+            schema = await getResultSchema(ast, queryString, getSchema);
+        } catch (err) {
+            console.error(err);
+            errors.push(err);
+        }
+        /** @type {Document[]} */
+        let results = [];
+        try {
+            const parsedQuery = makeMongoAggregate(queryString, {
+                database: 'PostgresQL',
+            });
+            results = await mongoClient
+                .db(databaseName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+        } catch (err) {
+            console.error(err);
+            errors.push(err);
+        }
+        return {results, schema, errors};
+    }
+
+    /**
+     *
+     * @param {ResultSchema[]} schema
+     * @param {Document[]} results
+     */
+    function compareSchemaWithResults(schema, results) {
+        if (results.length === 0) {
+            throw new Error('No results to compare with');
+        }
+        if (schema.length === 0) {
+            throw new Error('No schema to compare with');
+        }
+        for (const result of results) {
+            for (const [key, value] of Object.entries(result)) {
+                const fieldSchema = schema.find(
+                    (s) => s.as === key || s.path === key
+                );
+                if (!fieldSchema) {
+                    throw new Error(`No schema found for key "${key}"`);
+                }
+                let valueType = typeof value;
+                if (
+                    fieldSchema.format === 'mongoid' &&
+                    fieldSchema.type === 'string'
+                ) {
+                    valueType = 'string';
+                }
+                const mappedJsonSchemaType =
+                    // @ts-ignore
+                    _jsonSchemaTypeMapping[fieldSchema.type];
+                if (!mappedJsonSchemaType) {
+                    throw new Error(
+                        `No _jsonSchemaTypeMapping for type "${fieldSchema.type}"`
+                    );
+                }
+                if (valueType !== mappedJsonSchemaType) {
+                    throw new Error(
+                        `Type of value "${valueType}" does not equal schema type ${fieldSchema.type} for field "${key}".`
+                    );
+                }
+            }
+        }
     }
 });

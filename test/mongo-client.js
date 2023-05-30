@@ -100,7 +100,7 @@ async function setup() {
     await connect();
     await dropTestDb();
     await addTestData();
-    return {db, client};
+    return {db, client, dbName};
 }
 
 async function disconnect() {
