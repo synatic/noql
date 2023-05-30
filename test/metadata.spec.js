@@ -188,14 +188,7 @@ describe('metadata', () => {
             );
             compareSchemaWithResults(schema, results);
         });
-        // it('should be able to generate a schema for a a replace root query', async () => {
-        //     const queryString =
-        //         'select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT` from customers limit 1';
-        //     const {schema, results} = await getEstimatedSchemaAndResults(
-        //         queryString
-        //     );
-        //     compareSchemaWithResults(schema, results);
-        // });
+
         describe('functions', () => {
             it('trim', async () => {
                 const queryString =
@@ -390,6 +383,13 @@ describe('metadata', () => {
                     assert.deepStrictEqual(itemSplit.as, 'nullGuard');
                     assert.deepStrictEqual(itemSplit.type, 'string');
                     assert.deepStrictEqual(itemSplit.isArray, false);
+                });
+                it('should work on a complex query', async () => {
+                    const queryString =
+                        "select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` limit 1";
+                    const {schema, results} =
+                        await getEstimatedSchemaAndResults(queryString);
+                    compareSchemaWithResults(schema, results);
                 });
             });
             describe('first_in_array', () => {
@@ -649,7 +649,40 @@ describe('metadata', () => {
                     assert.deepStrictEqual(schema[6].order, 6);
                 });
             });
-            //
+            describe('merge_objects', () => {
+                it('should be able to generate a schema for a a merge_objects and replace root query', async () => {
+                    const queryString =
+                        'select (select id,`First Name` as Name) as t1, (select id,`Last Name` as LastName) as t2,MERGE_OBJECTS(t1,t2) as `$$ROOT` from customers limit 1';
+                    const {schema, results} =
+                        await getEstimatedSchemaAndResults(queryString);
+                    compareSchemaWithResults(schema, results);
+                    const pipeline = [
+                        {
+                            $project: {
+                                t1: {
+                                    id: '$id',
+                                    Name: '$First Name',
+                                },
+                                t2: {
+                                    id: '$id',
+                                    LastName: '$Last Name',
+                                },
+                            },
+                        },
+                        {
+                            $replaceRoot: {
+                                newRoot: {
+                                    $mergeObjects: ['$t1', '$t2'],
+                                },
+                            },
+                        },
+                        {
+                            $limit: 1,
+                        },
+                    ];
+                    assert.ok(pipeline);
+                });
+            });
         });
 
         // functions
