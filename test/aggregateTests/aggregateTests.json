@@ -656,28 +656,12 @@
         {
           "$project": {
             "t1": {
-              "$arrayToObject": {
-                "$concatArrays": [
-                  {
-                    "$objectToArray": {
-                      "id": "$id",
-                      "Name": "$First Name"
-                    }
-                  }
-                ]
-              }
+              "id": "$id",
+              "Name": "$First Name"
             },
             "t2": {
-              "$arrayToObject": {
-                "$concatArrays": [
-                  {
-                    "$objectToArray": {
-                      "id": "$id",
-                      "LastName": "$Last Name"
-                    }
-                  }
-                ]
-              }
+              "id": "$id",
+              "LastName": "$Last Name"
             }
           }
         },
@@ -2722,7 +2706,10 @@
           }
         }
       ],
-      "collections": ["financial-dashboard-dgw-views--pl-details-2", "financial-dashboard-dgw--bookings"],
+      "collections": [
+        "financial-dashboard-dgw-views--pl-details-2",
+        "financial-dashboard-dgw--bookings"
+      ],
       "type": "aggregate"
     }
   },
