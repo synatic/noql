@@ -384,9 +384,30 @@ describe('metadata', () => {
                     assert.deepStrictEqual(itemSplit.type, 'string');
                     assert.deepStrictEqual(itemSplit.isArray, false);
                 });
-                it('should work on a complex query', async () => {
+                it('should work with a query that hard codes a null and returns an object', async () => {
                     const queryString =
                         "select IFNULL(NULL,(select 'a' as val,1 as num)) as `conv` from `customers` limit 1";
+                    const {schema, results} =
+                        await getEstimatedSchemaAndResults(queryString);
+                    compareSchemaWithResults(schema, results);
+                });
+                it('should work with a query that hard codes a null and returns an single string in a query', async () => {
+                    const queryString =
+                        "select IFNULL(NULL,'aaaa') as `conv` from `customers` limit 1";
+                    const {schema, results} =
+                        await getEstimatedSchemaAndResults(queryString);
+                    compareSchemaWithResults(schema, results);
+                });
+                it('should work with a query that hard codes a null and returns an single number in a query', async () => {
+                    const queryString =
+                        'select IFNULL(NULL,1) as `conv` from `customers` limit 1';
+                    const {schema, results} =
+                        await getEstimatedSchemaAndResults(queryString);
+                    compareSchemaWithResults(schema, results);
+                });
+                it('should work with a query that hard codes a null and returns an single boolean in a query', async () => {
+                    const queryString =
+                        'select IFNULL(NULL,true) as `conv` from `customers` limit 1';
                     const {schema, results} =
                         await getEstimatedSchemaAndResults(queryString);
                     compareSchemaWithResults(schema, results);
@@ -656,31 +677,6 @@ describe('metadata', () => {
                     const {schema, results} =
                         await getEstimatedSchemaAndResults(queryString);
                     compareSchemaWithResults(schema, results);
-                    const pipeline = [
-                        {
-                            $project: {
-                                t1: {
-                                    id: '$id',
-                                    Name: '$First Name',
-                                },
-                                t2: {
-                                    id: '$id',
-                                    LastName: '$Last Name',
-                                },
-                            },
-                        },
-                        {
-                            $replaceRoot: {
-                                newRoot: {
-                                    $mergeObjects: ['$t1', '$t2'],
-                                },
-                            },
-                        },
-                        {
-                            $limit: 1,
-                        },
-                    ];
-                    assert.ok(pipeline);
                 });
             });
         });
