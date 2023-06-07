@@ -1047,15 +1047,15 @@ describe('Individual tests', function () {
             // LIMIT 1000001`;
 
             const queryText4 = `
-            select "x1"."StageName",
+            SELECT "x1"."StageName",
                    "x1"."ICP",
                    "x1"."a0"
-            from
-            (select "rows"."StageName" as "StageName",
+            FROM
+            (SELECT "rows"."StageName" as "StageName",
                     "rows"."ICP" as "ICP",
                     sum(cast("rows"."AnnualLicenseRevenueUSD" as decimal)) as "a0"
-                from
-                (select "x1"."id",
+                FROM
+                (SELECT "x1"."id",
                         "x1"."OpportunityId",
                         "x1"."CloseYear",
                         "x1"."CloseMonth",
@@ -1077,16 +1077,16 @@ describe('Individual tests', function () {
                         "x1"."LeadSource",
                         "x1"."NumberOfEmployees",
                         "x1"."ICP"
-                from "public"."opportunities" "x1"
-                where (("x1"."StageName" in ('Business Discovery',
+                FROM "public"."opportunities" "x1"
+                WHERE (("x1"."StageName" in ('Business Discovery',
                                         'Discovery',
                                         'Needs Analysis',
                                         'Negotiation',
                                         'Proposal',
                                         'Qualification',
                                         'Technical Discovery'))
-                    and cast("x1"."CloseYear" as decimal) = cast(2023 as decimal))
-                and (not ("x1"."RecordType" in ('Channel Customer'))
+                    AND cast("x1"."CloseYear" as decimal) = cast(2023 as decimal))
+                AND (not ("x1"."RecordType" in ('Channel Customer'))
                     or "x1"."RecordType" is null)) "rows"
                 group by "StageName",
                         "ICP") "x1"
