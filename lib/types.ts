@@ -63,7 +63,7 @@ export interface Expression {
     table?: string;
     column?: string;
     name?: string;
-    args?: Expression[];
+    args?: Expression | Expression[];
     from?: TableDefinition[];
     value?: any;
     tableList?: string[];
@@ -174,7 +174,7 @@ export interface ColumnParseResult {
     };
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
     count: {$count: string}[];
-    unset: string[];
+    unset: {$unset: string[]};
     countDistinct: string;
     groupByProject?: object;
 }
@@ -217,15 +217,45 @@ export type JSONSchemaTypeName =
     | 'date[]'
     | 'null';
 
-type SchemaFn = (params: any) => {
+type SchemaFn = (params: any) => SchemaFnResult | SchemaFnResult[];
+
+export interface SchemaFnResult {
     /** Specifies if there is a json schema type returned or the name of the field that defines the type */
-    type: 'fieldName' | 'jsonSchemaValue';
+    type: 'fieldName' | 'jsonSchemaValue' | 'unset';
     jsonSchemaValue?: JSONSchemaTypeName;
     fieldName?: 'string';
     /** Specifies if the result will be an array of the field type, should not apply to jsonSchemaValue */
     isArray?: boolean;
-};
-
+}
 export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
+
+export interface FlattenedSchema {
+    /** The path to the field within the document/json object */
+    path: string;
+    /** The JsonSchema type */
+    type: JSONSchemaTypeName | JSONSchemaTypeName[];
+    /** The JsonSchema format if it's a string */
+    format?: string | 'date-time' | 'mongoid';
+    /** Specifies if the field is an array or not */
+    isArray: boolean;
+    /** Specifies if it's a required field or not */
+    required: boolean;
+}
+export interface FlattenedSchemas {
+    [key: string]: FlattenedSchema[];
+}
+
+export interface ResultSchema extends FlattenedSchema {
+    /** The order for this result, lowest should come first */
+    order: number;
+    /** the collection from which this column comes */
+    collectionName: string;
+    /** If the column has an "as" name, it will be here */
+    as?: string;
+}
+
+export type GetSchemaFunction = (
+    collectionName: string
+) => Promise<FlattenedSchema[]>;

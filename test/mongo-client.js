@@ -1,14 +1,8 @@
 const {MongoClient} = require('mongodb');
-const _customers = require('./exampleData/customers.json');
-const _stores = require('./exampleData/stores.json');
-const _films = require('./exampleData/films.json');
-const _customerNotes = require('./exampleData/customer-notes.json');
-const _customerNotes2 = require('./exampleData/customer-notes2.json');
-const _orders = require('./exampleData/orders.json');
-const _inventory = require('./exampleData/inventory.json');
-const _policies = require('./exampleData/policies.json');
-const _policyPremium = require('./exampleData/policy-premiums.json');
 const $check = require('check-types');
+const $schema = require('@synatic/schema-magic');
+const fs = require('fs/promises');
+const Path = require('path');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -23,63 +17,55 @@ async function connect() {
     db = client.db(dbName);
 }
 
+/**
+ *
+ * @param {object[]} values
+ * @param {string} collectionName
+ */
+async function generateSchema(values, collectionName) {
+    if (!client || !db) {
+        throw new Error('Call connect before addTestData');
+    }
+    const schema = $schema.mergeSchemas(
+        values
+            .slice(0, 10)
+            .filter((v) => Boolean)
+            .map((v) => $schema.generateSchemaFromJSON(v))
+    );
+    const flattenedSchema = $schema.flattenSchema(schema, {
+        additionalProperties: ['displayOptions'],
+    });
+    await db.collection('schemas').insertOne({
+        collectionName,
+        schema,
+        flattenedSchema,
+    });
+}
 async function addTestData() {
     if (!client || !db) {
         throw new Error('Call connect before addTestData');
     }
-    await db.collection('customers').bulkWrite(
-        // @ts-ignore
-        _customers.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
+    const dataDirectory = './test/exampleData/';
+    const files = await fs.readdir(dataDirectory);
+    for (const file of files) {
+        const searchString = '.json';
+        const jsonIndex = file.lastIndexOf(searchString);
+        if (jsonIndex < 0) {
+            continue;
+        }
+        const collectionName = file.substring(0, jsonIndex);
+        const filePath = Path.join(dataDirectory, file);
+        const dataString = await fs.readFile(filePath, {encoding: 'utf-8'});
+        const data = JSON.parse(dataString);
+        await db.collection(collectionName).bulkWrite(
+            data.map((d) => {
+                return {insertOne: {document: parseDocForDates(d)}};
+            })
+        );
+        await generateSchema(data, collectionName);
+    }
 
-    await db.collection('stores').bulkWrite(
-        _stores.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-
-    await db.collection('films').bulkWrite(
-        _films.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-    await db.collection('customer-notes').bulkWrite(
-        _customerNotes.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-
-    await db.collection('customer-notes2').bulkWrite(
-        _customerNotes2.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-
-    await db.collection('orders').bulkWrite(
-        _orders.map((d) => {
-            return {insertOne: {document: parseDocForDates(d)}};
-        })
-    );
-
-    await db.collection('inventory').bulkWrite(
-        _inventory.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-
-    await db.collection('ams360-powerbi-basicpolinfo').bulkWrite(
-        _policies.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
-
-    await db.collection('ams360-powerbi-policytranpremium').bulkWrite(
-        _policyPremium.map((d) => {
-            return {insertOne: {document: d}};
-        })
-    );
+    //
 }
 function parseDocForDates(d, parentKey = '', parentObject = {}) {
     // eslint-disable-next-line guard-for-in
@@ -114,7 +100,7 @@ async function setup() {
     await connect();
     await dropTestDb();
     await addTestData();
-    return {db, client};
+    return {db, client, dbName};
 }
 
 async function disconnect() {

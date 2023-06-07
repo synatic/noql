@@ -3,7 +3,6 @@ const SQLParser = require('../../lib/SQLParser.js');
 const _dbName = 'sql-to-mongo-test';
 const supportsArraySort = false;
 const {setup, disconnect} = require('../mongo-client');
-
 describe('Individual tests', function () {
     this.timeout(90000);
     /** @type {import('mongodb').MongoClient} */
@@ -987,6 +986,120 @@ describe('Individual tests', function () {
             assert(results.length === 2);
             assert(results[0].item === 'pecans');
             assert(results[1].item === 'potatoes');
+        });
+        it('should work for the example query in bug from production', async () => {
+            // const queryText = `SELECT "op"."id",
+            //         "op"."OpportunityId",
+            //         "op"."CloseYear",
+            //         "op"."CloseMonth",
+            //         "op"."AnnualLicenseRevenueUSD",
+            //         "op"."DaysSinceQualification",
+            //         "op"."StageName",
+            //         "op"."AccountRecordType",
+            //         "op"."OpportunityRecordType",
+            //         "op"."RecordType",
+            //         "op"."SaleType",
+            //         "op"."DateSort",
+            //         "op"."DateID",
+            //         "op"."CalcDate",
+            //         "op"."Industry",
+            //         "op"."AddressCity",
+            //         "op"."AddressCountry",
+            //         "op"."OpportunityName",
+            //         "op"."AccountName",
+            //         "op"."LeadSource",
+            //         "op"."NumberOfEmployees",
+            //         "op"."ICP"
+            // FROM "public"."opportunities" "op"
+            // WHERE (
+            //         ("op"."StageName" in ('Business Discovery',
+            //                             'Discovery',
+            //                             'Needs Analysis',
+            //                             'Negotiation',
+            //                             'Proposal',
+            //                             'Qualification',
+            //                             'Technical Discovery'))
+            //         AND cast("op"."CloseYear" AS decimal) = cast(2023 AS decimal)
+            //       )
+            //       AND (
+            //         NOT ("op"."RecordType" in ('Channel Customer'))
+            //         OR "op"."RecordType" IS NULL)`;
+            // const queryText2 = `
+            //     SELECT
+            //         "rows"."StageName" AS "StageName",
+            //         "rows"."ICP" AS "ICP",
+            //         sum(cast("rows"."AnnualLicenseRevenueUSD" AS decimal)) AS "a0"
+            //     FROM
+            //     (${queryText}) "rows"
+            //     GROUP BY "StageName",
+            //                 "ICP"`;
+            // const queryText3 = `
+            //     SELECT
+            //         "grouped".StageName,
+            //         "grouped"."ICP",
+            //         "grouped"."a0"
+            // FROM
+            // (${queryText2}) "grouped"
+            // WHERE NOT "grouped"."a0" IS NULL
+            // LIMIT 1000001`;
+
+            const queryText4 = `
+            SELECT  "_"."StageName",
+                    "_"."ICP",
+                    "_"."a0"
+            FROM
+            (SELECT "rows"."StageName" AS "StageName",
+                    "rows"."ICP" AS "ICP",
+                    sum(cast("rows"."AnnualLicenseRevenueUSD" AS decimal)) AS "a0"
+                FROM
+                (SELECT "_"."_id",
+                        "_"."OpportunityId",
+                        "_"."CloseYear",
+                        "_"."CloseMonth",
+                        "_"."AnnualLicenseRevenueUSD",
+                        "_"."DaysSinceQualification",
+                        "_"."StageName",
+                        "_"."AccountRecordType",
+                        "_"."OpportunityRecordType",
+                        "_"."RecordType",
+                        "_"."SaleType",
+                        "_"."DateSort",
+                        "_"."DateID",
+                        "_"."CalcDate",
+                        "_"."Industry",
+                        "_"."AddressCity",
+                        "_"."AddressCountry",
+                        "_"."OpportunityName",
+                        "_"."AccountName",
+                        "_"."LeadSource",
+                        "_"."NumberOfEmployees",
+                        "_"."ICP"
+                FROM "public"."opportunities" "_"
+                WHERE (("_"."StageName" in ('Business Discovery',
+                                            'Discovery',
+                                            'Needs Analysis',
+                                            'Negotiation',
+                                            'Proposal',
+                                            'Qualification',
+                                            'Technical Discovery'))
+                        AND cast("_"."CloseYear" AS decimal) = cast(2023 AS decimal))
+                    AND (NOT ("_"."RecordType" in ('Channel Customer'))
+                        OR "_"."RecordType" IS NULL) ) "rows"
+                GROUP BY "StageName",
+                        "ICP") "_"
+            WHERE NOT "_"."a0" IS NULL
+            LIMIT 1000001`;
+
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText4, {
+                database: 'PostgresQL',
+            });
+            const results = await mongoClient
+                .db(_dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length);
+            assert(results.length === 1);
         });
     });
 });
