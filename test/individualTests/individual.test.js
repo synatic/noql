@@ -3,9 +3,6 @@ const SQLParser = require('../../lib/SQLParser.js');
 const _dbName = 'sql-to-mongo-test';
 const supportsArraySort = false;
 const {setup, disconnect} = require('../mongo-client');
-const {
-    escapeAndParseStatementToAst,
-} = require('./escape-and-parse-statement-to-ast.js');
 describe('Individual tests', function () {
     this.timeout(90000);
     /** @type {import('mongodb').MongoClient} */
