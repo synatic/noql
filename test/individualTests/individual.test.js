@@ -1047,98 +1047,52 @@ describe('Individual tests', function () {
             // LIMIT 1000001`;
 
             const queryText4 = `
-            SELECT "x1"."StageName",
-                   "x1"."ICP",
-                   "x1"."a0"
+            SELECT  "_"."StageName",
+                    "_"."ICP",
+                    "_"."a0"
             FROM
-            (SELECT "rows"."StageName" as "StageName",
-                    "rows"."ICP" as "ICP",
-                    sum(cast("rows"."AnnualLicenseRevenueUSD" as decimal)) as "a0"
+            (SELECT "rows"."StageName" AS "StageName",
+                    "rows"."ICP" AS "ICP",
+                    sum(cast("rows"."AnnualLicenseRevenueUSD" AS decimal)) AS "a0"
                 FROM
-                (SELECT "x1"."id",
-                        "x1"."OpportunityId",
-                        "x1"."CloseYear",
-                        "x1"."CloseMonth",
-                        "x1"."AnnualLicenseRevenueUSD",
-                        "x1"."DaysSinceQualification",
-                        "x1"."StageName",
-                        "x1"."AccountRecordType",
-                        "x1"."OpportunityRecordType",
-                        "x1"."RecordType",
-                        "x1"."SaleType",
-                        "x1"."DateSort",
-                        "x1"."DateID",
-                        "x1"."CalcDate",
-                        "x1"."Industry",
-                        "x1"."AddressCity",
-                        "x1"."AddressCountry",
-                        "x1"."OpportunityName",
-                        "x1"."AccountName",
-                        "x1"."LeadSource",
-                        "x1"."NumberOfEmployees",
-                        "x1"."ICP"
-                FROM "public"."opportunities" "x1"
-                WHERE (("x1"."StageName" in ('Business Discovery',
-                                        'Discovery',
-                                        'Needs Analysis',
-                                        'Negotiation',
-                                        'Proposal',
-                                        'Qualification',
-                                        'Technical Discovery'))
-                    AND cast("x1"."CloseYear" as decimal) = cast(2023 as decimal))
-                AND (not ("x1"."RecordType" in ('Channel Customer'))
-                    or "x1"."RecordType" is null)) "rows"
-                group by "StageName",
-                        "ICP") "x1"
-                where not "_"."a0" is null
-                limit 1000001`;
+                (SELECT "_"."_id",
+                        "_"."OpportunityId",
+                        "_"."CloseYear",
+                        "_"."CloseMonth",
+                        "_"."AnnualLicenseRevenueUSD",
+                        "_"."DaysSinceQualification",
+                        "_"."StageName",
+                        "_"."AccountRecordType",
+                        "_"."OpportunityRecordType",
+                        "_"."RecordType",
+                        "_"."SaleType",
+                        "_"."DateSort",
+                        "_"."DateID",
+                        "_"."CalcDate",
+                        "_"."Industry",
+                        "_"."AddressCity",
+                        "_"."AddressCountry",
+                        "_"."OpportunityName",
+                        "_"."AccountName",
+                        "_"."LeadSource",
+                        "_"."NumberOfEmployees",
+                        "_"."ICP"
+                FROM "public"."opportunities" "_"
+                WHERE (("_"."StageName" in ('Business Discovery',
+                                            'Discovery',
+                                            'Needs Analysis',
+                                            'Negotiation',
+                                            'Proposal',
+                                            'Qualification',
+                                            'Technical Discovery'))
+                        AND cast("_"."CloseYear" AS decimal) = cast(2023 AS decimal))
+                    AND (NOT ("_"."RecordType" in ('Channel Customer'))
+                        OR "_"."RecordType" IS NULL) ) "rows"
+                GROUP BY "StageName",
+                        "ICP") "_"
+            WHERE NOT "_"."a0" IS NULL
+            LIMIT 1000001`;
 
-            const queryText5 = `
-                SELECT  "x1"."StageName",
-                        "x1"."ICP",
-                        "x1"."a0"
-                FROM
-                (SELECT "rows"."StageName" AS "StageName",
-                        "rows"."ICP" AS "ICP",
-                        sum(cast("rows"."AnnualLicenseRevenueUSD" AS decimal)) AS "a0"
-                    FROM
-                    (SELECT "x1"."id",
-                            "x1"."OpportunityId",
-                            "x1"."CloseYear",
-                            "x1"."CloseMonth",
-                            "x1"."AnnualLicenseRevenueUSD",
-                            "x1"."DaysSinceQualification",
-                            "x1"."StageName",
-                            "x1"."AccountRecordType",
-                            "x1"."OpportunityRecordType",
-                            "x1"."RecordType",
-                            "x1"."SaleType",
-                            "x1"."DateSort",
-                            "x1"."DateID",
-                            "x1"."CalcDate",
-                            "x1"."Industry",
-                            "x1"."AddressCity",
-                            "x1"."AddressCountry",
-                            "x1"."OpportunityName",
-                            "x1"."AccountName",
-                            "x1"."LeadSource",
-                            "x1"."NumberOfEmployees",
-                            "x1"."ICP"
-                    FROM "public"."opportunities" "x1"
-                    WHERE (("x1"."StageName" in ('Business Discovery',
-                                                    'Discovery',
-                                                    'Needs Analysis',
-                                                    'Negotiation',
-                                                    'Proposal',
-                                                    'Qualification',
-                                                    'Technical Discovery'))
-                            AND cast("x1"."CloseYear" AS decimal) = cast(2023 AS decimal))
-                        AND (NOT ("x1"."RecordType" in ('Channel Customer'))
-                            OR "x1"."RecordType" IS NULL) ) "rows"
-                    GROUP BY "StageName",
-                            "ICP") "x1"
-                WHERE NOT "_"."a0" IS NULL
-                LIMIT 1000001`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText4, {
                 database: 'PostgresQL',
             });
