@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "OpportunityId": 2,
+    "CloseYear": 2023,
+    "CloseMonth": "January",
+    "AnnualLicenseRevenueUSD": 300,
+    "DaysSinceQualification": 4,
+    "StageName": "Business Discovery",
+    "AccountRecordType": "AccountRecordType",
+    "OpportunityRecordType": "OpportunityRecordType",
+    "RecordType": "RecordType",
+    "SaleType": "SaleType",
+    "DateSort": "DateSort",
+    "DateID": "DateID",
+    "CalcDate": "CalcDate",
+    "Industry": "Industry",
+    "AddressCity": "AddressCity",
+    "AddressCountry": "AddressCountry",
+    "OpportunityName": "OpportunityName",
+    "AccountName": "AccountName",
+    "LeadSource": "LeadSource",
+    "NumberOfEmployees": 5,
+    "ICP": "ICP"
+  }
+]
