@@ -78,5 +78,473 @@
         "CNDate": "2021-12:15"
       }
     ]
+  },
+  "case3": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "Phone": "838635286649",
+          "id": 2
+        },
+        "cn": {
+          "id": 2,
+          "notes": "Notes for id 2",
+          "date": "2021-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      }
+    ]
+  },
+  "case4": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1
+        },
+        "cn": {
+          "id": 1,
+          "notes": "Notes for id 1",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "Phone": "838635286649",
+          "id": 2
+        },
+        "cn": {
+          "id": 2,
+          "notes": "Notes for id 2",
+          "date": "2021-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      }
+    ]
+  },
+  "case5": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1
+        },
+        "cn": {
+          "id": 1,
+          "notes": "Notes for id 1",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "Phone": "838635286649",
+          "id": 2
+        },
+        "cn": {
+          "id": 2,
+          "notes": "Notes for id 2",
+          "date": "2021-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      }
+    ]
+  },
+  "case6": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1
+        },
+        "cn": {
+          "id": 1,
+          "notes": "Notes for id 1",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "Phone": "838635286649",
+          "id": 2
+        },
+        "cn": {
+          "id": 2,
+          "notes": "Notes for id 2",
+          "date": "2021-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      }
+    ]
+  },
+  "case7": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "Phone": "10655648674",
+          "id": 5
+        },
+        "cn": {
+          "id": 5,
+          "notes": "Notes for id 5",
+          "date": "2021-12:15"
+        }
+      }
+    ]
+  },
+  "case8": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "Phone": "10655648674",
+          "id": 5
+        },
+        "cn": {
+          "id": 5,
+          "notes": "Notes for id 5",
+          "date": "2021-12:15"
+        }
+      }
+    ]
+  },
+  "case9": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": [
+          {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": [
+          {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "Phone": "10655648674",
+          "id": 5
+        },
+        "cn": [
+          {
+            "id": 5,
+            "notes": "Notes for id 5",
+            "date": "2021-12:15"
+          }
+        ]
+      }
+    ]
+  },
+  "case10": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": {
+          "id": 3,
+          "notes": "Notes for id 3",
+          "date": "2020-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": {
+          "id": 4,
+          "notes": "Notes for id 4",
+          "date": "2019-12:15"
+        }
+      },
+      {
+        "c": {
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "Phone": "10655648674",
+          "id": 5
+        },
+        "cn": {
+          "id": 5,
+          "notes": "Notes for id 5",
+          "date": "2021-12:15"
+        }
+      }
+    ]
+  },
+  "case11": {
+    "expectedResults": [
+      {
+        "c": {
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1
+        },
+        "cn": [
+          {
+            "id": 1,
+            "notes": "Notes for id 1",
+            "date": "2020-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "Phone": "838635286649",
+          "id": 2
+        },
+        "cn": [
+          {
+            "id": 2,
+            "notes": "Notes for id 2",
+            "date": "2021-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "Phone": "448477190408",
+          "id": 3
+        },
+        "cn": [
+          {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "Phone": "705814003527",
+          "id": 4
+        },
+        "cn": [
+          {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        ]
+      },
+      {
+        "c": {
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "Phone": "10655648674",
+          "id": 5
+        },
+        "cn": [
+          {
+            "id": 5,
+            "notes": "Notes for id 5",
+            "date": "2021-12:15"
+          }
+        ]
+      }
+    ]
   }
 }
