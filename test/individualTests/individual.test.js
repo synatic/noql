@@ -1,10 +1,14 @@
 const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
-const _dbName = 'sql-to-mongo-test';
 const supportsArraySort = false;
-const {setup, disconnect} = require('../mongo-client');
+const {setup, disconnect, dbName} = require('../utils/mongo-client.js');
+const {queryResultTester} = require('../utils/query-tester');
+
 describe('Individual tests', function () {
     this.timeout(90000);
+    const fileName = 'individual-test-cases';
+    const mode = 'test';
+    const dirname = __dirname;
     /** @type {import('mongodb').MongoClient} */
     let mongoClient;
     before(function (done) {
@@ -33,7 +37,7 @@ describe('Individual tests', function () {
         const parsedQuery = SQLParser.makeMongoAggregate(queryText);
         try {
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -43,100 +47,403 @@ describe('Individual tests', function () {
             return done(err);
         }
     });
-    describe('left join', () => {
-        it('should be able to do a left join', async () => {
-            const queryText =
-                'select * from orders as o left join `inventory` as i  on o.item=i.sku';
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results);
-                assert(results.length === 4);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-        it('should be able to do a left join with an unwind', async () => {
-            const queryText =
-                'select * from orders as o left join `inventory|unwind` as i on o.item=i.sku';
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results);
-                assert(results.length === 4);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-        it('should be able to do a left join with an unwind in the query', async () => {
-            const queryText =
-                'select o.id as OID,unwind(i) as inv from orders as o left join `inventory` i on o.item=i.sku';
-            /**
-             * , unwind(`inventory`) as inventorySku
-             */
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results);
-                assert(results.length === 4);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+
+    describe('joins', () => {
+        describe('left join', () => {
+            it('should be able to do a left join', async () => {
+                const queryText =
+                    'select * from orders as o left join `inventory` as i  on o.item=i.sku';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do a left join with an unwind', async () => {
+                const queryText =
+                    'select * from orders as o left join `inventory|unwind` as i on o.item=i.sku';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+
+            it('should be able to do a left join with an unwind in the query', async () => {
+                const queryText =
+                    'select o.id as OID,unwind(i) as inv from orders as o left join `inventory` i on o.item=i.sku';
+                /**
+                 * , unwind(`inventory`) as inventorySku
+                 */
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+
+            it('should be able to do a left join with an unwind and a case statement', async () => {
+                const queryText =
+                    "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne from orders as o left join `inventory|unwind` as i  on o.item=i.sku";
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+
+            it('should be able to do a left join on special characters', async () => {
+                const queryText =
+                    'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+
+            it('should be able to do a left join the other way round', async () => {
+                const queryText =
+                    'select * from orders as o left join `inventory` as i on i.sku=o.item';
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results);
+                    assert(results.length === 4);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            // it('should be able to do a left join with multiple conditions', async () => {
+            //     const queryText =
+            //         'select * from orders as o left join `inventory` as i on o.item=i.sku and o.id=i.id';
+            //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            //     const hcp = [
+            //         {
+            //             $project: {
+            //                 o: '$$ROOT',
+            //             },
+            //         },
+            //         {
+            //             $lookup: {
+            //                 from: 'inventory',
+            //                 as: 'i',
+            //                 let: {
+            //                     o_item: '$o.item',
+            //                     o_id: '$o.id',
+            //                 },
+            //                 pipeline: [
+            //                     {
+            //                         $match: {
+            //                             $expr: {
+            //                                 $and: [
+            //                                     {
+            //                                         $eq: ['$sku', '$$o_item'],
+            //                                     },
+            //                                     {
+            //                                         $eq: ['$id', '$$o_id'],
+            //                                     },
+            //                                 ],
+            //                             },
+            //                         },
+            //                     },
+            //                 ],
+            //                 // pipeline: [
+            //                 //     {
+            //                 //         $match: {
+            //                 //             $expr: {
+            //                 //                 $and: [
+            //                 //                     {
+            //                 //                         $eq: ['$item', '$$i_sku'],
+            //                 //                     },
+            //                 //                     {
+            //                 //                         $eq: ['$id', '$$i_id'],
+            //                 //                     },
+            //                 //                 ],
+            //                 //             },
+            //                 //         },
+            //                 //     },
+            //                 // ],
+            //             },
+            //         },
+            //     ];
+            //     try {
+            //         const results = await mongoClient
+            //             .db(dbName)
+            //             .collection(parsedQuery.collections[0])
+            //             .aggregate(parsedQuery.pipeline)
+            //             .toArray();
+            //         assert(results);
+            //         assert(results.length === 4);
+            //         for (const result of results) {
+            //             assert(result.i.length);
+            //         }
+            //         return;
+            //     } catch (err) {
+            //         console.error(err);
+            //         throw err;
+            //     }
+            // });
+            // it('should be able to do a left join with multiple conditions the other way around', async () => {
+            //     const queryText =
+            //         'select * from orders as o left join `inventory` as i on i.sku=o.item and i.id=o.id';
+            //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            //     try {
+            //         const results = await mongoClient
+            //             .db(dbName)
+            //             .collection(parsedQuery.collections[0])
+            //             .aggregate(parsedQuery.pipeline)
+            //             .toArray();
+            //         assert(results);
+            //         assert(results.length === 4);
+            //         for (const result of results) {
+            //             assert(result.i.length);
+            //         }
+            //         return;
+            //     } catch (err) {
+            //         console.error(err);
+            //         throw err;
+            //     }
+            // });
         });
 
-        it('should be able to do a left join with an unwind and a case statement', async () => {
-            const queryText =
-                "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne from orders as o left join `inventory|unwind` as i  on o.item=i.sku";
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+        describe('join order of queries', () => {
+            it('should prase the query that was not working on prod', async () => {
+                const queryText = `SELECT
+                unset(_id)
+                ,pol.CustId
+                ,cust.CustId as c_CustId
+                ,pol.ExecCode
+                ,emp.EmpCode as emp_EmpCode
+                from \`ams360-powerbi-basicpolinfo\` pol
+                INNER join \`ams360-powerbi-customer|unwind\` cust on pol.CustId = cust.CustId
+                LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
+                limit 5`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                assert(parsedQuery);
+                const lookup1 = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup1, {
+                    from: 'ams360-powerbi-customer',
+                    foreignField: 'CustId',
+                    localField: 'pol.CustId',
+                    as: 'cust',
+                });
+                const lookup2 = parsedQuery.pipeline[4].$lookup;
+                assert.deepEqual(lookup2, {
+                    from: 'ams360-powerbi-employee',
+                    foreignField: 'EmpCode',
+                    localField: 'pol.ExecCode',
+                    as: 'emp',
+                });
+            });
+            describe('Existing example', () => {
+                it('should have the right lookup when no aliases specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only left alias is specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only right alias is specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when both aliases are specified', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+            });
+            describe('Existing example - reversed', () => {
+                it('should have the right lookup when no aliases specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on item=sku';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'item',
+                        localField: 'o.sku',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only left alias is specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when only right alias is specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+                it('should have the right lookup when both aliases are specified - reversed', () => {
+                    const queryText =
+                        'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                    const parsedQuery = SQLParser.parseSQL(queryText);
+                    const lookup = parsedQuery.pipeline[1].$lookup;
+                    assert.deepEqual(lookup, {
+                        from: 'inventory',
+                        foreignField: 'sku',
+                        localField: 'o.item',
+                        as: 'i',
+                    });
+                });
+            });
         });
 
-        it('should be able to do a left join on special characters', async () => {
-            const queryText =
-                'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars';
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results);
-                assert(results.length === 4);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
+        describe('n-level joins', () => {
+            it('should be able to do n level joins without an unwind', async () => {
+                const queryText = `select
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId
+                    from orders as o
+                    inner join \`inventory\` as i
+                    on o.item=i.sku
+                    inner join \`customers\` as c
+                    on o.customerId=c.id
+                    where o.id=1`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results.length > 0);
+                    assert(results[0].orderId);
+                    assert(results[0].inventoryId);
+                    assert(results[0].customerId);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
+            it('should be able to do n level joins with unwinds', async () => {
+                const queryText = `select
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId
+                    from orders as o
+                    inner join \`inventory|unwind\` as i
+                    on o.item=i.sku
+                    inner join \`customers|unwind\` as c
+                    on o.customerId=c.id`;
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                try {
+                    const results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline)
+                        .toArray();
+                    assert(results.length > 0);
+                    assert(results[0].orderId);
+                    assert(results[0].inventoryId);
+                    assert(results[0].customerId);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                    throw err;
+                }
+            });
         });
     });
 
@@ -146,7 +453,7 @@ describe('Individual tests', function () {
         try {
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -162,7 +469,7 @@ describe('Individual tests', function () {
         try {
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -173,71 +480,13 @@ describe('Individual tests', function () {
         }
     });
 
-    describe('n-level joins', () => {
-        it('should be able to do n level joins without an unwind', async () => {
-            const queryText = `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory\` as i
-                on o.item=i.sku
-                inner join \`customers\` as c
-                on o.customerId=c.id
-                where o.id=1`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results.length > 0);
-                assert(results[0].orderId);
-                assert(results[0].inventoryId);
-                assert(results[0].customerId);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-        it('should be able to do n level joins with unwinds', async () => {
-            const queryText = `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory|unwind\` as i
-                on o.item=i.sku
-                inner join \`customers|unwind\` as c
-                on o.customerId=c.id`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            try {
-                const results = await mongoClient
-                    .db(_dbName)
-                    .collection(parsedQuery.collections[0])
-                    .aggregate(parsedQuery.pipeline)
-                    .toArray();
-                assert(results.length > 0);
-                assert(results[0].orderId);
-                assert(results[0].inventoryId);
-                assert(results[0].customerId);
-                return;
-            } catch (err) {
-                console.error(err);
-                throw err;
-            }
-        });
-    });
-
     describe('Root replacement', () => {
         it('should be able to do a basic root unwind', async () => {
             const queryText = `select unwind('Address') as \`$$ROOT\` from customers LIMIT 1`;
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -257,7 +506,7 @@ describe('Individual tests', function () {
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -294,7 +543,7 @@ describe('Individual tests', function () {
 
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -315,7 +564,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -341,7 +590,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 let results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
@@ -362,7 +611,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -379,7 +628,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -396,7 +645,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -413,7 +662,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -430,7 +679,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -443,6 +692,7 @@ describe('Individual tests', function () {
             }
         });
     });
+
     describe('count', () => {
         it('should be able to do a count * with a group by', async () => {
             const queryText =
@@ -450,7 +700,7 @@ describe('Individual tests', function () {
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -472,7 +722,7 @@ describe('Individual tests', function () {
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -489,7 +739,7 @@ describe('Individual tests', function () {
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -502,6 +752,7 @@ describe('Individual tests', function () {
             }
         });
     });
+
     describe('unset', () => {
         it('should be able to do a basic unset in a query', async () => {
             const queryText =
@@ -509,7 +760,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collection)
                     .find(parsedQuery.query || null, {
                         projection: parsedQuery.projection,
@@ -531,7 +782,7 @@ describe('Individual tests', function () {
             try {
                 const parsedQuery = SQLParser.parseSQL(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -554,7 +805,7 @@ describe('Individual tests', function () {
                 try {
                     const parsedQuery = SQLParser.parseSQL(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -573,7 +824,7 @@ describe('Individual tests', function () {
                 try {
                     const parsedQuery = SQLParser.parseSQL(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -593,7 +844,7 @@ describe('Individual tests', function () {
                 'SELECT ord.specialChars FROM `orders` ord limit 4';
             const parsedQuery = SQLParser.parseSQL(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collection)
                 .find(parsedQuery.query || null, {
                     projection: parsedQuery.projection,
@@ -604,136 +855,7 @@ describe('Individual tests', function () {
             assert(results[0].specialChars);
         });
     });
-    describe('join order of queries', () => {
-        it('should prase the query that was not working on prod', async () => {
-            const queryText = `SELECT
-            unset(_id)
-            ,pol.CustId
-            ,cust.CustId as c_CustId
-            ,pol.ExecCode
-            ,emp.EmpCode as emp_EmpCode
-            from \`ams360-powerbi-basicpolinfo\` pol
-            INNER join \`ams360-powerbi-customer|unwind\` cust on pol.CustId = cust.CustId
-            LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
-            limit 5`;
-            const parsedQuery = SQLParser.parseSQL(queryText);
-            assert(parsedQuery);
-            const lookup1 = parsedQuery.pipeline[1].$lookup;
-            assert.deepEqual(lookup1, {
-                from: 'ams360-powerbi-customer',
-                foreignField: 'CustId',
-                localField: 'pol.CustId',
-                as: 'cust',
-            });
-            const lookup2 = parsedQuery.pipeline[4].$lookup;
-            assert.deepEqual(lookup2, {
-                from: 'ams360-powerbi-employee',
-                foreignField: 'EmpCode',
-                localField: 'pol.ExecCode',
-                as: 'emp',
-            });
-        });
-        describe('Existing example', () => {
-            it('should have the right lookup when no aliases specified', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on sku=item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when only left alias is specified', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on i.sku=item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when only right alias is specified', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on sku=o.item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when both aliases are specified', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on i.sku=o.item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-        });
-        describe('Existing example - reversed', () => {
-            it('should have the right lookup when no aliases specified - reversed', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on item=sku';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'item',
-                    localField: 'o.sku',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when only left alias is specified - reversed', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on i.sku=item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when only right alias is specified - reversed', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on sku=o.item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-            it('should have the right lookup when both aliases are specified - reversed', () => {
-                const queryText =
-                    'select * from orders as o inner join `inventory` as i on i.sku=o.item';
-                const parsedQuery = SQLParser.parseSQL(queryText);
-                const lookup = parsedQuery.pipeline[1].$lookup;
-                assert.deepEqual(lookup, {
-                    from: 'inventory',
-                    foreignField: 'sku',
-                    localField: 'o.item',
-                    as: 'i',
-                });
-            });
-        });
-    });
+
     describe('Case statement with functions', () => {
         it.skip('Should work when the case statement does not have backticks', async () => {
             const queryText = `
@@ -777,7 +899,7 @@ describe('Individual tests', function () {
                     .branches[0].case.$eq[0] === '$o.item'
             );
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -785,6 +907,7 @@ describe('Individual tests', function () {
             assert(results[0].OriginalExecutive === 'Y');
         });
     });
+
     describe('select in select', () => {
         it('Should work without an order by on a local field', async () => {
             const queryText = `
@@ -794,7 +917,7 @@ describe('Individual tests', function () {
             where _id=1`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -804,7 +927,7 @@ describe('Individual tests', function () {
             const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on cn.id=c.id`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -816,7 +939,7 @@ describe('Individual tests', function () {
                 inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) cn on cn.id=c.id`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -828,7 +951,7 @@ describe('Individual tests', function () {
                 'select `PolId`,max(`ChangedDate`) as ChangedDate from `ams360-powerbi-policytranpremium` group by `PolId`';
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -846,7 +969,7 @@ describe('Individual tests', function () {
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
 
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 // .aggregate(manualPipeline)
                 .aggregate(parsedQuery.pipeline)
@@ -858,14 +981,14 @@ describe('Individual tests', function () {
             const queryText1 = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on cn.id=c.id`;
             const parsedQuery1 = SQLParser.makeMongoAggregate(queryText1);
             const results1 = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery1.collections[0])
                 .aggregate(parsedQuery1.pipeline)
                 .toArray();
             const queryText2 = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on c.id=cn.id`;
             const parsedQuery2 = SQLParser.makeMongoAggregate(queryText2);
             const results2 = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery2.collections[0])
                 .aggregate(parsedQuery2.pipeline)
                 .toArray();
@@ -875,19 +998,20 @@ describe('Individual tests', function () {
             const queryText = `SELECT c.*,cn.* FROM customers c inner join (select * from \`customer-notes\` where id > 2) cn on c.id=cn.id`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results.length);
         });
     });
+
     describe('literals', () => {
         it('Should use the literal value if it is not a table alias', async () => {
             const queryText = `select "Name" as Id, Description from "films"`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -904,7 +1028,7 @@ describe('Individual tests', function () {
             // limit 4096`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -921,7 +1045,7 @@ describe('Individual tests', function () {
                 database: 'PostgresQL',
             });
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -929,6 +1053,7 @@ describe('Individual tests', function () {
             assert(results.length === 4);
         });
     });
+
     describe('not in & in', () => {
         it('should work for in subclause', async () => {
             const queryText = `
@@ -939,7 +1064,7 @@ describe('Individual tests', function () {
                 database: 'PostgresQL',
             });
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -978,7 +1103,7 @@ describe('Individual tests', function () {
                 database: 'PostgresQL',
             });
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -1094,7 +1219,7 @@ describe('Individual tests', function () {
                 database: 'PostgresQL',
             });
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();

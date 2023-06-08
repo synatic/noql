@@ -1,0 +1,82 @@
+{
+  "case1": {
+    "expectedResults": [
+      {
+        "id": 1,
+        "First Name": "MARY",
+        "Last Name": "SMITH",
+        "CNoteId": 1,
+        "Note": "Notes for id 1",
+        "CNDate": "2020-12:15"
+      },
+      {
+        "id": 2,
+        "First Name": "PATRICIA",
+        "Last Name": "JOHNSON",
+        "CNoteId": 2,
+        "Note": "Notes for id 2",
+        "CNDate": "2021-12:15"
+      },
+      {
+        "id": 3,
+        "First Name": "LINDA",
+        "Last Name": "WILLIAMS",
+        "CNoteId": 3,
+        "Note": "Notes for id 3",
+        "CNDate": "2020-12:15"
+      },
+      {
+        "id": 4,
+        "First Name": "BARBARA",
+        "Last Name": "JONES",
+        "CNoteId": 4,
+        "Note": "Notes for id 4",
+        "CNDate": "2019-12:15"
+      }
+    ]
+  },
+  "case2": {
+    "expectedResults": [
+      {
+        "id": 1,
+        "First Name": "MARY",
+        "Last Name": "SMITH",
+        "CNoteId": 1,
+        "Note": "Notes for id 1",
+        "CNDate": "2020-12:15"
+      },
+      {
+        "id": 2,
+        "First Name": "PATRICIA",
+        "Last Name": "JOHNSON",
+        "CNoteId": 2,
+        "Note": "Notes for id 2",
+        "CNDate": "2021-12:15"
+      },
+      {
+        "id": 3,
+        "First Name": "LINDA",
+        "Last Name": "WILLIAMS",
+        "CNoteId": 3,
+        "Note": "Notes for id 3",
+        "CNDate": "2020-12:15"
+      },
+      {
+        "id": 4,
+        "First Name": "BARBARA",
+        "Last Name": "JONES",
+        "CNoteId": 4,
+        "Note": "Notes for id 4",
+        "CNDate": "2019-12:15"
+      },
+      {
+        "id": 5,
+        "First Name": "ELIZABETH",
+        "Last Name": "BROWN",
+        "CNoteId": 5,
+        "Note": "Notes for id 5",
+        "CNDate": "2021-12:15"
+      }
+    ]
+  }
+}

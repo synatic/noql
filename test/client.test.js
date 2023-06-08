@@ -1,8 +1,7 @@
 const SQLParser = require('../lib/SQLParser.js');
 const ObjectID = require('bson-objectid');
-const {setup, disconnect} = require('./mongo-client');
+const {setup, disconnect, dbName} = require('./utils/mongo-client.js');
 
-const _dbName = 'sql-to-mongo-test';
 const _queryTests = [].concat(
     require('./queryTests/queryTests.json'),
     require('./queryTests/objectOperators.json'),
@@ -64,13 +63,13 @@ describe('Client Queries', function () {
                             });
                             if (parsedQuery.count) {
                                 const count = await mongoClient
-                                    .db(_dbName)
+                                    .db(dbName)
                                     .collection(parsedQuery.collection)
                                     .countDocuments(parsedQuery.query || null);
                                 console.log(`${count}`);
                             } else {
                                 const find = mongoClient
-                                    .db(_dbName)
+                                    .db(dbName)
                                     .collection(parsedQuery.collection)
                                     .find(parsedQuery.query || null, {
                                         projection: parsedQuery.projection,
@@ -118,7 +117,7 @@ describe('Client Queries', function () {
                             );
 
                             let results = await mongoClient
-                                .db(_dbName)
+                                .db(dbName)
                                 .collection(parsedQuery.collections[0])
                                 .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
@@ -155,7 +154,7 @@ describe('Client Queries', function () {
                                 }
                             );
                             let results = await mongoClient
-                                .db(_dbName)
+                                .db(dbName)
                                 .collection(parsedQuery.collections[0])
                                 .aggregate(parsedQuery.pipeline);
                             results = await results.toArray();
