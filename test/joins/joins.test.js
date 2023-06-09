@@ -1,10 +1,12 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester');
+const assert = require('assert');
+const SQLParser = require('../../lib/SQLParser.js');
 
 describe('joins', function () {
     this.timeout(90000);
     const fileName = 'join-cases';
-    const mode = 'write';
+    const mode = 'test';
     const dirName = __dirname;
     /** @type {import('../utils/query-tester/types').QueryResultTester} */
     let queryResultTester;
@@ -69,6 +71,7 @@ describe('joins', function () {
                 casePath: 'case2',
             });
         });
+
         it('should work for case 3', async () => {
             await queryResultTester({
                 queryString:
@@ -76,6 +79,7 @@ describe('joins', function () {
                 casePath: 'case3',
             });
         });
+
         it('should work for case 4', async () => {
             await queryResultTester({
                 queryString:
@@ -83,6 +87,7 @@ describe('joins', function () {
                 casePath: 'case4',
             });
         });
+
         it('should work for case 5', async () => {
             await queryResultTester({
                 queryString:
@@ -90,6 +95,7 @@ describe('joins', function () {
                 casePath: 'case5',
             });
         });
+
         it('should work for case 6', async () => {
             await queryResultTester({
                 queryString:
@@ -97,6 +103,7 @@ describe('joins', function () {
                 casePath: 'case6',
             });
         });
+
         it('should work for case 7', async () => {
             await queryResultTester({
                 queryString:
@@ -104,6 +111,7 @@ describe('joins', function () {
                 casePath: 'case7',
             });
         });
+
         it('should work for case 8', async () => {
             await queryResultTester({
                 queryString:
@@ -111,6 +119,7 @@ describe('joins', function () {
                 casePath: 'case8',
             });
         });
+
         it('should work for case 9', async () => {
             await queryResultTester({
                 queryString:
@@ -118,6 +127,7 @@ describe('joins', function () {
                 casePath: 'case9',
             });
         });
+
         it('should work for case 10', async () => {
             await queryResultTester({
                 queryString:
@@ -125,11 +135,302 @@ describe('joins', function () {
                 casePath: 'case10',
             });
         });
+
         it('should work for case 11', async () => {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes` cn on cn.id=c.id and (cn.id>2 or cn.id<5)',
                 casePath: 'case11',
+            });
+        });
+    });
+    describe('left join', () => {
+        it('should be able to do a left join', async () => {
+            await queryResultTester({
+                queryString:
+                    'select * from orders as o left join `inventory` as i  on o.item=i.sku',
+                casePath: 'basic-left-join',
+            });
+        });
+        it('should be able to do a left join with an unwind', async () => {
+            await queryResultTester({
+                queryString:
+                    'select * from orders as o left join `inventory|unwind` as i on o.item=i.sku',
+                casePath: 'left-join-with-unwind-hint',
+            });
+        });
+
+        it('should be able to do a left join with an unwind in the query', async () => {
+            await queryResultTester({
+                queryString:
+                    'select o.id as OID,unwind(i) as inv from orders as o left join `inventory` i on o.item=i.sku',
+                casePath: 'left-join-with-unwind-query',
+            });
+        });
+
+        it('should be able to do a left join with an unwind and a case statement', async () => {
+            await queryResultTester({
+                queryString:
+                    "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne from orders as o left join `inventory|unwind` as i  on o.item=i.sku",
+                casePath: 'left-join-with-unwind-and-case',
+            });
+        });
+
+        it('should be able to do a left join on special characters', async () => {
+            await queryResultTester({
+                queryString:
+                    'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars',
+                casePath: 'left-join-with-unwind-and-special-chars',
+            });
+        });
+
+        it('should be able to do a left join the other way round', async () => {
+            await queryResultTester({
+                queryString:
+                    'select * from orders as o left join `inventory` as i on i.sku=o.item',
+                casePath: 'left-join-reversed',
+            });
+        });
+        // it('should be able to do a left join with multiple conditions', async () => {
+        //     const queryText =
+        //         'select * from orders as o left join `inventory` as i on o.item=i.sku and o.id=i.id';
+        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+        //     const hcp = [
+        //         {
+        //             $project: {
+        //                 o: '$$ROOT',
+        //             },
+        //         },
+        //         {
+        //             $lookup: {
+        //                 from: 'inventory',
+        //                 as: 'i',
+        //                 let: {
+        //                     o_item: '$o.item',
+        //                     o_id: '$o.id',
+        //                 },
+        //                 pipeline: [
+        //                     {
+        //                         $match: {
+        //                             $expr: {
+        //                                 $and: [
+        //                                     {
+        //                                         $eq: ['$sku', '$$o_item'],
+        //                                     },
+        //                                     {
+        //                                         $eq: ['$id', '$$o_id'],
+        //                                     },
+        //                                 ],
+        //                             },
+        //                         },
+        //                     },
+        //                 ],
+        //                 // pipeline: [
+        //                 //     {
+        //                 //         $match: {
+        //                 //             $expr: {
+        //                 //                 $and: [
+        //                 //                     {
+        //                 //                         $eq: ['$item', '$$i_sku'],
+        //                 //                     },
+        //                 //                     {
+        //                 //                         $eq: ['$id', '$$i_id'],
+        //                 //                     },
+        //                 //                 ],
+        //                 //             },
+        //                 //         },
+        //                 //     },
+        //                 // ],
+        //             },
+        //         },
+        //     ];
+        //     try {
+        //         const results = await mongoClient
+        //             .db(dbName)
+        //             .collection(parsedQuery.collections[0])
+        //             .aggregate(parsedQuery.pipeline)
+        //             .toArray();
+        //         assert(results);
+        //         assert(results.length === 4);
+        //         for (const result of results) {
+        //             assert(result.i.length);
+        //         }
+        //         return;
+        //     } catch (err) {
+        //         console.error(err);
+        //         throw err;
+        //     }
+        // });
+        // it('should be able to do a left join with multiple conditions the other way around', async () => {
+        //     const queryText =
+        //         'select * from orders as o left join `inventory` as i on i.sku=o.item and i.id=o.id';
+        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+        //     try {
+        //         const results = await mongoClient
+        //             .db(dbName)
+        //             .collection(parsedQuery.collections[0])
+        //             .aggregate(parsedQuery.pipeline)
+        //             .toArray();
+        //         assert(results);
+        //         assert(results.length === 4);
+        //         for (const result of results) {
+        //             assert(result.i.length);
+        //         }
+        //         return;
+        //     } catch (err) {
+        //         console.error(err);
+        //         throw err;
+        //     }
+        // });
+    });
+
+    describe('join order of queries', () => {
+        it('should prase the query that was not working on prod', async () => {
+            await queryResultTester({
+                queryString: `
+                SELECT
+                    unset(_id)
+                    ,pol.CustId
+                    ,cust.CustId as c_CustId
+                    ,pol.ExecCode
+                    ,emp.EmpCode as emp_EmpCode
+                FROM \`ams360-powerbi-basicpolinfo\` pol
+                INNER join \`ams360-powerbi-customer|unwind\` cust on pol.CustId = cust.CustId
+                LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
+                LIMIT 5`,
+                casePath: 'join-order',
+            });
+        });
+        describe('Existing example', () => {
+            it('should have the right lookup when no aliases specified', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on sku=item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when only left alias is specified', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on i.sku=item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when only right alias is specified', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on sku=o.item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when both aliases are specified', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+        });
+        describe('Existing example - reversed', () => {
+            it('should have the right lookup when no aliases specified - reversed', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on item=sku';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'item',
+                    localField: 'o.sku',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when only left alias is specified - reversed', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on i.sku=item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when only right alias is specified - reversed', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on sku=o.item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+            it('should have the right lookup when both aliases are specified - reversed', () => {
+                const queryText =
+                    'select * from orders as o inner join `inventory` as i on i.sku=o.item';
+                const parsedQuery = SQLParser.parseSQL(queryText);
+                const lookup = parsedQuery.pipeline[1].$lookup;
+                assert.deepEqual(lookup, {
+                    from: 'inventory',
+                    foreignField: 'sku',
+                    localField: 'o.item',
+                    as: 'i',
+                });
+            });
+        });
+    });
+
+    describe('n-level joins', () => {
+        it('should be able to do n level joins without an unwind', async () => {
+            await queryResultTester({
+                queryString: `select
+                o.id as orderId
+                ,i.id as inventoryId
+                ,c.id as customerId
+                from orders as o
+                inner join \`inventory\` as i
+                on o.item=i.sku
+                inner join \`customers\` as c
+                on o.customerId=c.id
+                where o.id=1`,
+                casePath: 'n-level-join-without-unwind',
+            });
+        });
+        it('should be able to do n level joins with unwinds', async () => {
+            await queryResultTester({
+                queryString: `select
+                o.id as orderId
+                ,i.id as inventoryId
+                ,c.id as customerId
+                from orders as o
+                inner join \`inventory|unwind\` as i
+                on o.item=i.sku
+                inner join \`customers|unwind\` as c
+                on o.customerId=c.id`,
+                casePath: 'n-level-join-with-unwind',
             });
         });
     });

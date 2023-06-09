@@ -30,7 +30,7 @@ function buildQueryResultTester(options) {
  * Used to write the query + expected results to the output file
  *
  * @param {import('./types.js').AllQueryResultOptions} options The options to use
- * @returns {Promise<void>}
+ * @returns {Promise<import('mongodb').Document[]>}
  */
 async function queryResultTester(options) {
     let {
@@ -56,10 +56,11 @@ async function queryResultTester(options) {
     if (mode === 'write') {
         set(obj, casePath + '.expectedResults', results);
         await writeFile(filePath, obj);
-        return;
+        return [];
     }
     const expectedResults = get(obj, casePath + '.expectedResults');
     assert.deepStrictEqual(results, expectedResults);
+    return results;
 }
 
 /**

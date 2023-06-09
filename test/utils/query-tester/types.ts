@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb';
+import {MongoClient, Document} from 'mongodb';
 
 /** Options to use when running the function to test/generate test outputs */
 export interface BuildQueryResultOptions {
@@ -26,4 +26,4 @@ export type AllQueryResultOptions = BuildQueryResultOptions &
 
 export type QueryResultTester = (
     innerOptions: QueryResultOptions
-) => Promise<void>;
+) => Promise<Document[]>;
