@@ -1,4 +1,5 @@
 import {MongoClient, Document} from 'mongodb';
+import {PipelineFn} from '../../../lib/types';
 
 /** Options to use when running the function to test/generate test outputs */
 export interface BuildQueryResultOptions {
@@ -26,4 +27,10 @@ export type AllQueryResultOptions = BuildQueryResultOptions &
 
 export type QueryResultTester = (
     innerOptions: QueryResultOptions
-) => Promise<Document[]>;
+) => Promise<QueryTesterResult>;
+
+export type QueryTesterResult = {
+    results: Document[];
+    pipeline: PipelineFn[];
+    collections: string[];
+};

@@ -148,14 +148,14 @@ describe('joins', function () {
         it('should be able to do a left join', async () => {
             await queryResultTester({
                 queryString:
-                    'select * from orders as o left join `inventory` as i  on o.item=i.sku',
+                    'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i  on o.item=i.sku',
                 casePath: 'basic-left-join',
             });
         });
         it('should be able to do a left join with an unwind', async () => {
             await queryResultTester({
                 queryString:
-                    'select * from orders as o left join `inventory|unwind` as i on o.item=i.sku',
+                    'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory|unwind` as i on o.item=i.sku',
                 casePath: 'left-join-with-unwind-hint',
             });
         });
@@ -163,7 +163,7 @@ describe('joins', function () {
         it('should be able to do a left join with an unwind in the query', async () => {
             await queryResultTester({
                 queryString:
-                    'select o.id as OID,unwind(i) as inv from orders as o left join `inventory` i on o.item=i.sku',
+                    'select o.id as OID,unwind(i) as inv, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` i on o.item=i.sku',
                 casePath: 'left-join-with-unwind-query',
             });
         });
@@ -171,7 +171,7 @@ describe('joins', function () {
         it('should be able to do a left join with an unwind and a case statement', async () => {
             await queryResultTester({
                 queryString:
-                    "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne from orders as o left join `inventory|unwind` as i  on o.item=i.sku",
+                    "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne, unset(_id) from orders as o left join `inventory|unwind` as i  on o.item=i.sku",
                 casePath: 'left-join-with-unwind-and-case',
             });
         });
@@ -179,7 +179,7 @@ describe('joins', function () {
         it('should be able to do a left join on special characters', async () => {
             await queryResultTester({
                 queryString:
-                    'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars',
+                    'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars, unset(_id) from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars',
                 casePath: 'left-join-with-unwind-and-special-chars',
             });
         });
@@ -187,7 +187,7 @@ describe('joins', function () {
         it('should be able to do a left join the other way round', async () => {
             await queryResultTester({
                 queryString:
-                    'select * from orders as o left join `inventory` as i on i.sku=o.item',
+                    'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i on i.sku=o.item',
                 casePath: 'left-join-reversed',
             });
         });
@@ -406,30 +406,28 @@ describe('joins', function () {
     describe('n-level joins', () => {
         it('should be able to do n level joins without an unwind', async () => {
             await queryResultTester({
-                queryString: `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory\` as i
-                on o.item=i.sku
-                inner join \`customers\` as c
-                on o.customerId=c.id
-                where o.id=1`,
+                queryString: `SELECT
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId,
+                    unset(_id)
+                FROM orders as o
+                INNER JOIN \`inventory\` as i ON o.item=i.sku
+                INNER JOIN \`customers\` as c ON o.customerId=c.id
+                WHERE o.id=1`,
                 casePath: 'n-level-join-without-unwind',
             });
         });
         it('should be able to do n level joins with unwinds', async () => {
             await queryResultTester({
-                queryString: `select
-                o.id as orderId
-                ,i.id as inventoryId
-                ,c.id as customerId
-                from orders as o
-                inner join \`inventory|unwind\` as i
-                on o.item=i.sku
-                inner join \`customers|unwind\` as c
-                on o.customerId=c.id`,
+                queryString: `SELECT
+                    o.id as orderId
+                    ,i.id as inventoryId
+                    ,c.id as customerId,
+                    unset(_id)
+                FROM orders as o
+                INNER JOIN \`inventory|unwind\` as i ON o.item=i.sku
+                INNER JOIN \`customers|unwind\` as c ON o.customerId=c.id`,
                 casePath: 'n-level-join-with-unwind',
             });
         });

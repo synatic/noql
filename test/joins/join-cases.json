@@ -550,20 +550,16 @@
   "basic-left-join": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf1",
           "id": 1,
           "item": "almonds",
           "price": 12,
           "quantity": 2,
           "customerId": 1,
-          "specialChars": "^^^",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "^^^"
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8be9",
             "id": 1,
             "sku": "almonds",
             "description": "product 1",
@@ -573,21 +569,17 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf2",
           "id": 2,
           "item": "pecans",
           "notes": "testing",
           "price": 20,
           "quantity": 1,
           "customerId": 2,
-          "specialChars": "!!$",
-          "orderDate": "2022-04-08T00:00:00.000Z"
+          "specialChars": "!!$"
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8bec",
             "id": 4,
             "sku": "pecans",
             "description": "product 4",
@@ -597,20 +589,16 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf3",
           "id": 4,
           "item": "almonds",
           "price": 12,
           "quantity": 4,
           "customerId": 3,
-          "specialChars": "!!\"",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "!!\""
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8be9",
             "id": 1,
             "sku": "almonds",
             "description": "product 1",
@@ -620,16 +608,13 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf4",
           "id": 5,
           "item": "potatoes",
           "price": 7,
           "quantity": 6,
           "customerId": 5,
-          "specialChars": "!!*",
-          "orderDate": "2021-07-09T00:00:00.000Z"
+          "specialChars": "!!*"
         },
         "i": []
       }
@@ -638,19 +623,15 @@
   "left-join-with-unwind-hint": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf1",
           "id": 1,
           "item": "almonds",
           "price": 12,
           "quantity": 2,
           "customerId": 1,
-          "specialChars": "^^^",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "^^^"
         },
         "i": {
-          "_id": "64830e272b1735fa32bf8be9",
           "id": 1,
           "sku": "almonds",
           "description": "product 1",
@@ -659,20 +640,16 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf2",
           "id": 2,
           "item": "pecans",
           "notes": "testing",
           "price": 20,
           "quantity": 1,
           "customerId": 2,
-          "specialChars": "!!$",
-          "orderDate": "2022-04-08T00:00:00.000Z"
+          "specialChars": "!!$"
         },
         "i": {
-          "_id": "64830e272b1735fa32bf8bec",
           "id": 4,
           "sku": "pecans",
           "description": "product 4",
@@ -681,19 +658,15 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf3",
           "id": 4,
           "item": "almonds",
           "price": 12,
           "quantity": 4,
           "customerId": 3,
-          "specialChars": "!!\"",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "!!\""
         },
         "i": {
-          "_id": "64830e272b1735fa32bf8be9",
           "id": 1,
           "sku": "almonds",
           "description": "product 1",
@@ -702,16 +675,13 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf4",
           "id": 5,
           "item": "potatoes",
           "price": 7,
           "quantity": 6,
           "customerId": 5,
-          "specialChars": "!!*",
-          "orderDate": "2021-07-09T00:00:00.000Z"
+          "specialChars": "!!*"
         }
       }
     ]
@@ -719,10 +689,8 @@
   "left-join-with-unwind-query": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "OID": 1,
         "inv": {
-          "_id": "64830e272b1735fa32bf8be9",
           "id": 1,
           "sku": "almonds",
           "description": "product 1",
@@ -731,10 +699,8 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "OID": 2,
         "inv": {
-          "_id": "64830e272b1735fa32bf8bec",
           "id": 4,
           "sku": "pecans",
           "description": "product 4",
@@ -743,10 +709,8 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "OID": 4,
         "inv": {
-          "_id": "64830e272b1735fa32bf8be9",
           "id": 1,
           "sku": "almonds",
           "description": "product 1",
@@ -755,7 +719,6 @@
         }
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "OID": 5
       }
     ]
@@ -763,19 +726,15 @@
   "left-join-with-unwind-and-case": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "IsOne": "Yes"
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "IsOne": "No"
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "IsOne": "No"
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "IsOne": "No"
       }
     ]
@@ -783,28 +742,24 @@
   "left-join-with-unwind-and-special-chars": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "description": "product 1",
         "iChars": "^^^",
         "item": "almonds",
         "oChars": "^^^"
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "description": "product 2",
         "iChars": "!!$",
         "item": "pecans",
         "oChars": "!!$"
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "description": "product 3",
         "iChars": "!!\"",
         "item": "almonds",
         "oChars": "!!\""
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "description": "product 4",
         "iChars": "!!*",
         "item": "potatoes",
@@ -815,20 +770,16 @@
   "left-join-reversed": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf1",
           "id": 1,
           "item": "almonds",
           "price": 12,
           "quantity": 2,
           "customerId": 1,
-          "specialChars": "^^^",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "^^^"
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8be9",
             "id": 1,
             "sku": "almonds",
             "description": "product 1",
@@ -838,21 +789,17 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf2",
           "id": 2,
           "item": "pecans",
           "notes": "testing",
           "price": 20,
           "quantity": 1,
           "customerId": 2,
-          "specialChars": "!!$",
-          "orderDate": "2022-04-08T00:00:00.000Z"
+          "specialChars": "!!$"
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8bec",
             "id": 4,
             "sku": "pecans",
             "description": "product 4",
@@ -862,20 +809,16 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf3",
           "id": 4,
           "item": "almonds",
           "price": 12,
           "quantity": 4,
           "customerId": 3,
-          "specialChars": "!!\"",
-          "orderDate": "2023-06-09T11:33:59.445Z"
+          "specialChars": "!!\""
         },
         "i": [
           {
-            "_id": "64830e272b1735fa32bf8be9",
             "id": 1,
             "sku": "almonds",
             "description": "product 1",
@@ -885,16 +828,13 @@
         ]
       },
       {
-        "_id": "64830e272b1735fa32bf8bf4",
         "o": {
-          "_id": "64830e272b1735fa32bf8bf4",
           "id": 5,
           "item": "potatoes",
           "price": 7,
           "quantity": 6,
           "customerId": 5,
-          "specialChars": "!!*",
-          "orderDate": "2021-07-09T00:00:00.000Z"
+          "specialChars": "!!*"
         },
         "i": []
       }
@@ -906,7 +846,6 @@
   "n-level-join-without-unwind": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "orderId": 1,
         "inventoryId": [
           1
@@ -920,19 +859,16 @@
   "n-level-join-with-unwind": {
     "expectedResults": [
       {
-        "_id": "64830e272b1735fa32bf8bf1",
         "orderId": 1,
         "inventoryId": 1,
         "customerId": 1
       },
       {
-        "_id": "64830e272b1735fa32bf8bf2",
         "orderId": 2,
         "inventoryId": 4,
         "customerId": 2
       },
       {
-        "_id": "64830e272b1735fa32bf8bf3",
         "orderId": 4,
         "inventoryId": 1,
         "customerId": 3

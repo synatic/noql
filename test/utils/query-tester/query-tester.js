@@ -30,7 +30,7 @@ function buildQueryResultTester(options) {
  * Used to write the query + expected results to the output file
  *
  * @param {import('./types.js').AllQueryResultOptions} options The options to use
- * @returns {Promise<import('mongodb').Document[]>}
+ * @returns {Promise<import('./types').QueryTesterResult>}
  */
 async function queryResultTester(options) {
     let {
@@ -44,23 +44,34 @@ async function queryResultTester(options) {
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
-    const parsedQuery = SQLParser.makeMongoAggregate(queryString);
+    const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString);
     const filePath = $path.resolve(dirName, fileName);
     const results = await mongoClient
         .db(dbName)
-        .collection(parsedQuery.collections[0])
-        .aggregate(parsedQuery.pipeline)
+        .collection(collections[0])
+        .aggregate(pipeline)
         .toArray();
 
     const obj = await readCases(filePath);
-    if (mode === 'write') {
+    const hasKeys = Object.keys(obj).length === 0;
+    if (mode === 'write' || hasKeys) {
         set(obj, casePath + '.expectedResults', results);
         await writeFile(filePath, obj);
-        return [];
+        if (!hasKeys) {
+            return {
+                collections: [],
+                pipeline: [],
+                results: [],
+            };
+        }
     }
     const expectedResults = get(obj, casePath + '.expectedResults');
     assert.deepStrictEqual(results, expectedResults);
-    return results;
+    return {
+        results,
+        collections,
+        pipeline,
+    };
 }
 
 /**
