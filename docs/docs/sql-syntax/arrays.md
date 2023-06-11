@@ -1,8 +1,10 @@
 # Arrays
 
+## Array Support
+
 NoQL supports many methods that perform operations on array fields. They can be used as part of select statements and queries.
 
-NoQL uses sub-selects to query array fields in collections. E.g.
+NoQL uses sub-selects with a FROM array field to query array fields in collections. E.g.
 
 ???+ example "Using sub-selects to query array fields"
 
@@ -35,16 +37,16 @@ Slicing the array is supported by limit and offset in queries
         `customers`
     ```
 
-!!! warning "Sorting arrays in a sub select is not supported"
-    Sorting arrays in a sub select is not supported. You will need to use unwind instead. For example:
+Sorting Arrays is supported in MongoDB 5.2+ and NoQL
+
+???+ example "Sorting Arrays is supported"
 
     ```sql
-    --Wont'Work
     SELECT id,
         (SELECT * FROM Rentals ORDER BY id DESC) AS totalRentals
     FROM customers
     ```
-    
+   
 !!! warning "Aggregation functions are not supported in a sub select"
     Aggregation functions are not supported in a sub select. For example, the following won't work
     ```sql
@@ -54,7 +56,41 @@ Slicing the array is supported by limit and offset in queries
     FROM customers
     ```
 
-## All Supported Array Functions
+## UNWIND Function
+
+`UNWIND(array_expr)`
+
+NoQL has a high level unwind function that will unwind array fields. For Joins, the unwind join hint should be used.
+
+???+ example "UNWIND in SELECT"
+
+    ```sql
+    SELECT 
+      field1,
+      UNWIND(arrFld) as arrFld
+    FROM
+      test
+    ```
+???+ example "Complex UNWIND"
+
+    ```sql
+    SELECT 
+        MERGE_OBJECTS(
+            (SELECT 
+                t.CustomerID
+                ,t.Name
+            )
+            ,t.Rental
+            ) AS `$$ROOT` 
+    FROM 
+        (SELECT 
+            id AS CustomerID
+            ,`First Name` AS Name
+            ,UNWIND(Rentals) AS Rental 
+        FROM customers) AS t
+    ```
+
+## Supported Array Functions
 
 ### ALL_ELEMENTS_TRUE
 
@@ -125,7 +161,7 @@ Converts the array to an object.
         ARRAY_TO_OBJECT(OBJECT_TO_ARRAY(`Address`)) AS test
     FROM `customers`;
     ```
-### CONCAT_ARRAYS(array expr,...)
+### CONCAT_ARRAYS
 
 `CONCAT_ARRAYS(array expr,...)`
 
@@ -207,7 +243,7 @@ Converts the object to an array.
     FROM `customers`;
     ```
 
-### REVERSE_ARRAY(array expr)
+### REVERSE_ARRAY
 
 `REVERSE_ARRAY(array expr)`
 
@@ -219,7 +255,7 @@ Reverses the order of an array field.
     SELECT id,
         REVERSE_ARRAY(`Rentals`) AS test
     FROM `customers`;
-```
+    ```
 
 ### SET_DIFFERENCE
 
@@ -330,6 +366,20 @@ Sums the values in an array given an array field or sub-select and the field to 
                 SUM_ARRAY(`Payments`, ‘Amount’) AS total 
             FROM `Rentals`), ‘total’) AS t
     FROM customers;
+    ```
+
+### AVG_ARRAY
+
+`AVG_ARRAY(array expr,[field])`
+
+Averages the values in an array given an array field or sub-select and the field to average.
+
+???+ example "Example `AVG_ARRAY` usage"
+
+    ```sql
+    SELECT
+        AVG_ARRAY(`Rentals`, ‘staffId’) AS avgStaffIds
+    FROM `customers`;
     ```
 
 ### ZIP_ARRAY
