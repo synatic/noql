@@ -1002,7 +1002,23 @@
       ]
     },
     "two-conditions-both-reversed": {
-      "expectedResults": []
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
     }
   }
 }

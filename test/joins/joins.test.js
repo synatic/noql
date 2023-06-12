@@ -427,53 +427,24 @@ describe('joins', function () {
             assert(pipeline.length);
             assert(results.length);
         });
-        // it('should be able to do a basic inner join with 2 on conditions both reversed', async () => {
-        //     const {results, pipeline} = await queryResultTester({
-        //         queryString: `
-        //                 SELECT
-        //                     o.id,
-        //                     o.item,
-        //                     o.price,
-        //                     o.customerId,
-        //                     i.id as inventoryId,
-        //                     i.sku,
-        //                     i.instock,
-        //                     unset(_id)
-        //                 FROM orders o
-        //                 INNER JOIN 'inventory' i on o.item=i.sku and o.id=i.id
-        //                 `,
-        //         casePath: 'inner-join.two-conditions-both-reversed',
-        //     });
-        //     const lookup = pipeline[1];
-        //     assert.deepStrictEqual(lookup, {
-        //         $lookup: {
-        //             from: 'inventory',
-        //             as: 'i',
-        //             let: {
-        //                 o_item: '$o.item',
-        //                 o_id: '$o.id',
-        //             },
-        //             pipeline: [
-        //                 {
-        //                     $match: {
-        //                         $expr: {
-        //                             $and: [
-        //                                 {
-        //                                     $eq: ['$sku', '$$o_item'],
-        //                                 },
-        //                                 {
-        //                                     $eq: ['$id', '$$o_id'],
-        //                                 },
-        //                             ],
-        //                         },
-        //                     },
-        //                 },
-        //             ],
-        //         },
-        //     });
-        //     assert(pipeline.length);
-        //     assert(results.length);
-        // });
+        it('should be able to do a basic inner join with 2 on conditions both reversed', async () => {
+            const {results, pipeline} = await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on o.item=i.sku and o.id=i.id
+                        `,
+                casePath: 'inner-join.two-conditions-both-reversed',
+            });
+        });
         /**
          * 'select * from orders as o inner join `inventory` as i on o.item=i.sku and o.id=i.id';
          * 'select * from orders as o inner join `inventory` as i on i.sku=o.item and i.id=o.id'
