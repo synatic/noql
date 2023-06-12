@@ -6,6 +6,7 @@ const SQLParser = require('../../lib/SQLParser.js');
 describe('joins', function () {
     this.timeout(90000);
     const fileName = 'join-cases';
+    /** @type {'test'|'write'} */
     const mode = 'test';
     const dirName = __dirname;
     /** @type {import('../utils/query-tester/types').QueryResultTester} */
@@ -34,7 +35,7 @@ describe('joins', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
-    describe('existing regression tests', () => {
+    describe('regression tests', () => {
         it('should work for case 1', async () => {
             await queryResultTester({
                 queryString: `
@@ -50,7 +51,7 @@ describe('joins', function () {
                 inner join 'customer-notes|unwind' cn on cn.id=c.id
                 inner join 'customer-notes|unwind' cn2 on cn2.id=convert(c.id,'int')
                 limit 4`,
-                casePath: 'case1',
+                casePath: 'regression.case1',
             });
         });
 
@@ -68,7 +69,7 @@ describe('joins', function () {
                 FROM customers c
                 left outer join 'customer-notes' 'cn|first' on cn.id=to_int(c.id)
                 LIMIT 5`,
-                casePath: 'case2',
+                casePath: 'regression.case2',
             });
         });
 
@@ -76,7 +77,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5 where c.id>1',
-                casePath: 'case3',
+                casePath: 'regression.case3',
             });
         });
 
@@ -84,7 +85,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5',
-                casePath: 'case4',
+                casePath: 'regression.case4',
             });
         });
 
@@ -92,7 +93,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes|first` as cn on `cn`.id=c.id and cn.id<5',
-                casePath: 'case5',
+                casePath: 'regression.case5',
             });
         });
 
@@ -100,7 +101,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes|first` as cn on `cn`.id=c.id and cn.id<5',
-                casePath: 'case6',
+                casePath: 'regression.case6',
             });
         });
 
@@ -108,7 +109,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize|first` on c.id=cn.id',
-                casePath: 'case7',
+                casePath: 'regression.case7',
             });
         });
 
@@ -116,7 +117,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize|first` on cn.id=c.id',
-                casePath: 'case8',
+                casePath: 'regression.case8',
             });
         });
 
@@ -124,7 +125,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id',
-                casePath: 'case9',
+                casePath: 'regression.case9',
             });
         });
 
@@ -132,7 +133,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join (select * from `customer-notes` where id>2) `cn|first` on cn.id=c.id',
-                casePath: 'case10',
+                casePath: 'regression.case10',
             });
         });
 
@@ -140,7 +141,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select c.*,cn.*,unset(_id,c._id,c.Rentals,c.Address,cn._id) from customers c inner join `customer-notes` cn on cn.id=c.id and (cn.id>2 or cn.id<5)',
-                casePath: 'case11',
+                casePath: 'regression.case11',
             });
         });
     });
@@ -149,14 +150,14 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i  on o.item=i.sku',
-                casePath: 'basic-left-join',
+                casePath: 'left-join.basic',
             });
         });
         it('should be able to do a left join with an unwind', async () => {
             await queryResultTester({
                 queryString:
                     'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory|unwind` as i on o.item=i.sku',
-                casePath: 'left-join-with-unwind-hint',
+                casePath: 'left-join.unwind-hint',
             });
         });
 
@@ -164,7 +165,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select o.id as OID,unwind(i) as inv, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` i on o.item=i.sku',
-                casePath: 'left-join-with-unwind-query',
+                casePath: 'left-join.unwind-query',
             });
         });
 
@@ -172,7 +173,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     "select (case when o.id=1 then 'Yes' else 'No' end) as IsOne, unset(_id) from orders as o left join `inventory|unwind` as i  on o.item=i.sku",
-                casePath: 'left-join-with-unwind-and-case',
+                casePath: 'left-join.unwind-and-case',
             });
         });
 
@@ -180,7 +181,7 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select i.description,i.specialChars as iChars, o.item, o.specialChars as oChars, unset(_id) from orders as o left join `inventory|unwind` as i on o.specialChars=i.specialChars',
-                casePath: 'left-join-with-unwind-and-special-chars',
+                casePath: 'left-join.unwind-and-special-chars',
             });
         });
 
@@ -188,100 +189,9 @@ describe('joins', function () {
             await queryResultTester({
                 queryString:
                     'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i on i.sku=o.item',
-                casePath: 'left-join-reversed',
+                casePath: 'left-join.basic-reversed',
             });
         });
-        // it('should be able to do a left join with multiple conditions', async () => {
-        //     const queryText =
-        //         'select * from orders as o left join `inventory` as i on o.item=i.sku and o.id=i.id';
-        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-        //     const hcp = [
-        //         {
-        //             $project: {
-        //                 o: '$$ROOT',
-        //             },
-        //         },
-        //         {
-        //             $lookup: {
-        //                 from: 'inventory',
-        //                 as: 'i',
-        //                 let: {
-        //                     o_item: '$o.item',
-        //                     o_id: '$o.id',
-        //                 },
-        //                 pipeline: [
-        //                     {
-        //                         $match: {
-        //                             $expr: {
-        //                                 $and: [
-        //                                     {
-        //                                         $eq: ['$sku', '$$o_item'],
-        //                                     },
-        //                                     {
-        //                                         $eq: ['$id', '$$o_id'],
-        //                                     },
-        //                                 ],
-        //                             },
-        //                         },
-        //                     },
-        //                 ],
-        //                 // pipeline: [
-        //                 //     {
-        //                 //         $match: {
-        //                 //             $expr: {
-        //                 //                 $and: [
-        //                 //                     {
-        //                 //                         $eq: ['$item', '$$i_sku'],
-        //                 //                     },
-        //                 //                     {
-        //                 //                         $eq: ['$id', '$$i_id'],
-        //                 //                     },
-        //                 //                 ],
-        //                 //             },
-        //                 //         },
-        //                 //     },
-        //                 // ],
-        //             },
-        //         },
-        //     ];
-        //     try {
-        //         const results = await mongoClient
-        //             .db(dbName)
-        //             .collection(parsedQuery.collections[0])
-        //             .aggregate(parsedQuery.pipeline)
-        //             .toArray();
-        //         assert(results);
-        //         assert(results.length === 4);
-        //         for (const result of results) {
-        //             assert(result.i.length);
-        //         }
-        //         return;
-        //     } catch (err) {
-        //         console.error(err);
-        //         throw err;
-        //     }
-        // });
-        // it('should be able to do a left join with multiple conditions the other way around', async () => {
-        //     const queryText =
-        //         'select * from orders as o left join `inventory` as i on i.sku=o.item and i.id=o.id';
-        //     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-        //     try {
-        //         const results = await mongoClient
-        //             .db(dbName)
-        //             .collection(parsedQuery.collections[0])
-        //             .aggregate(parsedQuery.pipeline)
-        //             .toArray();
-        //         assert(results);
-        //         assert(results.length === 4);
-        //         for (const result of results) {
-        //             assert(result.i.length);
-        //         }
-        //         return;
-        //     } catch (err) {
-        //         console.error(err);
-        //         throw err;
-        //     }
-        // });
     });
 
     describe('join order of queries', () => {
@@ -298,7 +208,7 @@ describe('joins', function () {
                 INNER join \`ams360-powerbi-customer|unwind\` cust on pol.CustId = cust.CustId
                 LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
                 LIMIT 5`,
-                casePath: 'join-order',
+                casePath: 'join-order.case1',
             });
         });
         describe('Existing example', () => {
@@ -407,29 +317,166 @@ describe('joins', function () {
         it('should be able to do n level joins without an unwind', async () => {
             await queryResultTester({
                 queryString: `SELECT
-                    o.id as orderId
-                    ,i.id as inventoryId
-                    ,c.id as customerId,
-                    unset(_id)
-                FROM orders as o
-                INNER JOIN \`inventory\` as i ON o.item=i.sku
-                INNER JOIN \`customers\` as c ON o.customerId=c.id
-                WHERE o.id=1`,
-                casePath: 'n-level-join-without-unwind',
+                        o.id as orderId
+                        ,i.id as inventoryId
+                        ,c.id as customerId,
+                        unset(_id)
+                    FROM orders as o
+                    INNER JOIN \`inventory\` as i ON o.item=i.sku
+                    INNER JOIN \`customers\` as c ON o.customerId=c.id
+                    WHERE o.id=1`,
+                casePath: 'n-level-join.without-unwind',
             });
         });
         it('should be able to do n level joins with unwinds', async () => {
             await queryResultTester({
                 queryString: `SELECT
-                    o.id as orderId
-                    ,i.id as inventoryId
-                    ,c.id as customerId,
-                    unset(_id)
-                FROM orders as o
-                INNER JOIN \`inventory|unwind\` as i ON o.item=i.sku
-                INNER JOIN \`customers|unwind\` as c ON o.customerId=c.id`,
-                casePath: 'n-level-join-with-unwind',
+                        o.id as orderId
+                        ,i.id as inventoryId
+                        ,c.id as customerId,
+                        unset(_id)
+                    FROM orders as o
+                    INNER JOIN \`inventory|unwind\` as i ON o.item=i.sku
+                    INNER JOIN \`customers|unwind\` as c ON o.customerId=c.id`,
+                casePath: 'n-level-join.with-unwind',
             });
         });
+    });
+
+    describe('inner joins', () => {
+        it('should be able to do a basic inner join with 1 on condition', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on i.sku=o.item
+                        `,
+                casePath: 'inner-join.basic',
+            });
+        });
+        it('should be able to do a basic inner join with 1 on condition reversed', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on o.item=i.sku
+                        `,
+                casePath: 'inner-join.basic-reversed',
+            });
+        });
+        it('should be able to do a basic inner join with 2 on conditions', async () => {
+            const {results, pipeline} = await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on i.sku=o.item and i.id=o.id
+                        `,
+                casePath: 'inner-join.two-conditions',
+            });
+            const lookup = pipeline[1];
+            assert.deepStrictEqual(lookup, {
+                $lookup: {
+                    from: 'inventory',
+                    as: 'i',
+                    let: {
+                        o_item: '$o.item',
+                        o_id: '$o.id',
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: ['$sku', '$$o_item'],
+                                        },
+                                        {
+                                            $eq: ['$id', '$$o_id'],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                },
+            });
+            assert(pipeline.length);
+            assert(results.length);
+        });
+        it('should be able to do a basic inner join with 2 on conditions both reversed', async () => {
+            const {results, pipeline} = await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on o.item=i.sku and o.id=i.id
+                        `,
+                casePath: 'inner-join.two-conditions-both-reversed',
+            });
+            const lookup = pipeline[1];
+            assert.deepStrictEqual(lookup, {
+                $lookup: {
+                    from: 'inventory',
+                    as: 'i',
+                    let: {
+                        o_item: '$o.item',
+                        o_id: '$o.id',
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: ['$sku', '$$o_item'],
+                                        },
+                                        {
+                                            $eq: ['$id', '$$o_id'],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                },
+            });
+            assert(pipeline.length);
+            assert(results.length);
+        });
+        /**
+         * 'select * from orders as o inner join `inventory` as i on o.item=i.sku and o.id=i.id';
+         * 'select * from orders as o inner join `inventory` as i on i.sku=o.item and i.id=o.id'
+         */
     });
 });
