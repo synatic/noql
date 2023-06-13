@@ -4,7 +4,9 @@ icon: material/alphabet-greek
 
 # Mathematical Functions
 
-## `#!sql AVG`
+## Supported Mathematical Functions
+
+### AVG
 
 `#!sql AVG(expr,expr,...)`
 
@@ -20,7 +22,7 @@ Returns the average of a set of values.
         `films` 
     ```
 
-## ABS
+### ABS
 
 `ABS(expr)`
 
@@ -35,7 +37,7 @@ Returns the absolute value of a number.
         `films` 
     ```
 
-## ACOS
+### ACOS
 
 `ACOS(expr)`
 
@@ -50,7 +52,7 @@ Returns the inverse cosine (arc cosine) of a value.
         `films` 
     ```
 
-## ACOSH
+### ACOSH
 
 `ACOSH(expr)`
 
@@ -65,7 +67,7 @@ Returns the inverse hyperbolic cosine (hyperbolic arc cosine) of a value.
         `films`  
     ```
 
-## ASIN
+### ASIN
 
 `ASIN(expr)`
 
@@ -79,7 +81,7 @@ Returns the inverse sine (arc sine) of a value.
     FROM 
         `films`  
     ```
-## ASINH
+### ASINH
 
 `ASINH(expr)`
 
@@ -92,9 +94,9 @@ Returns the inverse hyperbolic sine (hyperbolic arc sine) of a value.
         ASINH(`Replacement Cost`) AS exprVal 
     FROM 
         `films`  
-```
+    ```
 
-## ATAN
+### ATAN
 
 `ATAN(expr)`
 
@@ -109,7 +111,7 @@ Returns the inverse tangent (arc tangent) of a value.
         `films`
     ```
 
-## ATAN2
+### ATAN2
 
 `ATAN2(y,x)`
 
@@ -124,7 +126,7 @@ Returns the inverse tangent (arc tangent) of y / x, where y and x are the first 
         `films`  
     ```
 
-## ATANH
+### ATANH
 
 `ATANH(expr)`
 
@@ -139,7 +141,7 @@ Returns the inverse hyperbolic tangent (hyperbolic arc tangent) of a value.
         `films`  
     ```
 
-## BINARY_SIZE
+### BINARY_SIZE
 
 `BINARY_SIZE(expr)`
 
@@ -155,7 +157,7 @@ Returns the byte size of the expression.
         `customers` 
     ```
 
-## CEIL
+### CEIL
 
 `CEIL(expr)`
 
@@ -170,7 +172,7 @@ Returns the smallest integer greater than or equal to the specified number.
         `films`  
     ```
 
-## DEGREES_TO_RADIANS
+### DEGREES_TO_RADIANS
 
 `DEGREES_TO_RADIANS(expr)`
 
@@ -185,7 +187,7 @@ Converts an input value measured in degrees to radians.
         `films` 
     ``` 
 
-## DIVIDE
+### DIVIDE
 
 `DIVIDE(expr,expr)`
 
@@ -201,7 +203,7 @@ Divides one number by another and returns the result.
     ```
 
 
-## EXP
+### EXP
 
 `EXP(expr)`
 
@@ -216,7 +218,7 @@ Raises Euler's number (i.e. e ) to the specified exponent and returns the result
         `films` 
     ```
 
-## FLOOR
+### FLOOR
 
 `FLOOR(expr)`
 
@@ -231,7 +233,7 @@ Returns the largest integer less than or equal to the specified number.
         `films` 
     ```
 
-## LN
+### LN
 
 `LN(expr)`
 
@@ -246,7 +248,7 @@ Calculates the natural logarithm ln (i.e log e) of a number and returns the resu
         `films` 
     ```
 
-## LOG
+### LOG
 
 `LOG(number,base)`
 
@@ -261,7 +263,7 @@ Calculates the log of a number in the specified base and returns the result as a
         `films` 
     ```
 
-## LOG10
+### LOG10
 
 `LOG10(expr)`
 
@@ -275,7 +277,7 @@ Calculates the log base 10 of a number and returns the result as a double.
     FROM 
         `films`  
     ```
-## MAX
+### MAX
 
 `MAX(expr,expr,...)`
 
@@ -288,9 +290,9 @@ Returns the max of a set of numbers.
         MAX(`Replacement Cost`,10) AS exprVal 
     FROM 
         `films` 
-```
+    ```
 
-## MIN
+### MIN
 
 `MIN(xpr,expr,...)`
 
@@ -305,7 +307,7 @@ Returns the min of a set of numbers.
         `films` 
     ``` 
 
-## MOD
+### MOD
 
 `MOD(expr,expr)`
 
@@ -319,7 +321,7 @@ Divides one number by another and returns the remainder.
         `films`
     ```
 
-## MULTIPLY
+### MULTIPLY
 
 `MULTIPLY(expr,expr,...)`
 
@@ -334,7 +336,7 @@ Multiplies numbers together and returns the result.
         `films`
     ```
 
-## POW
+### POW
 
 `POW(expr,exponent)`
 
@@ -348,7 +350,7 @@ Raises a number to the specified exponent and returns the result.
         `films` 
     ```
 
-## RADIANS_TO_DEGREES
+### RADIANS_TO_DEGREES
 
 `RADIANS_TO_DEGREES(expr)`
 
@@ -362,7 +364,7 @@ Converts an input value measured in radians to degrees.
     FROM 
         `films` 
     ``` 
-## RAND
+### RAND
 
 `RAND()`
 
@@ -377,7 +379,7 @@ Returns a random float between 0 and 1 each time it is called.
         `films`  
     ```
 
-## ROUND
+### ROUND
 
 `ROUND(expr,[places])`
 
@@ -392,7 +394,7 @@ Rounds a number to a whole integer or to a specified decimal place.
         `films`  
     ```
 
-## SIN
+### SIN
 
 `SIN(expr)`
 
@@ -405,9 +407,9 @@ Returns the sine of a value that is measured in radians.
         SIN(90) AS exprVal 
     FROM 
         `films`  
-```
+    ```
 
-## SINH
+### SINH
 
 `SINH(expr)`
 
@@ -422,7 +424,7 @@ Returns the hyperbolic sine of a value that is measured in radians.
         `films`  
     ```
 
-## SQRT
+### SQRT
 
 `SQRT(expr)`
 
@@ -437,7 +439,7 @@ Calculates the square root of a positive number and returns the result as a doub
         `films`  
     ```
 
-## SUBTRACT
+### SUBTRACT
 
 `SUBTRACT(expr,expr)`
 
@@ -452,7 +454,7 @@ Subtracts two numbers to return the difference, or two dates to return the diffe
         `films` 
     ```
 
-## SUM
+### SUM
 
 `SUM(expr,expr,...)`
 
@@ -467,7 +469,7 @@ Sums the values provided in the expression.
         `films`  
     ```
 
-## TAN
+### TAN
 
 `TAN(expr)`
 
@@ -482,7 +484,7 @@ Returns the tangent of a value that is measured in radians.
         `films`  
     ```
 
-## TANH
+### TANH
 
 `TANH(expr)`
 
@@ -497,7 +499,7 @@ Returns the hyperbolic tangent of a value that is measured in radians.
         `films`  
     ```
 
-## TRUNC
+### TRUNC
 
 `TRUNC(expr,[places])`
 

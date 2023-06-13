@@ -1,6 +1,22 @@
 # Date Functions
 
-## DATE_FROM_ISO_PARTS
+## Supported Date Functions
+
+### CURRENT_DATE
+
+`#!sql CURRENT_DATE()`
+
+Returns the current date
+
+!!! example
+
+    ```sql
+    SELECT 
+        CURRENT_DATE() AS exprVal 
+    FROM `customers`
+    ```
+
+### DATE_FROM_ISO_PARTS
 
 `#!sql
 DATE_FROM_ISO_PARTS(isoWeekYear, isoWeek, isoDayOfWeek, hour,
@@ -17,7 +33,7 @@ Constructs and returns a Date object given the date’s constituent ISO properti
     FROM `customers`
     ```
 
-## DATE_FROM_PARTS
+### DATE_FROM_PARTS
 
 `#!sql DATE_FROM_PARTS(year, month, day, hour, second, minute, millisecond, timezone)`
 
@@ -31,7 +47,7 @@ Constructs and returns a Date object given the date’s constituent properties.
     FROM `customers`
     ```
 
-## DATE_FROM_STRING
+### DATE_FROM_STRING
 
 `#!sql DATE_FROM_STRING(expr, format, timezone, onError, onNull)`
 
@@ -45,7 +61,7 @@ Converts a date/time string to a date object.
     FROM `customers`
     ```
 
-## DATE_TO_PARTS
+### DATE_TO_PARTS
 
 `#!sql DATE_TO_PARTS(expr, timezone, iso8601)`
 
@@ -59,7 +75,7 @@ Returns a document that contains the constituent parts of a given Date value.
     FROM `customers`
     ```
 
-## DATE_TO_STRING
+### DATE_TO_STRING
 
 `#!sql DATE_TO_STRING(expr, format, timezone, onNull)`
 
@@ -73,7 +89,7 @@ Converts a date object to a string according to a user-specified format.
     FROM `customers`
     ```
 
-## DAY_OF_MONTH
+### DAY_OF_MONTH
 
 `#!sql DAY_OF_MONTH(expr)`
 
@@ -87,7 +103,7 @@ Returns the day of the month for a date as a number between 1 and 31.
     FROM `customers`
     ```
 
-## DAY_OF_WEEK
+### DAY_OF_WEEK
 
 `#!sql DAY_OF_WEEK(expr)`
 
@@ -102,7 +118,7 @@ Returns the day of the week for a date as a number between 1 (Sunday) and 7 (Sat
     ```
 
 
-## DAY_OF_YEAR
+### DAY_OF_YEAR
 
 `#!sql DAY_OF_YEAR(expr)`
 
@@ -116,7 +132,7 @@ Returns the day of the year for a date as a number between 1 and 366.
     FROM `customers`
     ```
 
-## HOUR
+### HOUR
 
 `#!sql HOUR(expr)`
 
@@ -129,7 +145,7 @@ Returns the hour portion of a date as a number between 0 and 23.
         HOUR(DATE_FROM_STRING('2021-11-15')) AS exprVal 
     FROM `customers`
     ```
-## ISO_DAY_OF_WEEK
+### ISO_DAY_OF_WEEK
 
 `#!sql ISO_DAY_OF_WEEK(expr)`
 
@@ -142,7 +158,7 @@ Returns the weekday number in ISO 8601 format, ranging from 1 (for Monday) to 7 
         ISO_DAY_OF_WEEK(DATE_FROM_STRING('2021-11-15')) AS exprVal 
     FROM `customers`
     ```
-## ISO_WEEK
+### ISO_WEEK
 
 `#!sql ISO_WEEK(expr)`
 
@@ -157,7 +173,7 @@ Returns the week number in ISO 8601 format, ranging from 1 to 53. Week numbers s
     FROM `customers`
     ```
 
-## ISO_WEEK_YEAR
+### ISO_WEEK_YEAR
 
 `#!sql ISO_WEEK_YEAR(expr)`
 
@@ -171,7 +187,7 @@ Returns the year number in ISO 8601 format. The year starts with the Monday of w
     ```
 
 
-## MILLISECOND
+### MILLISECOND
 
 `#!sql MILLISECOND(expr)`
 
@@ -185,7 +201,7 @@ Returns the millisecond portion of a date as an integer between 0 and 999.
     FROM `customers`
     ```
 
-## MINUTE
+### MINUTE
 
 `#!sql MINUTE(expr)`
 
@@ -198,7 +214,7 @@ Returns the minute portion of a date as a number between 0 and 59.
         MINUTE(DATE_FROM_STRING('2021-11-15')) AS exprVal 
     FROM `customers`
     ```
-## MONTH
+### MONTH
 
 `#!sql MONTH(expr)`
 
@@ -212,7 +228,7 @@ Returns the month of a date as a number between 1 and 12.
     FROM `customers`
     ```
 
-## SECOND
+### SECOND
 
 `#!sql SECOND(expr)`
 
@@ -226,7 +242,7 @@ Returns the second portion of a date as a number between 0 and 59, but can be 60
     FROM `customers`
     ```
 
-## WEEK
+### WEEK
 
 `#!sql WEEK(expr)`
 
@@ -240,7 +256,7 @@ Returns the week of the year for a date as a number between 0 and 53.
     FROM `customers`
     ```
 
-## YEAR
+### YEAR
 
 `#!sql YEAR(expr)`
 
@@ -252,4 +268,21 @@ Returns the year portion of a date.
     SELECT 
         YEAR(DATE_FROM_STRING('2021-11-15')) AS exprVal 
     FROM `customers`
+    ```
+
+### EXTRACT
+
+`#!sql EXTRACT(period from expr)`
+
+Extracts a portion of the date as per Postgres standard. Supported time periods: year, month, day, hour, minute, second, milliseconds, week, dow
+
+!!! example
+
+    ```sql
+    SELECT 
+        EXTRACT(year from orderDate) AS year
+        ,EXTRACT(month from orderDate) AS month
+        ,EXTRACT(day from TO_DATE('2021-10-23')) AS day 
+    FROM 
+      orders"
     ```

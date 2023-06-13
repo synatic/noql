@@ -2,13 +2,31 @@ NoQL supports `INNER` and `OUTER` Joins, but does not unwind by default and the 
 
 ## Join Hints
 
-There are several join hints to support automatically unwinding of joins:
+There are several join hints to simplify document model joining:
 
 - first
 - last
 - unwind
+- optimize
 
-### Examples
+Join hints are added using a pipe `|` character to the join table or alias.
+
+???+ example "Example join hint"
+
+    ```sql
+    --return the first item in the array
+    SELECT
+         * 
+    FROM 
+        orders 
+    INNER JOIN 
+        `inventory` AS `inventory_docs|first` 
+    ON sku=item
+    ```
+
+### first
+
+Returns the first element of the join result as an object on the result
 
 ???+ example "Example `first` join hint"
 
@@ -19,8 +37,12 @@ There are several join hints to support automatically unwinding of joins:
     FROM 
         orders 
     INNER JOIN 
-        `inventory|first` AS inventory_docs ON sku=item
+        `inventory` AS `inventory_docs|first` ON sku=item
     ```
+
+### last
+
+Returns the last element of the join result as an object on the result
 
 ???+ example "Example `last` join hint"
 
@@ -31,8 +53,12 @@ There are several join hints to support automatically unwinding of joins:
     FROM 
         orders 
     INNER JOIN 
-        `inventory|last` AS inventory_docs ON sku=item
+        `inventory` AS `inventory_docs|last` ON sku=item
     ```
+
+### unwind
+
+Unwinds the result into multiple records following the result of the join
 
 ???+ example "Example `unwind` join hint"
 
@@ -43,12 +69,34 @@ There are several join hints to support automatically unwinding of joins:
     FROM 
         orders 
     INNER JOIN 
-        `inventory|unwind` AS inventory_docs ON sku=item
+        `inventory` AS `inventory_docs|unwind` ON sku=item
     ```
+
+### optimize
+
+The optimize hint is a current workaround to limit the result set for the $lookup when working with sub selects.
+
+The $match on sub query joins is applied after the subquery pipeline which can cause performance issues since indexes may not be used. It may be better to put the match before the pipeline to limit the input set depending on the on conditions.
+
+???+ example "Example `optimize` usage"
+
+    ```sql
+    SELECT 
+        c.*
+        ,cn.* 
+    FROM 
+        customers c 
+    INNER JOIN
+        (SELECT * FROM `customer-notes` WHERE id>2) `cn|optimize` 
+    ON 
+        cn.id=c.id
+    ```
+
+The on field must be part of the sub query select to be a valid optimization.
 
 ## `JOIN` Array Functions
 
-Alternatively the explicit array functions `FIRST_IN_ARRAY`, `LAST_IN_ARRAY`, `OBJECT_TO_ARRAY` can be used instead of the join hints:
+Alternatively the explicit array functions `FIRST_IN_ARRAY`, `LAST_IN_ARRAY`, `UNWIND` can be used instead of the join hints:
 
 ???+ example "Example `FIRST_IN_ARRAY` usage"
 
@@ -73,7 +121,7 @@ Alternatively the explicit array functions `FIRST_IN_ARRAY`, `LAST_IN_ARRAY`, `O
         `inventory` ON sku=item
     ```
 
-???+ example "Example `OBJECT_TO_ARRAY` usage"
+???+ example "Example `UNWIND` usage"
 
     ```sql
     --unwind the array to multiple documents
@@ -106,9 +154,9 @@ An `IN` sub-select on a `WHERE` clause does not work as a join. Use a join inste
                 sku= orders.item
             )
     ```
-    
+
 ???+ success "Using `JOIN` instead of `IN` sub-select"
-    
+
     ```sql
     --use join instead
     SELECT
