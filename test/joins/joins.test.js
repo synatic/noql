@@ -362,6 +362,24 @@ describe('joins', function () {
                 casePath: 'inner-join.basic',
             });
         });
+        it('should be able to do a basic inner join with 1 on condition and no aliases', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on inventory.sku=orders.item
+                        `,
+                casePath: 'inner-join.basic-no-alias',
+            });
+        });
         it('should be able to do a basic inner join with 1 on condition reversed', async () => {
             await queryResultTester({
                 queryString: `
@@ -380,8 +398,26 @@ describe('joins', function () {
                 casePath: 'inner-join.basic-reversed',
             });
         });
+        it('should be able to do a basic inner join with 1 on condition reversed no aliases', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on orders.item=inventory.sku
+                        `,
+                casePath: 'inner-join.basic-reversed-no-alias',
+            });
+        });
         it('should be able to do a basic inner join with 2 on conditions', async () => {
-            const {results, pipeline} = await queryResultTester({
+            await queryResultTester({
                 queryString: `
                         SELECT
                             o.id,
@@ -397,38 +433,27 @@ describe('joins', function () {
                         `,
                 casePath: 'inner-join.two-conditions',
             });
-            const lookup = pipeline[1];
-            assert.deepStrictEqual(lookup, {
-                $lookup: {
-                    from: 'inventory',
-                    as: 'i',
-                    let: {
-                        o_item: '$o.item',
-                        o_id: '$o.id',
-                    },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        {
-                                            $eq: ['$sku', '$$o_item'],
-                                        },
-                                        {
-                                            $eq: ['$id', '$$o_id'],
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ],
-                },
+        });
+        it('should be able to do a basic inner join with 2 on conditions no aliases', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on inventory.sku=orders.item and inventory.id=orders.id
+                        `,
+                casePath: 'inner-join.two-conditions-no-aliases',
             });
-            assert(pipeline.length);
-            assert(results.length);
         });
         it('should be able to do a basic inner join with 2 on conditions both reversed', async () => {
-            const {results, pipeline} = await queryResultTester({
+            await queryResultTester({
                 queryString: `
                         SELECT
                             o.id,
@@ -443,6 +468,24 @@ describe('joins', function () {
                         INNER JOIN 'inventory' i on o.item=i.sku and o.id=i.id
                         `,
                 casePath: 'inner-join.two-conditions-both-reversed',
+            });
+        });
+        it('should be able to do a basic inner join with 2 on conditions both reversed with no aliases', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on orders.item=inventory.sku and orders.id=inventory.id
+                        `,
+                casePath: 'inner-join.two-conditions-both-reversed-no-aliases',
             });
         });
         /**

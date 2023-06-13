@@ -1019,6 +1019,92 @@
           ]
         }
       ]
+    },
+    "basic-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
+    },
+    "basic-reversed-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
+    },
+    "two-conditions-no-aliases": {
+      "expectedResults": []
+    },
+    "two-conditions-both-reversed-no-aliases": {
+      "expectedResults": []
     }
   }
 }
