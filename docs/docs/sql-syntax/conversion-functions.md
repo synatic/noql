@@ -18,7 +18,9 @@
     {"$expr":{"$gt":[{"$toDate":"$date"},new Date("2012-01-01T00:00:00.000Z")]}}
     ```
 
-## CONVERT
+## Supported Conversion Functions
+
+### CONVERT
 
 `CONVERT(expr,to)`
 
@@ -33,7 +35,7 @@ Converts the expression to the specified mongo type: `double`, `string`, `bool`,
         `films`
     ```
 
-## IFNULL
+### IFNULL
 
 `IFNULL(expr,expr)`
 
@@ -57,7 +59,7 @@ Return the value if the expression is null.
         `customers` 
     ```
 
-## TO_BOOL
+### TO_BOOL
 
 `TO_BOOL(expr)`
 
@@ -72,7 +74,7 @@ Convert the expression to a boolean.
         `customers`
     ```
 
-## TO_DATE
+### TO_DATE
 
 `TO_DATE(expr)`
 
@@ -87,7 +89,7 @@ Convert the expression to a date.
         `customers`
     ```
 
-## TO_DECIMAL
+### TO_DECIMAL
 
 `TO_DECIMAL(expr)`
 
@@ -102,7 +104,7 @@ Convert the expression to a decimal.
         `customers`
     ```
 
-## TO_DOUBLE
+### TO_DOUBLE
 
 `TO_DOUBLE(expr)`
 
@@ -117,7 +119,7 @@ Convert the expression to a double.
         `customers`
     ```
  
-## TO_INT
+### TO_INT
 
 `TO_INT(expr)`
 
@@ -132,7 +134,7 @@ Convert the expression to an integer.
         `customers`
     ```
 
-## TO_LONG
+### TO_LONG
 
 `TO_LONG(expr)`
 
@@ -147,7 +149,7 @@ Convert the expression to a long.
         `customers`
     ```
 
-## TO_STRING
+### TO_STRING
 
 `TO_STRING(expr)`
 
@@ -161,8 +163,22 @@ Convert the expression to a string.
     FROM 
         `customers`
     ```
+### TO_OBJECTID
 
-## TYPEOF
+`TO_OBJECTID(expr)`
+
+Convert the expression to a mongodb id.
+
+???+ example "Example `TO_OBJECTID` usage"
+
+    ```sql 
+    SELECT 
+        TO_OBJECTID(`id`) AS `objId` 
+    FROM 
+        `customers`
+    ```
+
+### TYPEOF
 
 `TYPEOF(expr)`
 

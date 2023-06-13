@@ -23,7 +23,7 @@ theme:
     # Palette toggle for light mode
     - scheme: default
       toggle:
-        icon: material/weather-sunny 
+        icon: material/weather-sunny
         name: Switch to dark mode
     # Palette toggle for dark mode
     - scheme: slate
@@ -39,7 +39,7 @@ theme:
     # - media: "(prefers-color-scheme: light)"
     #   scheme: default
     #   toggle:
-    #     icon: material/weather-sunny 
+    #     icon: material/weather-sunny
     #     name: Switch to dark mode
     # # Palette toggle for dark mode
     # - media: "(prefers-color-scheme: dark)"
@@ -62,7 +62,7 @@ extra:
         - icon: material/thumb-down-outline
           name: This page could be improved
           data: 0
-          note: >- 
+          note: >-
             Thanks for your feedback!
   social:
     - icon: fontawesome/brands/twitter
@@ -92,35 +92,31 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.tabbed:
-      alternate_style: true 
+      alternate_style: true
   - pymdownx.emoji:
       emoji_generator: !!python/name:materialx.emoji.to_svg
       emoji_index: !!python/name:materialx.emoji.twemoji
 nav:
     - Home: index.md
-    - Quick Start: getting-started/index.md
-    - NoQL API:
-      - canQuery: noql-api-reference/canQuery.md
-      - makeMongoAggregate: noql-api-reference/makeMongoAggregate.md
-      - makeMongoQuery: noql-api-reference/makeMongoQuery.md
-      - parseSQL: noql-api-reference/parseSQL.md
-      - parseSQLtoAST: noql-api-reference/parseSQLtoAST.md
-    - Supported SQL Statements:
-      - Aggregate Functions: reference/aggregate-functions.md
-      - Arrays: reference/arrays.md
-      - Column Functions: reference/column-functions.md
-      - Comparison Functions: reference/comparison-operators.md
-      - Conversion Functions: reference/conversion-functions.md
-      - Date Functions: reference/date-functions.md
-      - Limits and Offsets: reference/limits-and-offsets.md
-      - Mathematical Functions: reference/mathematical-functions.md
-      - Mathematical Operators: reference/mathematical-operators.md
-      - MSQL Commands: reference/m-sql.md
-      - String Functions: reference/string-functions.md
-    - Best Practices:
-      - Joins: best-practices/joins.md
-      - Merge Fields: best-practices/merge-fields.md
-      - Object Functions: best-practices/object-functions.md
-      - Order By Clause: best-practices/order-by-clause.md
-      - Where Clause: best-practices/where-clause.md
+    - SQL Syntax:
+        - Introduction: sql-syntax/introduction.md
+        - Objects: sql-syntax/objects.md
+        - Arrays: sql-syntax/arrays.md
+        - Where Clause: sql-syntax/where-clause.md
+        - Order By Clause: sql-syntax/order-by-clause.md
+        - Joins: sql-syntax/joins.md
+        - Aggregates: sql-syntax/aggregates.md
+        - Comparison Operators: sql-syntax/comparison-operators.md
+        - Field Functions: sql-syntax/field-functions.md
+        - String Functions: sql-syntax/string-functions.md
+        - Date Functions: sql-syntax/date-functions.md
+        - Mathematical Operators: sql-syntax/mathematical-operators.md
+        - Mathematical Functions: sql-syntax/mathematical-functions.md
+        - Conversion Functions: sql-syntax/conversion-functions.md
+        - Window Functions: sql-syntax/window-functions.md
+        - Limits and Offsets: sql-syntax/limits-and-offsets.md
+        - Union: sql-syntax/union.md
     - Playground: playground/index.md
+    - JS Library:
+        - Getting Started: js-library/getting-started.md
+        - API: js-library/api-reference.md
