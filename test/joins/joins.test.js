@@ -489,9 +489,61 @@ describe('joins', function () {
                 casePath: 'inner-join.two-conditions-both-reversed-no-aliases',
             });
         });
-        /**
-         * 'select * from orders as o inner join `inventory` as i on o.item=i.sku and o.id=i.id';
-         * 'select * from orders as o inner join `inventory` as i on i.sku=o.item and i.id=o.id'
-         */
+        it('should be able to do a basic inner join with 2 on conditions, inversed', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            o.id,
+                            o.item,
+                            o.price,
+                            o.customerId,
+                            i.id as inventoryId,
+                            i.sku,
+                            i.instock,
+                            unset(_id)
+                        FROM orders o
+                        INNER JOIN 'inventory' i on i.sku=o.item and o.id=i.id
+                        `,
+                casePath: 'inner-join.two-conditions-inversed',
+            });
+        });
+        it('should be able to do a basic inner join with 2 on conditions, inversed, no aliases', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on inventory.sku=orders.item and orders.id=inventory.id
+                        `,
+                casePath: 'inner-join.two-conditions-inversed-no-alias',
+            });
+        });
+        it('should be able to do a basic inner join with 2 on conditions, inversed, no aliases, no original table name', async () => {
+            await queryResultTester({
+                queryString: `
+                        SELECT
+                            orders.id,
+                            orders.item,
+                            orders.price,
+                            orders.customerId,
+                            inventory.id as inventoryId,
+                            inventory.sku,
+                            inventory.instock,
+                            unset(_id)
+                        FROM orders
+                        INNER JOIN 'inventory' on inventory.sku=item and id=inventory.id
+                        `,
+                casePath:
+                    'inner-join.two-conditions-inversed-no-alias-no-table-name',
+                mode: 'write',
+            });
+        });
     });
 });

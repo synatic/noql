@@ -1155,6 +1155,55 @@
           "instock": []
         }
       ]
+    },
+    "two-conditions-inversed": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-inversed-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-inversed-no-alias-no-table-name": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
     }
   }
 }
