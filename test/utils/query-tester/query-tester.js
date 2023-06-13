@@ -45,7 +45,9 @@ async function queryResultTester(options) {
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
-    const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString);
+    const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
+        database: 'PostgresQL',
+    });
     const filePath = $path.resolve(dirName, fileName);
     const results = await mongoClient
         .db(dbName)

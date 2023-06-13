@@ -713,62 +713,7 @@ describe('Individual tests', function () {
             assert(results[1].item === 'potatoes');
         });
         it('should work for the example query in bug from production', async () => {
-            // const queryText = `SELECT "op"."id",
-            //         "op"."OpportunityId",
-            //         "op"."CloseYear",
-            //         "op"."CloseMonth",
-            //         "op"."AnnualLicenseRevenueUSD",
-            //         "op"."DaysSinceQualification",
-            //         "op"."StageName",
-            //         "op"."AccountRecordType",
-            //         "op"."OpportunityRecordType",
-            //         "op"."RecordType",
-            //         "op"."SaleType",
-            //         "op"."DateSort",
-            //         "op"."DateID",
-            //         "op"."CalcDate",
-            //         "op"."Industry",
-            //         "op"."AddressCity",
-            //         "op"."AddressCountry",
-            //         "op"."OpportunityName",
-            //         "op"."AccountName",
-            //         "op"."LeadSource",
-            //         "op"."NumberOfEmployees",
-            //         "op"."ICP"
-            // FROM "public"."opportunities" "op"
-            // WHERE (
-            //         ("op"."StageName" in ('Business Discovery',
-            //                             'Discovery',
-            //                             'Needs Analysis',
-            //                             'Negotiation',
-            //                             'Proposal',
-            //                             'Qualification',
-            //                             'Technical Discovery'))
-            //         AND cast("op"."CloseYear" AS decimal) = cast(2023 AS decimal)
-            //       )
-            //       AND (
-            //         NOT ("op"."RecordType" in ('Channel Customer'))
-            //         OR "op"."RecordType" IS NULL)`;
-            // const queryText2 = `
-            //     SELECT
-            //         "rows"."StageName" AS "StageName",
-            //         "rows"."ICP" AS "ICP",
-            //         sum(cast("rows"."AnnualLicenseRevenueUSD" AS decimal)) AS "a0"
-            //     FROM
-            //     (${queryText}) "rows"
-            //     GROUP BY "StageName",
-            //                 "ICP"`;
-            // const queryText3 = `
-            //     SELECT
-            //         "grouped".StageName,
-            //         "grouped"."ICP",
-            //         "grouped"."a0"
-            // FROM
-            // (${queryText2}) "grouped"
-            // WHERE NOT "grouped"."a0" IS NULL
-            // LIMIT 1000001`;
-
-            const queryText4 = `
+            const queryText = `
             SELECT  "_"."StageName",
                     "_"."ICP",
                     "_"."a0"
@@ -815,7 +760,7 @@ describe('Individual tests', function () {
             WHERE NOT "_"."a0" IS NULL
             LIMIT 1000001`;
 
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText4, {
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
                 database: 'PostgresQL',
             });
             const results = await mongoClient
