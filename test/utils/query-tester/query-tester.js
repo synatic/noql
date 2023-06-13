@@ -40,6 +40,7 @@ async function queryResultTester(options) {
         fileName,
         mode = 'test',
         dirName,
+        expectZeroResults,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -51,12 +52,16 @@ async function queryResultTester(options) {
         .collection(collections[0])
         .aggregate(pipeline)
         .toArray();
-
+    if (!expectZeroResults) {
+        assert(results.length);
+    }
     const obj = await readCases(filePath);
     const hasKeys = Object.keys(obj).length === 0;
     if (mode === 'write' || hasKeys) {
-        set(obj, casePath + '.expectedResults', results);
-        await writeFile(filePath, obj);
+        if (!expectZeroResults) {
+            set(obj, casePath + '.expectedResults', results);
+            await writeFile(filePath, obj);
+        }
         if (!hasKeys) {
             return {
                 collections: [],
@@ -65,8 +70,10 @@ async function queryResultTester(options) {
             };
         }
     }
-    const expectedResults = get(obj, casePath + '.expectedResults');
-    assert.deepStrictEqual(results, expectedResults);
+    if (!expectZeroResults) {
+        const expectedResults = get(obj, casePath + '.expectedResults');
+        assert.deepStrictEqual(results, expectedResults);
+    }
     return {
         results,
         collections,

@@ -20,6 +20,8 @@ export interface QueryResultOptions {
     casePath: string;
     /** Specifies if it should be run in write to file mode (when making changes) or test mode where the results are checked, defaults to test */
     mode?: 'write' | 'test';
+    /** Defaults to false, set to true if you expect no results to be returned */
+    expectZeroResults?: boolean;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &

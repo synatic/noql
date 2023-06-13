@@ -209,6 +209,7 @@ describe('joins', function () {
                 LEFT join \`ams360-powerbi-employee|unwind\` emp on pol.ExecCode = emp.EmpCode
                 LIMIT 5`,
                 casePath: 'join-order.case1',
+                expectZeroResults: true,
             });
         });
         describe('Existing example', () => {

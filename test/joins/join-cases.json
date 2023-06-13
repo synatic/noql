@@ -844,11 +844,6 @@
       ]
     }
   },
-  "join-order": {
-    "case1": {
-      "expectedResults": []
-    }
-  },
   "n-level-join": {
     "without-unwind": {
       "expectedResults": [
@@ -1101,10 +1096,65 @@
       ]
     },
     "two-conditions-no-aliases": {
-      "expectedResults": []
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
     },
     "two-conditions-both-reversed-no-aliases": {
-      "expectedResults": []
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        },
+        {
+          "inventoryId": [
+            2
+          ],
+          "sku": [
+            "bread"
+          ],
+          "instock": [
+            80
+          ]
+        },
+        {
+          "inventoryId": [
+            4
+          ],
+          "sku": [
+            "pecans"
+          ],
+          "instock": [
+            70
+          ]
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
     }
   }
 }
