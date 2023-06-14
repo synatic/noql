@@ -1,0 +1,1209 @@
+{
+  "regression": {
+    "case1": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "CNoteId": 1,
+          "Note": "Notes for id 1",
+          "CNDate": "2020-12:15"
+        },
+        {
+          "id": 2,
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "CNoteId": 2,
+          "Note": "Notes for id 2",
+          "CNDate": "2021-12:15"
+        },
+        {
+          "id": 3,
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "CNoteId": 3,
+          "Note": "Notes for id 3",
+          "CNDate": "2020-12:15"
+        },
+        {
+          "id": 4,
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "CNoteId": 4,
+          "Note": "Notes for id 4",
+          "CNDate": "2019-12:15"
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "CNoteId": 1,
+          "Note": "Notes for id 1",
+          "CNDate": "2020-12:15"
+        },
+        {
+          "id": 2,
+          "First Name": "PATRICIA",
+          "Last Name": "JOHNSON",
+          "CNoteId": 2,
+          "Note": "Notes for id 2",
+          "CNDate": "2021-12:15"
+        },
+        {
+          "id": 3,
+          "First Name": "LINDA",
+          "Last Name": "WILLIAMS",
+          "CNoteId": 3,
+          "Note": "Notes for id 3",
+          "CNDate": "2020-12:15"
+        },
+        {
+          "id": 4,
+          "First Name": "BARBARA",
+          "Last Name": "JONES",
+          "CNoteId": 4,
+          "Note": "Notes for id 4",
+          "CNDate": "2019-12:15"
+        },
+        {
+          "id": 5,
+          "First Name": "ELIZABETH",
+          "Last Name": "BROWN",
+          "CNoteId": 5,
+          "Note": "Notes for id 5",
+          "CNDate": "2021-12:15"
+        }
+      ]
+    },
+    "case3": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "PATRICIA",
+            "Last Name": "JOHNSON",
+            "Phone": "838635286649",
+            "id": 2
+          },
+          "cn": {
+            "id": 2,
+            "notes": "Notes for id 2",
+            "date": "2021-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        }
+      ]
+    },
+    "case4": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "MARY",
+            "Last Name": "SMITH",
+            "Phone": "28303384290",
+            "id": 1
+          },
+          "cn": {
+            "id": 1,
+            "notes": "Notes for id 1",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "PATRICIA",
+            "Last Name": "JOHNSON",
+            "Phone": "838635286649",
+            "id": 2
+          },
+          "cn": {
+            "id": 2,
+            "notes": "Notes for id 2",
+            "date": "2021-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        }
+      ]
+    },
+    "case5": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "MARY",
+            "Last Name": "SMITH",
+            "Phone": "28303384290",
+            "id": 1
+          },
+          "cn": {
+            "id": 1,
+            "notes": "Notes for id 1",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "PATRICIA",
+            "Last Name": "JOHNSON",
+            "Phone": "838635286649",
+            "id": 2
+          },
+          "cn": {
+            "id": 2,
+            "notes": "Notes for id 2",
+            "date": "2021-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        }
+      ]
+    },
+    "case6": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "MARY",
+            "Last Name": "SMITH",
+            "Phone": "28303384290",
+            "id": 1
+          },
+          "cn": {
+            "id": 1,
+            "notes": "Notes for id 1",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "PATRICIA",
+            "Last Name": "JOHNSON",
+            "Phone": "838635286649",
+            "id": 2
+          },
+          "cn": {
+            "id": 2,
+            "notes": "Notes for id 2",
+            "date": "2021-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        }
+      ]
+    },
+    "case7": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "ELIZABETH",
+            "Last Name": "BROWN",
+            "Phone": "10655648674",
+            "id": 5
+          },
+          "cn": {
+            "id": 5,
+            "notes": "Notes for id 5",
+            "date": "2021-12:15"
+          }
+        }
+      ]
+    },
+    "case8": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "ELIZABETH",
+            "Last Name": "BROWN",
+            "Phone": "10655648674",
+            "id": 5
+          },
+          "cn": {
+            "id": 5,
+            "notes": "Notes for id 5",
+            "date": "2021-12:15"
+          }
+        }
+      ]
+    },
+    "case9": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": [
+            {
+              "id": 3,
+              "notes": "Notes for id 3",
+              "date": "2020-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": [
+            {
+              "id": 4,
+              "notes": "Notes for id 4",
+              "date": "2019-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "ELIZABETH",
+            "Last Name": "BROWN",
+            "Phone": "10655648674",
+            "id": 5
+          },
+          "cn": [
+            {
+              "id": 5,
+              "notes": "Notes for id 5",
+              "date": "2021-12:15"
+            }
+          ]
+        }
+      ]
+    },
+    "case10": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": {
+            "id": 3,
+            "notes": "Notes for id 3",
+            "date": "2020-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": {
+            "id": 4,
+            "notes": "Notes for id 4",
+            "date": "2019-12:15"
+          }
+        },
+        {
+          "c": {
+            "First Name": "ELIZABETH",
+            "Last Name": "BROWN",
+            "Phone": "10655648674",
+            "id": 5
+          },
+          "cn": {
+            "id": 5,
+            "notes": "Notes for id 5",
+            "date": "2021-12:15"
+          }
+        }
+      ]
+    },
+    "case11": {
+      "expectedResults": [
+        {
+          "c": {
+            "First Name": "MARY",
+            "Last Name": "SMITH",
+            "Phone": "28303384290",
+            "id": 1
+          },
+          "cn": [
+            {
+              "id": 1,
+              "notes": "Notes for id 1",
+              "date": "2020-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "PATRICIA",
+            "Last Name": "JOHNSON",
+            "Phone": "838635286649",
+            "id": 2
+          },
+          "cn": [
+            {
+              "id": 2,
+              "notes": "Notes for id 2",
+              "date": "2021-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "id": 3
+          },
+          "cn": [
+            {
+              "id": 3,
+              "notes": "Notes for id 3",
+              "date": "2020-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "BARBARA",
+            "Last Name": "JONES",
+            "Phone": "705814003527",
+            "id": 4
+          },
+          "cn": [
+            {
+              "id": 4,
+              "notes": "Notes for id 4",
+              "date": "2019-12:15"
+            }
+          ]
+        },
+        {
+          "c": {
+            "First Name": "ELIZABETH",
+            "Last Name": "BROWN",
+            "Phone": "10655648674",
+            "id": 5
+          },
+          "cn": [
+            {
+              "id": 5,
+              "notes": "Notes for id 5",
+              "date": "2021-12:15"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "left-join": {
+    "basic": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 2,
+            "item": "pecans",
+            "notes": "testing",
+            "price": 20,
+            "quantity": 1,
+            "customerId": 2,
+            "specialChars": "!!$"
+          },
+          "i": [
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 4,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 4,
+            "customerId": 3,
+            "specialChars": "!!\""
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 5,
+            "item": "potatoes",
+            "price": 7,
+            "quantity": 6,
+            "customerId": 5,
+            "specialChars": "!!*"
+          },
+          "i": []
+        }
+      ]
+    },
+    "unwind-hint": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "o": {
+            "id": 2,
+            "item": "pecans",
+            "notes": "testing",
+            "price": 20,
+            "quantity": 1,
+            "customerId": 2,
+            "specialChars": "!!$"
+          },
+          "i": {
+            "id": 4,
+            "sku": "pecans",
+            "description": "product 4",
+            "instock": 70,
+            "specialChars": "!!*"
+          }
+        },
+        {
+          "o": {
+            "id": 4,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 4,
+            "customerId": 3,
+            "specialChars": "!!\""
+          },
+          "i": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "o": {
+            "id": 5,
+            "item": "potatoes",
+            "price": 7,
+            "quantity": 6,
+            "customerId": 5,
+            "specialChars": "!!*"
+          }
+        }
+      ]
+    },
+    "unwind-query": {
+      "expectedResults": [
+        {
+          "OID": 1,
+          "inv": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "OID": 2,
+          "inv": {
+            "id": 4,
+            "sku": "pecans",
+            "description": "product 4",
+            "instock": 70,
+            "specialChars": "!!*"
+          }
+        },
+        {
+          "OID": 4,
+          "inv": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "OID": 5
+        }
+      ]
+    },
+    "unwind-and-case": {
+      "expectedResults": [
+        {
+          "IsOne": "Yes"
+        },
+        {
+          "IsOne": "No"
+        },
+        {
+          "IsOne": "No"
+        },
+        {
+          "IsOne": "No"
+        }
+      ]
+    },
+    "unwind-and-special-chars": {
+      "expectedResults": [
+        {
+          "description": "product 1",
+          "iChars": "^^^",
+          "item": "almonds",
+          "oChars": "^^^"
+        },
+        {
+          "description": "product 2",
+          "iChars": "!!$",
+          "item": "pecans",
+          "oChars": "!!$"
+        },
+        {
+          "description": "product 3",
+          "iChars": "!!\"",
+          "item": "almonds",
+          "oChars": "!!\""
+        },
+        {
+          "description": "product 4",
+          "iChars": "!!*",
+          "item": "potatoes",
+          "oChars": "!!*"
+        }
+      ]
+    },
+    "basic-reversed": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 2,
+            "item": "pecans",
+            "notes": "testing",
+            "price": 20,
+            "quantity": 1,
+            "customerId": 2,
+            "specialChars": "!!$"
+          },
+          "i": [
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 4,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 4,
+            "customerId": 3,
+            "specialChars": "!!\""
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 5,
+            "item": "potatoes",
+            "price": 7,
+            "quantity": 6,
+            "customerId": 5,
+            "specialChars": "!!*"
+          },
+          "i": []
+        }
+      ]
+    }
+  },
+  "n-level-join": {
+    "without-unwind": {
+      "expectedResults": [
+        {
+          "orderId": 1,
+          "inventoryId": [
+            1
+          ],
+          "customerId": [
+            1
+          ]
+        }
+      ]
+    },
+    "with-unwind": {
+      "expectedResults": [
+        {
+          "orderId": 1,
+          "inventoryId": 1,
+          "customerId": 1
+        },
+        {
+          "orderId": 2,
+          "inventoryId": 4,
+          "customerId": 2
+        },
+        {
+          "orderId": 4,
+          "inventoryId": 1,
+          "customerId": 3
+        }
+      ]
+    }
+  },
+  "inner-join": {
+    "basic": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        },
+        {
+          "id": 2,
+          "item": "pecans",
+          "price": 20,
+          "customerId": 2,
+          "inventoryId": [
+            4
+          ],
+          "sku": [
+            "pecans"
+          ],
+          "instock": [
+            70
+          ]
+        },
+        {
+          "id": 4,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 3,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "basic-reversed": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        },
+        {
+          "id": 2,
+          "item": "pecans",
+          "price": 20,
+          "customerId": 2,
+          "inventoryId": [
+            4
+          ],
+          "sku": [
+            "pecans"
+          ],
+          "instock": [
+            70
+          ]
+        },
+        {
+          "id": 4,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 3,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-both-reversed": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "basic-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
+    },
+    "basic-reversed-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
+    },
+    "two-conditions-no-aliases": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-both-reversed-no-aliases": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        },
+        {
+          "inventoryId": [
+            2
+          ],
+          "sku": [
+            "bread"
+          ],
+          "instock": [
+            80
+          ]
+        },
+        {
+          "inventoryId": [
+            4
+          ],
+          "sku": [
+            "pecans"
+          ],
+          "instock": [
+            70
+          ]
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        }
+      ]
+    },
+    "two-conditions-inversed": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "item": "almonds",
+          "price": 12,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-inversed-no-alias": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    },
+    "two-conditions-inversed-no-alias-no-table-name": {
+      "expectedResults": [
+        {
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
+          ]
+        }
+      ]
+    }
+  }
+}

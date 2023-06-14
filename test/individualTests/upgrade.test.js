@@ -1,7 +1,6 @@
 const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
-const _dbName = 'sql-to-mongo-test';
-const {setup, disconnect} = require('../mongo-client');
+const {setup, disconnect, dbName} = require('../utils/mongo-client.js');
 const $check = require('check-types');
 
 describe('node-sql-parser upgrade tests', function () {
@@ -31,7 +30,7 @@ describe('node-sql-parser upgrade tests', function () {
         try {
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
-                .db(_dbName)
+                .db(dbName)
                 .collection(parsedQuery.collections[0])
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
@@ -49,7 +48,7 @@ describe('node-sql-parser upgrade tests', function () {
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -66,7 +65,7 @@ describe('node-sql-parser upgrade tests', function () {
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -85,7 +84,7 @@ describe('node-sql-parser upgrade tests', function () {
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -103,7 +102,7 @@ describe('node-sql-parser upgrade tests', function () {
                 try {
                     const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
-                        .db(_dbName)
+                        .db(dbName)
                         .collection(parsedQuery.collections[0])
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
@@ -125,7 +124,7 @@ describe('node-sql-parser upgrade tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -144,7 +143,7 @@ describe('node-sql-parser upgrade tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
@@ -165,7 +164,7 @@ describe('node-sql-parser upgrade tests', function () {
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
-                    .db(_dbName)
+                    .db(dbName)
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();

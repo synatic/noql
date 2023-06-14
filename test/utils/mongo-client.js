@@ -107,4 +107,4 @@ async function disconnect() {
     return client.close();
 }
 
-module.exports = {connect, addTestData, dropTestDb, setup, disconnect};
+module.exports = {connect, addTestData, dropTestDb, setup, disconnect, dbName};

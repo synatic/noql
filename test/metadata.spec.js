@@ -6,7 +6,7 @@ const {
     TableDoesNotExistError,
 } = require('../lib/errors');
 const assert = require('assert');
-const {setup, disconnect} = require('./mongo-client');
+const {setup, disconnect} = require('./utils/mongo-client');
 // @ts-ignore
 const {_jsonSchemaTypeMapping} = require('../lib/MongoFunctions');
 
