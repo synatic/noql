@@ -1205,5 +1205,18 @@
         }
       ]
     }
+  },
+  "deep-level-joins": {
+    "case1": {
+      "expectedResults": [
+        {
+          "_id": "648b0857b03ff3dc555f9134",
+          "basetable0": {
+            "c22": 2,
+            "a0": 300
+          }
+        }
+      ]
+    }
   }
 }
