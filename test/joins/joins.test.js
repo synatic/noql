@@ -595,15 +595,15 @@ describe('joins', function () {
                         GROUP BY "semijoin1_c151"`;
             const fullQueryString = `;
                 SELECT "_"."semijoin1_c151" AS "c151",
-                       "_"."a0" AS "a0"
+                       "_"."a0" AS "a0",
+                       unset(_id)
                 FROM (${qs4}) "_"
                 WHERE NOT "_"."a0" IS NULL
                 LIMIT 1000001`;
-            const res = await queryResultTester({
-                queryString: qs1,
+            await queryResultTester({
+                queryString: fullQueryString,
                 casePath: 'deep-level-joins.case1',
             });
-            console.log(res);
         });
     });
 });
