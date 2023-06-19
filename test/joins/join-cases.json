@@ -1205,5 +1205,18 @@
         }
       ]
     }
+  },
+  "deep-level-joins": {
+    "case1": {
+      "expectedResults": [
+        {
+          "c151": [
+            "first",
+            "third"
+          ],
+          "a0": 300
+        }
+      ]
+    }
   }
 }

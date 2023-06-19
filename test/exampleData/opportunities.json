@@ -9,7 +9,7 @@
     "StageName": "Business Discovery",
     "AccountRecordType": "AccountRecordType",
     "OpportunityRecordType": "OpportunityRecordType",
-    "RecordType": "RecordType",
+    "RecordType": "Direct Customer",
     "SaleType": "SaleType",
     "DateSort": "DateSort",
     "DateID": "DateID",

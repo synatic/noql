@@ -5,6 +5,7 @@ const fs = require('fs/promises');
 const $path = require('path');
 const {dbName} = require('../mongo-client');
 const SQLParser = require('../../../lib/SQLParser.js');
+const $check = require('check-types');
 
 module.exports = {
     queryResultTester,
@@ -45,7 +46,9 @@ async function queryResultTester(options) {
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
-    const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString);
+    const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
+        database: 'PostgresQL',
+    });
     const filePath = $path.resolve(dirName, fileName);
     const results = await mongoClient
         .db(dbName)
@@ -55,6 +58,7 @@ async function queryResultTester(options) {
     if (!expectZeroResults) {
         assert(results.length);
     }
+    results.map((o) => checkForMongoTypes(o));
     const obj = await readCases(filePath);
     const hasKeys = Object.keys(obj).length === 0;
     if (mode === 'write' || hasKeys) {
@@ -79,6 +83,29 @@ async function queryResultTester(options) {
         collections,
         pipeline,
     };
+}
+
+function checkForMongoTypes(obj) {
+    for (const [key, value] of Object.entries(obj)) {
+        if (Array.isArray(value)) {
+            obj[key] = value.sort();
+        } else if ($check.object(value)) {
+            if (Buffer.isBuffer(value)) {
+                obj[key] = value.toString('utf-8');
+            } else if (value._bsontype) {
+                if (value._bsontype === 'Decimal128') {
+                    obj[key] = Number(value.toString());
+                } else {
+                    throw new Error(
+                        `Unsupported bson type: ${value._bsontype}`
+                    );
+                }
+            } else {
+                obj[key] = checkForMongoTypes(value);
+            }
+        }
+    }
+    return obj;
 }
 
 /**

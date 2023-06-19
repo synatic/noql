@@ -546,4 +546,64 @@ describe('joins', function () {
             });
         });
     });
+
+    describe('Deep level joins', () => {
+        it('should work with the errored query from powerbi', async () => {
+            const qs1 = `
+            SELECT  "_"."OpportunityId" AS "basetable0.c22",
+                    "_"."AnnualLicenseRevenueUSD" AS "basetable0.a0"
+            FROM "public"."opportunities" "_"
+            WHERE ("_"."RecordType" in ('Direct Customer',
+                                       'Channel Customer'))
+            AND ("_"."StageName" in ('Discovery',
+                                    'Needs Analysis',
+                                    'Negotiation',
+                                    'Proposal',
+                                    'Qualification',
+                                    'Technical Discovery',
+                                    'Business Discovery'))`;
+            const qs2 = `SELECT "OpportunityId",
+                                "Name"
+                         FROM "public"."opportunitySolutions" "_Table"`;
+            /**
+             * semijoin1.c22 => semijoin1_c22
+             * semijoin1.c151 => semijoin1_c151
+             */
+            const qs3 = `
+                SELECT "rows"."OpportunityId" AS "semijoin1_c22",
+                       "rows"."Name" AS "semijoin1_c151"
+                FROM
+                    (${qs2}) "rows"
+                    GROUP BY "OpportunityId",
+                             "Name"`;
+            /**
+             * $Outer => outer
+             * $Inner => inner
+             */
+            const qs4 = `
+                        SELECT "rows"."semijoin1_c151" AS "semijoin1_c151",
+                                sum(cast("rows"."basetable0.a0" AS decimal)) AS "a0"
+                        FROM
+                        (SELECT "outer"."basetable0.a0",
+                                "inner"."semijoin1_c151"
+                        FROM
+                            (${qs1}) "outer"
+                        INNER JOIN
+                            (${qs3}) "inner" ON ("outer"."basetable0.c22" = "inner"."semijoin1_c22"
+                                                            OR "outer"."basetable0.c22" IS NULL
+                                                            AND "inner"."semijoin1_c22" IS NULL)) "rows"
+                        GROUP BY "semijoin1_c151"`;
+            const fullQueryString = `;
+                SELECT "_"."semijoin1_c151" AS "c151",
+                       "_"."a0" AS "a0",
+                       unset(_id)
+                FROM (${qs4}) "_"
+                WHERE NOT "_"."a0" IS NULL
+                LIMIT 1000001`;
+            await queryResultTester({
+                queryString: fullQueryString,
+                casePath: 'deep-level-joins.case1',
+            });
+        });
+    });
 });
