@@ -1,5 +1,16 @@
 [
   {
     "numberArray": [1, 2, 3, 4]
+  },
+  {
+    "name": "first",
+    "leftSide": "one",
+    "testId": "bugfix.true-false.case1",
+    "dateAchieved": "2023"
+  },
+  {
+    "name": "second",
+    "rightSide": "one",
+    "testId": "bugfix.true-false.case1"
   }
 ]

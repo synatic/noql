@@ -1,0 +1,22 @@
+{
+  "bugfix": {
+    "true-false": {
+      "case1": {
+        "expectedResults": [
+          {
+            "gbName": "first",
+            "ubName": "second",
+            "dateAchieved": null,
+            "achieved": true
+          },
+          {
+            "gbName": "second",
+            "ubName": "first",
+            "dateAchieved": "2023",
+            "achieved": true
+          }
+        ]
+      }
+    }
+  }
+}

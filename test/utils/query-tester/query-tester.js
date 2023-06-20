@@ -95,6 +95,8 @@ function checkForMongoTypes(obj) {
             } else if (value._bsontype) {
                 if (value._bsontype === 'Decimal128') {
                     obj[key] = Number(value.toString());
+                } else if (value._bsontype === 'ObjectID') {
+                    obj[key] = value.toString();
                 } else {
                     throw new Error(
                         `Unsupported bson type: ${value._bsontype}`
