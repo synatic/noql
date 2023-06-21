@@ -1,4 +1,4 @@
 ---
 template: home.html
-title: Home
+title: NoQL - SQL to MongoDB Query Interpreter
 ---
