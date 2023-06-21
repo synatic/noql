@@ -199,6 +199,8 @@ export interface MongoQueryFunction {
     /** Specifies if this query requires a group by */
     forceGroup?: boolean;
     jsonSchemaReturnType: JSONSchemaTypeName | SchemaFn;
+    /** Specifies if this function is allowed to run without parentheses. E.g. current_date */
+    doesNotNeedArgs?: boolean;
     //TODO Rk, would be good to have a description here and auto generate docs
 }
 
