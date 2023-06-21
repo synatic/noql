@@ -12,5 +12,17 @@
     "name": "second",
     "rightSide": "one",
     "testId": "bugfix.true-false.case1"
+  },
+  {
+    "names": ["Max", "Andy"],
+    "testId": "bugfix.join-fn.case1"
+  },
+  {
+    "name": "Max",
+    "testId": "bugfix.join-fn.case2"
+  },
+  {
+    "name": "Andy",
+    "testId": "bugfix.join-fn.case2"
   }
 ]
