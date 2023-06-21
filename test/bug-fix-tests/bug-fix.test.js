@@ -54,8 +54,91 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.true-false.case1',
-                mode: 'write',
             });
         });
+    });
+    describe('currentDate', async () => {
+        it('should work with or without parentheses', async () => {
+            const queryString = `
+            SELECT  CURRENT_DATE() as Today,
+                    current_date as Today2,
+                    unset(_id)
+            FROM function-test-data
+            LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.current-date.case1',
+                ignoreDateValues: true,
+            });
+        });
+    });
+    describe('join function', () => {
+        it('should be able to join strings together with a symbol in a standard select', async () => {
+            const queryString = `
+            SELECT  join(names,',') as names,
+                    unset(_id)
+            FROM function-test-data
+            WHERE testId="bugfix.join-fn.case1"
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.join-fn.case1',
+            });
+        });
+        // it('should be able to join strings together with a symbol in a group by', async () => {
+        //     const queryString = `
+        //     SELECT testId,
+        //             join(name,',') as names
+        //     FROM function-test-data
+        //     WHERE testId="bugfix.join-fn.case2"
+        //     GROUP BY testId
+        //     `;
+        //     const res = await queryResultTester({
+        //         queryString: queryString,
+        //         casePath: 'bugfix.current-date.case2',
+        //         mode: 'write',
+        //     });
+        //     const correctHcp = [
+        //         {
+        //             $match: {
+        //                 testId: {
+        //                     $eq: 'bugfix.join-fn.case2',
+        //                 },
+        //             },
+        //         },
+        //         {
+        //             $group: {
+        //                 _id: {
+        //                     testId: '$testId',
+        //                 },
+        //                 names: {
+        //                     $accumulator: {
+        //                         accumulateArgs: ['$name'],
+        //                         init: function () {
+        //                             return [];
+        //                         },
+        //                         accumulate: function (names, name) {
+        //                             return names.concat(name);
+        //                         },
+        //                         merge: function (names1, names2) {
+        //                             return names1.concat(names2);
+        //                         },
+        //                         finalize: function (names) {
+        //                             return names.join(',');
+        //                         },
+        //                         lang: 'js',
+        //                     },
+        //                 },
+        //             },
+        //         },
+        //         {
+        //             $project: {
+        //                 testId: '$_id.testId',
+        //                 names: '$_id.names',
+        //                 _id: 0,
+        //             },
+        //         },
+        //     ];
+        // });
     });
 });

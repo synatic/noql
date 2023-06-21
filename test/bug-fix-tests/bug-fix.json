@@ -17,6 +17,25 @@
           }
         ]
       }
+    },
+    "current-date": {
+      "case1": {
+        "expectedResults": [
+          {
+            "Today": "$date-placeholder",
+            "Today2": "$date-placeholder"
+          }
+        ]
+      }
+    },
+    "join-fn": {
+      "case1": {
+        "expectedResults": [
+          {
+            "names": "Max,Andy"
+          }
+        ]
+      }
     }
   }
 }

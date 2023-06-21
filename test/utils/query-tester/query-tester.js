@@ -42,6 +42,7 @@ async function queryResultTester(options) {
         mode = 'test',
         dirName,
         expectZeroResults,
+        ignoreDateValues = false,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -58,7 +59,7 @@ async function queryResultTester(options) {
     if (!expectZeroResults) {
         assert(results.length);
     }
-    results.map((o) => checkForMongoTypes(o));
+    results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     const obj = await readCases(filePath);
     const hasKeys = Object.keys(obj).length === 0;
     if (mode === 'write' || hasKeys) {
@@ -85,10 +86,14 @@ async function queryResultTester(options) {
     };
 }
 
-function checkForMongoTypes(obj) {
+function checkForMongoTypes(obj, ignoreDateValues) {
     for (const [key, value] of Object.entries(obj)) {
         if (Array.isArray(value)) {
             obj[key] = value.sort();
+        } else if ($check.date(value)) {
+            if (ignoreDateValues) {
+                obj[key] = '$date-placeholder';
+            }
         } else if ($check.object(value)) {
             if (Buffer.isBuffer(value)) {
                 obj[key] = value.toString('utf-8');
