@@ -4,19 +4,18 @@
 
     `+` (str + str) does not work for string concatenation. Use `CONCAT` instead.
 
-
 ## LIKE
 
 `LIKE '%%'`
 
-Provides string match functionality with support for standard % notation. Case insensitive. 
+Provides string match functionality with support for standard % notation. Case insensitive.
 
 ???+ example "Example `LIKE` usage"
 
     ```sql
-    SELECT 
+    SELECT
         *
-    FROM 
+    FROM
         `customers`
     WHERE
       name LIKE 'john%';
@@ -31,9 +30,9 @@ Provides string non match functionality with support for standard % notation. Ca
 ???+ example "Example `NOT LIKE` usage"
 
     ```sql
-    SELECT 
+    SELECT
         *
-    FROM 
+    FROM
         `customers`
     WHERE
       name NOT LIKE 'john%';
@@ -50,9 +49,24 @@ Concatenates strings.
 ???+ example "Example `CONCAT` usage"
 
     ```sql
-    SELECT 
-        CONCAT(`First Name`,‘:’,`Last Name`) AS exprVal 
-    FROM 
+    SELECT
+        CONCAT(`First Name`,‘:’,`Last Name`) AS exprVal
+    FROM
+        `customers`;
+    ```
+
+### JOIN
+
+`JOIN(expr,separator)`
+
+Joins the field that is an array of strings using the separator string.
+
+???+ example "Example `JOIN` usage"
+
+    ```sql
+    SELECT
+        JOIN(`Addresses`,‘,’) AS fullAddress
+    FROM
         `customers`;
     ```
 
@@ -65,9 +79,9 @@ Trims the string
 ???+ example "Example `TRIM` usage"
 
     ```sql
-    SELECT 
-        TRIM(`First Name`,‘_ -‘) AS exprVal 
-    FROM 
+    SELECT
+        TRIM(`First Name`,‘_ -‘) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -80,9 +94,9 @@ Left trims the string
 ???+ example "Example `LTRIM` usage"
 
     ```sql
-    SELECT 
-        LTRIM(`First Name`,‘_ -‘) AS exprVal 
-    FROM 
+    SELECT
+        LTRIM(`First Name`,‘_ -‘) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -95,9 +109,9 @@ Right trims the string
 ???+ example "Example `RTRIM` usage"
 
     ```sql
-    SELECT 
-        RTRIM(`First Name`,‘_ -‘) AS exprVal 
-    FROM 
+    SELECT
+        RTRIM(`First Name`,‘_ -‘) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -110,9 +124,9 @@ Returns the substring of a string.
 ???+ example "Example `SUBSTR` usage"
 
     ```sql
-    SELECT 
-        SUBSTR(`First Name`,1,10) AS exprVal 
-    FROM 
+    SELECT
+        SUBSTR(`First Name`,1,10) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -125,9 +139,9 @@ Returns the substring of a string by bytes.
 ???+ example "Example `SUBSTR_BYTES` usage"
 
     ```sql
-    SELECT 
-        SUBSTR_BYTES(`First Name`,1,10) AS exprVal 
-    FROM 
+    SELECT
+        SUBSTR_BYTES(`First Name`,1,10) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -140,9 +154,9 @@ Replaces the first instance of a search string in an input string with a replace
 ???+ example "Example `REPLACE` usage"
 
     ```sql
-    SELECT 
-        REPLACE(`First Name`,‘a’,‘b’) AS exprVal 
-    FROM 
+    SELECT
+        REPLACE(`First Name`,‘a’,‘b’) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -155,9 +169,9 @@ Replaces all instances of a search string in an input string with a replacement 
 ???+ example "Example `REPLACE_ALL` usage"
 
     ```sql
-    SELECT 
-        REPLACE_ALL(`First Name`,‘a’,‘b’) AS exprVal 
-    FROM 
+    SELECT
+        REPLACE_ALL(`First Name`,‘a’,‘b’) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -170,9 +184,9 @@ Returns the number of UTF-8 encoded bytes in the specified string.
 ???+ example "Example `STRLEN` usage"
 
     ```sql
-    SELECT 
-        STRLEN(`First Name`)  AS exprVal 
-    FROM 
+    SELECT
+        STRLEN(`First Name`)  AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -185,9 +199,9 @@ Returns the number of UTF-8 code points in the specified string.
 ???+ example "Example `STRLEN_CP` usage"
 
     ```sql
-    SELECT 
-        STRLEN_CP(`First Name`)  AS exprVal 
-    FROM 
+    SELECT
+        STRLEN_CP(`First Name`)  AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -200,9 +214,9 @@ Splits the string to an array.
 ???+ example "Example `SPLIT` usage"
 
     ```sql
-    SELECT 
-        SPLIT(`First Name`,‘,’) AS exprVal 
-    FROM 
+    SELECT
+        SPLIT(`First Name`,‘,’) AS exprVal
+    FROM
         `customers`;
     ```
 
@@ -210,16 +224,16 @@ Splits the string to an array.
 
 `STRPOS(expr,substr)`
 
-Finds the first index of the substring within the expression. Returns 0 if not found and 1 based index position as per PostgresQL. 
+Finds the first index of the substring within the expression. Returns 0 if not found and 1 based index position as per PostgresQL.
 
 ???+ example "Example `STRPOS` usage"
 
     ```sql
-    SELECT 
-        STRPOS(Title,'B') as pos,filmId 
-    FROM 
-        films 
-    WHERE 
+    SELECT
+        STRPOS(Title,'B') as pos,filmId
+    FROM
+        films
+    WHERE
         STRPOS(Title,'B') > 0;
     ```
 
@@ -232,10 +246,10 @@ Finds the first index of the substring within the expression. Returns 0 if not f
 ???+ example "Example `LOCATE` usage"
 
     ```sql
-    SELECT 
-        LOCATE(Title,'B') as pos,filmId 
-    FROM 
-        films 
-    WHERE 
+    SELECT
+        LOCATE(Title,'B') as pos,filmId
+    FROM
+        films
+    WHERE
         LOCATE(Title,'B') > 0;
     ```
