@@ -54,6 +54,20 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.true-false.case1',
+            });
+        });
+    });
+    describe('currentDate', async () => {
+        it('should work with or without parentheses', async () => {
+            const queryString = `
+            SELECT  CURRENT_DATE() as Today,
+                    current_date as Today2,
+                    unset(_id)
+            FROM function-test-data
+            LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.current-date.case1',
                 mode: 'write',
             });
         });
