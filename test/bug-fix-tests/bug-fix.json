@@ -22,8 +22,17 @@
       "case1": {
         "expectedResults": [
           {
-            "Today": "2023-06-21T09:07:05.046Z",
-            "Today2": "2023-06-21T09:07:05.046Z"
+            "Today": "$date-placeholder",
+            "Today2": "$date-placeholder"
+          }
+        ]
+      }
+    },
+    "join-fn": {
+      "case1": {
+        "expectedResults": [
+          {
+            "names": "Max,Andy"
           }
         ]
       }

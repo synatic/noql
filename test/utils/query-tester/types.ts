@@ -22,6 +22,8 @@ export interface QueryResultOptions {
     mode?: 'write' | 'test';
     /** Defaults to false, set to true if you expect no results to be returned */
     expectZeroResults?: boolean;
+    /** when comparing results, will ignore the values of dates, useful when using Current_Date etc. Defaults to false */
+    ignoreDateValues?: boolean;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &

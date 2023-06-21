@@ -191,9 +191,11 @@ export interface MongoQueryFunction {
     /** Doesn't seem to be used */
     parsedName?: string;
     /** function that takes in the parameters from the queries and returns the pipeline operation */
-    parse: (...parameters: any) => {
-        [key: string]: any;
-    };
+    parse: (...parameters: any) =>
+        | {
+              [key: string]: any;
+          }
+        | string;
     /** specifies if this function requires an as when it's in a query, default: true */
     requiresAs?: boolean;
     /** Specifies if this query requires a group by */
