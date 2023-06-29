@@ -141,4 +141,21 @@ describe('bug-fixes', function () {
         //     ];
         // });
     });
+    describe('sort order sub query', () => {
+        it('Should correctly sort the result set', async () => {
+            const queryString = `
+                SELECT *
+                FROM (
+                    SELECT clanId,count(1) as userCount
+                    FROM function-test-data
+                    WHERE testId='bugfix.sort-order'
+                ) c
+                ORDER BY c.userCount DESC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sort-order.case1',
+            });
+        });
+    });
 });

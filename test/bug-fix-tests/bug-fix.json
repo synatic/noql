@@ -36,6 +36,30 @@
           }
         ]
       }
+    },
+    "sort-order": {
+      "case1": {
+        "expectedResults": [
+          {
+            "c": {
+              "clanId": "C2",
+              "userCount": 2
+            }
+          },
+          {
+            "c": {
+              "clanId": "C3",
+              "userCount": 1
+            }
+          },
+          {
+            "c": {
+              "clanId": "C1",
+              "userCount": 1
+            }
+          }
+        ]
+      }
     }
   }
 }
