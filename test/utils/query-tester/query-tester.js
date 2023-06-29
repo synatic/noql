@@ -61,11 +61,9 @@ async function queryResultTester(options) {
     }
     results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     const obj = await readCases(filePath);
-    if (mode === 'write') {
-        if (!expectZeroResults) {
-            set(obj, casePath + '.expectedResults', results);
-            await writeFile(filePath, obj);
-        }
+    if (mode === 'write' && !expectZeroResults) {
+        set(obj, casePath + '.expectedResults', results);
+        await writeFile(filePath, obj);
     }
     if (!expectZeroResults) {
         const expectedResults = get(obj, casePath + '.expectedResults');
