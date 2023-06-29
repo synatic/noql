@@ -59,6 +59,38 @@
             }
           }
         ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "clanId": "C2",
+            "userCount": 2
+          },
+          {
+            "clanId": "C3",
+            "userCount": 1
+          },
+          {
+            "clanId": "C1",
+            "userCount": 1
+          }
+        ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "clanId": "C2",
+            "userCount": 2
+          },
+          {
+            "clanId": "C3",
+            "userCount": 1
+          },
+          {
+            "clanId": "C1",
+            "userCount": 1
+          }
+        ]
       }
     }
   }
