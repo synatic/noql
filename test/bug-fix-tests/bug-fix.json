@@ -92,6 +92,28 @@
           }
         ]
       }
+    },
+    "coalesce": {
+      "case1": {
+        "expectedResults": [
+          {
+            "Price": 0,
+            "inlineValue": 3
+          },
+          {
+            "Price": 1,
+            "inlineValue": 3
+          },
+          {
+            "Price": 0,
+            "inlineValue": 3
+          },
+          {
+            "Price": 0,
+            "inlineValue": 3
+          }
+        ]
+      }
     }
   }
 }

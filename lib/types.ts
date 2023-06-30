@@ -182,6 +182,8 @@ export interface ColumnParseResult {
 export interface MongoQueryFunction {
     /** The name of the function as it will be used in sql, case insensitive, e.g. abs */
     name: string;
+    /** List of aliases that can also be used to call this function */
+    aliases?: string[];
     /** A description of what the function does */
     description?: string;
     /** Allow the function to be used in mongo query/find and not just aggregate pipelines, default: false */
