@@ -24,5 +24,21 @@
   {
     "name": "Andy",
     "testId": "bugfix.join-fn.case2"
+  },
+  {
+    "clanId": "C3",
+    "testId": "bugfix.sort-order"
+  },
+  {
+    "clanId": "C1",
+    "testId": "bugfix.sort-order"
+  },
+  {
+    "clanId": "C2",
+    "testId": "bugfix.sort-order"
+  },
+  {
+    "clanId": "C2",
+    "testId": "bugfix.sort-order"
   }
 ]

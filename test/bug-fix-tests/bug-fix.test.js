@@ -141,4 +141,50 @@ describe('bug-fixes', function () {
         //     ];
         // });
     });
+    describe('sort order sub query', () => {
+        it('Should correctly sort the result set', async () => {
+            const queryString = `
+                SELECT *
+                FROM (
+                    SELECT clanId,count(1) as userCount
+                    FROM function-test-data
+                    WHERE testId='bugfix.sort-order'
+                ) c
+                ORDER BY c.userCount DESC,
+                         c.clanId DESC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sort-order.case1',
+            });
+        });
+        it('Should correctly sort the result set when not nested', async () => {
+            const queryString = `
+                SELECT clanId, count(1) as userCount
+                FROM function-test-data
+                WHERE testId='bugfix.sort-order'
+                GROUP BY clanId
+                ORDER BY userCount DESC,
+                         clanId DESC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sort-order.case2',
+            });
+        });
+        it('Should correctly sort the result set when not nested with the table name', async () => {
+            const queryString = `
+                SELECT clanId, count(1) as userCount
+                FROM function-test-data
+                WHERE testId='bugfix.sort-order'
+                GROUP BY clanId
+                ORDER BY function-test-data.userCount DESC,
+                         function-test-data.clanId DESC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sort-order.case3',
+            });
+        });
+    });
 });
