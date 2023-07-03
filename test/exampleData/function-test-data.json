@@ -40,5 +40,20 @@
   {
     "clanId": "C2",
     "testId": "bugfix.sort-order"
+  },
+  {
+    "price": 0,
+    "testId": "bugfix.coalesce.case1"
+  },
+  {
+    "price": 1,
+    "testId": "bugfix.coalesce.case1"
+  },
+  {
+    "price": null,
+    "testId": "bugfix.coalesce.case1"
+  },
+  {
+    "testId": "bugfix.coalesce.case1"
   }
 ]

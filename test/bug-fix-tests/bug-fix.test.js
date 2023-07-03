@@ -187,4 +187,19 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('coalesce', () => {
+        it('Should correctly coalesce the results for numbers', async () => {
+            const queryString = `
+                SELECT  coalesce(price,0) as Price,
+                        coalesce(null,null,3,0) as inlineValue,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.coalesce.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.coalesce.case1',
+            });
+        });
+    });
 });
