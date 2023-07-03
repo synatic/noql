@@ -88,7 +88,13 @@ export interface Expression {
                     nulls: null;
                     type: 'ASC' | 'DESC';
                 }[];
-                partitionby: string | null;
+                partitionby:
+                    | {
+                          expr: Expression;
+                          type: string;
+                          as: string | null;
+                      }[]
+                    | null;
                 window_frame_clause: any;
             };
         };

@@ -204,7 +204,7 @@ describe('bug-fixes', function () {
     });
 
     describe('rank', () => {
-        it('Should correctly rank the results without a partion by', async () => {
+        it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
                 SELECT  value,
                         RANK () OVER (
@@ -217,6 +217,22 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.rank.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        RANK () OVER (
+                            PARTITION BY testId
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.rank.case2',
             });
         });
     });
