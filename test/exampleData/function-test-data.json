@@ -55,5 +55,33 @@
   },
   {
     "testId": "bugfix.coalesce.case1"
+  },
+  {
+    "value": "A",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "A",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "B",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "B",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "B",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "C",
+    "testId": "bugfix.rank.case1"
+  },
+  {
+    "value": "E",
+    "testId": "bugfix.rank.case1"
   }
 ]

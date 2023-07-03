@@ -114,6 +114,40 @@
           }
         ]
       }
+    },
+    "rank": {
+      "case1": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 6
+          },
+          {
+            "value": "E",
+            "rank_number": 7
+          }
+        ]
+      }
     }
   }
 }
