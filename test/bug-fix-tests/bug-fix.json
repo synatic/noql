@@ -246,6 +246,72 @@
           }
         ]
       }
+    },
+    "dense-rank": {
+      "case1": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 2
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "D",
+            "rank_number": 4
+          },
+          {
+            "value": "E",
+            "rank_number": 5
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 2
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "D",
+            "rank_number": 4
+          },
+          {
+            "value": "E",
+            "rank_number": 5
+          }
+        ]
+      }
     }
   }
 }

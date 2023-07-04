@@ -83,5 +83,93 @@
   {
     "value": "E",
     "testId": "bugfix.rank.case1"
+  },
+  {
+    "year": 2018,
+    "name": "Jack Daniel",
+    "amount": 150000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2018,
+    "name": "Jane Johnson",
+    "amount": 110000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2018,
+    "name": "John Doe",
+    "amount": 120000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2018,
+    "name": "Stephane Heady",
+    "amount": 200000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2018,
+    "name": "Yin Yang",
+    "amount": 30000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2019,
+    "name": "Jack Daniel",
+    "amount": 180000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2019,
+    "name": "Jane Johnson",
+    "amount": 130000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2019,
+    "name": "John Doe",
+    "amount": 150000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2019,
+    "name": "Stephane Heady",
+    "amount": 270000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "year": 2019,
+    "name": "Yin Yang",
+    "amount": 25000,
+    "testId": "bugfix.ntile.case1"
+  },
+  {
+    "value": "A",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "A",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "B",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "C",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "C",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "D",
+    "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "value": "E",
+    "testId": "bugfix.dense-rank.case1"
   }
 ]

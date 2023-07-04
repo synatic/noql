@@ -236,6 +236,39 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('dense rank', () => {
+        it('Should correctly rank the results without a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        DENSE_RANK () OVER (
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.dense-rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.dense-rank.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        DENSE_RANK () OVER (
+                            PARTITION BY testId
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.dense-rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.dense-rank.case2',
+            });
+        });
+    });
     describe('row number', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -266,8 +299,26 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.row-number.case2',
-                mode: 'write',
             });
         });
     });
+    // describe('ntile', () => {
+    //     it('Should correctly group the results', async () => {
+    //         const queryString = `
+    //             SELECT  name,
+    //                     amount,
+    //                     NTILE (3) OVER (
+    //                         ORDER BY amount
+    //                     ) ntile,
+    //                     unset(_id)
+    //             FROM function-test-data
+    //             WHERE testId='bugfix.ntile.case1'
+    //         `;
+    //         await queryResultTester({
+    //             queryString: queryString,
+    //             casePath: 'bugfix.row-number.case1',
+    //             mode: 'write',
+    //         });
+    //     });
+    // });
 });
