@@ -236,4 +236,38 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('row number', () => {
+        it('Should correctly rank the results without a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        ROW_NUMBER() OVER (
+                            ORDER BY value
+                        ) row_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.row-number.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        ROW_NUMBER () OVER (
+                            PARTITION BY value
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.row-number.case2',
+                mode: 'write',
+            });
+        });
+    });
 });
