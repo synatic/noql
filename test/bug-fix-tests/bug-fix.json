@@ -114,6 +114,204 @@
           }
         ]
       }
+    },
+    "rank": {
+      "case1": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 6
+          },
+          {
+            "value": "E",
+            "rank_number": 7
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 6
+          },
+          {
+            "value": "E",
+            "rank_number": 7
+          }
+        ]
+      }
+    },
+    "row-number": {
+      "case1": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "row_number": 1
+          },
+          {
+            "value": "A",
+            "row_number": 2
+          },
+          {
+            "value": "B",
+            "row_number": 3
+          },
+          {
+            "value": "B",
+            "row_number": 4
+          },
+          {
+            "value": "B",
+            "row_number": 5
+          },
+          {
+            "value": "C",
+            "row_number": 6
+          },
+          {
+            "value": "E",
+            "row_number": 7
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 2
+          },
+          {
+            "value": "B",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 2
+          },
+          {
+            "value": "B",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 1
+          },
+          {
+            "value": "E",
+            "rank_number": 1
+          }
+        ]
+      }
+    },
+    "dense-rank": {
+      "case1": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 2
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "D",
+            "rank_number": 4
+          },
+          {
+            "value": "E",
+            "rank_number": 5
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "A",
+            "rank_number": 1
+          },
+          {
+            "value": "B",
+            "rank_number": 2
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "C",
+            "rank_number": 3
+          },
+          {
+            "value": "D",
+            "rank_number": 4
+          },
+          {
+            "value": "E",
+            "rank_number": 5
+          }
+        ]
+      }
     }
   }
 }
