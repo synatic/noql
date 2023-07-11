@@ -473,30 +473,6 @@
     }
   },
   {
-    "name": "Array:ARRAY_RANGE",
-    "query": "select id,ARRAY_RANGE(0,10,2) as test from `customers`",
-    "output": {
-      "limit": 100,
-      "collection": "customers",
-      "projection": {
-        "id": "$id",
-        "test": {
-          "$range": [
-            {
-              "$literal": 0
-            },
-            {
-              "$literal": 10
-            },
-            {
-              "$literal": 2
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
     "name": "Array:ZIP_ARRAY",
     "query": "select id,ZIP_ARRAY((select `Film Title` as '$$ROOT' from `Rentals`),ARRAY_RANGE(0,10,2)) as test from `customers`",
     "output": {

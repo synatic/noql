@@ -312,6 +312,16 @@
           }
         ]
       }
+    },
+    "to_objectid": {
+      "case1": {
+        "expectedResults": [
+          {
+            "_id": "61b0fdcbdee485f7c0682db6",
+            "i": "61b0fdcbdee485f7c0682db6"
+          }
+        ]
+      }
     }
   }
 }

@@ -321,4 +321,17 @@ describe('bug-fixes', function () {
     //         });
     //     });
     // });
+    describe('to_objectid', () => {
+        it('should be able to convert a string object id to an actual ObjectId', async () => {
+            const queryString = `
+                    SELECT to_objectid('61b0fdcbdee485f7c0682db6') as i
+                    FROM customers
+                    WHERE _id = to_objectid('61b0fdcbdee485f7c0682db6')
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.to_objectid.case1',
+            });
+        });
+    });
 });

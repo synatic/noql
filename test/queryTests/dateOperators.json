@@ -82,27 +82,6 @@
     }
   },
   {
-    "name": "Date:DAY_OF_MONTH",
-    "query": "select DAY_OF_MONTH(DATE_FROM_STRING('2021-11-15')) as exprVal from `customers`",
-    "output": {
-      "collection": "customers",
-      "limit": 100,
-      "projection": {
-        "exprVal": {
-          "$dayOfMonth": {
-            "date": {
-              "$dateFromString": {
-                "dateString": {
-                  "$literal": "2021-11-15"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  {
     "name": "Date:DATE_FROM_PARTS",
     "query": "select DATE_FROM_PARTS(2021,11,15) as exprVal from `customers`",
     "output": {

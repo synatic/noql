@@ -340,29 +340,6 @@ module.exports = [
         },
     },
     {
-        name: 'Convert:to_objectid on where',
-        query: "select to_objectid('61b0fdcbdee485f7c0682db6') as i from customers where _id = to_objectid('61b0fdcbdee485f7c0682db6')",
-        output: {
-            limit: 100,
-            collection: 'customers',
-            projection: {
-                i: {
-                    $toObjectId: {
-                        $literal: '61b0fdcbdee485f7c0682db6',
-                    },
-                },
-            },
-            query: {
-                _id: {
-                    $eq: {
-                        _bsontype: 'ObjectID',
-                        id: 'a°ýËÞä÷Àh-¶',
-                    },
-                },
-            },
-        },
-    },
-    {
         name: 'Query:in with primitive dates',
         query: " select * from films where Rating in (to_date('2021-05-10'),'X')",
         output: {

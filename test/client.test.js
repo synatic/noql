@@ -12,6 +12,7 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
+//Date:DATE_TO_PARTS:select
 const _aggregateTests = [].concat(
     require('./aggregateTests/aggregateTests.json'),
     require('./aggregateTests/joins.json')
@@ -64,13 +65,13 @@ describe('Client Queries', function () {
                                 const count = await mongoClient
                                     .db(dbName)
                                     .collection(parsedQuery.collection)
-                                    .countDocuments(parsedQuery.query || null);
+                                    .countDocuments(parsedQuery.query || {});
                                 console.log(`${count}`);
                             } else {
                                 const find = mongoClient
                                     .db(dbName)
                                     .collection(parsedQuery.collection)
-                                    .find(parsedQuery.query || null, {
+                                    .find(parsedQuery.query || {}, {
                                         projection: parsedQuery.projection,
                                     });
                                 if (parsedQuery.sort) {
