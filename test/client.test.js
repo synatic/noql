@@ -12,7 +12,7 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
-//Date:DATE_TO_PARTS:select
+
 const _aggregateTests = [].concat(
     require('./aggregateTests/aggregateTests.json'),
     require('./aggregateTests/joins.json')
