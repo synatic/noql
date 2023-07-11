@@ -1,5 +1,4 @@
 const SQLParser = require('../lib/SQLParser.js');
-const ObjectID = require('bson-objectid');
 const {setup, disconnect, dbName} = require('./utils/mongo-client.js');
 
 const _queryTests = [].concat(
@@ -33,7 +32,7 @@ describe('Client Queries', function () {
                     .findOne({id: 1});
                 const details2 = await db
                     .collection('inventory')
-                    .findOne({_id: new ObjectID(details._id.toString())});
+                    .findOne({_id: details._id});
                 if (!details2) {
                     throw new Error('Invalid BSOJN Parse');
                 }
