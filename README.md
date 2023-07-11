@@ -16,7 +16,7 @@ npm i @synatic/noql
 
 ## Usage
 
-NoQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. To use the output object, construct a query with `MongoClient` from the [MongoDB NodeJS Driver](https://www.npmjs.com/package/mongodb): 
+NoQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. To use the output object, construct a query with `MongoClient` from the [MongoDB NodeJS Driver](https://www.npmjs.com/package/mongodb):
 
 ```js
 const SQLParser = require('@synatic/noql');
@@ -55,13 +55,14 @@ const {MongoClient} = require('mongodb');
 
 NoQL outputs an object with the type, either `query` or `aggregate`, along with the components of the Mongo query. Here are some examples of the output:
 
-For a straight query: 
+For a straight query:
 
 ```js
-SQLMongoParser.parseSQL("select id from `films` where `id` > 10 limit 10")
+SQLMongoParser.parseSQL('select id from `films` where `id` > 10 limit 10');
 ```
 
 NoQL will output:
+
 ```json
 {
     "limit": 10,
@@ -81,7 +82,9 @@ NoQL will output:
 For an aggregate query:
 
 ```js
-SQLMongoParser.makeMongoAggregate("select id from `films` where `id` > 10 group by id")
+SQLMongoParser.makeMongoAggregate(
+    'select id from `films` where `id` > 10 group by id'
+);
 ```
 
 NoQL will output:
@@ -110,17 +113,15 @@ NoQL will output:
             }
         }
     ],
-    "collections": [
-        "films"
-    ]
+    "collections": ["films"]
 }
 ```
 
 ## Currently Unsupported SQL Statements
 
-- Over
-- CTE's
-- Pivot
-- Union
+-   Over
+-   CTE's
+-   Pivot
+-   Union
 
 See more in the full docs at [https://noql.synatic.dev/](https://noql.synatic.dev/)

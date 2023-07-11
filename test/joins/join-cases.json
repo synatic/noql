@@ -849,12 +849,8 @@
       "expectedResults": [
         {
           "orderId": 1,
-          "inventoryId": [
-            1
-          ],
-          "customerId": [
-            1
-          ]
+          "inventoryId": [1],
+          "customerId": [1]
         }
       ]
     },
@@ -886,45 +882,27 @@
           "item": "almonds",
           "price": 12,
           "customerId": 1,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         },
         {
           "id": 2,
           "item": "pecans",
           "price": 20,
           "customerId": 2,
-          "inventoryId": [
-            4
-          ],
-          "sku": [
-            "pecans"
-          ],
-          "instock": [
-            70
-          ]
+          "inventoryId": [4],
+          "sku": ["pecans"],
+          "instock": [70]
         },
         {
           "id": 4,
           "item": "almonds",
           "price": 12,
           "customerId": 3,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
@@ -935,45 +913,27 @@
           "item": "almonds",
           "price": 12,
           "customerId": 1,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         },
         {
           "id": 2,
           "item": "pecans",
           "price": 20,
           "customerId": 2,
-          "inventoryId": [
-            4
-          ],
-          "sku": [
-            "pecans"
-          ],
-          "instock": [
-            70
-          ]
+          "inventoryId": [4],
+          "sku": ["pecans"],
+          "instock": [70]
         },
         {
           "id": 4,
           "item": "almonds",
           "price": 12,
           "customerId": 3,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
@@ -984,15 +944,9 @@
           "item": "almonds",
           "price": 12,
           "customerId": 1,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
@@ -1003,54 +957,32 @@
           "item": "almonds",
           "price": 12,
           "customerId": 1,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
     "basic-no-alias": {
       "expectedResults": [
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         }
       ]
@@ -1058,39 +990,23 @@
     "basic-reversed-no-alias": {
       "expectedResults": [
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         }
       ]
@@ -1098,60 +1014,32 @@
     "two-conditions-no-aliases": {
       "expectedResults": [
         {
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
     "two-conditions-both-reversed-no-aliases": {
       "expectedResults": [
         {
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         },
         {
-          "inventoryId": [
-            2
-          ],
-          "sku": [
-            "bread"
-          ],
-          "instock": [
-            80
-          ]
+          "inventoryId": [2],
+          "sku": ["bread"],
+          "instock": [80]
         },
         {
-          "inventoryId": [
-            4
-          ],
-          "sku": [
-            "pecans"
-          ],
-          "instock": [
-            70
-          ]
+          "inventoryId": [4],
+          "sku": ["pecans"],
+          "instock": [70]
         },
         {
-          "inventoryId": [
-            5
-          ],
-          "sku": [
-            null
-          ],
+          "inventoryId": [5],
+          "sku": [null],
           "instock": []
         }
       ]
@@ -1163,45 +1051,27 @@
           "item": "almonds",
           "price": 12,
           "customerId": 1,
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
     "two-conditions-inversed-no-alias": {
       "expectedResults": [
         {
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     },
     "two-conditions-inversed-no-alias-no-table-name": {
       "expectedResults": [
         {
-          "inventoryId": [
-            1
-          ],
-          "sku": [
-            "almonds"
-          ],
-          "instock": [
-            120
-          ]
+          "inventoryId": [1],
+          "sku": ["almonds"],
+          "instock": [120]
         }
       ]
     }
@@ -1210,10 +1080,7 @@
     "case1": {
       "expectedResults": [
         {
-          "c151": [
-            "first",
-            "third"
-          ],
+          "c151": ["first", "third"],
           "a0": 300
         }
       ]
