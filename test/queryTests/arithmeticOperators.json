@@ -307,10 +307,7 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$min": [
-            "$id",
-            "$col"
-          ]
+          "$min": ["$id", "$col"]
         }
       },
       "collection": "films"
@@ -325,16 +322,12 @@
         "$expr": {
           "$gt": [
             {
-              "$min": [
-                "$id",
-                "$col"
-              ]
+              "$min": ["$id", "$col"]
             },
             0
           ]
         }
-      }
-    ,
+      },
       "collection": "films"
     },
     "query": "select * from `films` where MIN(`id`,`col`) > 0"
@@ -345,10 +338,7 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$max": [
-            "$id",
-            "$col"
-          ]
+          "$max": ["$id", "$col"]
         }
       },
       "collection": "films"
@@ -363,16 +353,12 @@
         "$expr": {
           "$gt": [
             {
-              "$max": [
-                "$id",
-                "$col"
-              ]
+              "$max": ["$id", "$col"]
             },
             0
           ]
         }
-      }
-    ,
+      },
       "collection": "films"
     },
     "query": "select * from `films` where max(`id`,`col`) > 0"
@@ -383,10 +369,7 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$add": [
-            "$id",
-            "$col"
-          ]
+          "$add": ["$id", "$col"]
         }
       },
       "collection": "films"
@@ -401,16 +384,12 @@
         "$expr": {
           "$gt": [
             {
-              "$add": [
-                "$id",
-                "$col"
-              ]
+              "$add": ["$id", "$col"]
             },
             0
           ]
         }
-      }
-    ,
+      },
       "collection": "films"
     },
     "query": "select * from `films` where sum(`id`,`col`) > 0"
@@ -421,10 +400,7 @@
       "limit": 100,
       "projection": {
         "exprVal": {
-          "$avg": [
-            "$id",
-            "$col"
-          ]
+          "$avg": ["$id", "$col"]
         }
       },
       "collection": "films"
@@ -439,16 +415,12 @@
         "$expr": {
           "$gt": [
             {
-              "$avg": [
-                "$id",
-                "$col"
-              ]
+              "$avg": ["$id", "$col"]
             },
             0
           ]
         }
-      }
-    ,
+      },
       "collection": "films"
     },
     "query": "select * from `films` where avg(`id`,`col`) > 0"

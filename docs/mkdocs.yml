@@ -97,26 +97,26 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
       emoji_index: !!python/name:materialx.emoji.twemoji
 nav:
-    - Home: index.md
-    - SQL Syntax:
-        - Introduction: sql-syntax/introduction.md
-        - Objects: sql-syntax/objects.md
-        - Arrays: sql-syntax/arrays.md
-        - Where Clause: sql-syntax/where-clause.md
-        - Order By Clause: sql-syntax/order-by-clause.md
-        - Joins: sql-syntax/joins.md
-        - Aggregates: sql-syntax/aggregates.md
-        - Comparison Operators: sql-syntax/comparison-operators.md
-        - Field Functions: sql-syntax/field-functions.md
-        - String Functions: sql-syntax/string-functions.md
-        - Date Functions: sql-syntax/date-functions.md
-        - Mathematical Operators: sql-syntax/mathematical-operators.md
-        - Mathematical Functions: sql-syntax/mathematical-functions.md
-        - Conversion Functions: sql-syntax/conversion-functions.md
-        - Window Functions: sql-syntax/window-functions.md
-        - Limits and Offsets: sql-syntax/limits-and-offsets.md
-        - Union: sql-syntax/union.md
-    - Playground: playground/index.md
-    - JS Library:
-        - Getting Started: js-library/getting-started.md
-        - API: js-library/api-reference.md
+  - Home: index.md
+  - SQL Syntax:
+      - Introduction: sql-syntax/introduction.md
+      - Objects: sql-syntax/objects.md
+      - Arrays: sql-syntax/arrays.md
+      - Where Clause: sql-syntax/where-clause.md
+      - Order By Clause: sql-syntax/order-by-clause.md
+      - Joins: sql-syntax/joins.md
+      - Aggregates: sql-syntax/aggregates.md
+      - Comparison Operators: sql-syntax/comparison-operators.md
+      - Field Functions: sql-syntax/field-functions.md
+      - String Functions: sql-syntax/string-functions.md
+      - Date Functions: sql-syntax/date-functions.md
+      - Mathematical Operators: sql-syntax/mathematical-operators.md
+      - Mathematical Functions: sql-syntax/mathematical-functions.md
+      - Conversion Functions: sql-syntax/conversion-functions.md
+      - Window Functions: sql-syntax/window-functions.md
+      - Limits and Offsets: sql-syntax/limits-and-offsets.md
+      - Union: sql-syntax/union.md
+  - Playground: playground/index.md
+  - JS Library:
+      - Getting Started: js-library/getting-started.md
+      - API: js-library/api-reference.md

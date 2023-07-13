@@ -1,4 +1,4 @@
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectId} = require('mongodb');
 const $check = require('check-types');
 const $schema = require('@synatic/schema-magic');
 const fs = require('fs/promises');
@@ -57,6 +57,11 @@ async function addTestData() {
         const filePath = Path.join(dataDirectory, file);
         const dataString = await fs.readFile(filePath, {encoding: 'utf-8'});
         const data = JSON.parse(dataString);
+        for (const item of data) {
+            if (item._id && typeof item._id === 'string') {
+                item._id = new ObjectId(item._id);
+            }
+        }
         await db.collection(collectionName).bulkWrite(
             data.map((d) => {
                 return {insertOne: {document: parseDocForDates(d)}};

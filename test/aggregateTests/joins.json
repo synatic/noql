@@ -1072,12 +1072,8 @@
           }
         }
       ],
-      "collections": [
-        "customers",
-        "customer-notes"
-      ],
+      "collections": ["customers", "customer-notes"],
       "type": "aggregate"
-
     }
   }
 ]

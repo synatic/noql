@@ -51,7 +51,7 @@ describe('SQL Parser', function () {
             } catch (exp) {
                 return assert.equal(
                     exp.message,
-                    '[Start: Line 1, Col:11][End: Line 1, Col:12] - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GO", "GROUP", "HAVING", "INTO", "LIMIT", "LOCK", "ORDER", "UNION", "WHERE", "WINDOW", [ \\t\\n\\r], or end of input but "`" found.'
+                    '[Start: Line 1, Col:11][End: Line 1, Col:12] - Expected "#", ",", "--", "/*", ";", "FOR", "FROM", "GO", "GROUP", "HAVING", "INTERSECT", "INTO", "LIMIT", "LOCK", "MINUS", "ORDER", "UNION", "WHERE", "WINDOW", [ \\t\\n\\r], or end of input but "`" found.'
                 );
             }
             assert(false, 'No error');

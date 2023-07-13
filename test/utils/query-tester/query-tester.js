@@ -90,7 +90,7 @@ function checkForMongoTypes(obj, ignoreDateValues) {
             } else if (value._bsontype) {
                 if (value._bsontype === 'Decimal128') {
                     obj[key] = Number(value.toString());
-                } else if (value._bsontype === 'ObjectID') {
+                } else if (value._bsontype.toLowerCase() === 'objectid') {
                     obj[key] = value.toString();
                 } else {
                     throw new Error(
