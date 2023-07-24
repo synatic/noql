@@ -322,6 +322,33 @@
           }
         ]
       }
+    },
+    "object_to_array": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 1,
+            "test": [
+              {
+                "k": "Address",
+                "v": "1913 Hanoi Way"
+              },
+              {
+                "k": "City",
+                "v": "Sasebo"
+              },
+              {
+                "k": "Country",
+                "v": "Japan"
+              },
+              {
+                "k": "District",
+                "v": "Nagasaki"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

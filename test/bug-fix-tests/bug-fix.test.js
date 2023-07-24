@@ -334,4 +334,18 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('OBJECT_TO_ARRAY', () => {
+        it('should be able to convert a string object id to an actual ObjectId', async () => {
+            const queryString = `
+                SELECT  id,
+                        OBJECT_TO_ARRAY(Address) as test,
+                        unset(_id)
+                FROM customers LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.object_to_array.case1',
+            });
+        });
+    });
 });

@@ -12,8 +12,10 @@ let client;
 let db;
 
 async function connect() {
+    console.log('About to connect to db');
     client = new MongoClient(connectionString);
     await client.connect();
+    console.log('Connected!');
     db = client.db(dbName);
 }
 
