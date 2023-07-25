@@ -1,5 +1,5 @@
 import {MongoClient, Document} from 'mongodb';
-import {PipelineFn} from '../../../lib/types';
+import {PipelineFn, GetSchemaFunction} from '../../../lib/types';
 
 /** Options to use when running the function to test/generate test outputs */
 export interface BuildQueryResultOptions {
@@ -26,6 +26,8 @@ export interface QueryResultOptions {
     ignoreDateValues?: boolean;
     /** Specifies if the pipeline should be written to the file, useful for debugging */
     outputPipeline?: boolean;
+    /** Specifies a getSchema function if the library should use that to produce better queries */
+    getSchemaFunction?: GetSchemaFunction;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &

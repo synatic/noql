@@ -1,5 +1,5 @@
 import type {Document, Sort} from 'mongodb';
-import type {} from 'node-sql-parser';
+
 export interface TableColumnAst {
     tableList?: string[];
     columnList?: string[];
@@ -175,14 +175,31 @@ export interface SetWindowFields {
 
 export type ParserInput = TableColumnAst | string;
 export type ParserOptions = {
+    /** Only used in canQuery */
     isArray?: boolean;
-    /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select */
+    /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select or join */
     unwindJoins?: boolean;
+    /** Specifies the type of database that Nodejs SQL Parser will use, e.g. 'PostgresQL' */
     database?: string;
+    /** Specifies the type that Nodejs SQL Parser will use e.g. 'table', 'column'*/
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
     unsetId?: boolean;
+    /** If provided, the library will use the schema to generate better queries */
+    getSchemaFunction?: GetSchemaFunction;
 };
+
+export interface NoqlContext {
+    /** If provided, the library will use the schema to generate better queries */
+    getSchemaFunction?: GetSchemaFunction;
+    rawStatement?: string;
+    cleanedStatement?: string;
+}
+
+export interface ParseResult {
+    parsedAst: TableColumnAst;
+    context: NoqlContext;
+}
 
 export interface ColumnParseResult {
     replaceRoot?: {
@@ -273,6 +290,10 @@ export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
 
+export interface FlattenedSchemas {
+    [collectionName: string]: FlattenedSchema[];
+}
+
 export interface FlattenedSchema {
     /** The path to the field within the document/json object */
     path: string;
@@ -284,9 +305,6 @@ export interface FlattenedSchema {
     isArray: boolean;
     /** Specifies if it's a required field or not */
     required: boolean;
-}
-export interface FlattenedSchemas {
-    [key: string]: FlattenedSchema[];
 }
 
 export interface ResultSchema extends FlattenedSchema {

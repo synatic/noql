@@ -33,6 +33,14 @@ describe('bug-fixes', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
+
+    async function getSchema(collectionName) {
+        const doc = await database
+            .collection('schemas')
+            .findOne({collectionName});
+        return doc.flattenedSchema;
+    }
+
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -345,6 +353,23 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.object_to_array.case1',
+            });
+        });
+    });
+    describe('schema-aware-queries', () => {
+        it('should be able to cast a JSON array to a varchar', async () => {
+            const queryString = `
+                SELECT  cast(values as varchar) as valuesString,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath:
+                    'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
+                mode: 'write',
+                getSchemaFunction: getSchema,
             });
         });
     });

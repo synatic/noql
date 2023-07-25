@@ -171,5 +171,9 @@
   {
     "value": "E",
     "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "values": [{"value": 1}, {"value": 2}, {"value": 3}, {"value": 4}],
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   }
 ]
