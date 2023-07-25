@@ -187,4 +187,165 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('coalesce', () => {
+        it('Should correctly coalesce the results for numbers', async () => {
+            const queryString = `
+                SELECT  coalesce(price,0) as Price,
+                        coalesce(null,null,3,0) as inlineValue,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.coalesce.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.coalesce.case1',
+            });
+        });
+    });
+
+    describe('rank', () => {
+        it('Should correctly rank the results without a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        RANK () OVER (
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.rank.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        RANK () OVER (
+                            PARTITION BY testId
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.rank.case2',
+            });
+        });
+    });
+    describe('dense rank', () => {
+        it('Should correctly rank the results without a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        DENSE_RANK () OVER (
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.dense-rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.dense-rank.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        DENSE_RANK () OVER (
+                            PARTITION BY testId
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.dense-rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.dense-rank.case2',
+            });
+        });
+    });
+    describe('row number', () => {
+        it('Should correctly rank the results without a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        ROW_NUMBER() OVER (
+                            ORDER BY value
+                        ) row_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.row-number.case1',
+            });
+        });
+        it('Should correctly rank the results with a partition by', async () => {
+            const queryString = `
+                SELECT  value,
+                        ROW_NUMBER () OVER (
+                            PARTITION BY value
+                            ORDER BY value
+                        ) rank_number,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.rank.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.row-number.case2',
+            });
+        });
+    });
+    // describe('ntile', () => {
+    //     it('Should correctly group the results', async () => {
+    //         const queryString = `
+    //             SELECT  name,
+    //                     amount,
+    //                     NTILE (3) OVER (
+    //                         ORDER BY amount
+    //                     ) ntile,
+    //                     unset(_id)
+    //             FROM function-test-data
+    //             WHERE testId='bugfix.ntile.case1'
+    //         `;
+    //         await queryResultTester({
+    //             queryString: queryString,
+    //             casePath: 'bugfix.row-number.case1',
+    //             mode: 'write',
+    //         });
+    //     });
+    // });
+    describe('to_objectid', () => {
+        it('should be able to convert a string object id to an actual ObjectId', async () => {
+            const queryString = `
+                    SELECT to_objectid('61b0fdcbdee485f7c0682db6') as i
+                    FROM customers
+                    WHERE _id = to_objectid('61b0fdcbdee485f7c0682db6')
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.to_objectid.case1',
+            });
+        });
+    });
+    describe('OBJECT_TO_ARRAY', () => {
+        it('should be able to convert a string object id to an actual ObjectId', async () => {
+            const queryString = `
+                SELECT  id,
+                        OBJECT_TO_ARRAY(Address) as test,
+                        unset(_id)
+                FROM customers LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.object_to_array.case1',
+            });
+        });
+    });
 });

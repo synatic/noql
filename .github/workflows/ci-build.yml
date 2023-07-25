@@ -23,8 +23,8 @@ jobs:
           - 27017:27017
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
@@ -45,8 +45,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
@@ -62,4 +62,3 @@ jobs:
     name: Build and Publish Docs
     needs: build
     uses: ./.github/workflows/ci-docs.yml
-

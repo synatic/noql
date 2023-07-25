@@ -362,7 +362,7 @@ describe('Individual tests', function () {
                 const results = await mongoClient
                     .db(dbName)
                     .collection(parsedQuery.collection)
-                    .find(parsedQuery.query || null, {
+                    .find(parsedQuery.query || {}, {
                         projection: parsedQuery.projection,
                     })
                     .sort()
@@ -446,7 +446,7 @@ describe('Individual tests', function () {
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collection)
-                .find(parsedQuery.query || null, {
+                .find(parsedQuery.query || {}, {
                     projection: parsedQuery.projection,
                 })
                 .limit(parsedQuery.limit)

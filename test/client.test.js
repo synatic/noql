@@ -1,5 +1,4 @@
 const SQLParser = require('../lib/SQLParser.js');
-const ObjectID = require('bson-objectid');
 const {setup, disconnect, dbName} = require('./utils/mongo-client.js');
 
 const _queryTests = [].concat(
@@ -13,6 +12,7 @@ const _queryTests = [].concat(
     require('./queryTests/comparisonOperators.json'),
     require('./queryTests/columnOperators.json')
 );
+
 const _aggregateTests = [].concat(
     require('./aggregateTests/aggregateTests.json'),
     require('./aggregateTests/joins.json')
@@ -33,7 +33,7 @@ describe('Client Queries', function () {
                     .findOne({id: 1});
                 const details2 = await db
                     .collection('inventory')
-                    .findOne({_id: new ObjectID(details._id.toString())});
+                    .findOne({_id: details._id});
                 if (!details2) {
                     throw new Error('Invalid BSOJN Parse');
                 }
@@ -65,13 +65,13 @@ describe('Client Queries', function () {
                                 const count = await mongoClient
                                     .db(dbName)
                                     .collection(parsedQuery.collection)
-                                    .countDocuments(parsedQuery.query || null);
+                                    .countDocuments(parsedQuery.query || {});
                                 console.log(`${count}`);
                             } else {
                                 const find = mongoClient
                                     .db(dbName)
                                     .collection(parsedQuery.collection)
-                                    .find(parsedQuery.query || null, {
+                                    .find(parsedQuery.query || {}, {
                                         projection: parsedQuery.projection,
                                     });
                                 if (parsedQuery.sort) {

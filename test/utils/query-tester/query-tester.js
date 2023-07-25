@@ -43,6 +43,7 @@ async function queryResultTester(options) {
         dirName,
         expectZeroResults,
         ignoreDateValues = false,
+        outputPipeline = false,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -51,18 +52,31 @@ async function queryResultTester(options) {
         database: 'PostgresQL',
     });
     const filePath = $path.resolve(dirName, fileName);
-    const results = await mongoClient
-        .db(dbName)
-        .collection(collections[0])
-        .aggregate(pipeline)
-        .toArray();
+    /** @type {import('mongodb').Document[]} */
+    let results = [];
+    try {
+        results = await mongoClient
+            .db(dbName)
+            .collection(collections[0])
+            .aggregate(pipeline)
+            .toArray();
+    } catch (err) {
+        console.error(err);
+    }
     if (!expectZeroResults) {
         assert(results.length);
     }
     results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     const obj = await readCases(filePath);
-    if (mode === 'write' && !expectZeroResults) {
-        set(obj, casePath + '.expectedResults', results);
+    if (mode === 'write') {
+        if (outputPipeline) {
+            set(obj, casePath + '.pipeline', pipeline);
+        } else {
+            set(obj, casePath + '.pipeline', undefined);
+        }
+        if (!expectZeroResults) {
+            set(obj, casePath + '.expectedResults', results);
+        }
         await writeFile(filePath, obj);
     }
     if (!expectZeroResults) {
@@ -90,7 +104,7 @@ function checkForMongoTypes(obj, ignoreDateValues) {
             } else if (value._bsontype) {
                 if (value._bsontype === 'Decimal128') {
                     obj[key] = Number(value.toString());
-                } else if (value._bsontype === 'ObjectID') {
+                } else if (value._bsontype.toLowerCase() === 'objectid') {
                     obj[key] = value.toString();
                 } else {
                     throw new Error(

@@ -16,7 +16,8 @@ export type ExpressionTypes =
     | 'expr_list'
     | 'else'
     | 'when'
-    | 'unary_expr';
+    | 'unary_expr'
+    | 'window_func';
 
 export interface AST extends Expression {
     _next?: AST;
@@ -77,6 +78,28 @@ export interface Expression {
     cond?: Expression;
     result?: Expression;
     target?: any;
+    over?: {
+        as_window_specification: {
+            parentheses: boolean;
+            window_specification: {
+                name: string | null;
+                orderby: {
+                    expr: Expression;
+                    nulls: null;
+                    type: 'ASC' | 'DESC';
+                }[];
+                partitionby:
+                    | {
+                          expr: Expression;
+                          type: string;
+                          as: string | null;
+                      }[]
+                    | null;
+                window_frame_clause: any;
+            };
+        };
+        type: 'window';
+    };
 }
 
 export type Columns = '*' | Column[];
@@ -139,6 +162,15 @@ export interface PipelineFn {
     $count?: any;
     $unionWith?: any;
     $set?: any;
+    $setWindowFields?: SetWindowFields;
+}
+
+export interface SetWindowFields {
+    partitionBy?: string;
+    sortBy: {[key: string]: -1 | 1};
+    output: {
+        [key: string]: any;
+    };
 }
 
 export type ParserInput = TableColumnAst | string;
@@ -169,7 +201,10 @@ export interface ColumnParseResult {
     unwind: {$unset?: string; $unwind?: string}[];
     parsedProject: {
         $project: {
-            [key: string]: string | {$literal: string};
+            [key: string]:
+                | string
+                | {$literal: string}
+                | {[key: string]: string};
         };
     };
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
@@ -177,11 +212,14 @@ export interface ColumnParseResult {
     unset: {$unset: string[]};
     countDistinct: string;
     groupByProject?: object;
+    windowFields: SetWindowFields[];
 }
 
 export interface MongoQueryFunction {
     /** The name of the function as it will be used in sql, case insensitive, e.g. abs */
     name: string;
+    /** List of aliases that can also be used to call this function */
+    aliases?: string[];
     /** A description of what the function does */
     description?: string;
     /** Allow the function to be used in mongo query/find and not just aggregate pipelines, default: false */
