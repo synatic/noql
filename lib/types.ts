@@ -1,4 +1,5 @@
 import type {Document, Sort} from 'mongodb';
+import {Ast} from 'node-sql-parser';
 
 export interface TableColumnAst {
     tableList?: string[];
@@ -185,13 +186,13 @@ export type ParserOptions = {
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
     unsetId?: boolean;
-    /** If provided, the library will use the schema to generate better queries */
-    getSchemaFunction?: GetSchemaFunction;
+    /** If provided, the library will use the schemas to generate better queries */
+    schemas?: FlattenedSchemas;
 };
 
 export interface NoqlContext {
-    /** If provided, the library will use the schema to generate better queries */
-    getSchemaFunction?: GetSchemaFunction;
+    /** If provided, the library will use the schemas to generate better queries */
+    schemas?: FlattenedSchemas;
     rawStatement?: string;
     cleanedStatement?: string;
 }
