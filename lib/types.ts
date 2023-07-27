@@ -175,7 +175,7 @@ export interface SetWindowFields {
 }
 
 export type ParserInput = TableColumnAst | string;
-export type ParserOptions = {
+export interface ParserOptions {
     /** Only used in canQuery */
     isArray?: boolean;
     /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select or join */
@@ -188,12 +188,12 @@ export type ParserOptions = {
     unsetId?: boolean;
     /** If provided, the library will use the schemas to generate better queries */
     schemas?: FlattenedSchemas;
-};
+}
 
-export interface NoqlContext {
-    /** If provided, the library will use the schemas to generate better queries */
-    schemas?: FlattenedSchemas;
+export interface NoqlContext extends ParserOptions {
+    /** The raw SQL statement before being cleaned up or altered */
     rawStatement?: string;
+    /** The cleaned SQL statement */
     cleanedStatement?: string;
 }
 
@@ -320,3 +320,9 @@ export interface ResultSchema extends FlattenedSchema {
 export type GetSchemaFunction = (
     collectionName: string
 ) => Promise<FlattenedSchema[]>;
+
+export type GroupByColumnParserFn = (
+    expr: Expression,
+    depth: number,
+    aggrName: string
+) => void;
