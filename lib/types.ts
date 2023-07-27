@@ -195,6 +195,7 @@ export interface NoqlContext extends ParserOptions {
     rawStatement?: string;
     /** The cleaned SQL statement */
     cleanedStatement?: string;
+    tables: string[];
 }
 
 export interface ParseResult {
@@ -326,3 +327,5 @@ export type GroupByColumnParserFn = (
     depth: number,
     aggrName: string
 ) => void;
+
+export type GetTables = (subAst: AST, context: NoqlContext) => string[];

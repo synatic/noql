@@ -37,17 +37,21 @@ describe('bug-fixes', function () {
         disconnect().then(done).catch(done);
     });
 
-    async function getAllSchemas(collectionName) {
+    async function getAllSchemas() {
         /** @type {import('../../lib/types').FlattenedSchemas} */
         const result = {};
         const collections = await database.collections();
-        for (const collection of collections) {
-            result[collection.collectionName] = await database
+        const collectionNames = collections
+            .map((c) => c.collectionName)
+            .filter((c) => c !== 'schemas');
+        for (const collectionName of collectionNames) {
+            const searchResult = await database
                 .collection('schemas')
                 .findOne(
-                    {collectionName: collection.collectionName},
+                    {collectionName},
                     {projection: {_id: 0, flattenedSchema: 1}}
                 );
+            result[collectionName] = searchResult.flattenedSchema;
         }
 
         return result;
@@ -382,7 +386,7 @@ describe('bug-fixes', function () {
     //             casePath:
     //                 'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
     //             mode: 'write',
-    //             getSchemaFunction: getSchema,
+    //             schemas: await getAllSchemas(),
     //         });
     //     });
     // });
