@@ -173,7 +173,19 @@
     "testId": "bugfix.dense-rank.case1"
   },
   {
-    "values": [{"value": 1}, {"value": 2}, {"value": 3}, {"value": 4}],
+    "jsonArrayValues": [
+      {
+        "string": "Testing",
+        "stringArray": ["a", "b"]
+      },
+      {
+        "string": "",
+        "stringArray": []
+      },
+      {
+        "string": null
+      }
+    ],
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   }
 ]

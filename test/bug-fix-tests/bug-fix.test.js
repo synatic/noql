@@ -57,6 +57,27 @@ describe('bug-fixes', function () {
         return result;
     }
 
+    // /**
+    //  *
+    //  * @param  {...string} collectionNames
+    //  * @returns
+    //  */
+    // async function getSchemas(...collectionNames) {
+    //     /** @type {import('../../lib/types').FlattenedSchemas} */
+    //     const result = {};
+    //     for (const collectionName of collectionNames) {
+    //         const searchResult = await database
+    //             .collection('schemas')
+    //             .findOne(
+    //                 {collectionName},
+    //                 {projection: {_id: 0, flattenedSchema: 1}}
+    //             );
+    //         result[collectionName] = searchResult.flattenedSchema;
+    //     }
+
+    //     return result;
+    // }
+
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -376,7 +397,7 @@ describe('bug-fixes', function () {
     // describe('schema-aware-queries', () => {
     //     it('should be able to cast a JSON array to a varchar', async () => {
     //         const queryString = `
-    //             SELECT  cast(values as varchar) as valuesString,
+    //             SELECT  cast(jsonArrayValues as varchar) as valuesString,
     //                     unset(_id)
     //             FROM function-test-data
     //             WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'
@@ -387,6 +408,7 @@ describe('bug-fixes', function () {
     //                 'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
     //             mode: 'write',
     //             schemas: await getAllSchemas(),
+    //             outputPipeline: true,
     //         });
     //     });
     // });

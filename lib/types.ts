@@ -1,5 +1,5 @@
 import type {Document, Sort} from 'mongodb';
-import {Ast} from 'node-sql-parser';
+import {JSONSchema6TypeName} from 'json-schema';
 
 export interface TableColumnAst {
     tableList?: string[];
@@ -300,7 +300,7 @@ export interface FlattenedSchema {
     /** The path to the field within the document/json object */
     path: string;
     /** The JsonSchema type */
-    type: JSONSchemaTypeName | JSONSchemaTypeName[];
+    type: JSONSchema6TypeName | JSONSchema6TypeName[];
     /** The JsonSchema format if it's a string */
     format?: string | 'date-time' | 'mongoid';
     /** Specifies if the field is an array or not */

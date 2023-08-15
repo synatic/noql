@@ -355,20 +355,67 @@
         "case1": {
           "expectedResults": [
             {
-              "values": [
-                {
-                  "value": 1
-                },
-                {
-                  "value": 2
-                },
-                {
-                  "value": 3
-                },
-                {
-                  "value": 4
+              "valuesString": "{\"string\":\"Testing\"\"stringArray.n\":\"\"$$this.stringArray.n\"\"},{\"string\":\"null\"\"stringArray.n\":\"\"$$this.stringArray.n\"\"},{\"string\":\"null\"\"stringArray.n\":\"\"$$this.stringArray.n\"\"}"
+            }
+          ],
+          "pipeline": [
+            {
+              "$match": {
+                "testId": {
+                  "$eq": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
                 }
+              }
+            },
+            {
+              "$unset": [
+                "_id"
               ]
+            },
+            {
+              "$project": {
+                "valuesString": {
+                  "$reduce": {
+                    "input": "$jsonArrayValues",
+                    "initialValue": "",
+                    "in": {
+                      "$concat": [
+                        "$$value",
+                        {
+                          "$cond": [
+                            {
+                              "$eq": [
+                                "$$value",
+                                ""
+                              ]
+                            },
+                            "",
+                            ","
+                          ]
+                        },
+                        "{",
+                        "\"string\":\"",
+                        {
+                          "$cond": [
+                            {
+                              "$eq": [
+                                "$$value",
+                                ""
+                              ]
+                            },
+                            "$$this.string",
+                            "null"
+                          ]
+                        },
+                        "\"",
+                        "\"stringArray.n\":\"",
+                        "\"$$this.stringArray.n\"",
+                        "\"",
+                        "}"
+                      ]
+                    }
+                  }
+                }
+              }
             }
           ]
         }
