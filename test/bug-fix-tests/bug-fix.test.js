@@ -353,13 +353,12 @@ describe('bug-fixes', function () {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)
-                FROM function-test-data
-                WHERE parameter = \`Isn't a "bug" just $\`
+                FROM function-test-data ftd
+                WHERE ftd.parameter = \`Isn't a "bug" just $\`
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case1',
-                mode: 'write',
             });
         });
         it('should be able to do a like statement with lots of special characters', async () => {
@@ -372,6 +371,19 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case2',
+            });
+        });
+        it('should work for example 1', async () => {
+            const queryString = `
+                SELECT  id,
+                        (f.id + f.Length + 2) as val,
+                        unset(_id)
+                FROM films f
+                where id>1 limit 2
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case3',
             });
         });
     });

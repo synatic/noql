@@ -63,9 +63,6 @@ async function queryResultTester(options) {
     } catch (err) {
         console.error(err);
     }
-    if (!expectZeroResults) {
-        assert(results.length);
-    }
     results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     const obj = await readCases(filePath);
     if (mode === 'write') {
@@ -80,6 +77,7 @@ async function queryResultTester(options) {
         await writeFile(filePath, obj);
     }
     if (!expectZeroResults) {
+        assert(results.length);
         const expectedResults = get(obj, casePath + '.expectedResults');
         assert.deepStrictEqual(results, expectedResults);
     }

@@ -364,6 +364,18 @@
             "parameter": "Isn't a \"bug\" just $"
           }
         ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "val": 52
+          },
+          {
+            "id": 3,
+            "val": 55
+          }
+        ]
       }
     }
   }
