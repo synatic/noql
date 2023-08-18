@@ -7,9 +7,9 @@ describe('bug-fixes', function () {
     /** @type {'test'|'write'} */
     const mode = 'test';
     const dirName = __dirname;
-    /** @type {import('../utils/query-tester/types.js').QueryResultTester} */
+    /** @type {import("../utils/query-tester/types.js").QueryResultTester} */
     let queryResultTester;
-    /** @type {import('mongodb').MongoClient} */
+    /** @type {import("mongodb").MongoClient} */
     let mongoClient;
     before(function (done) {
         const run = async () => {
@@ -345,6 +345,33 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.object_to_array.case1',
+            });
+        });
+    });
+    describe('Injected parameters with special characters', () => {
+        it('should be able to do a where statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter = \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case1',
+                mode: 'write',
+            });
+        });
+        it('should be able to do a like statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter like \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case2',
             });
         });
     });

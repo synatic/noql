@@ -171,5 +171,9 @@
   {
     "value": "E",
     "testId": "bugfix.dense-rank.case1"
+  },
+  {
+    "parameter": "Isn't a \"bug\" just $",
+    "testId": "bugfix.special-char-parameters.case1"
   }
 ]

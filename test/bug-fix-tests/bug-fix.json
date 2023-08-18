@@ -349,6 +349,22 @@
           }
         ]
       }
+    },
+    "special-char-parameters": {
+      "case1": {
+        "expectedResults": [
+          {
+            "parameter": "Isn't a \"bug\" just $"
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "parameter": "Isn't a \"bug\" just $"
+          }
+        ]
+      }
     }
   }
 }
