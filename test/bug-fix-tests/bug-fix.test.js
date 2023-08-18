@@ -7,9 +7,9 @@ describe('bug-fixes', function () {
     /** @type {'test'|'write'} */
     const mode = 'test';
     const dirName = __dirname;
-    /** @type {import('../utils/query-tester/types.js').QueryResultTester} */
+    /** @type {import("../utils/query-tester/types.js").QueryResultTester} */
     let queryResultTester;
-    /** @type {import('mongodb').MongoClient} */
+    /** @type {import("mongodb").MongoClient} */
     let mongoClient;
     /** @type {import('mongodb').Db} */
     let database;
@@ -393,7 +393,46 @@ describe('bug-fixes', function () {
             });
         });
     });
-    // https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
+    describe('Injected parameters with special characters', () => {
+        it('should be able to do a where statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data ftd
+                WHERE ftd.parameter = \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case1',
+            });
+        });
+        it('should be able to do a like statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter like \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case2',
+            });
+        });
+        it('should work for example 1', async () => {
+            const queryString = `
+                SELECT  id,
+                        (f.id + f.Length + 2) as val,
+                        unset(_id)
+                FROM films f
+                where id>1 limit 2
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case3',
+            });
+        });
+    });
+// https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
     // describe('schema-aware-queries', () => {
     //     it('should be able to cast a JSON array to a varchar', async () => {
     //         const queryString = `
