@@ -11,7 +11,7 @@ describe('bug-fixes', function () {
     let queryResultTester;
     /** @type {import("mongodb").MongoClient} */
     let mongoClient;
-    /** @type {import('mongodb').Db} */
+    /** @type {import("mongodb").Db} */
     let database;
     before(function (done) {
         const run = async () => {
@@ -38,7 +38,7 @@ describe('bug-fixes', function () {
     });
 
     async function getAllSchemas() {
-        /** @type {import('../../lib/types').FlattenedSchemas} */
+        /** @type {import("../../lib/types").FlattenedSchemas} */
         const result = {};
         const collections = await database.collections();
         const collectionNames = collections
@@ -432,7 +432,7 @@ describe('bug-fixes', function () {
             });
         });
     });
-// https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
+    // https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
     // describe('schema-aware-queries', () => {
     //     it('should be able to cast a JSON array to a varchar', async () => {
     //         const queryString = `
