@@ -38,7 +38,7 @@ describe('bug-fixes', function () {
     });
 
     async function getAllSchemas() {
-        /** @type {import("../../lib/types").FlattenedSchemas} */
+        /** @type {import("../../lib/types").Schemas} */
         const result = {};
         const collections = await database.collections();
         const collectionNames = collections
@@ -47,11 +47,8 @@ describe('bug-fixes', function () {
         for (const collectionName of collectionNames) {
             const searchResult = await database
                 .collection('schemas')
-                .findOne(
-                    {collectionName},
-                    {projection: {_id: 0, flattenedSchema: 1}}
-                );
-            result[collectionName] = searchResult.flattenedSchema;
+                .findOne({collectionName}, {projection: {_id: 0, schema: 1}});
+            result[collectionName] = searchResult.schema;
         }
 
         return result;
@@ -433,22 +430,22 @@ describe('bug-fixes', function () {
         });
     });
     // https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
-    // describe('schema-aware-queries', () => {
-    //     it('should be able to cast a JSON array to a varchar', async () => {
-    //         const queryString = `
-    //             SELECT  cast(jsonArrayValues as varchar) as valuesString,
-    //                     unset(_id)
-    //             FROM function-test-data
-    //             WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'
-    //         `;
-    //         await queryResultTester({
-    //             queryString: queryString,
-    //             casePath:
-    //                 'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
-    //             mode: 'write',
-    //             schemas: await getAllSchemas(),
-    //             outputPipeline: true,
-    //         });
-    //     });
-    // });
+    describe('schema-aware-queries', () => {
+        it('should be able to cast a JSON array to a varchar', async () => {
+            const queryString = `
+                SELECT  cast(jsonArrayValues as varchar) as valuesString,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath:
+                    'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
+                mode: 'write',
+                schemas: await getAllSchemas(),
+                outputPipeline: true,
+            });
+        });
+    });
 });

@@ -1,6 +1,7 @@
 import type {Document, Sort} from 'mongodb';
-import {JSONSchema6TypeName} from 'json-schema';
+import {JSONSchema6TypeName, JSONSchema6} from 'json-schema';
 
+export {JSONSchema6};
 export interface TableColumnAst {
     tableList?: string[];
     columnList?: string[];
@@ -187,7 +188,7 @@ export interface ParserOptions {
     /** force the unset of the _id field if it's not in the select list */
     unsetId?: boolean;
     /** If provided, the library will use the schemas to generate better queries */
-    schemas?: FlattenedSchemas;
+    schemas?: Schemas;
 }
 
 export interface NoqlContext extends ParserOptions {
@@ -294,6 +295,9 @@ export type JsonSchemaTypeMap = {
 
 export interface FlattenedSchemas {
     [collectionName: string]: FlattenedSchema[];
+}
+export interface Schemas {
+    [collectionName: string]: JSONSchema6;
 }
 
 export interface FlattenedSchema {
