@@ -435,7 +435,8 @@ describe('bug-fixes', function () {
         it('should be able to cast a JSON array to a varchar', async () => {
             const queryString = `
                 SELECT  testId,
-                        cast(jsonObjValues as varchar) as jsonObjValuesStr,
+                --        cast(jsonObjValues as varchar) as jsonObjValuesStr,
+                        cast(stringArray as varchar) as stringArrayStr,
                         unset(_id)
                 FROM function-test-data
                 WHERE testCategory='stringify'

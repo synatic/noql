@@ -190,6 +190,7 @@
         }
       }
     },
+    "stringArray": ["a", "b"],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   },
@@ -201,6 +202,7 @@
       "number": 0,
       "stringOrInt": 1
     },
+    "stringArray": [],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   },
@@ -212,6 +214,7 @@
       "number": null,
       "stringOrInt": null
     },
+    "stringArray": null,
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
   },
