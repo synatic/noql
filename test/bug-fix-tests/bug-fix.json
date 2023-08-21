@@ -397,12 +397,12 @@
             {
               "$project": {
                 "testId": "$testId",
-                "stringArrayStr": {
+                "numberArrayStr": {
                   "$concat": [
                     "[",
                     {
                       "$reduce": {
-                        "input": "$stringArray",
+                        "input": "$numberArray",
                         "initialValue": "",
                         "in": {
                           "$concat": [
@@ -419,9 +419,11 @@
                                 ","
                               ]
                             },
-                            "\"",
-                            "$$this",
-                            "\""
+                            "",
+                            {
+                              "$toString": "$$this"
+                            },
+                            ""
                           ]
                         }
                       }
@@ -435,19 +437,19 @@
           "expectedResults": [
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "stringArrayStr": "[\"a\",\"b\"]"
+              "numberArrayStr": "[1,2,3,4]"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "stringArrayStr": "[]"
+              "numberArrayStr": "[]"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "stringArrayStr": null
+              "numberArrayStr": null
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
-              "stringArrayStr": null
+              "numberArrayStr": null
             }
           ]
         }

@@ -436,7 +436,8 @@ describe('bug-fixes', function () {
             const queryString = `
                 SELECT  testId,
                 --        cast(jsonObjValues as varchar) as jsonObjValuesStr,
-                        cast(stringArray as varchar) as stringArrayStr,
+                --        cast(stringArray as varchar) as stringArrayStr,
+                          cast(numberArray as varchar) as numberArrayStr,
                         unset(_id)
                 FROM function-test-data
                 WHERE testCategory='stringify'

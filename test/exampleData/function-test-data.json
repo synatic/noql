@@ -191,6 +191,7 @@
       }
     },
     "stringArray": ["a", "b"],
+    "numberArray": [1, 2, 3, 4],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   },
@@ -203,6 +204,7 @@
       "stringOrInt": 1
     },
     "stringArray": [],
+    "numberArray": [],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   },
