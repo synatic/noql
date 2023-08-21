@@ -400,7 +400,6 @@
                 "valuesString": {
                   "$concat": [
                     "{",
-                    "\"string\":\"",
                     {
                       "$cond": [
                         {
@@ -414,11 +413,16 @@
                             ""
                           ]
                         },
-                        "null",
-                        "$jsonObjValues.string"
+                        "",
+                        {
+                          "$concat": [
+                            "\"string\":\"",
+                            "$jsonObjValues.string",
+                            "\""
+                          ]
+                        }
                       ]
                     },
-                    "\"",
                     "}"
                   ]
                 }
@@ -432,7 +436,7 @@
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "valuesString": "{\"string\":\"null\"}"
+              "valuesString": "{}"
             }
           ]
         }
