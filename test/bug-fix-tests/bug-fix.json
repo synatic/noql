@@ -404,21 +404,77 @@
                       "$cond": [
                         {
                           "$eq": [
+                            "$jsonObjValues.string",
+                            null
+                          ]
+                        },
+                        "\"string\":null",
+                        {
+                          "$cond": [
+                            "$jsonObjValues.string",
                             {
-                              "$ifNull": [
+                              "$concat": [
+                                "\"string\":\"",
                                 "$jsonObjValues.string",
-                                ""
+                                "\""
                               ]
                             },
                             ""
                           ]
-                        },
-                        "",
+                        }
+                      ]
+                    },
+                    {
+                      "$cond": [
                         {
-                          "$concat": [
-                            "\"string\":\"",
+                          "$ifNull": [
                             "$jsonObjValues.string",
-                            "\""
+                            ""
+                          ]
+                        },
+                        ",",
+                        ""
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$eq": [
+                            "$jsonObjValues.number",
+                            null
+                          ]
+                        },
+                        "\"number\":null",
+                        {
+                          "$cond": [
+                            "$jsonObjValues.number",
+                            {
+                              "$concat": [
+                                "\"number\":",
+                                {
+                                  "$toString": "$jsonObjValues.number"
+                                }
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$eq": [
+                                    "$jsonObjValues.number",
+                                    0
+                                  ]
+                                },
+                                {
+                                  "$concat": [
+                                    "\"number\":",
+                                    {
+                                      "$toString": "$jsonObjValues.number"
+                                    }
+                                  ]
+                                },
+                                ""
+                              ]
+                            }
                           ]
                         }
                       ]
@@ -432,11 +488,19 @@
           "expectedResults": [
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "valuesString": "{\"string\":\"Testing\"}"
+              "valuesString": "{\"string\":\"Testing\",\"number\":1}"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "valuesString": "{}"
+              "valuesString": "{\"string\":\"\",\"number\":0}"
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
+              "valuesString": "{\"string\":null,\"number\":null}"
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
+              "valuesString": "{,}"
             }
           ]
         }

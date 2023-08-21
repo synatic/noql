@@ -178,14 +178,31 @@
   },
   {
     "jsonObjValues": {
-      "string": "Testing"
+      "string": "Testing",
+      "number": 1
     },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   },
   {
-    "jsonObjValues": {},
+    "jsonObjValues": {
+      "string": "",
+      "number": 0
+    },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
+  },
+  {
+    "jsonObjValues": {
+      "string": null,
+      "number": null
+    },
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
+  },
+  {
+    "jsonObjValues": {},
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
   }
 ]
