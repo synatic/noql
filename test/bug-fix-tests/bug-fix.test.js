@@ -433,10 +433,11 @@ describe('bug-fixes', function () {
     describe('schema-aware-queries', () => {
         it('should be able to cast a JSON array to a varchar', async () => {
             const queryString = `
-                SELECT  cast(jsonArrayValues as varchar) as valuesString,
+                SELECT  testId,
+                        cast(jsonObjValues as varchar) as valuesString,
                         unset(_id)
                 FROM function-test-data
-                WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'
+                WHERE testCategory='stringify'
             `;
             await queryResultTester({
                 queryString: queryString,

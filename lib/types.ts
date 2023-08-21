@@ -7,6 +7,7 @@ export interface TableColumnAst {
     columnList?: string[];
     ast: AST;
 }
+
 export type ExpressionTypes =
     | 'column_ref'
     | 'aggr_func'
@@ -289,6 +290,7 @@ export interface SchemaFnResult {
     /** Specifies if the result will be an array of the field type, should not apply to jsonSchemaValue */
     isArray?: boolean;
 }
+
 export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
@@ -296,6 +298,7 @@ export type JsonSchemaTypeMap = {
 export interface FlattenedSchemas {
     [collectionName: string]: FlattenedSchema[];
 }
+
 export interface Schemas {
     [collectionName: string]: JSONSchema6;
 }
@@ -333,3 +336,8 @@ export type GroupByColumnParserFn = (
 ) => void;
 
 export type GetTables = (subAst: AST, context: NoqlContext) => string[];
+
+export interface FindSchemaResult {
+    schema: JSONSchema6;
+    required: boolean;
+}

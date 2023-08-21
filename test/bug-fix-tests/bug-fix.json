@@ -377,6 +377,66 @@
           }
         ]
       }
+    },
+    "schema-aware-queries": {
+      "cast-json-array-to-varchar": {
+        "case1": {
+          "pipeline": [
+            {
+              "$match": {
+                "testCategory": {
+                  "$eq": "stringify"
+                }
+              }
+            },
+            {
+              "$unset": [
+                "_id"
+              ]
+            },
+            {
+              "$project": {
+                "testId": "$testId",
+                "valuesString": {
+                  "$concat": [
+                    "{",
+                    "\"string\":\"",
+                    {
+                      "$cond": [
+                        {
+                          "$eq": [
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.string",
+                                ""
+                              ]
+                            },
+                            ""
+                          ]
+                        },
+                        "null",
+                        "$jsonObjValues.string"
+                      ]
+                    },
+                    "\"",
+                    "}"
+                  ]
+                }
+              }
+            }
+          ],
+          "expectedResults": [
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
+              "valuesString": "{\"string\":\"Testing\"}"
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
+              "valuesString": "{\"string\":\"null\"}"
+            }
+          ]
+        }
+      }
     }
   }
 }

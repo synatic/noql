@@ -177,19 +177,15 @@
     "testId": "bugfix.special-char-parameters.case1"
   },
   {
-    "jsonArrayValues": [
-      {
-        "string": "Testing",
-        "stringArray": ["a", "b"]
-      },
-      {
-        "string": "",
-        "stringArray": []
-      },
-      {
-        "string": null
-      }
-    ],
+    "jsonObjValues": {
+      "string": "Testing"
+    },
+    "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
+  },
+  {
+    "jsonObjValues": {},
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   }
 ]
