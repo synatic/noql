@@ -179,7 +179,16 @@
   {
     "jsonObjValues": {
       "string": "Testing",
-      "number": 1
+      "integer": 1,
+      "boolean": true,
+      "number": 1.5,
+      "stringOrInt": "asd",
+      "nested": {
+        "string": "Testing",
+        "secondLevel": {
+          "string": "Testing"
+        }
+      }
     },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
@@ -187,7 +196,10 @@
   {
     "jsonObjValues": {
       "string": "",
-      "number": 0
+      "integer": 0,
+      "boolean": false,
+      "number": 0,
+      "stringOrInt": 1
     },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
@@ -195,7 +207,10 @@
   {
     "jsonObjValues": {
       "string": null,
-      "number": null
+      "integer": null,
+      "boolean": null,
+      "number": null,
+      "stringOrInt": null
     },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
@@ -203,6 +218,6 @@
   {
     "jsonObjValues": {},
     "testCategory": "stringify",
-    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4"
   }
 ]

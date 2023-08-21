@@ -430,11 +430,12 @@ describe('bug-fixes', function () {
         });
     });
     // https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
+    // https://www.mongodb.com/community/forums/t/json-stringify-within-an-aggregation-pipeline/237638
     describe('schema-aware-queries', () => {
         it('should be able to cast a JSON array to a varchar', async () => {
             const queryString = `
                 SELECT  testId,
-                        cast(jsonObjValues as varchar) as valuesString,
+                        cast(jsonObjValues as varchar) as jsonObjValuesStr,
                         unset(_id)
                 FROM function-test-data
                 WHERE testCategory='stringify'

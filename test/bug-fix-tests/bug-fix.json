@@ -397,29 +397,28 @@
             {
               "$project": {
                 "testId": "$testId",
-                "valuesString": {
+                "jsonObjValuesStr": {
                   "$concat": [
                     "{",
                     {
                       "$cond": [
                         {
                           "$eq": [
-                            "$jsonObjValues.string",
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.string",
+                                null
+                              ]
+                            },
                             null
                           ]
                         },
                         "\"string\":null",
                         {
-                          "$cond": [
+                          "$concat": [
+                            "\"string\":\"",
                             "$jsonObjValues.string",
-                            {
-                              "$concat": [
-                                "\"string\":\"",
-                                "$jsonObjValues.string",
-                                "\""
-                              ]
-                            },
-                            ""
+                            "\""
                           ]
                         }
                       ]
@@ -440,43 +439,220 @@
                       "$cond": [
                         {
                           "$eq": [
-                            "$jsonObjValues.number",
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.integer",
+                                null
+                              ]
+                            },
+                            null
+                          ]
+                        },
+                        "\"integer\":null",
+                        {
+                          "$concat": [
+                            "\"integer\":",
+                            {
+                              "$toString": "$jsonObjValues.integer"
+                            },
+                            ""
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$ifNull": [
+                            "$jsonObjValues.integer",
+                            ""
+                          ]
+                        },
+                        ",",
+                        ""
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$eq": [
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.boolean",
+                                null
+                              ]
+                            },
+                            null
+                          ]
+                        },
+                        "\"boolean\":null",
+                        {
+                          "$concat": [
+                            "\"boolean\":",
+                            {
+                              "$toString": "$jsonObjValues.boolean"
+                            },
+                            ""
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$ifNull": [
+                            "$jsonObjValues.boolean",
+                            ""
+                          ]
+                        },
+                        ",",
+                        ""
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$eq": [
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.number",
+                                null
+                              ]
+                            },
                             null
                           ]
                         },
                         "\"number\":null",
                         {
-                          "$cond": [
-                            "$jsonObjValues.number",
+                          "$concat": [
+                            "\"number\":",
                             {
-                              "$concat": [
-                                "\"number\":",
-                                {
-                                  "$toString": "$jsonObjValues.number"
-                                }
+                              "$toString": "$jsonObjValues.number"
+                            },
+                            ""
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$ifNull": [
+                            "$jsonObjValues.number",
+                            ""
+                          ]
+                        },
+                        ",",
+                        ""
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$eq": [
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.stringOrInt",
+                                null
                               ]
                             },
+                            null
+                          ]
+                        },
+                        "\"stringOrInt\":null",
+                        {
+                          "$concat": [
+                            "\"stringOrInt\":\"",
+                            {
+                              "$toString": "$jsonObjValues.stringOrInt"
+                            },
+                            "\""
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$cond": [
+                        {
+                          "$ifNull": [
+                            "$jsonObjValues.stringOrInt",
+                            ""
+                          ]
+                        },
+                        ",",
+                        ""
+                      ]
+                    },
+                    "\"nested\":",
+                    {
+                      "$concat": [
+                        "{",
+                        {
+                          "$cond": [
+                            {
+                              "$eq": [
+                                {
+                                  "$ifNull": [
+                                    "$jsonObjValues.nested.string",
+                                    null
+                                  ]
+                                },
+                                null
+                              ]
+                            },
+                            "\"string\":null",
+                            {
+                              "$concat": [
+                                "\"string\":\"",
+                                "$jsonObjValues.nested.string",
+                                "\""
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "$cond": [
+                            {
+                              "$ifNull": [
+                                "$jsonObjValues.nested.string",
+                                ""
+                              ]
+                            },
+                            ",",
+                            ""
+                          ]
+                        },
+                        "\"secondLevel\":",
+                        {
+                          "$concat": [
+                            "{",
                             {
                               "$cond": [
                                 {
                                   "$eq": [
-                                    "$jsonObjValues.number",
-                                    0
+                                    {
+                                      "$ifNull": [
+                                        "$jsonObjValues.nested.secondLevel.string",
+                                        null
+                                      ]
+                                    },
+                                    null
                                   ]
                                 },
+                                "\"string\":null",
                                 {
                                   "$concat": [
-                                    "\"number\":",
-                                    {
-                                      "$toString": "$jsonObjValues.number"
-                                    }
+                                    "\"string\":\"",
+                                    "$jsonObjValues.nested.secondLevel.string",
+                                    "\""
                                   ]
-                                },
-                                ""
+                                }
                               ]
-                            }
+                            },
+                            "}"
                           ]
-                        }
+                        },
+                        "}"
                       ]
                     },
                     "}"
@@ -488,19 +664,19 @@
           "expectedResults": [
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "valuesString": "{\"string\":\"Testing\",\"number\":1}"
+              "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"stringOrInt\":\"asd\",\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}}"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "valuesString": "{\"string\":\"\",\"number\":0}"
+              "jsonObjValuesStr": "{\"string\":\"\",\"integer\":0\"boolean\":false\"number\":0\"stringOrInt\":\"1\",\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "valuesString": "{\"string\":null,\"number\":null}"
+              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"stringOrInt\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
             },
             {
-              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "valuesString": "{,}"
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
+              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"stringOrInt\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
             }
           ]
         }
