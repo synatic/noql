@@ -397,12 +397,12 @@
             {
               "$project": {
                 "testId": "$testId",
-                "numberArrayStr": {
+                "jsonArrayStr": {
                   "$concat": [
                     "[",
                     {
                       "$reduce": {
-                        "input": "$numberArray",
+                        "input": "$jsonArray",
                         "initialValue": "",
                         "in": {
                           "$concat": [
@@ -419,11 +419,226 @@
                                 ","
                               ]
                             },
-                            "",
+                            "{",
                             {
-                              "$toString": "$$this"
+                              "$cond": [
+                                {
+                                  "$eq": [
+                                    {
+                                      "$ifNull": [
+                                        "$$this.string",
+                                        null
+                                      ]
+                                    },
+                                    null
+                                  ]
+                                },
+                                "\"string\":null",
+                                {
+                                  "$concat": [
+                                    "\"string\":\"",
+                                    "$$this.string",
+                                    "\""
+                                  ]
+                                }
+                              ]
                             },
-                            ""
+                            {
+                              "$cond": [
+                                {
+                                  "$ifNull": [
+                                    "$$this.string",
+                                    ""
+                                  ]
+                                },
+                                ",",
+                                ""
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$eq": [
+                                    {
+                                      "$ifNull": [
+                                        "$$this.integer",
+                                        null
+                                      ]
+                                    },
+                                    null
+                                  ]
+                                },
+                                "\"integer\":null",
+                                {
+                                  "$concat": [
+                                    "\"integer\":",
+                                    {
+                                      "$toString": "$$this.integer"
+                                    },
+                                    ""
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$ifNull": [
+                                    "$$this.integer",
+                                    ""
+                                  ]
+                                },
+                                ",",
+                                ""
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$eq": [
+                                    {
+                                      "$ifNull": [
+                                        "$$this.boolean",
+                                        null
+                                      ]
+                                    },
+                                    null
+                                  ]
+                                },
+                                "\"boolean\":null",
+                                {
+                                  "$concat": [
+                                    "\"boolean\":",
+                                    {
+                                      "$toString": "$$this.boolean"
+                                    },
+                                    ""
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$ifNull": [
+                                    "$$this.boolean",
+                                    ""
+                                  ]
+                                },
+                                ",",
+                                ""
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$eq": [
+                                    {
+                                      "$ifNull": [
+                                        "$$this.number",
+                                        null
+                                      ]
+                                    },
+                                    null
+                                  ]
+                                },
+                                "\"number\":null",
+                                {
+                                  "$concat": [
+                                    "\"number\":",
+                                    {
+                                      "$toString": "$$this.number"
+                                    },
+                                    ""
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$cond": [
+                                {
+                                  "$ifNull": [
+                                    "$$this.number",
+                                    ""
+                                  ]
+                                },
+                                ",",
+                                ""
+                              ]
+                            },
+                            "\"nested\":",
+                            {
+                              "$concat": [
+                                "{",
+                                {
+                                  "$cond": [
+                                    {
+                                      "$eq": [
+                                        {
+                                          "$ifNull": [
+                                            "$$this.nested.string",
+                                            null
+                                          ]
+                                        },
+                                        null
+                                      ]
+                                    },
+                                    "\"string\":null",
+                                    {
+                                      "$concat": [
+                                        "\"string\":\"",
+                                        "$$this.nested.string",
+                                        "\""
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$cond": [
+                                    {
+                                      "$ifNull": [
+                                        "$$this.nested.string",
+                                        ""
+                                      ]
+                                    },
+                                    ",",
+                                    ""
+                                  ]
+                                },
+                                "\"secondLevel\":",
+                                {
+                                  "$concat": [
+                                    "{",
+                                    {
+                                      "$cond": [
+                                        {
+                                          "$eq": [
+                                            {
+                                              "$ifNull": [
+                                                "$$this.nested.secondLevel.string",
+                                                null
+                                              ]
+                                            },
+                                            null
+                                          ]
+                                        },
+                                        "\"string\":null",
+                                        {
+                                          "$concat": [
+                                            "\"string\":\"",
+                                            "$$this.nested.secondLevel.string",
+                                            "\""
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    "}"
+                                  ]
+                                },
+                                "}"
+                              ]
+                            },
+                            "}"
                           ]
                         }
                       }
@@ -437,19 +652,19 @@
           "expectedResults": [
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "numberArrayStr": "[1,2,3,4]"
+              "jsonArrayStr": "[{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}},{\"string\":\"Testing2\",\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}]"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "numberArrayStr": "[]"
+              "jsonArrayStr": null
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "numberArrayStr": null
+              "jsonArrayStr": null
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
-              "numberArrayStr": null
+              "jsonArrayStr": null
             }
           ]
         }
