@@ -381,6 +381,24 @@
     "schema-aware-queries": {
       "cast-json-array-to-varchar": {
         "case1": {
+          "expectedResults": [
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
+              "jsonArrayStr": "[{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}},{\"string\":\"Testing2\",\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}]"
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
+              "jsonArrayStr": null
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
+              "jsonArrayStr": null
+            },
+            {
+              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
+              "jsonArrayStr": null
+            }
+          ],
           "pipeline": [
             {
               "$match": {
@@ -647,24 +665,6 @@
                   ]
                 }
               }
-            }
-          ],
-          "expectedResults": [
-            {
-              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "jsonArrayStr": "[{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}},{\"string\":\"Testing2\",\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}]"
-            },
-            {
-              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "jsonArrayStr": null
-            },
-            {
-              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "jsonArrayStr": null
-            },
-            {
-              "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
-              "jsonArrayStr": null
             }
           ]
         }

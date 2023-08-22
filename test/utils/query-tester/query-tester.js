@@ -11,27 +11,29 @@ module.exports = {
     queryResultTester,
     buildQueryResultTester,
 };
+
 /**
  *
- * @param {import('./types.js').BuildQueryResultOptions} options
+ * @param {import("./types.js").BuildQueryResultOptions} options
  */
 function buildQueryResultTester(options) {
     return runQueryResultTester;
 
     /**
      *
-     * @param {import('./types.js').QueryResultOptions} innerOptions
+     * @param {import("./types.js").QueryResultOptions} innerOptions
      * @returns
      */
     async function runQueryResultTester(innerOptions) {
         return await queryResultTester({...options, ...innerOptions});
     }
 }
+
 /**
  * Used to write the query + expected results to the output file
  *
- * @param {import('./types.js').AllQueryResultOptions} options The options to use
- * @returns {Promise<import('./types').QueryTesterResult>}
+ * @param {import("./types.js").AllQueryResultOptions} options The options to use
+ * @returns {Promise<import("./types").QueryTesterResult>}
  */
 async function queryResultTester(options) {
     let {
@@ -54,7 +56,7 @@ async function queryResultTester(options) {
         schemas,
     });
     const filePath = $path.resolve(dirName, fileName);
-    /** @type {import('mongodb').Document[]} */
+    /** @type {import("mongodb").Document[]} */
     let results = [];
     try {
         results = await mongoClient
@@ -76,6 +78,9 @@ async function queryResultTester(options) {
         if (!expectZeroResults) {
             set(obj, casePath + '.expectedResults', results);
         }
+        await writeFile(filePath, obj);
+    } else if (outputPipeline) {
+        set(obj, casePath + '.pipeline', pipeline);
         await writeFile(filePath, obj);
     }
     if (!expectZeroResults) {

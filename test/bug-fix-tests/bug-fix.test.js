@@ -391,12 +391,12 @@ describe('bug-fixes', function () {
         });
     });
     describe('Injected parameters with special characters', () => {
-        it.skip('should be able to do a where statement with lots of special characters', async () => {
+        it('should be able to do a where statement with lots of special characters', async () => {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = \`Isn't a "bug" just $\`
+                WHERE ftd.parameter = wrapParam(\`Isn't a "bug" just $\`)
             `;
             await queryResultTester({
                 queryString: queryString,
