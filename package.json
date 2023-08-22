@@ -68,7 +68,7 @@
     "check-types": "11.2.2",
     "clone-deep": "4.0.1",
     "deepmerge": "^4.3.1",
-    "node-sql-parser": "^4.7.0"
+    "node-sql-parser": "^4.9.0"
   },
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^1.0.19",
