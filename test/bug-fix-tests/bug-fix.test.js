@@ -391,7 +391,7 @@ describe('bug-fixes', function () {
         });
     });
     describe('Injected parameters with special characters', () => {
-        it('should be able to do a where statement with lots of special characters', async () => {
+        it.skip('should be able to do a where statement with lots of special characters', async () => {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)

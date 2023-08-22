@@ -1,6 +1,11 @@
 [
   {
-    "numberArray": [1, 2, 3, 4]
+    "numberArray": [
+      1,
+      2,
+      3,
+      4
+    ]
   },
   {
     "name": "first",
@@ -14,7 +19,10 @@
     "testId": "bugfix.true-false.case1"
   },
   {
-    "names": ["Max", "Andy"],
+    "names": [
+      "Max",
+      "Andy"
+    ],
     "testId": "bugfix.join-fn.case1"
   },
   {
@@ -190,8 +198,16 @@
         }
       }
     },
-    "stringArray": ["a", "b"],
-    "numberArray": [1, 2, 3, 4],
+    "stringArray": [
+      "a",
+      "b"
+    ],
+    "numberArray": [
+      1,
+      2,
+      3,
+      4
+    ],
     "jsonArray": [
       {
         "string": "Testing",
