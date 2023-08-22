@@ -1303,27 +1303,27 @@
               {
                 "$match": {
                   "$expr": {
-                    "$and": [
+                    "$or": [
                       {
-                        "$or": [
-                          {
-                            "$eq": [
-                              "$$outer_basetable0_c22",
-                              "$semijoin1_c22"
-                            ]
-                          },
+                        "$eq": [
+                          "$$outer_basetable0_c22",
+                          "$semijoin1_c22"
+                        ]
+                      },
+                      {
+                        "$and": [
                           {
                             "$eq": [
                               "$$outer_basetable0_c22",
                               null
                             ]
+                          },
+                          {
+                            "$eq": [
+                              "$semijoin1_c22",
+                              null
+                            ]
                           }
-                        ]
-                      },
-                      {
-                        "$eq": [
-                          "$semijoin1_c22",
-                          null
                         ]
                       }
                     ]
