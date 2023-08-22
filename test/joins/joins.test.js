@@ -9,9 +9,9 @@ describe('joins', function () {
     /** @type {'test'|'write'} */
     const mode = 'test';
     const dirName = __dirname;
-    /** @type {import('../utils/query-tester/types').QueryResultTester} */
+    /** @type {import("../utils/query-tester/types").QueryResultTester} */
     let queryResultTester;
-    /** @type {import('mongodb').MongoClient} */
+    /** @type {import("mongodb").MongoClient} */
     let mongoClient;
     before(function (done) {
         const run = async () => {
@@ -603,6 +603,9 @@ describe('joins', function () {
             await queryResultTester({
                 queryString: fullQueryString,
                 casePath: 'deep-level-joins.case1',
+                outputPipeline: true,
+                expectZeroResults: true,
+                mode: 'write',
             });
         });
     });
