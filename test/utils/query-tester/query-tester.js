@@ -44,12 +44,14 @@ async function queryResultTester(options) {
         expectZeroResults,
         ignoreDateValues = false,
         outputPipeline = false,
+        schemas,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
     const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
         database: 'PostgresQL',
+        schemas,
     });
     const filePath = $path.resolve(dirName, fileName);
     /** @type {import('mongodb').Document[]} */
