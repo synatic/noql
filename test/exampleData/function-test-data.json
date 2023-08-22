@@ -175,5 +175,71 @@
   {
     "parameter": "Isn't a \"bug\" just $",
     "testId": "bugfix.special-char-parameters.case1"
+  },
+  {
+    "jsonObjValues": {
+      "string": "Testing",
+      "integer": 1,
+      "boolean": true,
+      "number": 1.5,
+      "stringOrInt": "asd",
+      "nested": {
+        "string": "Testing",
+        "secondLevel": {
+          "string": "Testing"
+        }
+      }
+    },
+    "stringArray": ["a", "b"],
+    "numberArray": [1, 2, 3, 4],
+    "jsonArray": [
+      {
+        "string": "Testing",
+        "integer": 1,
+        "boolean": true,
+        "number": 1.5,
+        "nested": {
+          "string": "Testing",
+          "secondLevel": {
+            "string": "Testing"
+          }
+        }
+      },
+      {
+        "string": "Testing2"
+      }
+    ],
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
+  },
+  {
+    "jsonObjValues": {
+      "string": "",
+      "integer": 0,
+      "boolean": false,
+      "number": 0,
+      "stringOrInt": 1
+    },
+    "stringArray": [],
+    "numberArray": [],
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
+  },
+  {
+    "jsonObjValues": {
+      "string": null,
+      "integer": null,
+      "boolean": null,
+      "number": null,
+      "stringOrInt": null
+    },
+    "stringArray": null,
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
+  },
+  {
+    "jsonObjValues": {},
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4"
   }
 ]
