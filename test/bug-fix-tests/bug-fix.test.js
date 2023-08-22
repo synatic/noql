@@ -7,9 +7,9 @@ describe('bug-fixes', function () {
     /** @type {'test'|'write'} */
     const mode = 'test';
     const dirName = __dirname;
-    /** @type {import('../utils/query-tester/types.js').QueryResultTester} */
+    /** @type {import("../utils/query-tester/types.js").QueryResultTester} */
     let queryResultTester;
-    /** @type {import('mongodb').MongoClient} */
+    /** @type {import("mongodb").MongoClient} */
     let mongoClient;
     before(function (done) {
         const run = async () => {
@@ -331,6 +331,59 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.to_objectid.case1',
+            });
+        });
+    });
+    describe('OBJECT_TO_ARRAY', () => {
+        it('should be able to convert a string object id to an actual ObjectId', async () => {
+            const queryString = `
+                SELECT  id,
+                        OBJECT_TO_ARRAY(Address) as test,
+                        unset(_id)
+                FROM customers LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.object_to_array.case1',
+            });
+        });
+    });
+    describe('Injected parameters with special characters', () => {
+        it('should be able to do a where statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data ftd
+                WHERE ftd.parameter = \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case1',
+            });
+        });
+        it('should be able to do a like statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter like \`Isn't a "bug" just $\`
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case2',
+            });
+        });
+        it('should work for example 1', async () => {
+            const queryString = `
+                SELECT  id,
+                        (f.id + f.Length + 2) as val,
+                        unset(_id)
+                FROM films f
+                where id>1 limit 2
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case3',
             });
         });
     });

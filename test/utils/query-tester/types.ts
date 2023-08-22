@@ -24,6 +24,8 @@ export interface QueryResultOptions {
     expectZeroResults?: boolean;
     /** when comparing results, will ignore the values of dates, useful when using Current_Date etc. Defaults to false */
     ignoreDateValues?: boolean;
+    /** Specifies if the pipeline should be written to the file, useful for debugging */
+    outputPipeline?: boolean;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &

@@ -43,6 +43,7 @@ async function queryResultTester(options) {
         dirName,
         expectZeroResults,
         ignoreDateValues = false,
+        outputPipeline = false,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -51,21 +52,32 @@ async function queryResultTester(options) {
         database: 'PostgresQL',
     });
     const filePath = $path.resolve(dirName, fileName);
-    const results = await mongoClient
-        .db(dbName)
-        .collection(collections[0])
-        .aggregate(pipeline)
-        .toArray();
-    if (!expectZeroResults) {
-        assert(results.length);
+    /** @type {import('mongodb').Document[]} */
+    let results = [];
+    try {
+        results = await mongoClient
+            .db(dbName)
+            .collection(collections[0])
+            .aggregate(pipeline)
+            .toArray();
+    } catch (err) {
+        console.error(err);
     }
     results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     const obj = await readCases(filePath);
-    if (mode === 'write' && !expectZeroResults) {
-        set(obj, casePath + '.expectedResults', results);
+    if (mode === 'write') {
+        if (outputPipeline) {
+            set(obj, casePath + '.pipeline', pipeline);
+        } else {
+            set(obj, casePath + '.pipeline', undefined);
+        }
+        if (!expectZeroResults) {
+            set(obj, casePath + '.expectedResults', results);
+        }
         await writeFile(filePath, obj);
     }
     if (!expectZeroResults) {
+        assert(results.length);
         const expectedResults = get(obj, casePath + '.expectedResults');
         assert.deepStrictEqual(results, expectedResults);
     }

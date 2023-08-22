@@ -512,7 +512,7 @@ describe('Individual tests', function () {
         it('Should work without an order by on a local field', async () => {
             const queryText = `
             SELECT Address,
-                SELECT \`Film Title\` from Inventory where inventoryId=1 as latestFilm
+                (SELECT \`Film Title\` from Inventory where inventoryId=1) as latestFilm
             FROM stores
             where _id=1`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
