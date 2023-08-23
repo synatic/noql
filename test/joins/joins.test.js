@@ -542,7 +542,6 @@ describe('joins', function () {
                         `,
                 casePath:
                     'inner-join.two-conditions-inversed-no-alias-no-table-name',
-                mode: 'write',
             });
         });
     });

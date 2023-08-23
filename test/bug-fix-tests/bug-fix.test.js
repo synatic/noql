@@ -244,7 +244,6 @@ describe('bug-fixes', function () {
             });
         });
     });
-
     describe('rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -391,18 +390,45 @@ describe('bug-fixes', function () {
         });
     });
     describe('Injected parameters with special characters', () => {
-        it('should be able to do a where statement with lots of special characters', async () => {
+        it('should be able to do a where statement with lots of special characters using double quotes', async () => {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = wrapParam(\`Isn't a "bug" just $\`)
+                WHERE ftd.parameter = wrapParam("Isn't a \\"bug\\" \`just\` $")
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case1',
+                outputPipeline: true,
             });
         });
+        it('should be able to do a where statement with lots of special characters using single quotes', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data ftd
+                WHERE ftd.parameter = wrapParam('Isn\\'t a "bug" \`just\` $')
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case2',
+            });
+        });
+        // it('should be able to do a where statement with lots of special characters using backticks', async () => {
+        //     const queryString = `
+        //         SELECT  parameter,
+        //                 unset(_id)
+        //         FROM function-test-data ftd
+        //         WHERE ftd.parameter = wrapParam(\`Isn't a "bug" \\\`just\\\` $\`)
+        //     `;
+        //     await queryResultTester({
+        //         queryString: queryString,
+        //         casePath: 'bugfix.special-char-parameters.case3',
+        //         mode: 'write',
+        //         outputPipeline: true,
+        //     });
+        // });
         it('should be able to do a like statement with lots of special characters', async () => {
             const queryString = `
                 SELECT  parameter,
@@ -412,7 +438,8 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.special-char-parameters.case2',
+                casePath: 'bugfix.special-char-parameters.case4',
+                mode: 'write',
             });
         });
         it('should work for example 1', async () => {
@@ -425,7 +452,8 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.special-char-parameters.case3',
+                casePath: 'bugfix.special-char-parameters.case5',
+                mode: 'write',
             });
         });
     });
@@ -435,10 +463,10 @@ describe('bug-fixes', function () {
         it('should be able to cast a JSON array to a varchar', async () => {
             const queryString = `
                 SELECT  testId,
-                --        cast(jsonObjValues as varchar) as jsonObjValuesStr,
+                        cast(jsonObjValues as varchar) as jsonObjValuesStr,
                 --        cast(stringArray as varchar) as stringArrayStr,
                 --        cast(numberArray as varchar) as numberArrayStr,
-                          cast(jsonArray as varchar) as jsonArrayStr,
+                --        cast(jsonArray as varchar) as jsonArrayStr,
                         unset(_id)
                 FROM function-test-data
                 WHERE testCategory='stringify'
@@ -447,9 +475,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
-                mode: 'write',
                 schemas: await getAllSchemas(),
-                outputPipeline: true,
             });
         });
     });

@@ -181,7 +181,7 @@
     "testId": "bugfix.dense-rank.case1"
   },
   {
-    "parameter": "Isn't a \"bug\" just $",
+    "parameter": "Isn't a \"bug\" `just` $",
     "testId": "bugfix.special-char-parameters.case1"
   },
   {
@@ -257,5 +257,17 @@
     "jsonObjValues": {},
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4"
+  },
+  {
+    "jsonObjValues": {
+      "string": "Testing",
+      "integer": 1,
+      "boolean": true,
+      "number": 1.5,
+      "stringOrInt": "asd",
+      "nested": false
+    },
+    "testCategory": "stringify",
+    "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case5"
   }
 ]
