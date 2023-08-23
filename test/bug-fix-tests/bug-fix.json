@@ -354,43 +354,14 @@
       "case1": {
         "expectedResults": [
           {
-            "parameter": "Isn't a \"bug\" `just` $"
-          }
-        ],
-        "pipeline": [
-          {
-            "$project": {
-              "ftd": "$$ROOT"
-            }
-          },
-          {
-            "$match": {
-              "$expr": {
-                "$eq": [
-                  "$ftd.parameter",
-                  {
-                    "$literal": "Isn't a \"bug\" `just` $"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "$unset": [
-              "_id"
-            ]
-          },
-          {
-            "$project": {
-              "parameter": "$ftd.parameter"
-            }
+            "parameter": "$eq Isn't a \"bug\" `just` $"
           }
         ]
       },
       "case2": {
         "expectedResults": [
           {
-            "parameter": "Isn't a \"bug\" `just` $"
+            "parameter": "$eq Isn't a \"bug\" `just` $"
           }
         ]
       },
@@ -407,7 +378,11 @@
         ]
       },
       "case4": {
-        "expectedResults": []
+        "expectedResults": [
+          {
+            "parameter": "$eq Isn't a \"bug\" `just` $"
+          }
+        ]
       },
       "case5": {
         "expectedResults": [

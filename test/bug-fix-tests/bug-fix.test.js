@@ -395,12 +395,13 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = wrapParam("Isn't a \\"bug\\" \`just\` $")
+                WHERE ftd.parameter = wrapParam("$eq Isn't a \\"bug\\" \`just\` $")
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case1',
-                outputPipeline: true,
+                outputPipeline: false,
+                mode: 'write',
             });
         });
         it('should be able to do a where statement with lots of special characters using single quotes', async () => {
@@ -408,11 +409,13 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = wrapParam('Isn\\'t a "bug" \`just\` $')
+                WHERE ftd.parameter = wrapParam('$eq Isn\\'t a "bug" \`just\` $')
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case2',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
         // it('should be able to do a where statement with lots of special characters using backticks', async () => {
@@ -420,7 +423,7 @@ describe('bug-fixes', function () {
         //         SELECT  parameter,
         //                 unset(_id)
         //         FROM function-test-data ftd
-        //         WHERE ftd.parameter = wrapParam(\`Isn't a "bug" \\\`just\\\` $\`)
+        //         WHERE ftd.parameter = wrapParam(\`$eq Isn't a "bug" \\\`just\\\` $\`)
         //     `;
         //     await queryResultTester({
         //         queryString: queryString,
@@ -434,12 +437,13 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data
-                WHERE parameter like \`Isn't a "bug" just $\`
+                WHERE parameter like wrapParam("$eq Isn't a \\"bug\\" \`just\` $",true)
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case4',
                 mode: 'write',
+                outputPipeline: false,
             });
         });
         it('should work for example 1', async () => {
@@ -454,6 +458,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case5',
                 mode: 'write',
+                outputPipeline: false,
             });
         });
     });
