@@ -68,6 +68,7 @@
     "check-types": "11.2.2",
     "clone-deep": "4.0.1",
     "deepmerge": "^4.3.1",
+    "lodash": "^4.17.21",
     "node-sql-parser": "^4.9.0"
   },
   "devDependencies": {
@@ -87,7 +88,6 @@
     "eslint-plugin-security": "^1.5.0",
     "eslint-plugin-sonarjs": "^0.19.0",
     "json-schema": "^0.4.0",
-    "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "moment": "^2.29.4",
     "mongodb": "^5.7.0",
