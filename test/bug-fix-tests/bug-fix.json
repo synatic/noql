@@ -395,6 +395,11 @@
             "val": 55
           }
         ]
+      },
+      "case6": {
+        "expectedResults": [
+          {}
+        ]
       }
     },
     "schema-aware-queries": {

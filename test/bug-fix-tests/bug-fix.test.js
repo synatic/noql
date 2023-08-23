@@ -390,6 +390,8 @@ describe('bug-fixes', function () {
         });
     });
     describe('Injected parameters with special characters', () => {
+        const mode = 'test';
+        const outputPipeline = false;
         it('should be able to do a where statement with lots of special characters using double quotes', async () => {
             const queryString = `
                 SELECT  parameter,
@@ -400,8 +402,8 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case1',
-                outputPipeline: false,
-                mode: 'write',
+                outputPipeline,
+                mode,
             });
         });
         it('should be able to do a where statement with lots of special characters using single quotes', async () => {
@@ -414,8 +416,8 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case2',
-                mode: 'write',
-                outputPipeline: false,
+                outputPipeline,
+                mode,
             });
         });
         // it('should be able to do a where statement with lots of special characters using backticks', async () => {
@@ -428,8 +430,8 @@ describe('bug-fixes', function () {
         //     await queryResultTester({
         //         queryString: queryString,
         //         casePath: 'bugfix.special-char-parameters.case3',
-        //         mode: 'write',
-        //         outputPipeline: true,
+        //         outputPipeline,
+        //         mode,
         //     });
         // });
         it('should be able to do a like statement with lots of special characters', async () => {
@@ -442,8 +444,8 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case4',
-                mode: 'write',
-                outputPipeline: false,
+                outputPipeline,
+                mode,
             });
         });
         it('should work for example 1', async () => {
@@ -457,8 +459,23 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case5',
-                mode: 'write',
-                outputPipeline: false,
+                outputPipeline,
+                mode,
+            });
+        });
+        it('should be able to do a not like statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter not like wrapParam("$eq Isn't a \\"bug\\" \`just\` $",true)
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case6',
+                outputPipeline,
+                mode,
             });
         });
     });
