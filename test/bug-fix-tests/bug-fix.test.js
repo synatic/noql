@@ -397,7 +397,7 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = wrapParam("$eq Isn't a \\"bug\\" \`just\` $")
+                WHERE ftd.parameter = wrapParam("$eq Isn't a \\"bug\\" \`just\` $ \\\\")
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -411,7 +411,7 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = wrapParam('$eq Isn\\'t a "bug" \`just\` $')
+                WHERE ftd.parameter = wrapParam('$eq Isn\\'t a "bug" \`just\` $ \\\\')
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -439,7 +439,7 @@ describe('bug-fixes', function () {
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data
-                WHERE parameter like wrapParam("$eq Isn't a \\"bug\\" \`just\` $",true)
+                WHERE parameter like wrapParam("$eq Isn't a \\"bug\\" \`just\` $ \\\\",true)
             `;
             await queryResultTester({
                 queryString: queryString,

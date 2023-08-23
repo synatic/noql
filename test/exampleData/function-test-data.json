@@ -181,7 +181,7 @@
     "testId": "bugfix.dense-rank.case1"
   },
   {
-    "parameter": "$eq Isn't a \"bug\" `just` $",
+    "parameter": "$eq Isn't a \"bug\" `just` $ \\",
     "testId": "bugfix.special-char-parameters.case1"
   },
   {

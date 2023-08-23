@@ -354,14 +354,14 @@
       "case1": {
         "expectedResults": [
           {
-            "parameter": "$eq Isn't a \"bug\" `just` $"
+            "parameter": "$eq Isn't a \"bug\" `just` $ \\"
           }
         ]
       },
       "case2": {
         "expectedResults": [
           {
-            "parameter": "$eq Isn't a \"bug\" `just` $"
+            "parameter": "$eq Isn't a \"bug\" `just` $ \\"
           }
         ]
       },
@@ -380,7 +380,7 @@
       "case4": {
         "expectedResults": [
           {
-            "parameter": "$eq Isn't a \"bug\" `just` $"
+            "parameter": "$eq Isn't a \"bug\" `just` $ \\"
           }
         ]
       },
