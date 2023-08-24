@@ -483,22 +483,62 @@ describe('bug-fixes', function () {
     // https://www.mongodb.com/community/forums/t/json-stringify-within-an-aggregation-pipeline/237638
     describe('schema-aware-queries', () => {
         it('should be able to cast a JSON array to a varchar', async () => {
+            /**
+             * TODO: bug in schema magic merging the schemas:
+             * ["a", 1, true, {"b": 3, "c": {}}, [1], null, 2.5]
+             * String missing, possibly other issues.
+             */
             const queryString = `
                 SELECT  testId,
                         cast(jsonObjValues as varchar) as jsonObjValuesStr,
-                --        cast(stringArray as varchar) as stringArrayStr,
-                --        cast(numberArray as varchar) as numberArrayStr,
-                --        cast(jsonArray as varchar) as jsonArrayStr,
+                        cast(stringArray as varchar) as stringArrayStr,
+                        cast(numberArray as varchar) as numberArrayStr,
+                        cast(jsonArray as varchar) as jsonArrayStr,
+                        cast(mixedArray as varchar) as mixedArrayStr,
+                        cast(mixedPrimitiveArray as varchar) as mixedPrimitiveArrayStr,
+                        cast(objOrArray as varchar) as objOrArrayStr,
+                        cast(stringOrObject as varchar) as stringOrObjectStr,
+                        cast(commaTest as varchar) as commaTestStr,
                         unset(_id)
                 FROM function-test-data
                 WHERE testCategory='stringify'
             `;
-            await queryResultTester({
+            const {results} = await queryResultTester({
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
                 schemas: await getAllSchemas(),
+                mode: 'write',
+                outputPipeline: false,
             });
+            const keysToParse = [
+                'jsonObjValuesStr',
+                'stringArrayStr',
+                'numberArrayStr',
+                'jsonArrayStr',
+                'mixedArrayStr',
+                'mixedPrimitiveArrayStr',
+                'objOrArrayStr',
+                'commaTestStr',
+            ];
+            let resultCounter = 0;
+            for (const result of results) {
+                for (const key of keysToParse) {
+                    const str = result[key];
+                    if (!str) {
+                        continue;
+                    }
+                    try {
+                        JSON.parse(str);
+                    } catch (err) {
+                        console.error(err);
+                        throw new Error(
+                            `Unable to parse result ${resultCounter}, key "${key}". Raw String:\n${str}\n${err.message}\n${err.stack}`
+                        );
+                    }
+                }
+                resultCounter++;
+            }
         });
     });
 });

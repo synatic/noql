@@ -223,6 +223,10 @@
     "stringOrObject": {
       "value": true
     },
+    "commaTest": {
+      "string": "Testing",
+      "integer": 1
+    },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   },
@@ -239,6 +243,9 @@
     "objOrArray": ["bob", true],
     "mixedPrimitiveArray": [],
     "stringOrObject": "test",
+    "commaTest": {
+      "string": "Testing"
+    },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   },

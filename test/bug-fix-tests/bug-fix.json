@@ -408,23 +408,63 @@
           "expectedResults": [
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1",
-              "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"stringOrInt\":\"asd\",\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}}"
+              "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}},\"nestedStrArray\":[\"A\",\"b\"],\"nestedObjArray\":[{\"string\":\"Testing\",\"integer\":1},{\"string\":\"\",\"integer\":0},{\"string\":null,\"integer\":null}],\"stringOrInt\":\"asd\"}",
+              "stringArrayStr": "[\"a\",\"b\"]",
+              "numberArrayStr": "[1,2,3,4]",
+              "jsonArrayStr": "[{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}}},{\"string\":\"Testing2\",\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":null}]",
+              "mixedArrayStr": "[{\"b\":3},\"a\",1,true,[1,2,3]]",
+              "mixedPrimitiveArrayStr": "[\"a\",1,true]",
+              "objOrArrayStr": "{\"bob\":\"string\"}",
+              "stringOrObjectStr": "{\"value\":true}",
+              "commaTestStr": "{\"string\":\"Testing\",\"integer\":1}"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2",
-              "jsonObjValuesStr": "{\"string\":\"\",\"integer\":0\"boolean\":false\"number\":0\"stringOrInt\":\"1\",\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
+              "jsonObjValuesStr": "{\"string\":\"\",\"integer\":0,\"boolean\":false,\"number\":0,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":1}",
+              "stringArrayStr": "[]",
+              "numberArrayStr": "[]",
+              "jsonArrayStr": null,
+              "mixedArrayStr": null,
+              "mixedPrimitiveArrayStr": "[]",
+              "objOrArrayStr": "{\"bob\":null}",
+              "stringOrObjectStr": "test",
+              "commaTestStr": "{\"string\":\"Testing\",\"integer\":null}"
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3",
-              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"stringOrInt\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
+              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":null}",
+              "stringArrayStr": null,
+              "numberArrayStr": null,
+              "jsonArrayStr": null,
+              "mixedArrayStr": null,
+              "mixedPrimitiveArrayStr": "[1,\"a\",true,\"b\"]",
+              "objOrArrayStr": null,
+              "stringOrObjectStr": "12",
+              "commaTestStr": null
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case4",
-              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"stringOrInt\":null,\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
+              "jsonObjValuesStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":null}",
+              "stringArrayStr": null,
+              "numberArrayStr": null,
+              "jsonArrayStr": null,
+              "mixedArrayStr": null,
+              "mixedPrimitiveArrayStr": null,
+              "objOrArrayStr": null,
+              "stringOrObjectStr": null,
+              "commaTestStr": null
             },
             {
               "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case5",
-              "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"stringOrInt\":\"asd\",\"nested\":{\"string\":null,\"secondLevel\":{\"string\":null}}}"
+              "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":false,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":\"asd\"}",
+              "stringArrayStr": null,
+              "numberArrayStr": null,
+              "jsonArrayStr": null,
+              "mixedArrayStr": null,
+              "mixedPrimitiveArrayStr": null,
+              "objOrArrayStr": null,
+              "stringOrObjectStr": null,
+              "commaTestStr": null
             }
           ]
         }
