@@ -216,6 +216,7 @@
       }
     ],
     "mixedArray": ["a", 1, true, {"b": 3, "c": {}}, [1], null, 2.5],
+    "mixedPrimitiveArray": ["a", 1, true],
     "objOrArray": {
       "bob": "string"
     },
