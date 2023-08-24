@@ -215,7 +215,7 @@
         "string": "Testing2"
       }
     ],
-    "mixedArray": ["a", 1, true, {"b": 3, "c": {}}, [1], null, 2.5],
+    "mixedArray": [{"b": 3}, "a", 1, true],
     "mixedPrimitiveArray": ["a", 1, true],
     "objOrArray": {
       "bob": "string"
