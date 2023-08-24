@@ -234,6 +234,7 @@
     "stringArray": [],
     "numberArray": [],
     "objOrArray": ["bob", true],
+    "mixedPrimitiveArray": [],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   },
@@ -246,6 +247,7 @@
       "stringOrInt": null
     },
     "stringArray": null,
+    "mixedPrimitiveArray": [1, "a", true, "b"],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case3"
   },
