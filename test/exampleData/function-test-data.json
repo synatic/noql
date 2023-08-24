@@ -190,13 +190,17 @@
       "integer": 1,
       "boolean": true,
       "number": 1.5,
-      "stringOrInt": "asd",
       "nested": {
         "string": "Testing",
         "secondLevel": {
           "string": "Testing"
         }
-      }
+      },
+      "nestedStrArray": [
+        "A",
+        "b"
+      ],
+      "stringOrInt": "asd"
     },
     "stringArray": [
       "a",
