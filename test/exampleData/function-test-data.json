@@ -215,6 +215,10 @@
         "string": "Testing2"
       }
     ],
+    "mixedArray": ["a", 1, true, {"b": 3, "c": {}}, [1], null, 2.5],
+    "objOrArray": {
+      "bob": "string"
+    },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
   },
@@ -228,6 +232,7 @@
     },
     "stringArray": [],
     "numberArray": [],
+    "objOrArray": ["bob", true],
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case2"
   },
