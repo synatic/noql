@@ -1216,6 +1216,194 @@
           ],
           "a0": 300
         }
+      ],
+      "pipeline": [
+        {
+          "$project": {
+            "_": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "$and": [
+              {
+                "_.RecordType": {
+                  "$in": [
+                    "Direct Customer",
+                    "Channel Customer"
+                  ]
+                }
+              },
+              {
+                "_.StageName": {
+                  "$in": [
+                    "Discovery",
+                    "Needs Analysis",
+                    "Negotiation",
+                    "Proposal",
+                    "Qualification",
+                    "Technical Discovery",
+                    "Business Discovery"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "basetable0.c22": "$_.OpportunityId",
+            "basetable0.a0": "$_.AnnualLicenseRevenueUSD"
+          }
+        },
+        {
+          "$project": {
+            "outer": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "opportunitySolutions",
+            "as": "inner",
+            "let": {
+              "outer_basetable0_c22": "$outer.basetable0.c22"
+            },
+            "pipeline": [
+              {
+                "$project": {
+                  "_Table": "$$ROOT"
+                }
+              },
+              {
+                "$project": {
+                  "OpportunityId": "$_Table.OpportunityId",
+                  "Name": "$_Table.Name"
+                }
+              },
+              {
+                "$project": {
+                  "rows": "$$ROOT"
+                }
+              },
+              {
+                "$group": {
+                  "_id": {
+                    "semijoin1_c22": "$rows.OpportunityId",
+                    "semijoin1_c151": "$rows.Name"
+                  }
+                }
+              },
+              {
+                "$project": {
+                  "semijoin1_c22": "$_id.semijoin1_c22",
+                  "semijoin1_c151": "$_id.semijoin1_c151",
+                  "_id": 0
+                }
+              },
+              {
+                "$match": {
+                  "$expr": {
+                    "$or": [
+                      {
+                        "$eq": [
+                          "$$outer_basetable0_c22",
+                          "$semijoin1_c22"
+                        ]
+                      },
+                      {
+                        "$and": [
+                          {
+                            "$eq": [
+                              "$$outer_basetable0_c22",
+                              null
+                            ]
+                          },
+                          {
+                            "$eq": [
+                              "$semijoin1_c22",
+                              null
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$inner"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "basetable0.a0": "$outer.basetable0.a0",
+            "semijoin1_c151": "$inner.semijoin1_c151"
+          }
+        },
+        {
+          "$project": {
+            "rows": "$$ROOT"
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "semijoin1_c151": "$rows.semijoin1_c151"
+            },
+            "a0": {
+              "$sum": {
+                "$convert": {
+                  "input": "$rows.basetable0.a0",
+                  "to": "decimal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "semijoin1_c151": "$_id.semijoin1_c151",
+            "_id": 0,
+            "a0": "$a0"
+          }
+        },
+        {
+          "$project": {
+            "_": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "_.a0": {
+              "$ne": null
+            }
+          }
+        },
+        {
+          "$unset": [
+            "_id"
+          ]
+        },
+        {
+          "$project": {
+            "c151": "$_.semijoin1_c151",
+            "a0": "$_.a0"
+          }
+        },
+        {
+          "$limit": 1000001
+        }
       ]
     }
   }

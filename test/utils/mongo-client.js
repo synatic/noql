@@ -3,6 +3,7 @@ const $check = require('check-types');
 const $schema = require('@synatic/schema-magic');
 const fs = require('fs/promises');
 const Path = require('path');
+const set = require('lodash/set');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -30,7 +31,7 @@ async function generateSchema(values, collectionName) {
     }
     const schema = $schema.mergeSchemas(
         values
-            .slice(0, 10)
+            .slice(0, 100)
             .filter((v) => Boolean)
             .map((v) => $schema.generateSchemaFromJSON(v))
     );
@@ -80,9 +81,25 @@ function parseDocForDates(d, parentKey = '', parentObject = {}) {
         const value = d[key];
         if (key === '$date') {
             if ($check.null(value)) {
-                parentObject[parentKey] = new Date();
+                set(parentObject, parentKey, new Date());
             } else {
-                parentObject[parentKey] = new Date(value);
+                set(parentObject, parentKey, new Date(value));
+            }
+            continue;
+        }
+        if (key === '$objectId') {
+            if ($check.null(value)) {
+                set(parentObject, parentKey, new ObjectId());
+            } else {
+                set(parentObject, parentKey, new ObjectId(value));
+            }
+            continue;
+        }
+        if (Array.isArray(value)) {
+            let index = 0;
+            for (const item of value) {
+                parseDocForDates(item, `${key}[${index}]`, d);
+                index++;
             }
             continue;
         }
