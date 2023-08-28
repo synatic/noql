@@ -11,11 +11,14 @@ describe('bug-fixes', function () {
     let queryResultTester;
     /** @type {import("mongodb").MongoClient} */
     let mongoClient;
+    /** @type {import("mongodb").Db} */
+    let database;
     before(function (done) {
         const run = async () => {
             try {
-                const {client} = await setup();
+                const {client, db} = await setup();
                 mongoClient = client;
+                database = db;
                 queryResultTester = buildQueryResultTester({
                     dirName,
                     fileName,
@@ -33,6 +36,45 @@ describe('bug-fixes', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
+
+    async function getAllSchemas() {
+        /** @type {import("../../lib/types").Schemas} */
+        const result = {};
+        const collections = await database.collections();
+        const collectionNames = collections
+            .map((c) => c.collectionName)
+            .filter((c) => c !== 'schemas');
+        for (const collectionName of collectionNames) {
+            const searchResult = await database
+                .collection('schemas')
+                .findOne({collectionName}, {projection: {_id: 0, schema: 1}});
+            result[collectionName] = searchResult.schema;
+        }
+
+        return result;
+    }
+
+    // /**
+    //  *
+    //  * @param  {...string} collectionNames
+    //  * @returns
+    //  */
+    // async function getSchemas(...collectionNames) {
+    //     /** @type {import('../../lib/types').FlattenedSchemas} */
+    //     const result = {};
+    //     for (const collectionName of collectionNames) {
+    //         const searchResult = await database
+    //             .collection('schemas')
+    //             .findOne(
+    //                 {collectionName},
+    //                 {projection: {_id: 0, flattenedSchema: 1}}
+    //             );
+    //         result[collectionName] = searchResult.flattenedSchema;
+    //     }
+
+    //     return result;
+    // }
+
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -202,7 +244,6 @@ describe('bug-fixes', function () {
             });
         });
     });
-
     describe('rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -349,28 +390,62 @@ describe('bug-fixes', function () {
         });
     });
     describe('Injected parameters with special characters', () => {
-        it('should be able to do a where statement with lots of special characters', async () => {
+        const mode = 'test';
+        const outputPipeline = false;
+        it('should be able to do a where statement with lots of special characters using double quotes', async () => {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data ftd
-                WHERE ftd.parameter = \`Isn't a "bug" just $\`
+                WHERE ftd.parameter = wrapParam("$eq Isn't a \\"bug\\" \`just\` $ \\\\")
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.special-char-parameters.case1',
+                outputPipeline,
+                mode,
             });
         });
+        it('should be able to do a where statement with lots of special characters using single quotes', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data ftd
+                WHERE ftd.parameter = wrapParam('$eq Isn\\'t a "bug" \`just\` $ \\\\')
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case2',
+                outputPipeline,
+                mode,
+            });
+        });
+        // it('should be able to do a where statement with lots of special characters using backticks', async () => {
+        //     const queryString = `
+        //         SELECT  parameter,
+        //                 unset(_id)
+        //         FROM function-test-data ftd
+        //         WHERE ftd.parameter = wrapParam(\`$eq Isn't a "bug" \\\`just\\\` $\`)
+        //     `;
+        //     await queryResultTester({
+        //         queryString: queryString,
+        //         casePath: 'bugfix.special-char-parameters.case3',
+        //         outputPipeline,
+        //         mode,
+        //     });
+        // });
         it('should be able to do a like statement with lots of special characters', async () => {
             const queryString = `
                 SELECT  parameter,
                         unset(_id)
                 FROM function-test-data
-                WHERE parameter like \`Isn't a "bug" just $\`
+                WHERE parameter like wrapParam("$eq Isn't a \\"bug\\" \`just\` $ \\\\",true)
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.special-char-parameters.case2',
+                casePath: 'bugfix.special-char-parameters.case4',
+                outputPipeline,
+                mode,
             });
         });
         it('should work for example 1', async () => {
@@ -383,8 +458,87 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.special-char-parameters.case3',
+                casePath: 'bugfix.special-char-parameters.case5',
+                outputPipeline,
+                mode,
             });
+        });
+        it('should be able to do a not like statement with lots of special characters', async () => {
+            const queryString = `
+                SELECT  parameter,
+                        unset(_id)
+                FROM function-test-data
+                WHERE parameter not like wrapParam("$eq Isn't a \\"bug\\" \`just\` $",true)
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.special-char-parameters.case6',
+                outputPipeline,
+                mode,
+            });
+        });
+    });
+    // https://stackoverflow.com/questions/63300248/mongodb-aggregation-array-of-objects-to-string-value
+    // https://www.mongodb.com/community/forums/t/json-stringify-within-an-aggregation-pipeline/237638
+    describe('schema-aware-queries', () => {
+        it('should be able to cast a JSON array to a varchar', async () => {
+            /**
+             * TODO: bug in schema magic merging the schemas:
+             * ["a", 1, true, {"b": 3, "c": {}}, [1], null, 2.5]
+             * String missing, possibly other issues.
+             */
+            const queryString = `
+                SELECT  testId,
+                        cast(jsonObjValues as varchar) as jsonObjValuesStr,
+                        cast(stringArray as varchar) as stringArrayStr,
+                        cast(numberArray as varchar) as numberArrayStr,
+                        cast(jsonArray as varchar) as jsonArrayStr,
+                        cast(mixedArray as varchar) as mixedArrayStr,
+                        cast(mixedPrimitiveArray as varchar) as mixedPrimitiveArrayStr,
+                        cast(objOrArray as varchar) as objOrArrayStr,
+                        cast(stringOrObject as varchar) as stringOrObjectStr,
+                        cast(commaTest as varchar) as commaTestStr,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testCategory='stringify'
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath:
+                    'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
+                schemas: await getAllSchemas(),
+                mode: 'write',
+                outputPipeline: false,
+            });
+            const keysToParse = [
+                'jsonObjValuesStr',
+                'stringArrayStr',
+                'numberArrayStr',
+                'jsonArrayStr',
+                'mixedArrayStr',
+                'mixedPrimitiveArrayStr',
+                'objOrArrayStr',
+                'commaTestStr',
+            ];
+            let resultCounter = 0;
+            for (const result of results) {
+                for (const key of keysToParse) {
+                    const str = result[key];
+                    if (!str) {
+                        continue;
+                    }
+                    try {
+                        JSON.parse(str);
+                    } catch (err) {
+                        console.error(err);
+                        throw new Error(
+                            `Unable to parse result ${resultCounter}, key "${key}". Raw String:\n${str}\n${err.message}\n${err.stack}`
+                        );
+                    }
+                }
+                resultCounter++;
+            }
         });
     });
 });

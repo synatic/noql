@@ -542,7 +542,6 @@ describe('joins', function () {
                         `,
                 casePath:
                     'inner-join.two-conditions-inversed-no-alias-no-table-name',
-                mode: 'write',
             });
         });
     });
@@ -604,6 +603,9 @@ describe('joins', function () {
             await queryResultTester({
                 queryString: fullQueryString,
                 casePath: 'deep-level-joins.case1',
+                outputPipeline: true,
+                expectZeroResults: true,
+                mode: 'write',
             });
         });
     });

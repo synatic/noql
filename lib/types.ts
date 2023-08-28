@@ -1,10 +1,13 @@
 import type {Document, Sort} from 'mongodb';
-import type {} from 'node-sql-parser';
+import {JSONSchema6TypeName, JSONSchema6} from 'json-schema';
+
+export {JSONSchema6};
 export interface TableColumnAst {
     tableList?: string[];
     columnList?: string[];
     ast: AST;
 }
+
 export type ExpressionTypes =
     | 'column_ref'
     | 'aggr_func'
@@ -174,15 +177,33 @@ export interface SetWindowFields {
 }
 
 export type ParserInput = TableColumnAst | string;
-export type ParserOptions = {
+export interface ParserOptions {
+    /** Only used in canQuery */
     isArray?: boolean;
-    /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select */
+    /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select or join */
     unwindJoins?: boolean;
+    /** Specifies the type of database that Nodejs SQL Parser will use, e.g. 'PostgresQL' */
     database?: string;
+    /** Specifies the type that Nodejs SQL Parser will use e.g. 'table', 'column'*/
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
     unsetId?: boolean;
-};
+    /** If provided, the library will use the schemas to generate better queries */
+    schemas?: Schemas;
+}
+
+export interface NoqlContext extends ParserOptions {
+    /** The raw SQL statement before being cleaned up or altered */
+    rawStatement?: string;
+    /** The cleaned SQL statement */
+    cleanedStatement?: string;
+    tables: string[];
+}
+
+export interface ParseResult {
+    parsedAst: TableColumnAst;
+    context: NoqlContext;
+}
 
 export interface ColumnParseResult {
     replaceRoot?: {
@@ -269,24 +290,30 @@ export interface SchemaFnResult {
     /** Specifies if the result will be an array of the field type, should not apply to jsonSchemaValue */
     isArray?: boolean;
 }
+
 export type JsonSchemaTypeMap = {
     [key: string]: JSONSchemaTypeName;
 };
+
+export interface FlattenedSchemas {
+    [collectionName: string]: FlattenedSchema[];
+}
+
+export interface Schemas {
+    [collectionName: string]: JSONSchema6;
+}
 
 export interface FlattenedSchema {
     /** The path to the field within the document/json object */
     path: string;
     /** The JsonSchema type */
-    type: JSONSchemaTypeName | JSONSchemaTypeName[];
+    type: JSONSchema6TypeName | JSONSchema6TypeName[];
     /** The JsonSchema format if it's a string */
     format?: string | 'date-time' | 'mongoid';
     /** Specifies if the field is an array or not */
     isArray: boolean;
     /** Specifies if it's a required field or not */
     required: boolean;
-}
-export interface FlattenedSchemas {
-    [key: string]: FlattenedSchema[];
 }
 
 export interface ResultSchema extends FlattenedSchema {
@@ -301,3 +328,16 @@ export interface ResultSchema extends FlattenedSchema {
 export type GetSchemaFunction = (
     collectionName: string
 ) => Promise<FlattenedSchema[]>;
+
+export type GroupByColumnParserFn = (
+    expr: Expression,
+    depth: number,
+    aggrName: string
+) => void;
+
+export type GetTables = (subAst: AST, context: NoqlContext) => string[];
+
+export interface FindSchemaResult {
+    schema: JSONSchema6;
+    required: boolean;
+}
