@@ -439,25 +439,22 @@ describe('Individual tests', function () {
     });
 
     describe('table alias', () => {
-        it.skip("should allow you to alias a table without an 'as' statement", async () => {
+        it("should allow you to alias a table without an 'as' statement", async () => {
             const queryText =
                 'SELECT ord.specialChars FROM `orders` ord limit 4';
             const parsedQuery = SQLParser.parseSQL(queryText);
             const results = await mongoClient
                 .db(dbName)
-                .collection(parsedQuery.collection)
-                .find(parsedQuery.query || {}, {
-                    projection: parsedQuery.projection,
-                })
-                .limit(parsedQuery.limit)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
                 .toArray();
-            assert(results.length === 1);
+            assert(results.length === 4);
             assert(results[0].specialChars);
         });
     });
 
     describe('Case statement with functions', () => {
-        it.skip('Should work when the case statement does not have backticks', async () => {
+        it('Should work when the case statement does not have backticks', async () => {
             const queryText = `
             SELECT
                 o.item,
