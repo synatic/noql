@@ -62,7 +62,6 @@ typings/
 
 # lock files
 yarn.lock
-package-lock.json
 
 # IDE files
 .idea
