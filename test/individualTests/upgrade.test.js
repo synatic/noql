@@ -175,5 +175,15 @@ describe('node-sql-parser upgrade tests', function () {
                 throw err;
             }
         });
+        it('should get the correct collection name', async () => {
+            const queryString = 'select * from `xxx`';
+            const options = {};
+            const parsedAST = SQLParser.parseSQLtoAST(queryString, options);
+            const parsedQuery = SQLParser.makeMongoAggregate(
+                parsedAST,
+                options
+            );
+            assert(parsedQuery.collections);
+        });
     });
 });
