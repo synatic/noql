@@ -198,6 +198,7 @@ export interface NoqlContext extends ParserOptions {
     /** The cleaned SQL statement */
     cleanedStatement?: string;
     tables: string[];
+    fullAst:TableColumnAst;
 }
 
 export interface ParseResult {
