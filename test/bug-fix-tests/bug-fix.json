@@ -491,6 +491,25 @@
               "jsonObjValuesStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":false,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":\"asd\"}"
             }
           ]
+        },
+        "case3": {
+          "expectedResults": [
+            {
+              "subSelectStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":{\"string\":\"Testing\",\"secondLevel\":{\"string\":\"Testing\"}},\"nestedStrArray\":[\"A\",\"b\"],\"nestedObjArray\":[{\"string\":\"Testing\",\"integer\":1},{\"string\":\"\",\"integer\":0},{\"string\":null,\"integer\":null}],\"stringOrInt\":\"asd\"}"
+            },
+            {
+              "subSelectStr": "{\"string\":\"\",\"integer\":0,\"boolean\":false,\"number\":0,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":1}"
+            },
+            {
+              "subSelectStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":null}"
+            },
+            {
+              "subSelectStr": "{\"string\":null,\"integer\":null,\"boolean\":null,\"number\":null,\"nested\":null,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":null}"
+            },
+            {
+              "subSelectStr": "{\"string\":\"Testing\",\"integer\":1,\"boolean\":true,\"number\":1.5,\"nested\":false,\"nestedStrArray\":null,\"nestedObjArray\":null,\"stringOrInt\":\"asd\"}"
+            }
+          ]
         }
       }
     }

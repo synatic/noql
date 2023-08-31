@@ -551,8 +551,42 @@ describe('bug-fixes', function () {
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case2',
                 schemas: await getAllSchemas(),
-                mode: 'write',
-                outputPipeline: false,
+            });
+            const keysToParse = ['jsonObjValuesStr'];
+            let resultCounter = 0;
+            for (const result of results) {
+                for (const key of keysToParse) {
+                    const str = result[key];
+                    if (!str) {
+                        continue;
+                    }
+                    try {
+                        JSON.parse(str);
+                    } catch (err) {
+                        console.error(err);
+                        throw new Error(
+                            `Unable to parse result ${resultCounter}, key "${key}". Raw String:\n${str}\n${err.message}\n${err.stack}`
+                        );
+                    }
+                }
+                resultCounter++;
+            }
+        });
+        it('should be able to cast a JSON array to a varchar with a table alias inside a sub select', async () => {
+            const queryString = `
+                SELECT nested.jsonObjValuesStr as subSelectStr
+                FROM
+                (SELECT  FTD.testId,
+                        cast(FTD.jsonObjValues as varchar) as jsonObjValuesStr,
+                        unset(_id)
+                FROM function-test-data as FTD
+                WHERE testCategory='stringify') nested
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath:
+                    'bugfix.schema-aware-queries.cast-json-array-to-varchar.case3',
+                schemas: await getAllSchemas(),
             });
             const keysToParse = ['jsonObjValuesStr'];
             let resultCounter = 0;
