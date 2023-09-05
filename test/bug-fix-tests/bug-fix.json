@@ -512,6 +512,33 @@
           ]
         }
       }
+    },
+    "subquery-capitalisation": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 1,
+            "item": "almonds"
+          }
+        ],
+        "pipeline": [
+          {
+            "$match": {
+              "orderDate": {
+                "$gt": "2020-01-01 00:00:00"
+              }
+            }
+          },
+          {
+            "$unset": [
+              "_id"
+            ]
+          },
+          {
+            "$limit": 1
+          }
+        ]
+      }
     }
   }
 }

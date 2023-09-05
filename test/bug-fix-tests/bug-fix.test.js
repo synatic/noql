@@ -609,4 +609,22 @@ describe('bug-fixes', function () {
             }
         });
     });
+    describe('subquery capitalisation', () => {
+        it('should not throw an error when the right hand side is capitalised', async () => {
+            const queryString = `
+                SELECT  Order1.id,
+                        Order1.item,
+                        unset(_id)
+                FROM orders Order1
+                INNER JOIN(
+                    SELECT * FROM orders) 'Order2|unwind' on Order2.id = Order1.id
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.subquery-capitalisation.case1',
+                mode,
+            });
+        });
+    });
 });
