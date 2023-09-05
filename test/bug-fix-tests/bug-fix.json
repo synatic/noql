@@ -539,6 +539,21 @@
           }
         ]
       }
+    },
+    "timestamp": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^",
+            "orderDate": "$date-placeholder"
+          }
+        ]
+      }
     }
   }
 }

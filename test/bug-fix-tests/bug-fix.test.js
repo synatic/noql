@@ -627,4 +627,21 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('timestamp query', () => {
+        it('should be able to query by timestamp', async () => {
+            const queryString = `
+                SELECT  *,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate > timestamp '2021-01-01 00:00:00'
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.timestamp.case1',
+                mode,
+                ignoreDateValues: true,
+            });
+        });
+    });
 });
