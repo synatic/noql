@@ -555,5 +555,22 @@
         ]
       }
     }
+  },
+  "blog": {
+    "scratchpad": {
+      "case1": {
+        "expectedResults": [
+          {
+            "productTitle": "Chelsea boots - black",
+            "lowStockItems": [
+              {
+                "size": "medium",
+                "currentCount": 1
+              }
+            ]
+          }
+        ]
+      }
+    }
   }
 }
