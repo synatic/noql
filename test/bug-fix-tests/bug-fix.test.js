@@ -628,6 +628,7 @@ describe('bug-fixes', function () {
         });
     });
     describe('timestamp query', () => {
+        // todo RK this creates a pipeline that is not serialisable as the makeQueryPart converts it to a date object, look at how to fix
         it('should be able to query by timestamp', async () => {
             const queryString = `
                 SELECT  *,
@@ -641,6 +642,24 @@ describe('bug-fixes', function () {
                 casePath: 'bugfix.timestamp.case1',
                 mode,
                 ignoreDateValues: true,
+            });
+        });
+    });
+    describe('blog article', () => {
+        it('scratchpad', async () => {
+            const queryString = `
+                SELECT  p.title as productTitle,
+                        (SELECT * FROM p.stock WHERE currentCount <=2) AS lowStockItems,
+                        unset(_id)
+                FROM prod-orders po
+                INNER JOIN "products|unwind" p on po.products.productId = p._id
+                WHERE createdDate> SUBTRACT(CURRENT_DATE(), 7 * 24 * 60 * 60 * 1000)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'blog.scratchpad.case1',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
     });

@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "629aed84d0547c4d1ebc1111",
+    "title": "Chelsea boots - black",
+    "stock": [
+      {
+        "size": "small",
+        "currentCount": 4
+      },
+      {
+        "size": "medium",
+        "currentCount": 1
+      },
+      {
+        "size": "large",
+        "currentCount": 6
+      }
+    ]
+  },
+  {
+    "_id": "629aed84d0547c4d1ebc1112",
+    "title": "Leather Jacket - black",
+    "stock": [
+      {
+        "size": "small",
+        "currentCount": 3
+      },
+      {
+        "size": "medium",
+        "currentCount": 4
+      },
+      {
+        "size": "large",
+        "currentCount": 2
+      }
+    ]
+  }
+]
