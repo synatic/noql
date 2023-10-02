@@ -561,13 +561,8 @@
       "case1": {
         "expectedResults": [
           {
-            "productTitle": "Chelsea boots - black",
-            "lowStockItems": [
-              {
-                "size": "medium",
-                "currentCount": 1
-              }
-            ]
+            "First Name": "AUSTIN",
+            "Last Name": "CINTRON"
           }
         ]
       }

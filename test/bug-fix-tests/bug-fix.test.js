@@ -645,15 +645,15 @@ describe('bug-fixes', function () {
             });
         });
     });
-    describe('blog article', () => {
-        it('scratchpad', async () => {
+    describe('Large numbers', () => {
+        it('limit', async () => {
             const queryString = `
-                SELECT  p.title as productTitle,
-                        (SELECT * FROM p.stock WHERE currentCount <=2) AS lowStockItems,
+                SELECT  "First Name",
+                        "Last Name",
                         unset(_id)
-                FROM prod-orders po
-                INNER JOIN "products|unwind" p on po.products.productId = p._id
-                WHERE createdDate> SUBTRACT(CURRENT_DATE(), 7 * 24 * 60 * 60 * 1000)
+                FROM customers
+                LIMIT 9223372036854775807
+                offset 598
             `;
             await queryResultTester({
                 queryString: queryString,
