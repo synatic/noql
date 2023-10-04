@@ -554,15 +554,22 @@
           }
         ]
       }
-    }
-  },
-  "blog": {
-    "scratchpad": {
+    },
+    "large-number": {
       "case1": {
         "expectedResults": [
           {
             "First Name": "AUSTIN",
             "Last Name": "CINTRON"
+          }
+        ]
+      }
+    },
+    "current_date": {
+      "case1": {
+        "expectedResults": [
+          {
+            "orderDate": "$date-placeholder"
           }
         ]
       }
