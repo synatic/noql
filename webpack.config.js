@@ -7,6 +7,7 @@ const config = {
     entry: {
         index: './index.js',
     },
+    experiments: {topLevelAwait: true},
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: 'index.js',
@@ -28,6 +29,7 @@ const config = {
     ],
     resolve: {
         extensions: ['.js'],
+        fallback: {crypto: false},
     },
 };
 

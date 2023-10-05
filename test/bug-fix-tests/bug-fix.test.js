@@ -657,9 +657,25 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'blog.scratchpad.case1',
+                casePath: 'bugfix.large-number.case1',
                 mode: 'write',
-                outputPipeline: false,
+            });
+        });
+    });
+    describe('Current_Date', () => {
+        it('should allow you to compare dates', async () => {
+            const queryString = `
+                SELECT  orderDate,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate < CURRENT_DATE()
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.current_date.case1',
+                mode,
+                ignoreDateValues: true,
             });
         });
     });

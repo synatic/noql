@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "2.1.16",
+  "version": "2.1.17",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -8,7 +8,7 @@
     "index.js"
   ],
   "scripts": {
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production --config webpack.config.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",
@@ -69,8 +69,7 @@
     "clone-deep": "4.0.1",
     "deepmerge": "^4.3.1",
     "lodash": "^4.17.21",
-    "node-sql-parser": "4.9.0",
-    "mongodb": "^5.7.0"
+    "node-sql-parser": "4.9.0"
   },
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^1.0.19",
@@ -90,6 +89,7 @@
     "eslint-plugin-sonarjs": "^0.19.0",
     "json-schema": "^0.4.0",
     "mocha": "^10.0.0",
+    "mongodb": "^5.7.0",
     "moment": "^2.29.4",
     "mongodb-language-model": "^2.3.0",
     "npm-check": "^6.0.1",
