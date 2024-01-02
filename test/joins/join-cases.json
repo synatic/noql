@@ -593,6 +593,25 @@
         },
         {
           "o": {
+            "id": 3,
+            "item": "almonds",
+            "price": 1.5,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        },
+        {
+          "o": {
             "id": 4,
             "item": "almonds",
             "price": 12,
@@ -662,6 +681,23 @@
         },
         {
           "o": {
+            "id": 3,
+            "item": "almonds",
+            "price": 1.5,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "o": {
             "id": 4,
             "item": "almonds",
             "price": 12,
@@ -712,6 +748,16 @@
           }
         },
         {
+          "OID": 3,
+          "inv": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
           "OID": 4,
           "inv": {
             "id": 1,
@@ -739,6 +785,9 @@
         },
         {
           "IsOne": "No"
+        },
+        {
+          "IsOne": "No"
         }
       ]
     },
@@ -755,6 +804,12 @@
           "iChars": "!!$",
           "item": "pecans",
           "oChars": "!!$"
+        },
+        {
+          "description": "product 1",
+          "iChars": "^^^",
+          "item": "almonds",
+          "oChars": "^^^"
         },
         {
           "description": "product 3",
@@ -808,6 +863,25 @@
               "description": "product 4",
               "instock": 70,
               "specialChars": "!!*"
+            }
+          ]
+        },
+        {
+          "o": {
+            "id": 3,
+            "item": "almonds",
+            "price": 1.5,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
             }
           ]
         },
@@ -871,6 +945,11 @@
           "customerId": 2
         },
         {
+          "orderId": 3,
+          "inventoryId": 1,
+          "customerId": 1
+        },
+        {
           "orderId": 4,
           "inventoryId": 1,
           "customerId": 3
@@ -909,6 +988,21 @@
           ],
           "instock": [
             70
+          ]
+        },
+        {
+          "id": 3,
+          "item": "almonds",
+          "price": 1.5,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
           ]
         },
         {
@@ -958,6 +1052,21 @@
           ],
           "instock": [
             70
+          ]
+        },
+        {
+          "id": 3,
+          "item": "almonds",
+          "price": 1.5,
+          "customerId": 1,
+          "inventoryId": [
+            1
+          ],
+          "sku": [
+            "almonds"
+          ],
+          "instock": [
+            120
           ]
         },
         {
@@ -1052,11 +1161,29 @@
             null
           ],
           "instock": []
+        },
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
         }
       ]
     },
     "basic-reversed-no-alias": {
       "expectedResults": [
+        {
+          "inventoryId": [
+            5
+          ],
+          "sku": [
+            null
+          ],
+          "instock": []
+        },
         {
           "inventoryId": [
             5
@@ -1132,6 +1259,17 @@
           ],
           "instock": [
             80
+          ]
+        },
+        {
+          "inventoryId": [
+            3
+          ],
+          "sku": [
+            "cashews"
+          ],
+          "instock": [
+            60
           ]
         },
         {
@@ -1216,195 +1354,10 @@
           ],
           "a0": 300
         }
-      ],
-      "pipeline": [
-        {
-          "$project": {
-            "_": "$$ROOT"
-          }
-        },
-        {
-          "$match": {
-            "$and": [
-              {
-                "_.RecordType": {
-                  "$in": [
-                    "Direct Customer",
-                    "Channel Customer"
-                  ]
-                }
-              },
-              {
-                "_.StageName": {
-                  "$in": [
-                    "Discovery",
-                    "Needs Analysis",
-                    "Negotiation",
-                    "Proposal",
-                    "Qualification",
-                    "Technical Discovery",
-                    "Business Discovery"
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$project": {
-            "basetable0.c22": "$_.OpportunityId",
-            "basetable0.a0": "$_.AnnualLicenseRevenueUSD"
-          }
-        },
-        {
-          "$project": {
-            "outer": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "opportunitySolutions",
-            "as": "inner",
-            "let": {
-              "outer_basetable0_c22": "$outer.basetable0.c22"
-            },
-            "pipeline": [
-              {
-                "$project": {
-                  "_Table": "$$ROOT"
-                }
-              },
-              {
-                "$project": {
-                  "OpportunityId": "$_Table.OpportunityId",
-                  "Name": "$_Table.Name"
-                }
-              },
-              {
-                "$project": {
-                  "rows": "$$ROOT"
-                }
-              },
-              {
-                "$group": {
-                  "_id": {
-                    "semijoin1_c22": "$rows.OpportunityId",
-                    "semijoin1_c151": "$rows.Name"
-                  }
-                }
-              },
-              {
-                "$project": {
-                  "semijoin1_c22": "$_id.semijoin1_c22",
-                  "semijoin1_c151": "$_id.semijoin1_c151",
-                  "_id": 0
-                }
-              },
-              {
-                "$match": {
-                  "$expr": {
-                    "$and": [
-                      {
-                        "$or": [
-                          {
-                            "$eq": [
-                              "$$outer_basetable0_c22",
-                              "$semijoin1_c22"
-                            ]
-                          },
-                          {
-                            "$eq": [
-                              "$$outer_basetable0_c22",
-                              null
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "$eq": [
-                          "$semijoin1_c22",
-                          null
-                        ]
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$match": {
-            "$expr": {
-              "$gt": [
-                {
-                  "$size": "$inner"
-                },
-                0
-              ]
-            }
-          }
-        },
-        {
-          "$project": {
-            "basetable0.a0": "$outer.basetable0.a0",
-            "semijoin1_c151": "$inner.semijoin1_c151"
-          }
-        },
-        {
-          "$project": {
-            "rows": "$$ROOT"
-          }
-        },
-        {
-          "$group": {
-            "_id": {
-              "semijoin1_c151": "$rows.semijoin1_c151"
-            },
-            "a0": {
-              "$sum": {
-                "$convert": {
-                  "input": "$rows.basetable0.a0",
-                  "to": "decimal"
-                }
-              }
-            }
-          }
-        },
-        {
-          "$project": {
-            "semijoin1_c151": "$_id.semijoin1_c151",
-            "_id": 0,
-            "a0": "$a0"
-          }
-        },
-        {
-          "$project": {
-            "_": "$$ROOT"
-          }
-        },
-        {
-          "$match": {
-            "_.a0": {
-              "$ne": null
-            }
-          }
-        },
-        {
-          "$unset": [
-            "_id"
-          ]
-        },
-        {
-          "$project": {
-            "c151": "$_.semijoin1_c151",
-            "a0": "$_.a0"
-          }
-        },
-        {
-          "$limit": 1000001
-        }
       ]
     }
+  },
+  "join-order": {
+    "case1": {}
   }
 }

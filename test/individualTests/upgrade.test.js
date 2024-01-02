@@ -53,7 +53,7 @@ describe('node-sql-parser upgrade tests', function () {
                         .aggregate(parsedQuery.pipeline)
                         .toArray();
                     assert(results);
-                    assert(results.length === 2);
+                    assert(results.length === 3);
                 } catch (err) {
                     console.error(err);
                     throw err;
@@ -129,7 +129,7 @@ describe('node-sql-parser upgrade tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
                 assert(results);
-                assert(results.length === 4);
+                assert(results.length === 5);
                 assert($check.date(results[0].currDate));
             } catch (err) {
                 console.error(err);
@@ -148,7 +148,7 @@ describe('node-sql-parser upgrade tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
                 assert(results);
-                assert(results.length === 4);
+                assert(results.length === 5);
                 assert($check.number(results[0].currDate));
                 assert(results[0].currDate.toString().length === 4);
             } catch (err) {
@@ -169,7 +169,7 @@ describe('node-sql-parser upgrade tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
                 assert(results);
-                assert(results.length === 2);
+                assert(results.length === 3);
             } catch (err) {
                 console.error(err);
                 throw err;

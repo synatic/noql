@@ -679,4 +679,44 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('unique', () => {
+        it.skip('should get unique values', async () => {
+            const queryString = `
+                SELECT DISTINCT
+                     item,
+                     unset(_id)
+                    FROM orders
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.unique.case1',
+                ignoreDateValues: true,
+                mode: 'test',
+            });
+        });
+    });
+    describe('round + sum', () => {
+        it.skip('should get the rounded and summed values', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        ROUND(sum(price),0) as roundSumPrice,
+                        sum(ROUND(price,0)) as sumRoundPrice
+                FROM orders
+                group by customerId
+                order by customerId ASC
+            `;
+            /**
+             * sum(ROUND(price,2)) as sumRoundPrice <== Works
+             * ROUND(price,0) as roundPrice,
+                        sum(price) as sumPrice,
+             *  --ROUND(sum(price),2) as RoundSumPrice,
+                        --unset(_id)
+             */
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.round+sum.case1',
+                mode,
+            });
+        });
+    });
 });

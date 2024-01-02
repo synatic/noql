@@ -147,7 +147,7 @@ describe('Individual tests', function () {
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
-                assert(results.length === 2);
+                assert(results.length === 3);
                 assert(results[0].id === 1);
                 assert(results[0].item === 'almonds');
                 assert(results[0].price === 12);
@@ -168,7 +168,7 @@ describe('Individual tests', function () {
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
-                assert(results.length === 3);
+                assert(results.length === 4);
                 assert(results[0].id === 1);
                 assert(results[0].item === 'almonds');
                 assert(results[0].price === 12);
@@ -194,7 +194,7 @@ describe('Individual tests', function () {
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline);
                 results = await results.toArray();
-                assert(results.length === 3);
+                assert(results.length === 4);
                 assert(results[0].id === 1);
                 assert(results[0].item === 'almonds');
                 assert(results[0].price === 12);
@@ -215,7 +215,7 @@ describe('Individual tests', function () {
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
-                assert(results.length === 3);
+                assert(results.length === 4);
                 assert(results[0].Product === 'almonds');
                 return;
             } catch (err) {
@@ -232,7 +232,7 @@ describe('Individual tests', function () {
                     .collection(parsedQuery.collections[0])
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
-                assert(results.length === 3);
+                assert(results.length === 4);
                 assert(results[0].item === 'almonds');
                 return;
             } catch (err) {
@@ -344,7 +344,7 @@ describe('Individual tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
                 assert(results.length === 1);
-                assert(results[0].countVal === 2);
+                assert(results[0].countVal === 3);
                 return;
             } catch (err) {
                 console.error(err);
@@ -387,7 +387,7 @@ describe('Individual tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
 
-                assert(results.length === 2);
+                assert(results.length === 3);
                 assert(results[0]._id === undefined);
                 return;
             } catch (err) {
@@ -647,7 +647,7 @@ describe('Individual tests', function () {
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results.length);
-            assert(results.length === 4);
+            assert(results.length === 5);
         });
     });
 

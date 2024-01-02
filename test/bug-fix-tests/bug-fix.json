@@ -573,6 +573,67 @@
           }
         ]
       }
+    },
+    "unique": {
+      "case1": {
+        "expectedResults": [
+          {
+            "item": "pecans"
+          },
+          {
+            "item": "potatoes"
+          },
+          {
+            "item": "almonds"
+          }
+        ],
+        "pipeline": [
+          {
+            "$unset": [
+              "_id"
+            ]
+          },
+          {
+            "$group": {
+              "_id": {
+                "item": "$item"
+              }
+            }
+          },
+          {
+            "$project": {
+              "item": "$_id.item",
+              "_id": 0
+            }
+          }
+        ]
+      }
+    },
+    "round+sum": {
+      "case1": {
+        "expectedResults": [
+          {
+            "roundSumPrice": 14,
+            "customerId": 1,
+            "sumRoundPrice": 14
+          },
+          {
+            "roundSumPrice": 20,
+            "customerId": 2,
+            "sumRoundPrice": 20
+          },
+          {
+            "roundSumPrice": 12,
+            "customerId": 3,
+            "sumRoundPrice": 12
+          },
+          {
+            "roundSumPrice": 7,
+            "customerId": 5,
+            "sumRoundPrice": 7
+          }
+        ]
+      }
     }
   }
 }
