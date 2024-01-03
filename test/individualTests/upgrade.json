@@ -1,0 +1,22 @@
+{
+  "bugfix": {
+    "join-fn": {
+      "case1": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "quantity": 2,
+            "Category": "Fats",
+            "priceZAR": 264
+          },
+          {
+            "customerId": 1,
+            "quantity": 2,
+            "Category": "Real Order",
+            "priceZAR": 264
+          }
+        ]
+      }
+    }
+  }
+}

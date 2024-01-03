@@ -2,22 +2,27 @@ const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
 const {setup, disconnect, dbName} = require('../utils/mongo-client.js');
 const $check = require('check-types');
+const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 
 describe('node-sql-parser upgrade tests', function () {
     this.timeout(90000);
     /** @type {import('mongodb').MongoClient} */
     let mongoClient;
-    before(function (done) {
-        const run = async () => {
-            try {
-                const {client} = await setup();
-                mongoClient = client;
-                done();
-            } catch (exp) {
-                done(exp);
-            }
-        };
-        run();
+    /** @type {import("../utils/query-tester/types.js").QueryResultTester} */
+    let queryResultTester;
+    const mode = 'test';
+    const dirName = __dirname;
+    const fileName = 'upgrade';
+
+    before(async function () {
+        const {client} = await setup();
+        mongoClient = client;
+        queryResultTester = buildQueryResultTester({
+            dirName,
+            fileName,
+            mongoClient,
+            mode,
+        });
     });
 
     after(function (done) {
@@ -184,6 +189,54 @@ describe('node-sql-parser upgrade tests', function () {
                 options
             );
             assert(parsedQuery.collections);
+        });
+    });
+    describe('Group by split', () => {
+        it('should perform a union with 2 sub selects', async () => {
+            const queryString = `
+            SELECT  o.customerId,
+                    o.quantity,
+                    CASE
+                        WHEN o.item = 'almonds' THEN 'Fats'
+                        WHEN o.item = 'potatoes' THEN 'Carbs'
+                        WHEN o.item = 'pecans' THEN 'Fats'
+                        ELSE o.item
+                    END AS 'Category',
+                    ROUND(o.priceZAR,2) as priceZAR
+            FROM (
+                SELECT  customerId,
+                        quantity,
+                        item,
+                        sum(ROUND(price * 19.6,0)) as priceZAR
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            ) o
+            WHERE customerId = 1
+            UNION
+            SELECT  o.customerId,
+                    o.quantity,
+                    CASE
+                        WHEN o.notes = 'testing' THEN 'Test Order'
+                        ELSE 'Real Order'
+                    END AS 'Category',
+                    ROUND(o.priceZAR,2) as priceZAR
+            FROM (
+                SELECT  customerId,
+                        quantity,
+                        item,
+                        sum(ROUND(price * 19.6,0)) as priceZAR
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            ) o
+            WHERE customerId = 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.join-fn.case1',
+                mode: 'write',
+            });
         });
     });
 });

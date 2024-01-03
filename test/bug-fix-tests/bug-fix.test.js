@@ -13,24 +13,16 @@ describe('bug-fixes', function () {
     let mongoClient;
     /** @type {import("mongodb").Db} */
     let database;
-    before(function (done) {
-        const run = async () => {
-            try {
-                const {client, db} = await setup();
-                mongoClient = client;
-                database = db;
-                queryResultTester = buildQueryResultTester({
-                    dirName,
-                    fileName,
-                    mongoClient,
-                    mode,
-                });
-                done();
-            } catch (exp) {
-                done(exp);
-            }
-        };
-        run();
+    before(async function () {
+        const {client, db} = await setup();
+        mongoClient = client;
+        database = db;
+        queryResultTester = buildQueryResultTester({
+            dirName,
+            fileName,
+            mongoClient,
+            mode,
+        });
     });
 
     after(function (done) {
@@ -702,8 +694,8 @@ describe('bug-fixes', function () {
                         ROUND(sum(price),0) as roundSumPrice,
                         sum(ROUND(price,0)) as sumRoundPrice
                 FROM orders
-                group by customerId
-                order by customerId ASC
+                GROUP BY customerId
+                ORDER BY customerId ASC
             `;
             /**
              * sum(ROUND(price,2)) as sumRoundPrice <== Works
