@@ -687,8 +687,8 @@ describe('bug-fixes', function () {
             });
         });
     });
-    describe('round + sum', () => {
-        it('should get the rounded and summed values', async () => {
+    describe('chaining functions in group by', () => {
+        it('should be able to use round + sum', async () => {
             const queryString = `
                 SELECT  customerId,
                         ROUND(sum(price),0) as roundSumPrice,
@@ -697,16 +697,38 @@ describe('bug-fixes', function () {
                 GROUP BY customerId
                 ORDER BY customerId ASC
             `;
-            /**
-             * sum(ROUND(price,2)) as sumRoundPrice <== Works
-             * ROUND(price,0) as roundPrice,
-                        sum(price) as sumPrice,
-             *  --ROUND(sum(price),2) as RoundSumPrice,
-                        --unset(_id)
-             */
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.round+sum.case1',
+                casePath: 'bugfix.chain-group-by.case1',
+                mode,
+            });
+        });
+        it('should be able to use round + sum without a second argument to round', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        ROUND(sum(price)) as roundSumPrice,
+                        sum(ROUND(price)) as sumRoundPrice
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case2',
+            });
+        });
+        it('should be able to use sum + avg', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        avg(sum(price)) as roundSumPrice,
+                        sum(avg(price)) as sumRoundPrice
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case3',
                 mode,
             });
         });

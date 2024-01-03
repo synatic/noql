@@ -609,7 +609,7 @@
         ]
       }
     },
-    "round+sum": {
+    "chain-group-by": {
       "case1": {
         "expectedResults": [
           {
@@ -630,6 +630,54 @@
           {
             "roundSumPrice": 7,
             "customerId": 5,
+            "sumRoundPrice": 7
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "roundSumPrice": 14,
+            "customerId": 1,
+            "sumRoundPrice": 14
+          },
+          {
+            "roundSumPrice": 20,
+            "customerId": 2,
+            "sumRoundPrice": 20
+          },
+          {
+            "roundSumPrice": 12,
+            "customerId": 3,
+            "sumRoundPrice": 12
+          },
+          {
+            "roundSumPrice": 7,
+            "customerId": 5,
+            "sumRoundPrice": 7
+          }
+        ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "roundSumPrice": 6.75,
+            "sumRoundPrice": 13.5
+          },
+          {
+            "customerId": 2,
+            "roundSumPrice": 20,
+            "sumRoundPrice": 20
+          },
+          {
+            "customerId": 3,
+            "roundSumPrice": 12,
+            "sumRoundPrice": 12
+          },
+          {
+            "customerId": 5,
+            "roundSumPrice": 7,
             "sumRoundPrice": 7
           }
         ]
