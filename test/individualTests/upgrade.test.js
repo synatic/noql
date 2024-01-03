@@ -196,45 +196,55 @@ describe('node-sql-parser upgrade tests', function () {
             const queryString = `
             SELECT  o.customerId,
                     o.quantity,
-                    CASE
-                        WHEN o.item = 'almonds' THEN 'Fats'
-                        WHEN o.item = 'potatoes' THEN 'Carbs'
-                        WHEN o.item = 'pecans' THEN 'Fats'
-                        ELSE o.item
-                    END AS 'Category',
-                    ROUND(o.priceZAR,2) as priceZAR
+                    o.Category,
+                    o.priceZAR
             FROM (
-                SELECT  customerId,
-                        quantity,
-                        item,
-                        sum(ROUND(price * 19.6,0)) as priceZAR
-                FROM orders
-                GROUP BY customerId
-                ORDER BY customerId ASC
+                SELECT  o.customerId,
+                        o.quantity,
+                        CASE
+                            WHEN o.item = 'almonds' THEN 'Fats'
+                            WHEN o.item = 'potatoes' THEN 'Carbs'
+                            WHEN o.item = 'pecans' THEN 'Fats'
+                            ELSE o.item
+                        END AS 'Category',
+                        ROUND(o.priceZAR,2) as priceZAR
+                FROM (
+                    SELECT  customerId,
+                            quantity,
+                            item,
+                            sum(ROUND(price * 19.6,0)) as priceZAR
+                    FROM orders
+                    GROUP BY customerId
+                    ORDER BY customerId ASC
+                ) o
+                WHERE customerId = 1
+                UNION
+                SELECT  o.customerId,
+                        o.quantity,
+                        CASE
+                            WHEN o.notes = 'testing' THEN 'Test Order'
+                            ELSE 'Real Order'
+                        END AS 'Category',
+                        ROUND(o.priceZAR,2) as priceZAR
+                FROM (
+                    SELECT  customerId,
+                            quantity,
+                            item,
+                            sum(ROUND(price * 19.6,0)) as priceZAR
+                    FROM orders
+                    GROUP BY customerId
+                    ORDER BY customerId ASC
+                ) o
+                WHERE customerId = 1
             ) o
-            WHERE customerId = 1
-            UNION
-            SELECT  o.customerId,
-                    o.quantity,
-                    CASE
-                        WHEN o.notes = 'testing' THEN 'Test Order'
-                        ELSE 'Real Order'
-                    END AS 'Category',
-                    ROUND(o.priceZAR,2) as priceZAR
-            FROM (
-                SELECT  customerId,
-                        quantity,
-                        item,
-                        sum(ROUND(price * 19.6,0)) as priceZAR
-                FROM orders
-                GROUP BY customerId
-                ORDER BY customerId ASC
-            ) o
-            WHERE customerId = 1
+            --TODO Bug, o.Category doesn't work
+            ORDER BY Category ASC
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.join-fn.case1',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
     });

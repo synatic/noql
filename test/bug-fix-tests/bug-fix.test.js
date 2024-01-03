@@ -688,7 +688,7 @@ describe('bug-fixes', function () {
         });
     });
     describe('round + sum', () => {
-        it.skip('should get the rounded and summed values', async () => {
+        it('should get the rounded and summed values', async () => {
             const queryString = `
                 SELECT  customerId,
                         ROUND(sum(price),0) as roundSumPrice,
