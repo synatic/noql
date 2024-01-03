@@ -10,6 +10,7 @@
       "$date": null
     }
   },
+
   {
     "id": 2,
     "item": "pecans",
@@ -20,6 +21,17 @@
     "specialChars": "!!$",
     "orderDate": {
       "$date": "2022-04-08T00:00:00.000Z"
+    }
+  },
+  {
+    "id": 3,
+    "item": "almonds",
+    "price": 1.5,
+    "quantity": 2,
+    "customerId": 1,
+    "specialChars": "^^^",
+    "orderDate": {
+      "$date": null
     }
   },
   {

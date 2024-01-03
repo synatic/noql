@@ -602,9 +602,9 @@ describe('joins', function () {
             await queryResultTester({
                 queryString: fullQueryString,
                 casePath: 'deep-level-joins.case1',
-                outputPipeline: true,
+                outputPipeline: false,
                 expectZeroResults: true,
-                mode: 'write',
+                mode,
             });
         });
     });

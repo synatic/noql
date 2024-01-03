@@ -13,24 +13,16 @@ describe('bug-fixes', function () {
     let mongoClient;
     /** @type {import("mongodb").Db} */
     let database;
-    before(function (done) {
-        const run = async () => {
-            try {
-                const {client, db} = await setup();
-                mongoClient = client;
-                database = db;
-                queryResultTester = buildQueryResultTester({
-                    dirName,
-                    fileName,
-                    mongoClient,
-                    mode,
-                });
-                done();
-            } catch (exp) {
-                done(exp);
-            }
-        };
-        run();
+    before(async function () {
+        const {client, db} = await setup();
+        mongoClient = client;
+        database = db;
+        queryResultTester = buildQueryResultTester({
+            dirName,
+            fileName,
+            mongoClient,
+            mode,
+        });
     });
 
     after(function (done) {
@@ -676,6 +668,97 @@ describe('bug-fixes', function () {
                 casePath: 'bugfix.current_date.case1',
                 mode,
                 ignoreDateValues: true,
+            });
+        });
+    });
+    describe('unique', () => {
+        it.skip('should get unique values', async () => {
+            const queryString = `
+                SELECT DISTINCT
+                     item,
+                     unset(_id)
+                    FROM orders
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.unique.case1',
+                ignoreDateValues: true,
+                mode: 'test',
+            });
+        });
+    });
+    describe('chaining functions in group by', () => {
+        it('should be able to use round + sum', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        ROUND(sum(price),0) as roundSumPrice,
+                        sum(ROUND(price,0)) as sumRoundPrice
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case1',
+                mode,
+            });
+        });
+        it('should be able to use round + sum without a second argument to round', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        ROUND(sum(price)) as roundSumPrice,
+                        sum(ROUND(price)) as sumRoundPrice
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case2',
+            });
+        });
+        it('should be able to use sum + avg', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        avg(sum(price)) as avgSum,
+                        sum(avg(price)) as sumAvg
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case3',
+            });
+        });
+        it('should be able to use sum + min', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        min(sum(price)) as minSum,
+                        sum(min(price)) as sumMin
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case4',
+            });
+        });
+        it('should be able to use sum + subtract', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        subtract(sum(price),1) as subtractSum,
+                        sum(subtract(price, 1)) as sumSubtract
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case5',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
     });

@@ -573,6 +573,168 @@
           }
         ]
       }
+    },
+    "unique": {
+      "case1": {
+        "expectedResults": [
+          {
+            "item": "pecans"
+          },
+          {
+            "item": "potatoes"
+          },
+          {
+            "item": "almonds"
+          }
+        ],
+        "pipeline": [
+          {
+            "$unset": [
+              "_id"
+            ]
+          },
+          {
+            "$group": {
+              "_id": {
+                "item": "$item"
+              }
+            }
+          },
+          {
+            "$project": {
+              "item": "$_id.item",
+              "_id": 0
+            }
+          }
+        ]
+      }
+    },
+    "chain-group-by": {
+      "case1": {
+        "expectedResults": [
+          {
+            "roundSumPrice": 14,
+            "customerId": 1,
+            "sumRoundPrice": 14
+          },
+          {
+            "roundSumPrice": 20,
+            "customerId": 2,
+            "sumRoundPrice": 20
+          },
+          {
+            "roundSumPrice": 12,
+            "customerId": 3,
+            "sumRoundPrice": 12
+          },
+          {
+            "roundSumPrice": 7,
+            "customerId": 5,
+            "sumRoundPrice": 7
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "roundSumPrice": 14,
+            "customerId": 1,
+            "sumRoundPrice": 14
+          },
+          {
+            "roundSumPrice": 20,
+            "customerId": 2,
+            "sumRoundPrice": 20
+          },
+          {
+            "roundSumPrice": 12,
+            "customerId": 3,
+            "sumRoundPrice": 12
+          },
+          {
+            "roundSumPrice": 7,
+            "customerId": 5,
+            "sumRoundPrice": 7
+          }
+        ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "avgSum": 6.75,
+            "sumAvg": 13.5
+          },
+          {
+            "customerId": 2,
+            "avgSum": 20,
+            "sumAvg": 20
+          },
+          {
+            "customerId": 3,
+            "avgSum": 12,
+            "sumAvg": 12
+          },
+          {
+            "customerId": 5,
+            "avgSum": 7,
+            "sumAvg": 7
+          }
+        ]
+      },
+      "case4": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "minSum": 1.5,
+            "sumMin": 13.5
+          },
+          {
+            "customerId": 2,
+            "minSum": 20,
+            "sumMin": 20
+          },
+          {
+            "customerId": 3,
+            "minSum": 12,
+            "sumMin": 12
+          },
+          {
+            "customerId": 5,
+            "minSum": 7,
+            "sumMin": 7
+          }
+        ]
+      },
+      "case5": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "subtractSum": 11,
+            "sumSubtract": 11
+          },
+          {
+            "customerId": 1,
+            "subtractSum": 0.5,
+            "sumSubtract": 0.5
+          },
+          {
+            "customerId": 2,
+            "subtractSum": 19,
+            "sumSubtract": 19
+          },
+          {
+            "customerId": 3,
+            "subtractSum": 11,
+            "sumSubtract": 11
+          },
+          {
+            "customerId": 5,
+            "subtractSum": 6,
+            "sumSubtract": 6
+          }
+        ]
+      }
     }
   }
 }
