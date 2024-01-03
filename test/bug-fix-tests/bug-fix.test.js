@@ -720,8 +720,8 @@ describe('bug-fixes', function () {
         it('should be able to use sum + avg', async () => {
             const queryString = `
                 SELECT  customerId,
-                        avg(sum(price)) as roundSumPrice,
-                        sum(avg(price)) as sumRoundPrice
+                        avg(sum(price)) as avgSum,
+                        sum(avg(price)) as sumAvg
                 FROM orders
                 GROUP BY customerId
                 ORDER BY customerId ASC
@@ -729,7 +729,36 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.chain-group-by.case3',
-                mode,
+            });
+        });
+        it('should be able to use sum + min', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        min(sum(price)) as minSum,
+                        sum(min(price)) as sumMin
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case4',
+            });
+        });
+        it('should be able to use sum + subtract', async () => {
+            const queryString = `
+                SELECT  customerId,
+                        subtract(sum(price),1) as subtractSum,
+                        sum(subtract(price, 1)) as sumSubtract
+                FROM orders
+                GROUP BY customerId
+                ORDER BY customerId ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.chain-group-by.case5',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
     });

@@ -662,23 +662,76 @@
         "expectedResults": [
           {
             "customerId": 1,
-            "roundSumPrice": 6.75,
-            "sumRoundPrice": 13.5
+            "avgSum": 6.75,
+            "sumAvg": 13.5
           },
           {
             "customerId": 2,
-            "roundSumPrice": 20,
-            "sumRoundPrice": 20
+            "avgSum": 20,
+            "sumAvg": 20
           },
           {
             "customerId": 3,
-            "roundSumPrice": 12,
-            "sumRoundPrice": 12
+            "avgSum": 12,
+            "sumAvg": 12
           },
           {
             "customerId": 5,
-            "roundSumPrice": 7,
-            "sumRoundPrice": 7
+            "avgSum": 7,
+            "sumAvg": 7
+          }
+        ]
+      },
+      "case4": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "minSum": 1.5,
+            "sumMin": 13.5
+          },
+          {
+            "customerId": 2,
+            "minSum": 20,
+            "sumMin": 20
+          },
+          {
+            "customerId": 3,
+            "minSum": 12,
+            "sumMin": 12
+          },
+          {
+            "customerId": 5,
+            "minSum": 7,
+            "sumMin": 7
+          }
+        ]
+      },
+      "case5": {
+        "expectedResults": [
+          {
+            "customerId": 1,
+            "subtractSum": 11,
+            "sumSubtract": 11
+          },
+          {
+            "customerId": 1,
+            "subtractSum": 0.5,
+            "sumSubtract": 0.5
+          },
+          {
+            "customerId": 2,
+            "subtractSum": 19,
+            "sumSubtract": 19
+          },
+          {
+            "customerId": 3,
+            "subtractSum": 11,
+            "sumSubtract": 11
+          },
+          {
+            "customerId": 5,
+            "subtractSum": 6,
+            "sumSubtract": 6
           }
         ]
       }
