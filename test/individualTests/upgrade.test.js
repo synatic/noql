@@ -235,7 +235,6 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.join-fn.case1',
-                mode: 'write',
             });
         });
     });
