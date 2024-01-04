@@ -752,7 +752,7 @@ describe('bug-fixes', function () {
                         sum(subtract(price, 1)) as sumSubtract
                 FROM orders
                 GROUP BY customerId
-                ORDER BY customerId ASC
+                ORDER BY customerId ASC, subtractSum desc
             `;
             await queryResultTester({
                 queryString: queryString,
