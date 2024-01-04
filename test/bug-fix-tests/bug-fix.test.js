@@ -757,8 +757,6 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.chain-group-by.case5',
-                mode: 'write',
-                outputPipeline: false,
             });
         });
     });
