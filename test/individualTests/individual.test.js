@@ -469,28 +469,6 @@ describe('Individual tests', function () {
             FROM orders o
             where id=2`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            const pipeline = [
-                {$match: {id: {$eq: 2}}},
-                {$project: {o: '$$ROOT'}},
-                {
-                    $project: {
-                        item: '$o.item',
-                        notes: '$o.notes',
-                        specialChars: '$o.specialChars',
-                        OriginalExecutive: {
-                            $switch: {
-                                branches: [
-                                    {
-                                        case: {$eq: ['$o.item', 'pecans']},
-                                        then: 'Y',
-                                    },
-                                ],
-                                default: {$literal: 'N'},
-                            },
-                        },
-                    },
-                },
-            ];
             assert(
                 parsedQuery.pipeline[2].$project.OriginalExecutive.$switch
                     .branches[0].case.$eq[0] === '$o.item'
