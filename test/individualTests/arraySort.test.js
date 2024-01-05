@@ -5,13 +5,15 @@ describe('Array Sort', function () {
     it('should be able to build an AST without an exception', () => {
         assert.doesNotThrow(() => {
             SQLParser.parseSQLtoAST(
-                'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`'
+                'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`',
+                {database: 'PostgresQL'}
             );
         });
     });
     it('should build the mongodb aggregation pipeline with a sort', () => {
         SQLParser.makeMongoAggregate(
-            'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`'
+            'SELECT id, (select * from Rentals order by `Rental Date` desc) AS OrderedRentals FROM `customers`',
+            {database: 'PostgresQL'}
         );
     });
 });

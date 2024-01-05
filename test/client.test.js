@@ -57,7 +57,7 @@ describe('Client Queries', function () {
                     test.query
                 }`, async function () {
                     const parsedQuery = SQLParser.parseSQL(test.query, {
-                        database: test.database,
+                        database: test.database || 'PostgresQL',
                     });
                     if (parsedQuery.count) {
                         const count = await mongoClient
@@ -100,7 +100,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(
                         test.query,
                         {
-                            database: test.database,
+                            database: test.database || 'PostgresQL',
                         }
                     );
 
@@ -130,7 +130,7 @@ describe('Client Queries', function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(
                         test.query,
                         {
-                            database: test.database,
+                            database: test.database || 'PostgresQL',
                         }
                     );
                     let results = await mongoClient

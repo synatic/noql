@@ -67,7 +67,9 @@ describe('Individual tests', function () {
     it('should be able to do a select * computed', async () => {
         const queryText = `SELECT *, convert(id, 'string') as idConv FROM inventory`;
         try {
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
+                database: 'PostgresQL',
+            });
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collections[0])
