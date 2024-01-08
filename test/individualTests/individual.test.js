@@ -583,7 +583,7 @@ describe('Individual tests', function () {
 
     describe('literals', () => {
         it('Should use the literal value if it is not a table alias', async () => {
-            const queryText = `select "Name" as Id, Description from "films"`;
+            const queryText = `select 'Name' as Id, Description from "films"`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
