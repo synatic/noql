@@ -20,27 +20,20 @@ const _aggregateTests = [].concat(
 describe('SQL Parser', function () {
     describe('should parse from sql ast: SQLParser.parseSQLtoAST', function () {
         it('should parse simple sql', function () {
-            const {ast} = SQLParser.parseSQLtoAST(
-                'select * from `collection`',
-                {database: 'PostgresQL'}
-            );
+            const {ast} = SQLParser.parseSQLtoAST('select * from `collection`');
             assert(ast.from[0].table === 'collection', 'Invalid from');
         });
 
         it('should return an ast when ast passed', function () {
-            const ast = SQLParser.parseSQLtoAST('select * from `collection`', {
-                database: 'PostgresQL',
-            });
-            const ast2 = SQLParser.parseSQLtoAST(ast, {database: 'PostgresQL'});
+            const ast = SQLParser.parseSQLtoAST('select * from `collection`');
+            const ast2 = SQLParser.parseSQLtoAST(ast);
             assert(ast === ast2, 'Invalid returns from ast');
         });
 
         it('should fail if no collection passed', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const ast = SQLParser.parseSQLtoAST('select 1', {
-                    database: 'PostgresQL',
-                });
+                const ast = SQLParser.parseSQLtoAST('select 1');
             } catch (exp) {
                 return assert.equal(
                     exp.message,
@@ -54,9 +47,7 @@ describe('SQL Parser', function () {
         it('should fail on an invalid statement', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const ast = SQLParser.parseSQLtoAST('select *  `collection`', {
-                    database: 'PostgresQL',
-                });
+                const ast = SQLParser.parseSQLtoAST('select *  `collection`');
             } catch (exp) {
                 return assert.ok(
                     exp.message.startsWith(
@@ -71,8 +62,7 @@ describe('SQL Parser', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST(
-                    'select * from `collection` with unwind',
-                    {database: 'PostgresQL'}
+                    'select * from `collection` with unwind'
                 );
             } catch (exp) {
                 return assert.equal(
@@ -87,8 +77,7 @@ describe('SQL Parser', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST(
-                    'select Name,sum(`Replacement Cost`,2)  from `films`',
-                    {database: 'PostgresQL'}
+                    'select Name,sum(`Replacement Cost`,2)  from `films`'
                 );
             } catch (exp) {
                 return assert.equal(
@@ -103,8 +92,7 @@ describe('SQL Parser', function () {
             try {
                 // eslint-disable-next-line no-unused-vars
                 const ast = SQLParser.parseSQLtoAST(
-                    'select Name,a>b from `films`',
-                    {database: 'PostgresQL'}
+                    'select Name,a>b from `films`'
                 );
             } catch (exp) {
                 return assert.equal(exp.message, 'Requires as for binary_expr');
@@ -254,9 +242,7 @@ describe('SQL Parser', function () {
             it(`${t.name ? t.name + ':' : ''}${t.query}`, function () {
                 if (t.error) {
                     try {
-                        SQLParser.makeMongoQuery(t.query, {
-                            database: t.database || 'PostgresQL',
-                        });
+                        SQLParser.makeMongoQuery(t.query);
                         assert(false, 'No error');
                     } catch (exp) {
                         assert.equal(exp.message, t.error);
@@ -265,9 +251,7 @@ describe('SQL Parser', function () {
                     let err = null;
                     let parsedQuery;
                     try {
-                        parsedQuery = SQLParser.makeMongoQuery(t.query, {
-                            database: t.database || 'PostgresQL',
-                        });
+                        parsedQuery = SQLParser.makeMongoQuery(t.query);
                     } catch (exp) {
                         err = exp.message;
                     }
@@ -286,12 +270,8 @@ describe('SQL Parser', function () {
                 let parsedQuery;
                 let parsedAggregate;
                 try {
-                    parsedQuery = SQLParser.makeMongoQuery(t.query, {
-                        database: t.database || 'PostgresQL',
-                    });
-                    parsedAggregate = SQLParser.makeMongoAggregate(t.query, {
-                        database: t.database || 'PostgresQL',
-                    });
+                    parsedQuery = SQLParser.makeMongoQuery(t.query);
+                    parsedAggregate = SQLParser.makeMongoAggregate(t.query);
                 } catch (exp) {
                     err = exp.message;
                 }
@@ -326,9 +306,7 @@ describe('SQL Parser', function () {
             it(`${t.name ? t.name + ':' : ''}${t.query}`, function () {
                 if (t.error) {
                     try {
-                        SQLParser.makeMongoAggregate(t.query, {
-                            database: 'PostgresQL',
-                        });
+                        SQLParser.makeMongoAggregate(t.query);
                         assert(false, 'No error');
                     } catch (exp) {
                         assert.equal(exp.message, t.error);
@@ -337,9 +315,7 @@ describe('SQL Parser', function () {
                     let err = null;
                     let parsedQuery;
                     try {
-                        parsedQuery = SQLParser.makeMongoAggregate(t.query, {
-                            database: 'PostgresQL',
-                        });
+                        parsedQuery = SQLParser.makeMongoAggregate(t.query);
                     } catch (exp) {
                         err = exp.message;
                     }
@@ -354,8 +330,7 @@ describe('SQL Parser', function () {
     it('should parse plain query 2', function () {
         assert.deepEqual(
             SQLParser.parseSQL(
-                'select `a.b` as Id ,Name from `global-test` where `a.b`>1',
-                {database: 'PostgresQL'}
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1'
             ),
             {
                 collection: 'global-test',
@@ -374,8 +349,7 @@ describe('SQL Parser', function () {
 
         assert.deepEqual(
             SQLParser.parseSQL(
-                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10',
-                {database: 'PostgresQL'}
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10'
             ),
             {
                 collection: 'global-test',
@@ -394,8 +368,7 @@ describe('SQL Parser', function () {
 
         assert.deepEqual(
             SQLParser.parseSQL(
-                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5',
-                {database: 'PostgresQL'}
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'
             ),
             {
                 collection: 'global-test',
@@ -415,8 +388,7 @@ describe('SQL Parser', function () {
 
         assert.deepEqual(
             SQLParser.parseSQL(
-                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5',
-                {database: 'PostgresQL'}
+                'select `a.b` as Id ,Name from `global-test` where `a.b`>1 limit 10 offset 5'
             ),
             {
                 collection: 'global-test',
@@ -439,9 +411,7 @@ describe('SQL Parser', function () {
     it('SQL to MongoBD Mapping', function () {
         // TODO ID issue shoot
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT id, user_id, status FROM people`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT id, user_id, status FROM people`),
             {
                 limit: 100,
                 collection: 'people',
@@ -452,9 +422,7 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT user_id, status FROM people`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT user_id, status FROM people`),
             {
                 limit: 100,
                 collection: 'people',
@@ -465,9 +433,7 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT * FROM people WHERE status = "A"`),
             {
                 limit: 100,
                 collection: 'people',
@@ -479,8 +445,7 @@ describe('SQL Parser', function () {
 
         assert.deepStrictEqual(
             SQLParser.parseSQL(
-                `SELECT user_id, status FROM people WHERE status = "A"`,
-                {database: 'PostgresQL'}
+                `SELECT user_id, status FROM people WHERE status = "A"`
             ),
             {
                 limit: 100,
@@ -493,9 +458,7 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE status != "A"`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT * FROM people WHERE status != "A"`),
             {
                 limit: 100,
                 collection: 'people',
@@ -507,8 +470,7 @@ describe('SQL Parser', function () {
 
         assert.deepStrictEqual(
             SQLParser.parseSQL(
-                `SELECT * FROM people WHERE status = "A" AND age = 50`,
-                {database: 'PostgresQL'}
+                `SELECT * FROM people WHERE status = "A" AND age = 50`
             ),
             {
                 limit: 100,
@@ -521,8 +483,7 @@ describe('SQL Parser', function () {
 
         assert.deepStrictEqual(
             SQLParser.parseSQL(
-                `SELECT * FROM people WHERE status = "A" OR age = 50`,
-                {database: 'PostgresQL'}
+                `SELECT * FROM people WHERE status = "A" OR age = 50`
             ),
             {
                 limit: 100,
@@ -536,9 +497,7 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE age > 25`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT * FROM people WHERE age > 25`),
             {
                 limit: 100,
                 collection: 'people',
@@ -549,9 +508,7 @@ describe('SQL Parser', function () {
         );
 
         assert.deepStrictEqual(
-            SQLParser.parseSQL(`SELECT * FROM people WHERE age < 25`, {
-                database: 'PostgresQL',
-            }),
+            SQLParser.parseSQL(`SELECT * FROM people WHERE age < 25`),
             {
                 limit: 100,
                 collection: 'people',
@@ -563,8 +520,7 @@ describe('SQL Parser', function () {
 
         assert.deepStrictEqual(
             SQLParser.parseSQL(
-                `SELECT * FROM people WHERE age > 25 and age <30`,
-                {database: 'PostgresQL'}
+                `SELECT * FROM people WHERE age > 25 and age <30`
             ),
             {
                 limit: 100,
@@ -593,7 +549,6 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(
             SQLParser.makeMongoAggregate(`select _id,x,y from customers`, {
                 unsetId: true,
-                database: 'PostgresQL',
             }),
             {
                 collections: ['customers'],
@@ -614,7 +569,6 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(
             SQLParser.makeMongoAggregate(`select x,y from customers`, {
                 unsetId: true,
-                database: 'PostgresQL',
             }),
             {
                 collections: ['customers'],
@@ -635,7 +589,6 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(
             SQLParser.makeMongoAggregate(`select x,y from customers`, {
                 unsetId: false,
-                database: 'PostgresQL',
             }),
             {
                 collections: ['customers'],
@@ -655,7 +608,6 @@ describe('SQL Parser', function () {
         assert.deepStrictEqual(
             SQLParser.makeMongoAggregate(`select * from customers`, {
                 unsetId: true,
-                database: 'PostgresQL',
             }),
             {
                 collections: ['customers'],
@@ -670,7 +622,6 @@ describe('SQL Parser', function () {
                 `select x,y from customers order by _id`,
                 {
                     unsetId: true,
-                    database: 'PostgresQL',
                 }
             ),
             {

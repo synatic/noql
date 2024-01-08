@@ -56,9 +56,7 @@ describe('Client Queries', function () {
                 it(`${test.name ? test.name + ':' : ''}${
                     test.query
                 }`, async function () {
-                    const parsedQuery = SQLParser.parseSQL(test.query, {
-                        database: test.database || 'PostgresQL',
-                    });
+                    const parsedQuery = SQLParser.parseSQL(test.query);
                     if (parsedQuery.count) {
                         const count = await mongoClient
                             .db(dbName)
@@ -98,10 +96,7 @@ describe('Client Queries', function () {
                     test.query
                 }`, async function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(
-                        test.query,
-                        {
-                            database: test.database || 'PostgresQL',
-                        }
+                        test.query
                     );
 
                     let results = await mongoClient
@@ -128,10 +123,7 @@ describe('Client Queries', function () {
                     test.query
                 }`, async function () {
                     const parsedQuery = SQLParser.makeMongoAggregate(
-                        test.query,
-                        {
-                            database: test.database || 'PostgresQL',
-                        }
+                        test.query
                     );
                     let results = await mongoClient
                         .db(dbName)

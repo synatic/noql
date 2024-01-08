@@ -51,10 +51,7 @@ describe('node-sql-parser upgrade tests', function () {
                 const queryText =
                     "select `item` as productName from `orders` where `item` Like 'alm%'";
                 try {
-                    const parsedQuery = SQLParser.makeMongoAggregate(
-                        queryText,
-                        {database: 'PostgresQL'}
-                    );
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
                         .db(dbName)
                         .collection(parsedQuery.collections[0])
@@ -71,10 +68,7 @@ describe('node-sql-parser upgrade tests', function () {
                 const queryText =
                     "select `item` as productName from `orders` where `item` Not Like 'alm%'";
                 try {
-                    const parsedQuery = SQLParser.makeMongoAggregate(
-                        queryText,
-                        {database: 'PostgresQL'}
-                    );
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
                         .db(dbName)
                         .collection(parsedQuery.collections[0])
@@ -93,10 +87,7 @@ describe('node-sql-parser upgrade tests', function () {
                 const queryText =
                     "select id,`First Name`,`Last Name`,(select * from Rentals where `Film Title` like 'MUSKETEERS%') as rentalsArr from `customers` where id=1";
                 try {
-                    const parsedQuery = SQLParser.makeMongoAggregate(
-                        queryText,
-                        {database: 'PostgresQL'}
-                    );
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
                         .db(dbName)
                         .collection(parsedQuery.collections[0])
@@ -114,10 +105,7 @@ describe('node-sql-parser upgrade tests', function () {
                 const queryText =
                     "select id,`First Name`,`Last Name`,(select * from Rentals where `Film Title` not like 'MUSKETEERS%') as rentalsArr from `customers` where id=1";
                 try {
-                    const parsedQuery = SQLParser.makeMongoAggregate(
-                        queryText,
-                        {database: 'PostgresQL'}
-                    );
+                    const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                     const results = await mongoClient
                         .db(dbName)
                         .collection(parsedQuery.collections[0])

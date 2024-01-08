@@ -182,8 +182,6 @@ export interface ParserOptions {
     isArray?: boolean;
     /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select or join */
     unwindJoins?: boolean;
-    /** Specifies the type of database that Nodejs SQL Parser will use, e.g. 'PostgresQL' */
-    database?: string;
     /** Specifies the type that Nodejs SQL Parser will use e.g. 'table', 'column'*/
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
@@ -198,7 +196,7 @@ export interface NoqlContext extends ParserOptions {
     /** The cleaned SQL statement */
     cleanedStatement?: string;
     tables: string[];
-    fullAst:TableColumnAst;
+    fullAst: TableColumnAst;
 }
 
 export interface ParseResult {

@@ -903,7 +903,7 @@
   },
   {
     "name": "Join:with function in on 1",
-    "query": "select *  from customers c left outer join `customer-notes` `cn|first` on cn.id=convert(c.id,'int')",
+    "query": "select * from customers c left outer join `customer-notes` `cn|first` on cn.id=convert(c.id,'int')",
     "type": "aggregate",
     "output": {
       "pipeline": [

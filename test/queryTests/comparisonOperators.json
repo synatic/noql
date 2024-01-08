@@ -422,7 +422,6 @@
   },
   {
     "name": "Comparison:ILIKE",
-    "database": "PostgresQL",
     "output": {
       "limit": 100,
       "projection": {

@@ -403,7 +403,6 @@
   {
     "name": "Date:EXTRACT",
     "query": "select extract(year from orderDate) as year,extract(month from orderDate) as month, extract(day from to_date('2021-10-23')) as day from orders",
-    "database": "PostgresQL",
     "output": {
       "collection": "orders",
       "limit": 100,
