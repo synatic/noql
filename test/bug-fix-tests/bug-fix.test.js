@@ -46,27 +46,6 @@ describe('bug-fixes', function () {
         return result;
     }
 
-    // /**
-    //  *
-    //  * @param  {...string} collectionNames
-    //  * @returns
-    //  */
-    // async function getSchemas(...collectionNames) {
-    //     /** @type {import('../../lib/types').FlattenedSchemas} */
-    //     const result = {};
-    //     for (const collectionName of collectionNames) {
-    //         const searchResult = await database
-    //             .collection('schemas')
-    //             .findOne(
-    //                 {collectionName},
-    //                 {projection: {_id: 0, flattenedSchema: 1}}
-    //             );
-    //         result[collectionName] = searchResult.flattenedSchema;
-    //     }
-
-    //     return result;
-    // }
-
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -627,7 +606,6 @@ describe('bug-fixes', function () {
                         unset(_id)
                 FROM orders
                 WHERE orderDate > timestamp '2021-01-01 00:00:00'
-                LIMIT 1
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -650,18 +628,17 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.large-number.case1',
-                mode: 'write',
             });
         });
     });
     describe('Current_Date', () => {
         it('should allow you to compare dates', async () => {
             const queryString = `
-                SELECT  orderDate,
+                SELECT  id,
+                        orderDate,
                         unset(_id)
                 FROM orders
-                WHERE orderDate < CURRENT_DATE()
-                LIMIT 1
+                WHERE FIELD_EXISTS('orderDate',true) AND orderDate != null AND orderDate < CURRENT_DATE()
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -757,6 +734,46 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.chain-group-by.case5',
+            });
+        });
+    });
+    describe('multiple sums, with column names', () => {
+        it('should work with Martins example', async () => {
+            const queryString = `
+                SELECT
+                    sum("stats.2023.06.acord.total") as "2023_06",
+                    sum("stats.2023.07.acord.total") as "2023_07",
+                    sum("stats.2023.08.acord.total") as "2023_08",
+                    sum("stats.2023.09.acord.total") as "2023_09",
+                    sum("stats.2023.10.acord.total") as "2023_10",
+                    sum("stats.2023.11.acord.total") as "2023_11",
+                    sum("stats.2023.12.acord.total") as "2023_12"
+                FROM ocr_stats
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.multiple-sums.case1',
+                mode,
+            });
+        });
+    });
+    describe('extract dates', () => {
+        it('Date:EXTRACT', async () => {
+            const queryString = `
+                SELECT  orderDate,
+                        extract(year from orderDate) as year,
+                        extract(month from orderDate) as month,
+                        extract(day from to_date('2021-10-23')) as day,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate != null
+                ORDER BY orderDate ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.extract-dates.case1',
+                mode,
+                ignoreDateValues: true,
             });
         });
     });

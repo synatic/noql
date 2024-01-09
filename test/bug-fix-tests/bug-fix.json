@@ -544,12 +544,22 @@
       "case1": {
         "expectedResults": [
           {
-            "id": 1,
-            "item": "almonds",
-            "price": 12,
-            "quantity": 2,
-            "customerId": 1,
-            "specialChars": "^^^",
+            "id": 2,
+            "item": "pecans",
+            "notes": "testing",
+            "price": 20,
+            "quantity": 1,
+            "customerId": 2,
+            "specialChars": "!!$",
+            "orderDate": "$date-placeholder"
+          },
+          {
+            "id": 5,
+            "item": "potatoes",
+            "price": 7,
+            "quantity": 6,
+            "customerId": 5,
+            "specialChars": "!!*",
             "orderDate": "$date-placeholder"
           }
         ]
@@ -569,6 +579,11 @@
       "case1": {
         "expectedResults": [
           {
+            "id": 2,
+            "orderDate": "$date-placeholder"
+          },
+          {
+            "id": 5,
             "orderDate": "$date-placeholder"
           }
         ]
@@ -732,6 +747,39 @@
             "customerId": 5,
             "subtractSum": 6,
             "sumSubtract": 6
+          }
+        ]
+      }
+    },
+    "multiple-sums": {
+      "case1": {
+        "expectedResults": [
+          {
+            "2023_06": 6,
+            "2023_07": 7,
+            "2023_08": 8,
+            "2023_09": 9,
+            "2023_10": 10,
+            "2023_11": 11,
+            "2023_12": 12
+          }
+        ]
+      }
+    },
+    "extract-dates": {
+      "case1": {
+        "expectedResults": [
+          {
+            "orderDate": "$date-placeholder",
+            "year": 2021,
+            "month": 7,
+            "day": 23
+          },
+          {
+            "orderDate": "$date-placeholder",
+            "year": 2022,
+            "month": 4,
+            "day": 23
           }
         ]
       }
