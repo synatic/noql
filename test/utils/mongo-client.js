@@ -1,9 +1,8 @@
+const {EJSON} = require('bson');
 const {MongoClient, ObjectId} = require('mongodb');
-const $check = require('check-types');
 const $schema = require('@synatic/schema-magic');
 const fs = require('fs/promises');
 const Path = require('path');
-const set = require('lodash/set');
 
 const connectionString = 'mongodb://127.0.0.1:27017';
 const dbName = 'sql-to-mongo-test';
@@ -59,7 +58,7 @@ async function addTestData() {
         const collectionName = file.substring(0, jsonIndex);
         const filePath = Path.join(dataDirectory, file);
         const dataString = await fs.readFile(filePath, {encoding: 'utf-8'});
-        const data = JSON.parse(dataString);
+        const data = EJSON.parse(dataString);
         for (const item of data) {
             if (item._id && typeof item._id === 'string') {
                 item._id = new ObjectId(item._id);
@@ -67,47 +66,11 @@ async function addTestData() {
         }
         await db.collection(collectionName).bulkWrite(
             data.map((d) => {
-                return {insertOne: {document: parseDocForDates(d)}};
+                return {insertOne: {document: d}};
             })
         );
         await generateSchema(data, collectionName);
     }
-
-    //
-}
-function parseDocForDates(d, parentKey = '', parentObject = {}) {
-    // eslint-disable-next-line guard-for-in
-    for (const key in d) {
-        const value = d[key];
-        if (key === '$date') {
-            if ($check.null(value)) {
-                set(parentObject, parentKey, new Date());
-            } else {
-                set(parentObject, parentKey, new Date(value));
-            }
-            continue;
-        }
-        if (key === '$objectId') {
-            if ($check.null(value)) {
-                set(parentObject, parentKey, new ObjectId());
-            } else {
-                set(parentObject, parentKey, new ObjectId(value));
-            }
-            continue;
-        }
-        if (Array.isArray(value)) {
-            let index = 0;
-            for (const item of value) {
-                parseDocForDates(item, `${key}[${index}]`, d);
-                index++;
-            }
-            continue;
-        }
-        if ($check.object(value)) {
-            parseDocForDates(value, key, d);
-        }
-    }
-    return d;
 }
 
 async function dropTestDb() {
