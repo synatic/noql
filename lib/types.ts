@@ -233,6 +233,7 @@ export interface ColumnParseResult {
     countDistinct: string;
     groupByProject?: object;
     windowFields: SetWindowFields[];
+    subQueryRootProjections: string[];
 }
 
 export interface MongoQueryFunction {

@@ -737,7 +737,7 @@ describe('bug-fixes', function () {
             });
         });
     });
-    describe('multiple sums, with column names', () => {
+    describe('SUM function', () => {
         it('should work with Martins example', async () => {
             const queryString = `
                 SELECT
@@ -752,7 +752,24 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.multiple-sums.case1',
+                casePath: 'bugfix.sums.case1',
+                mode,
+            });
+        });
+        it('should work with sum(1)', async () => {
+            const queryString = `
+                SELECT  c.id,
+                        sum(1) as cnt
+                FROM customers c
+                INNER JOIN \`customer-notes\` cn on c.id=cn.id
+                WHERE cn.id>1 and c.id>2
+                GROUP BY c.id
+                HAVING cnt >0
+                ORDER BY c.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sums.case2',
                 mode,
             });
         });

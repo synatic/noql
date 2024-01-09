@@ -397,9 +397,7 @@
         ]
       },
       "case6": {
-        "expectedResults": [
-          {}
-        ]
+        "expectedResults": [{}]
       }
     },
     "schema-aware-queries": {
@@ -520,23 +518,6 @@
             "id": 1,
             "item": "almonds"
           }
-        ],
-        "pipeline": [
-          {
-            "$match": {
-              "orderDate": {
-                "$gt": "2020-01-01 00:00:00"
-              }
-            }
-          },
-          {
-            "$unset": [
-              "_id"
-            ]
-          },
-          {
-            "$limit": 1
-          }
         ]
       }
     },
@@ -600,26 +581,6 @@
           },
           {
             "item": "almonds"
-          }
-        ],
-        "pipeline": [
-          {
-            "$unset": [
-              "_id"
-            ]
-          },
-          {
-            "$group": {
-              "_id": {
-                "item": "$item"
-              }
-            }
-          },
-          {
-            "$project": {
-              "item": "$_id.item",
-              "_id": 0
-            }
           }
         ]
       }
@@ -751,21 +712,6 @@
         ]
       }
     },
-    "multiple-sums": {
-      "case1": {
-        "expectedResults": [
-          {
-            "2023_06": 6,
-            "2023_07": 7,
-            "2023_08": 8,
-            "2023_09": 9,
-            "2023_10": 10,
-            "2023_11": 11,
-            "2023_12": 12
-          }
-        ]
-      }
-    },
     "extract-dates": {
       "case1": {
         "expectedResults": [
@@ -780,6 +726,37 @@
             "year": 2022,
             "month": 4,
             "day": 23
+          }
+        ]
+      }
+    },
+    "sums": {
+      "case1": {
+        "expectedResults": [
+          {
+            "2023_06": 6,
+            "2023_07": 7,
+            "2023_08": 8,
+            "2023_09": 9,
+            "2023_10": 10,
+            "2023_11": 11,
+            "2023_12": 12
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 3,
+            "cnt": 1
+          },
+          {
+            "id": 4,
+            "cnt": 1
+          },
+          {
+            "id": 5,
+            "cnt": 1
           }
         ]
       }

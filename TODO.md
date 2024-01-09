@@ -7,4 +7,3 @@
 -   Deprecate ignoreDateValues
 -   orderDate < CURRENT_DATE() includes nulls
 -   Monitoring dashboard for failed parses of buffer queries
--   Get PR merged in
