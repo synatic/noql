@@ -314,25 +314,110 @@ describe('bug-fixes', function () {
             });
         });
     });
-    // describe('ntile', () => {
-    //     it('Should correctly group the results', async () => {
-    //         const queryString = `
-    //             SELECT  name,
-    //                     amount,
-    //                     NTILE (3) OVER (
-    //                         ORDER BY amount
-    //                     ) ntile,
-    //                     unset(_id)
-    //             FROM function-test-data
-    //             WHERE testId='bugfix.ntile.case1'
-    //         `;
-    //         await queryResultTester({
-    //             queryString: queryString,
-    //             casePath: 'bugfix.row-number.case1',
-    //             mode: 'write',
-    //         });
-    //     });
-    // });
+    describe('ntile', () => {
+        it.skip('Should correctly group the results', async () => {
+            // https://www.postgresqltutorial.com/postgresql-window-function/postgresql-ntile-function/
+            const queryString = `
+                SELECT  name,
+                        amount,
+                        NTILE (3) OVER (
+                            ORDER BY amount
+                        ) ntile,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.ntile.case1'
+            `;
+            const workingPipeline = [
+                {
+                    $match: {
+                        testId: {
+                            $eq: 'bugfix.ntile.case1',
+                        },
+                    },
+                },
+                {
+                    $unset: ['_id'],
+                },
+                {
+                    $project: {
+                        name: '$name',
+                        amount: '$amount',
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            name: '$name',
+                        },
+                        amount: {
+                            $last: '$amount',
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        name: '$_id.name',
+                        amount: '$amount',
+                    },
+                },
+                {
+                    $sort: {
+                        amount: 1,
+                    },
+                },
+                {
+                    $bucketAuto: {
+                        groupBy: '$name',
+                        buckets: 3,
+                        output: {
+                            buckets: {
+                                $push: {
+                                    name: '$name',
+                                    amount: '$amount',
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    $setWindowFields: {
+                        sortBy: {
+                            _id: 1,
+                        },
+                        output: {
+                            ntile: {
+                                $rank: {},
+                            },
+                        },
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$buckets',
+                        preserveNullAndEmptyArrays: false,
+                    },
+                },
+                {
+                    $project: {
+                        name: '$buckets.name',
+                        amount: '$buckets.amount',
+                        ntile: '$ntile',
+                    },
+                },
+                {
+                    $sort: {
+                        amount: 1,
+                    },
+                },
+            ];
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.ntile.case1',
+                mode: 'write',
+                outputPipeline: true,
+            });
+        });
+    });
     describe('to_objectid', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
