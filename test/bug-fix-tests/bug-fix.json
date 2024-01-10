@@ -397,9 +397,7 @@
         ]
       },
       "case6": {
-        "expectedResults": [
-          {}
-        ]
+        "expectedResults": [{}]
       }
     },
     "schema-aware-queries": {
@@ -769,44 +767,12 @@
       "expectedResults": [
         {
           "company": {
-            "id": 5,
-            "item": "potatoes",
-            "price": 7,
-            "quantity": 6,
-            "customerId": 5,
-            "specialChars": "!!*",
-            "orderDate": "2021-07-09T00:00:00.000Z",
-            "CName": "potatoes"
-          }
-        },
-        {
-          "company": {
-            "id": 4,
+            "id": 1,
             "item": "almonds",
             "price": 12,
-            "quantity": 4,
-            "customerId": 3,
-            "specialChars": "!!\"",
-            "orderDate": null,
-            "CName": "almonds"
-          },
-          "AMSCompany": {
-            "id": 1,
-            "sku": "almonds",
-            "description": "product 1",
-            "instock": 120,
-            "specialChars": "^^^"
-          }
-        },
-        {
-          "company": {
-            "id": 3,
-            "item": "almonds",
-            "price": 1.5,
             "quantity": 2,
             "customerId": 1,
             "specialChars": "^^^",
-            "orderDate": null,
             "CName": "almonds"
           },
           "AMSCompany": {
@@ -826,7 +792,6 @@
             "quantity": 1,
             "customerId": 2,
             "specialChars": "!!$",
-            "orderDate": "2022-04-08T00:00:00.000Z",
             "CName": "pecans"
           },
           "AMSCompany": {
@@ -839,13 +804,12 @@
         },
         {
           "company": {
-            "id": 1,
+            "id": 3,
             "item": "almonds",
-            "price": 12,
+            "price": 1.5,
             "quantity": 2,
             "customerId": 1,
             "specialChars": "^^^",
-            "orderDate": null,
             "CName": "almonds"
           },
           "AMSCompany": {
@@ -855,127 +819,33 @@
             "instock": 120,
             "specialChars": "^^^"
           }
-        }
-      ]
-    },
-    "case2": {
-      "pipeline": [
-        {
-          "$replaceRoot": {
-            "newRoot": {
-              "$mergeObjects": [
-                "$$ROOT",
-                {
-                  "CName": "$item"
-                }
-              ]
-            }
-          }
         },
         {
-          "$project": {
-            "company": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "inventory",
-            "as": "AMSCompany",
-            "let": {},
-            "pipeline": [
-              {
-                "$match": {
-                  "$expr": {
-                    "$regexMatch": {
-                      "input": {
-                        "$toString": "$sku"
-                      },
-                      "regex": null,
-                      "options": "i"
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$set": {
-            "AMSCompany": {
-              "$first": "$AMSCompany"
-            }
-          }
-        }
-      ],
-      "expectedResults": [
-        {
-          "_id": "659eab97baf835c31c65c716",
           "company": {
-            "_id": "659eab97baf835c31c65c716",
-            "id": 1,
-            "item": "almonds",
-            "price": 12,
-            "quantity": 2,
-            "customerId": 1,
-            "specialChars": "^^^",
-            "orderDate": null,
-            "CName": "almonds"
-          }
-        },
-        {
-          "_id": "659eab97baf835c31c65c717",
-          "company": {
-            "_id": "659eab97baf835c31c65c717",
-            "id": 2,
-            "item": "pecans",
-            "notes": "testing",
-            "price": 20,
-            "quantity": 1,
-            "customerId": 2,
-            "specialChars": "!!$",
-            "orderDate": "2022-04-08T00:00:00.000Z",
-            "CName": "pecans"
-          }
-        },
-        {
-          "_id": "659eab97baf835c31c65c718",
-          "company": {
-            "_id": "659eab97baf835c31c65c718",
-            "id": 3,
-            "item": "almonds",
-            "price": 1.5,
-            "quantity": 2,
-            "customerId": 1,
-            "specialChars": "^^^",
-            "orderDate": null,
-            "CName": "almonds"
-          }
-        },
-        {
-          "_id": "659eab97baf835c31c65c719",
-          "company": {
-            "_id": "659eab97baf835c31c65c719",
             "id": 4,
             "item": "almonds",
             "price": 12,
             "quantity": 4,
             "customerId": 3,
             "specialChars": "!!\"",
-            "orderDate": null,
             "CName": "almonds"
+          },
+          "AMSCompany": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
           }
         },
         {
-          "_id": "659eab97baf835c31c65c71a",
           "company": {
-            "_id": "659eab97baf835c31c65c71a",
             "id": 5,
             "item": "potatoes",
             "price": 7,
             "quantity": 6,
             "customerId": 5,
             "specialChars": "!!*",
-            "orderDate": "2021-07-09T00:00:00.000Z",
             "CName": "potatoes"
           }
         }

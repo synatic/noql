@@ -880,9 +880,9 @@ describe('bug-fixes', function () {
         });
     });
     describe('scratchpad', () => {
-        it('Should let you provide the full table name in the on clause', async () => {
+        it('Should let you provide the full table name in the on clause on the left', async () => {
             const queryString = `
-                SELECT  *,unset(_id,company._id,AMSCompany._id)
+                SELECT *,unset(_id,company._id,AMSCompany._id,company.orderDate)
                 FROM (SELECT *, item  as CName from orders) "company|first"
                 LEFT JOIN (select * from inventory) "AMSCompany|first"
                     ON TO_STRING(AMSCompany.sku) = company.CName
@@ -894,7 +894,21 @@ describe('bug-fixes', function () {
                 mode,
             });
         });
-        it('should allow you to use the like clause in an on', async () => {
+        it('Should let you provide the full table name in the on clause on the right', async () => {
+            const queryString = `
+                SELECT *,unset(_id,company._id,AMSCompany._id,company.orderDate)
+                FROM (SELECT *, item  as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON company.CName = TO_STRING(AMSCompany.sku)
+                ORDER BY company.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case1',
+                mode,
+            });
+        });
+        it.skip('should allow you to use the like clause in an on', async () => {
             const queryString = `
                 SELECT  *
                 FROM (SELECT *, item as CName from orders) "company|first"

@@ -67,7 +67,7 @@ export interface Expression {
     table?: string;
     column?: string;
     name?: string;
-    args?: Expression | Expression[];
+    args?: Expression;
     from?: TableDefinition[];
     value?: any;
     tableList?: string[];
@@ -117,6 +117,7 @@ export interface TableDefinition {
     as?: string;
     type?: 'dual';
     expr?: Expression;
+    on?: Expression;
 }
 
 /**------------end testing */
