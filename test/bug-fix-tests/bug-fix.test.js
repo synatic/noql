@@ -879,4 +879,56 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('scratchpad', () => {
+        it('Should let you provide the full table name in the on clause', async () => {
+            const queryString = `
+                SELECT  *,unset(_id,company._id,AMSCompany._id)
+                FROM (SELECT *, item  as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON TO_STRING(AMSCompany.sku) = company.CName
+                ORDER BY company.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case1',
+                mode,
+            });
+        });
+        it('should allow you to use the like clause in an on', async () => {
+            const queryString = `
+                SELECT  *
+                FROM (SELECT *, item as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON TO_STRING(sku) LIKE company.CName
+            `;
+            const $lookup = {
+                from: 'inventory',
+                as: 'AMSCompany',
+                let: {
+                    regex: '$company.CName',
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $regexMatch: {
+                                    input: {
+                                        $toString: '$sku',
+                                    },
+                                    regex: '$$regex',
+                                    options: 'i',
+                                },
+                            },
+                        },
+                    },
+                ],
+            };
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case2',
+                mode: 'write',
+                outputPipeline: true,
+            });
+        });
+    });
 });
