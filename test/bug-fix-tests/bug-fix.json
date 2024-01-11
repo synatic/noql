@@ -397,7 +397,9 @@
         ]
       },
       "case6": {
-        "expectedResults": [{}]
+        "expectedResults": [
+          {}
+        ]
       }
     },
     "schema-aware-queries": {
@@ -764,6 +766,94 @@
   },
   "scratchpad": {
     "case1": {
+      "expectedResults": [
+        {
+          "company": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^",
+            "CName": "almonds"
+          },
+          "AMSCompany": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "company": {
+            "id": 2,
+            "item": "pecans",
+            "notes": "testing",
+            "price": 20,
+            "quantity": 1,
+            "customerId": 2,
+            "specialChars": "!!$",
+            "CName": "pecans"
+          },
+          "AMSCompany": {
+            "id": 4,
+            "sku": "pecans",
+            "description": "product 4",
+            "instock": 70,
+            "specialChars": "!!*"
+          }
+        },
+        {
+          "company": {
+            "id": 3,
+            "item": "almonds",
+            "price": 1.5,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^",
+            "CName": "almonds"
+          },
+          "AMSCompany": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "company": {
+            "id": 4,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 4,
+            "customerId": 3,
+            "specialChars": "!!\"",
+            "CName": "almonds"
+          },
+          "AMSCompany": {
+            "id": 1,
+            "sku": "almonds",
+            "description": "product 1",
+            "instock": 120,
+            "specialChars": "^^^"
+          }
+        },
+        {
+          "company": {
+            "id": 5,
+            "item": "potatoes",
+            "price": 7,
+            "quantity": 6,
+            "customerId": 5,
+            "specialChars": "!!*",
+            "CName": "potatoes"
+          }
+        }
+      ]
+    },
+    "case2": {
       "expectedResults": [
         {
           "company": {
