@@ -22,7 +22,7 @@ const defaultConnectionOptions = {
     password: 'sql123#',
 };
 
-const shouldAddDataToPg = true;
+const shouldAddDataToPg = false;
 const maxRowsToInsert = 1;
 
 async function connect() {
@@ -108,9 +108,13 @@ async function setup() {
     // todo don't connect/disconnect from pg if not going to add data
     await connect();
     await dropTestDb();
-    await dropPgDbAndRecreate();
+    if (shouldAddDataToPg) {
+        await dropPgDbAndRecreate();
+    }
     await addTestData();
-    await pgClient.end();
+    if (shouldAddDataToPg) {
+        await pgClient.end();
+    }
     return {db, client: mongoClient, dbName};
 }
 
