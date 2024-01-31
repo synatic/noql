@@ -1,0 +1,37 @@
+{
+  "intercept": {
+    "case1": {
+      "expectedResults": [
+        {
+          "item": "almonds"
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "item": "almonds"
+        }
+      ]
+    },
+    "case3": {
+      "expectedResults": [
+        {
+          "id": 1
+        }
+      ]
+    },
+    "case4": {
+      "expectedResults": [
+        {
+          "name": "The Godfather",
+          "year": 1972
+        },
+        {
+          "name": "The Dark Knight",
+          "year": 2008
+        }
+      ]
+    }
+  }
+}

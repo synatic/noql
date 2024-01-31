@@ -1,6 +1,6 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
-
+const {getAllSchemas} = require('../utils/get-all-schemas.js');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -28,23 +28,6 @@ describe('bug-fixes', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
-
-    async function getAllSchemas() {
-        /** @type {import("../../lib/types").Schemas} */
-        const result = {};
-        const collections = await database.collections();
-        const collectionNames = collections
-            .map((c) => c.collectionName)
-            .filter((c) => c !== 'schemas');
-        for (const collectionName of collectionNames) {
-            const searchResult = await database
-                .collection('schemas')
-                .findOne({collectionName}, {projection: {_id: 0, schema: 1}});
-            result[collectionName] = searchResult.schema;
-        }
-
-        return result;
-    }
 
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
@@ -563,7 +546,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = [
                 'jsonObjValuesStr',
@@ -606,7 +589,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case2',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = ['jsonObjValuesStr'];
             let resultCounter = 0;
@@ -642,7 +625,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case3',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = ['jsonObjValuesStr'];
             let resultCounter = 0;

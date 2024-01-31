@@ -154,7 +154,7 @@ export interface ParsedMongoAggregate {
 export interface PipelineFn {
     $project?: {[key: string]: any};
     $match?: {[key: string]: any};
-    $group?: {_id: any};
+    $group?: {_id: any; [key: string]: any};
     $replaceRoot?: {[key: string]: any};
     $map?: {[key: string]: any};
     $sort?: {[key: string]: any};
