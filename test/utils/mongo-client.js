@@ -120,7 +120,11 @@ async function disconnect() {
         promises.push(pgClient.end());
     }
     promises.push(mongoClient.close());
-    return await Promise.all(promises);
+    try {
+        await Promise.all(promises);
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 async function dropPgDbAndRecreate() {

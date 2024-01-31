@@ -1,20 +1,15 @@
-/** @type {import("../../lib/types").Schemas |null} */
-let schemas = null;
 /**
  *
  * @param {import("mongodb").Db} database
  * @returns {import("../../lib/types").Schemas}
  */
 async function getAllSchemas(database) {
-    if (schemas) {
-        return schemas;
-    }
-
     const collections = await database.collections();
     const collectionNames = collections
         .map((c) => c.collectionName)
         .filter((c) => c !== 'schemas');
-    schemas = {};
+    /** @type {import("../../lib/types").Schemas} */
+    const schemas = {};
     for (const collectionName of collectionNames) {
         const searchResult = await database
             .collection('schemas')
@@ -22,6 +17,15 @@ async function getAllSchemas(database) {
         schemas[collectionName] = searchResult.schema;
     }
 
+    const schemaKeys = Object.keys(schemas);
+    if (collectionNames.length !== schemaKeys.length) {
+        const missingSchemas = collectionNames.filter(
+            (cn) => schemaKeys.indexOf(cn) >= 0
+        );
+        throw new Error(
+            `Not all schemas could be retrieved from the db, missing: ${missingSchemas}`
+        );
+    }
     return schemas;
 }
 module.exports = {getAllSchemas};
