@@ -30,7 +30,7 @@ describe('intersect & except', function () {
         disconnect().then(done).catch(done);
     });
     describe('intercept', () => {
-        it('should allow you to get the interception of two queries from different tables', async () => {
+        it('should allow you to get the INTERSECT of two queries from different tables', async () => {
             const queryString = `
                 SELECT  item,
                         unset(_id)
@@ -50,7 +50,7 @@ describe('intersect & except', function () {
                 mode,
             });
         });
-        it('should allow you to get the interception of two queries from the same table', async () => {
+        it('should allow you to get the INTERSECT of two queries from the same table', async () => {
             const queryString = `
                 SELECT  item,
                         unset(_id)
@@ -70,7 +70,7 @@ describe('intersect & except', function () {
                 mode,
             });
         });
-        it('should allow you to get the interception of two queries from the same table for a number', async () => {
+        it('should allow you to get the INTERSECT of two queries from the same table for a number', async () => {
             const queryString = `
                 SELECT  id,
                         unset(_id)
@@ -90,20 +90,44 @@ describe('intersect & except', function () {
                 mode,
             });
         });
-        it('should allow you to get the interception of two queries from different tables for a * with string and number values', async () => {
+        it('should allow you to get the INTERSECT of two queries from different tables for a * with string and number values', async () => {
             const queryString = `
             SELECT  *,unset(_id)
             FROM "most-popular-films"
             WHERE 1=1
+
             INTERSECT
 
             SELECT  *,unset(_id)
             FROM "top-rated-films"
             WHERE 1=1
+            ORDER BY name
         `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'intercept.case4',
+                mode,
+                schemas: await getAllSchemas(database),
+            });
+        });
+    });
+    describe('except', () => {
+        it('should allow you to get the EXCEPT of two queries from different tables for a * with string and number values and order by', async () => {
+            const queryString = `
+                SELECT  *,unset(_id)
+                FROM "top-rated-films"
+                WHERE 1=1
+
+                EXCEPT
+
+                SELECT  *,unset(_id)
+                FROM "most-popular-films"
+                WHERE 1=1
+                ORDER BY name
+`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'except.case1',
                 mode,
                 schemas: await getAllSchemas(database),
             });

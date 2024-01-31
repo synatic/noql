@@ -24,12 +24,26 @@
     "case4": {
       "expectedResults": [
         {
-          "name": "The Godfather",
-          "year": 1972
-        },
-        {
           "name": "The Dark Knight",
           "year": 2008
+        },
+        {
+          "name": "The Godfather",
+          "year": 1972
+        }
+      ]
+    }
+  },
+  "except": {
+    "case1": {
+      "expectedResults": [
+        {
+          "name": "12 Angry Men",
+          "year": 1957
+        },
+        {
+          "name": "The Shawshank Redemption",
+          "year": 1994
         }
       ]
     }

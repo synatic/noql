@@ -167,6 +167,7 @@ export interface PipelineFn {
     $unionWith?: any;
     $set?: any;
     $setWindowFields?: SetWindowFields;
+    $addFields?: {[key: string]: any};
 }
 
 export interface SetWindowFields {
