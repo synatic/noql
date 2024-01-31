@@ -44,9 +44,7 @@ describe('metadata', () => {
     describe('no joins', () => {
         it('should be able to generate a schema for a * query', async () => {
             const queryString = 'select * from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 9);
             const _idColumn = schema[7];
@@ -54,9 +52,7 @@ describe('metadata', () => {
         });
         it('should be able to generate a schema for a specific field', async () => {
             const queryString = 'select _id from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 1);
             const _idField = schema[0];
@@ -71,9 +67,7 @@ describe('metadata', () => {
         });
         it('should include the _id column even if not selected', async () => {
             const queryString = 'select id from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 2);
             const _idField = schema[0];
@@ -88,9 +82,7 @@ describe('metadata', () => {
         });
         it('should not include the _id if it is explicitly unset', async () => {
             const queryString = 'select id, unset(_id) from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 1);
             const _idField = schema.find((s) => s.path === '_id');
@@ -99,9 +91,7 @@ describe('metadata', () => {
         // TODO TEST for table.*, table2.*
         it('should be able to generate a schema for a * query with field specified', async () => {
             const queryString = 'select _id, * from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 10);
             const _idColumn = schema[8];
@@ -109,25 +99,19 @@ describe('metadata', () => {
         });
         it('should be able to generate a schema for multiple specific fields', async () => {
             const queryString = 'select _id,item from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 2);
         });
         it('should be able to generate a schema for multiple specific fields with a select *', async () => {
             const queryString = 'select _id,item,* from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 11);
         });
         it('should throw an error if there is no such column', async () => {
             const queryString = 'select _id,bob from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
 
             try {
                 await getResultSchema(ast, queryString, getSchema);
@@ -139,9 +123,7 @@ describe('metadata', () => {
         });
         it('should throw an error if there is no such table with * specified', async () => {
             const queryString = 'select * from orderss';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             try {
                 await getResultSchema(ast, queryString, getSchema);
             } catch (err) {
@@ -152,9 +134,7 @@ describe('metadata', () => {
         });
         it('should throw an error if there is no such table with columns specified', async () => {
             const queryString = 'select _id from orderss';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             try {
                 await getResultSchema(ast, queryString, getSchema);
             } catch (err) {
@@ -165,9 +145,7 @@ describe('metadata', () => {
         });
         it('should be able to generate a schema for a specific field with an alias', async () => {
             const queryString = 'select _id as mongoId from orders';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 1);
             const _idField = schema[0];
@@ -193,9 +171,7 @@ describe('metadata', () => {
             it('trim', async () => {
                 const queryString =
                     'select _id, TRIM(`item`) as trimmedItem from orders';
-                const ast = parseSQLtoAST(queryString, {
-                    database: 'PostgresQL',
-                });
+                const ast = parseSQLtoAST(queryString);
                 const schema = await getResultSchema(
                     ast,
                     queryString,
@@ -211,9 +187,7 @@ describe('metadata', () => {
                 it('object result, no field set', async () => {
                     const queryString =
                         'select _id, firstn(1) as itemSplit from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -228,9 +202,7 @@ describe('metadata', () => {
                 it('object result, field set', async () => {
                     const queryString =
                         'select _id, firstn(1,"rentals") as itemSplit from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -245,9 +217,7 @@ describe('metadata', () => {
                 it('number result, field set', async () => {
                     const queryString =
                         'select _id, firstn(1,"numberArray") as itemSplit from function-test-data';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -263,9 +233,7 @@ describe('metadata', () => {
             it('split', async () => {
                 const queryString =
                     'select _id, SPLIT(`item`,",") as itemSplit from orders';
-                const ast = parseSQLtoAST(queryString, {
-                    database: 'PostgresQL',
-                });
+                const ast = parseSQLtoAST(queryString);
                 const schema = await getResultSchema(
                     ast,
                     queryString,
@@ -281,9 +249,7 @@ describe('metadata', () => {
                 it('object result, no field set', async () => {
                     const queryString =
                         'select _id, lastn(1) as itemSplit from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -298,9 +264,7 @@ describe('metadata', () => {
                 it('object result, field set', async () => {
                     const queryString =
                         'select _id, lastn(1,"rentals") as itemSplit from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -315,9 +279,7 @@ describe('metadata', () => {
                 it('number result, field set', async () => {
                     const queryString =
                         'select _id, lastn(1,"numberArray") as itemSplit from function-test-data';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -334,9 +296,7 @@ describe('metadata', () => {
                 it('to int', async () => {
                     const queryString =
                         'select _id, convert(Phone,"int") as converted from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -353,9 +313,7 @@ describe('metadata', () => {
                 it('should work if a static value is set', async () => {
                     const queryString =
                         'select _id, ifNull(Phone,"555-555-5555") as nullGuard from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -370,9 +328,7 @@ describe('metadata', () => {
                 it('should work if a select value is set', async () => {
                     const queryString =
                         'select _id, ifNull(Phone,(SELECT "A" as val)) as nullGuard from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -417,9 +373,7 @@ describe('metadata', () => {
                 it('should work for a basic first_in_array', async () => {
                     const queryString =
                         'select _id,FIRST_IN_ARRAY(`Rentals`) as Rental from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -436,9 +390,7 @@ describe('metadata', () => {
                 it('should work for a basic last_in_array', async () => {
                     const queryString =
                         'select _id,last_in_array(`Rentals`) as Rental from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -455,9 +407,7 @@ describe('metadata', () => {
                 it('should work for a basic reverse_array', async () => {
                     const queryString =
                         'select _id,reverse_array(`Rentals`) as Rental from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -474,9 +424,7 @@ describe('metadata', () => {
                 it('should work for a basic array_elem_at', async () => {
                     const queryString =
                         'select _id,array_elem_at(`Rentals`,0) as Rental from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -493,9 +441,7 @@ describe('metadata', () => {
                 it('should work for a basic array_elem_at', async () => {
                     const queryString =
                         'select _id,ARRAY_RANGE(0,10,2) as test from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -512,9 +458,7 @@ describe('metadata', () => {
                 it('should work for a basic zip_array', async () => {
                     const queryString =
                         'select _id, ZIP_ARRAY((select `Film Title` as "$$ROOT" from `Rentals`),ARRAY_RANGE(0,10,2)) as test from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -531,9 +475,7 @@ describe('metadata', () => {
                 it('should work for a basic concat_arrays', async () => {
                     const queryString =
                         'select _id, concat_arrays((select `Film Title` as "$$ROOT" from `Rentals`),ARRAY_RANGE(0,10,2)) as test from customers';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -550,9 +492,7 @@ describe('metadata', () => {
                 it('should work for a basic object_to_array', async () => {
                     const queryString =
                         'select id,OBJECT_TO_ARRAY(`Address`) as test from `customers`';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -569,9 +509,7 @@ describe('metadata', () => {
                 it('should work for a basic array_to_object', async () => {
                     const queryString =
                         'select id,ARRAY_TO_OBJECT(PARSE_JSON(\'[{"k":"val","v":1}]\')) as test from `customers`';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -588,9 +526,7 @@ describe('metadata', () => {
                 it('should work for a basic array_to_object', async () => {
                     const queryString =
                         "select id,SET_UNION((select filmId as '$$ROOT' from `Rentals`),PARSE_JSON('[ 1,2,3,4] ')) as test from `customers`";
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -606,9 +542,7 @@ describe('metadata', () => {
             describe('unset', () => {
                 it('should work when unsetting a single field even if it would not have been in the result set', async () => {
                     const queryString = 'select _id, unset(`item`) from orders';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -623,9 +557,7 @@ describe('metadata', () => {
                 it('should work when unsetting multiple fields not in the result set', async () => {
                     const queryString =
                         'select _id, unset(`item,notes`) from orders';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -639,9 +571,7 @@ describe('metadata', () => {
                 });
                 it('should work when unsetting a single field in the result set', async () => {
                     const queryString = 'select *, unset(`item`) from orders';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -654,9 +584,7 @@ describe('metadata', () => {
                 it('should work when unsetting multiple fields in the result set', async () => {
                     const queryString =
                         'select *, unset(`item`,`price`) from orders';
-                    const ast = parseSQLtoAST(queryString, {
-                        database: 'PostgresQL',
-                    });
+                    const ast = parseSQLtoAST(queryString);
                     const schema = await getResultSchema(
                         ast,
                         queryString,
@@ -694,9 +622,7 @@ describe('metadata', () => {
         it('should be able to generate a schema for a * query', async () => {
             const queryString =
                 'select * from orders inner join `inventory` on sku=item';
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             const schema = await getResultSchema(ast, queryString, getSchema);
             assert.deepStrictEqual(schema.length, 15);
             const _idColumn = schema[7];
@@ -734,9 +660,7 @@ describe('metadata', () => {
         /** @type {ResultSchema[]} */
         let schema = [];
         try {
-            const ast = parseSQLtoAST(queryString, {
-                database: 'PostgresQL',
-            });
+            const ast = parseSQLtoAST(queryString);
             schema = await getResultSchema(ast, queryString, getSchema);
         } catch (err) {
             console.error(err);
@@ -745,9 +669,7 @@ describe('metadata', () => {
         /** @type {Document[]} */
         let results = [];
         try {
-            const parsedQuery = makeMongoAggregate(queryString, {
-                database: 'PostgresQL',
-            });
+            const parsedQuery = makeMongoAggregate(queryString);
             results = await mongoClient
                 .db(databaseName)
                 .collection(parsedQuery.collections[0])

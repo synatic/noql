@@ -52,7 +52,6 @@ async function queryResultTester(options) {
         fileName = fileName + '.json';
     }
     const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
-        database: 'PostgresQL',
         schemas,
     });
     const filePath = $path.resolve(dirName, fileName);

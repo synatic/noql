@@ -469,28 +469,6 @@ describe('Individual tests', function () {
             FROM orders o
             where id=2`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
-            const pipeline = [
-                {$match: {id: {$eq: 2}}},
-                {$project: {o: '$$ROOT'}},
-                {
-                    $project: {
-                        item: '$o.item',
-                        notes: '$o.notes',
-                        specialChars: '$o.specialChars',
-                        OriginalExecutive: {
-                            $switch: {
-                                branches: [
-                                    {
-                                        case: {$eq: ['$o.item', 'pecans']},
-                                        then: 'Y',
-                                    },
-                                ],
-                                default: {$literal: 'N'},
-                            },
-                        },
-                    },
-                },
-            ];
             assert(
                 parsedQuery.pipeline[2].$project.OriginalExecutive.$switch
                     .branches[0].case.$eq[0] === '$o.item'
@@ -605,7 +583,7 @@ describe('Individual tests', function () {
 
     describe('literals', () => {
         it('Should use the literal value if it is not a table alias', async () => {
-            const queryText = `select "Name" as Id, Description from "films"`;
+            const queryText = `select 'Name' as Id, Description from "films"`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
@@ -638,9 +616,7 @@ describe('Individual tests', function () {
             select "AccountType",
                 "CalcDate"
             from "orders"`;
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
-                database: 'PostgresQL',
-            });
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collections[0])
@@ -657,9 +633,7 @@ describe('Individual tests', function () {
                         select distinct item
                         from "orders"
                         where id in (select id from orders where item=almonds)`;
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
-                database: 'PostgresQL',
-            });
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collections[0])
@@ -675,9 +649,7 @@ describe('Individual tests', function () {
                         from "orders"
                         where id not in (select * from orders where item=almonds)`;
             assert.throws(() => {
-                SQLParser.makeMongoAggregate(queryText, {
-                    database: 'PostgresQL',
-                });
+                SQLParser.makeMongoAggregate(queryText);
             });
         });
         it('should throw an error when more than 1 column is specified', async () => {
@@ -686,9 +658,7 @@ describe('Individual tests', function () {
                         from "orders"
                         where id not in (select item,id from orders where item=almonds)`;
             assert.throws(() => {
-                SQLParser.makeMongoAggregate(queryText, {
-                    database: 'PostgresQL',
-                });
+                SQLParser.makeMongoAggregate(queryText);
             });
         });
         it('should work for a valid not in query', async () => {
@@ -696,9 +666,7 @@ describe('Individual tests', function () {
                         select item
                         from "orders"
                         where id not in (select id from orders where item=almonds)`;
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
-                database: 'PostgresQL',
-            });
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collections[0])
@@ -757,9 +725,7 @@ describe('Individual tests', function () {
             WHERE NOT "_"."a0" IS NULL
             LIMIT 1000001`;
 
-            const parsedQuery = SQLParser.makeMongoAggregate(queryText, {
-                database: 'PostgresQL',
-            });
+            const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
                 .collection(parsedQuery.collections[0])

@@ -4,7 +4,8 @@
     "sku": "almonds",
     "description": "product 1",
     "instock": 120,
-    "specialChars": "^^^"
+    "specialChars": "^^^",
+    "someValue": 1
   },
   {
     "id": 2,

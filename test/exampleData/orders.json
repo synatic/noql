@@ -6,9 +6,7 @@
     "quantity": 2,
     "customerId": 1,
     "specialChars": "^^^",
-    "orderDate": {
-      "$date": null
-    }
+    "orderDate": null
   },
 
   {
@@ -30,9 +28,7 @@
     "quantity": 2,
     "customerId": 1,
     "specialChars": "^^^",
-    "orderDate": {
-      "$date": null
-    }
+    "orderDate": null
   },
   {
     "id": 4,
@@ -41,9 +37,7 @@
     "quantity": 4,
     "customerId": 3,
     "specialChars": "!!\"",
-    "orderDate": {
-      "$date": null
-    }
+    "orderDate": null
   },
   {
     "id": 5,

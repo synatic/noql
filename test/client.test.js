@@ -49,129 +49,95 @@ describe('Client Queries', function () {
         disconnect().then(done).catch(done);
     });
 
-    describe('run query tests', function (done) {
+    describe('run query tests', function () {
         (async () => {
             const tests = _queryTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
                 it(`${test.name ? test.name + ':' : ''}${
                     test.query
-                }`, function (done) {
-                    (async () => {
-                        try {
-                            const parsedQuery = SQLParser.parseSQL(test.query, {
-                                database: test.database,
+                }`, async function () {
+                    const parsedQuery = SQLParser.parseSQL(test.query);
+                    if (parsedQuery.count) {
+                        const count = await mongoClient
+                            .db(dbName)
+                            .collection(parsedQuery.collection)
+                            .countDocuments(parsedQuery.query || {});
+                        console.log(`${count}`);
+                    } else {
+                        const find = mongoClient
+                            .db(dbName)
+                            .collection(parsedQuery.collection)
+                            .find(parsedQuery.query || {}, {
+                                projection: parsedQuery.projection,
                             });
-                            if (parsedQuery.count) {
-                                const count = await mongoClient
-                                    .db(dbName)
-                                    .collection(parsedQuery.collection)
-                                    .countDocuments(parsedQuery.query || {});
-                                console.log(`${count}`);
-                            } else {
-                                const find = mongoClient
-                                    .db(dbName)
-                                    .collection(parsedQuery.collection)
-                                    .find(parsedQuery.query || {}, {
-                                        projection: parsedQuery.projection,
-                                    });
-                                if (parsedQuery.sort) {
-                                    find.sort(parsedQuery.sort);
-                                }
-                                if (parsedQuery.limit) {
-                                    find.limit(parsedQuery.limit);
-                                }
-                                const results = await find.toArray();
-                                console.log(
-                                    `count:${results.length} | ${
-                                        results[0]
-                                            ? JSON.stringify(results[0])
-                                            : ''
-                                    }`
-                                );
-                            }
-                            done();
-                        } catch (exp) {
-                            done(exp ? exp.message : null);
+                        if (parsedQuery.sort) {
+                            find.sort(parsedQuery.sort);
                         }
-                    })();
+                        if (parsedQuery.limit) {
+                            find.limit(parsedQuery.limit);
+                        }
+                        const results = await find.toArray();
+                        console.log(
+                            `count:${results.length} | ${
+                                results[0] ? JSON.stringify(results[0]) : ''
+                            }`
+                        );
+                    }
                 });
             }
-            done();
         })();
     });
 
-    describe('run query tests as aggregates', function (done) {
+    describe('run query tests as aggregates', function () {
         (async () => {
             const tests = _queryTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
                 it(`${test.name ? test.name + ':' : ''}${
                     test.query
-                }`, function (done) {
-                    (async () => {
-                        try {
-                            const parsedQuery = SQLParser.makeMongoAggregate(
-                                test.query,
-                                {
-                                    database: test.database,
-                                }
-                            );
+                }`, async function () {
+                    const parsedQuery = SQLParser.makeMongoAggregate(
+                        test.query
+                    );
 
-                            let results = await mongoClient
-                                .db(dbName)
-                                .collection(parsedQuery.collections[0])
-                                .aggregate(parsedQuery.pipeline);
-                            results = await results.toArray();
+                    let results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
 
-                            console.log(
-                                `count:${results.length} | ${
-                                    results[0] ? JSON.stringify(results[0]) : ''
-                                }`
-                            );
-                            done();
-                        } catch (exp) {
-                            done(exp ? exp.message : null);
-                        }
-                    })();
+                    console.log(
+                        `count:${results.length} | ${
+                            results[0] ? JSON.stringify(results[0]) : ''
+                        }`
+                    );
                 });
             }
-            done();
         })();
     });
 
-    describe('run aggregate tests', function (done) {
+    describe('run aggregate tests', function () {
         (async () => {
             const tests = _aggregateTests.filter((q) => !!q.query && !q.error);
             for (const test of tests) {
                 it(`${test.name ? test.name + ':' : ''}${
                     test.query
-                }`, function (done) {
-                    (async () => {
-                        try {
-                            const parsedQuery = SQLParser.makeMongoAggregate(
-                                test.query,
-                                {
-                                    database: test.database,
-                                }
-                            );
-                            let results = await mongoClient
-                                .db(dbName)
-                                .collection(parsedQuery.collections[0])
-                                .aggregate(parsedQuery.pipeline);
-                            results = await results.toArray();
+                }`, async function () {
+                    const parsedQuery = SQLParser.makeMongoAggregate(
+                        test.query
+                    );
+                    let results = await mongoClient
+                        .db(dbName)
+                        .collection(parsedQuery.collections[0])
+                        .aggregate(parsedQuery.pipeline);
+                    results = await results.toArray();
 
-                            console.log(
-                                `count:${results.length} | ${
-                                    results[0] ? JSON.stringify(results[0]) : ''
-                                }`
-                            );
-                            done();
-                        } catch (exp) {
-                            done(exp ? exp.message : null);
-                        }
-                    })();
+                    console.log(
+                        `count:${results.length} | ${
+                            results[0] ? JSON.stringify(results[0]) : ''
+                        }`
+                    );
                 });
             }
-            done();
         })();
     });
 });
