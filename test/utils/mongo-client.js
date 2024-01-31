@@ -1,7 +1,7 @@
 const {EJSON} = require('bson');
 const {MongoClient, ObjectId} = require('mongodb');
 const $schema = require('@synatic/schema-magic');
-const fs = require('fs/promises');
+const fs = require('fs');
 const Path = require('path');
 const {Client} = require('pg');
 const $check = require('check-types');
@@ -66,7 +66,7 @@ async function addTestData() {
         throw new Error('Call connect before addTestData');
     }
     const dataDirectory = './test/exampleData/';
-    const files = await fs.readdir(dataDirectory);
+    const files = await fs.readdirSync(dataDirectory);
     for (const file of files) {
         const searchString = '.json';
         const jsonIndex = file.lastIndexOf(searchString);
@@ -75,7 +75,7 @@ async function addTestData() {
         }
         const collectionName = file.substring(0, jsonIndex);
         const filePath = Path.join(dataDirectory, file);
-        const dataString = await fs.readFile(filePath, {encoding: 'utf-8'});
+        const dataString = await fs.readFileSync(filePath, {encoding: 'utf-8'});
         const data = EJSON.parse(dataString);
         for (const item of data) {
             if (item._id && typeof item._id === 'string') {
