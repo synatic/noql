@@ -415,7 +415,7 @@ function convertValue(value, type, schema, tableName, columnName) {
                 return `array[${value.join(',')}]`;
             }
             if (schema.items.type === 'string') {
-                return `array[${value.map((v) => `'${v}'`).join(',')}]`;
+                return `array[${value.map((v) => "'" + v + "'").join(',')}]`;
             }
         }
     }
