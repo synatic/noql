@@ -1,7 +1,7 @@
 const assert = require('assert');
 // eslint-disable-next-line node/no-extraneous-require
 const {set, get} = require('lodash');
-const fs = require('fs/promises');
+const fs = require('fs');
 const $path = require('path');
 const {dbName} = require('../mongo-client');
 const SQLParser = require('../../../lib/SQLParser.js');
@@ -52,7 +52,6 @@ async function queryResultTester(options) {
         fileName = fileName + '.json';
     }
     const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
-        database: 'PostgresQL',
         schemas,
     });
     const filePath = $path.resolve(dirName, fileName);
@@ -130,7 +129,7 @@ function checkForMongoTypes(obj, ignoreDateValues) {
  */
 async function ensureFileExists(path) {
     try {
-        await fs.stat(path);
+        await fs.statSync(path);
         return true;
     } catch (err) {
         if (err.code === 'ENOENT') {
@@ -150,7 +149,7 @@ async function ensureFileExists(path) {
  */
 async function writeFile(path, content) {
     const contentString = JSON.stringify(content, null, 2);
-    await fs.writeFile(path, contentString, {
+    await fs.writeFileSync(path, contentString, {
         encoding: 'utf-8',
     });
 }
@@ -164,6 +163,6 @@ async function readCases(path) {
     if (!existed) {
         return {};
     }
-    const dataString = await fs.readFile(path, {encoding: 'utf-8'});
+    const dataString = await fs.readFileSync(path, {encoding: 'utf-8'});
     return JSON.parse(dataString);
 }

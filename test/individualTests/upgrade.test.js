@@ -165,7 +165,7 @@ describe('node-sql-parser upgrade tests', function () {
             const queryText = `
             SELECT *
             FROM orders
-            WHERE YEAR(orderDate) = YEAR(CURRENT_DATE())`;
+            WHERE YEAR(orderDate) < YEAR(CURRENT_DATE())`;
             try {
                 const parsedQuery = SQLParser.makeMongoAggregate(queryText);
                 const results = await mongoClient
@@ -174,7 +174,7 @@ describe('node-sql-parser upgrade tests', function () {
                     .aggregate(parsedQuery.pipeline)
                     .toArray();
                 assert(results);
-                assert(results.length === 3);
+                assert(results.length === 5);
             } catch (err) {
                 console.error(err);
                 throw err;
@@ -243,7 +243,7 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.join-fn.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
             });
         });

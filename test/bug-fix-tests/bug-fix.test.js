@@ -1,6 +1,6 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
-
+const {getAllSchemas} = require('../utils/get-all-schemas.js');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -28,44 +28,6 @@ describe('bug-fixes', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
-
-    async function getAllSchemas() {
-        /** @type {import("../../lib/types").Schemas} */
-        const result = {};
-        const collections = await database.collections();
-        const collectionNames = collections
-            .map((c) => c.collectionName)
-            .filter((c) => c !== 'schemas');
-        for (const collectionName of collectionNames) {
-            const searchResult = await database
-                .collection('schemas')
-                .findOne({collectionName}, {projection: {_id: 0, schema: 1}});
-            result[collectionName] = searchResult.schema;
-        }
-
-        return result;
-    }
-
-    // /**
-    //  *
-    //  * @param  {...string} collectionNames
-    //  * @returns
-    //  */
-    // async function getSchemas(...collectionNames) {
-    //     /** @type {import('../../lib/types').FlattenedSchemas} */
-    //     const result = {};
-    //     for (const collectionName of collectionNames) {
-    //         const searchResult = await database
-    //             .collection('schemas')
-    //             .findOne(
-    //                 {collectionName},
-    //                 {projection: {_id: 0, flattenedSchema: 1}}
-    //             );
-    //         result[collectionName] = searchResult.flattenedSchema;
-    //     }
-
-    //     return result;
-    // }
 
     describe('true/false case statement bug', () => {
         it('should work for case 1', async () => {
@@ -335,25 +297,110 @@ describe('bug-fixes', function () {
             });
         });
     });
-    // describe('ntile', () => {
-    //     it('Should correctly group the results', async () => {
-    //         const queryString = `
-    //             SELECT  name,
-    //                     amount,
-    //                     NTILE (3) OVER (
-    //                         ORDER BY amount
-    //                     ) ntile,
-    //                     unset(_id)
-    //             FROM function-test-data
-    //             WHERE testId='bugfix.ntile.case1'
-    //         `;
-    //         await queryResultTester({
-    //             queryString: queryString,
-    //             casePath: 'bugfix.row-number.case1',
-    //             mode: 'write',
-    //         });
-    //     });
-    // });
+    describe('ntile', () => {
+        it.skip('Should correctly group the results', async () => {
+            // https://www.postgresqltutorial.com/postgresql-window-function/postgresql-ntile-function/
+            const queryString = `
+                SELECT  name,
+                        amount,
+                        NTILE (3) OVER (
+                            ORDER BY amount
+                        ) ntile,
+                        unset(_id)
+                FROM function-test-data
+                WHERE testId='bugfix.ntile.case1'
+            `;
+            const workingPipeline = [
+                {
+                    $match: {
+                        testId: {
+                            $eq: 'bugfix.ntile.case1',
+                        },
+                    },
+                },
+                {
+                    $unset: ['_id'],
+                },
+                {
+                    $project: {
+                        name: '$name',
+                        amount: '$amount',
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            name: '$name',
+                        },
+                        amount: {
+                            $last: '$amount',
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        name: '$_id.name',
+                        amount: '$amount',
+                    },
+                },
+                {
+                    $sort: {
+                        amount: 1,
+                    },
+                },
+                {
+                    $bucketAuto: {
+                        groupBy: '$name',
+                        buckets: 3,
+                        output: {
+                            buckets: {
+                                $push: {
+                                    name: '$name',
+                                    amount: '$amount',
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    $setWindowFields: {
+                        sortBy: {
+                            _id: 1,
+                        },
+                        output: {
+                            ntile: {
+                                $rank: {},
+                            },
+                        },
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$buckets',
+                        preserveNullAndEmptyArrays: false,
+                    },
+                },
+                {
+                    $project: {
+                        name: '$buckets.name',
+                        amount: '$buckets.amount',
+                        ntile: '$ntile',
+                    },
+                },
+                {
+                    $sort: {
+                        amount: 1,
+                    },
+                },
+            ];
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.ntile.case1',
+                mode: 'write',
+                outputPipeline: true,
+            });
+        });
+    });
     describe('to_objectid', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
@@ -499,7 +546,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case1',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = [
                 'jsonObjValuesStr',
@@ -542,7 +589,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case2',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = ['jsonObjValuesStr'];
             let resultCounter = 0;
@@ -578,7 +625,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath:
                     'bugfix.schema-aware-queries.cast-json-array-to-varchar.case3',
-                schemas: await getAllSchemas(),
+                schemas: await getAllSchemas(database),
             });
             const keysToParse = ['jsonObjValuesStr'];
             let resultCounter = 0;
@@ -627,7 +674,6 @@ describe('bug-fixes', function () {
                         unset(_id)
                 FROM orders
                 WHERE orderDate > timestamp '2021-01-01 00:00:00'
-                LIMIT 1
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -650,18 +696,17 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.large-number.case1',
-                mode: 'write',
             });
         });
     });
     describe('Current_Date', () => {
         it('should allow you to compare dates', async () => {
             const queryString = `
-                SELECT  orderDate,
+                SELECT  id,
+                        orderDate,
                         unset(_id)
                 FROM orders
-                WHERE orderDate < CURRENT_DATE()
-                LIMIT 1
+                WHERE FIELD_EXISTS('orderDate',true) AND orderDate != null AND orderDate < CURRENT_DATE()
             `;
             await queryResultTester({
                 queryString: queryString,
@@ -752,13 +797,111 @@ describe('bug-fixes', function () {
                         sum(subtract(price, 1)) as sumSubtract
                 FROM orders
                 GROUP BY customerId
-                ORDER BY customerId ASC
+                ORDER BY customerId ASC, subtractSum desc
             `;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.chain-group-by.case5',
-                mode: 'write',
-                outputPipeline: false,
+            });
+        });
+    });
+    describe('SUM function', () => {
+        it('should work with Martins example', async () => {
+            const queryString = `
+                SELECT
+                    sum("stats.2023.06.acord.total") as "2023_06",
+                    sum("stats.2023.07.acord.total") as "2023_07",
+                    sum("stats.2023.08.acord.total") as "2023_08",
+                    sum("stats.2023.09.acord.total") as "2023_09",
+                    sum("stats.2023.10.acord.total") as "2023_10",
+                    sum("stats.2023.11.acord.total") as "2023_11",
+                    sum("stats.2023.12.acord.total") as "2023_12"
+                FROM ocr_stats
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sums.case1',
+                mode,
+            });
+        });
+        it('should work with sum(1)', async () => {
+            const queryString = `
+                SELECT  c.id,
+                        sum(1) as cnt
+                FROM customers c
+                INNER JOIN \`customer-notes\` cn on c.id=cn.id
+                WHERE cn.id>1 and c.id>2
+                GROUP BY c.id
+                HAVING cnt >0
+                ORDER BY c.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.sums.case2',
+                mode,
+            });
+        });
+    });
+    describe('extract dates', () => {
+        it('Date:EXTRACT', async () => {
+            const queryString = `
+                SELECT  orderDate,
+                        extract(year from orderDate) as year,
+                        extract(month from orderDate) as month,
+                        extract(day from to_date('2021-10-23')) as day,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate != null
+                ORDER BY orderDate ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.extract-dates.case1',
+                mode,
+                ignoreDateValues: true,
+            });
+        });
+    });
+    describe('scratchpad', () => {
+        it('Should let you provide the full table name in the on clause on the left', async () => {
+            const queryString = `
+                SELECT *,unset(_id,company._id,AMSCompany._id,company.orderDate)
+                FROM (SELECT *, item  as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON TO_STRING(AMSCompany.sku) = company.CName
+                ORDER BY company.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case1',
+                mode,
+            });
+        });
+        it('Should let you provide the full table name in the on clause on the right', async () => {
+            const queryString = `
+                SELECT *,unset(_id,company._id,AMSCompany._id,company.orderDate)
+                FROM (SELECT *, item  as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON company.CName = TO_STRING(AMSCompany.sku)
+                ORDER BY company.id ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case1',
+                mode,
+            });
+        });
+        it('should allow you to use the like clause in an on', async () => {
+            const queryString = `
+                SELECT  *,unset(_id,company._id,AMSCompany._id,company.orderDate)
+                FROM (SELECT *, item as CName from orders) "company|first"
+                LEFT JOIN (select * from inventory) "AMSCompany|first"
+                    ON TO_STRING(sku) LIKE company.CName
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'scratchpad.case2',
+                mode,
             });
         });
     });

@@ -67,7 +67,7 @@ export interface Expression {
     table?: string;
     column?: string;
     name?: string;
-    args?: Expression | Expression[];
+    args?: Expression;
     from?: TableDefinition[];
     value?: any;
     tableList?: string[];
@@ -117,6 +117,7 @@ export interface TableDefinition {
     as?: string;
     type?: 'dual';
     expr?: Expression;
+    on?: Expression;
 }
 
 /**------------end testing */
@@ -153,7 +154,7 @@ export interface ParsedMongoAggregate {
 export interface PipelineFn {
     $project?: {[key: string]: any};
     $match?: {[key: string]: any};
-    $group?: {_id: any};
+    $group?: {_id: any; [key: string]: any};
     $replaceRoot?: {[key: string]: any};
     $map?: {[key: string]: any};
     $sort?: {[key: string]: any};
@@ -166,6 +167,7 @@ export interface PipelineFn {
     $unionWith?: any;
     $set?: any;
     $setWindowFields?: SetWindowFields;
+    $addFields?: {[key: string]: any};
 }
 
 export interface SetWindowFields {
@@ -182,8 +184,6 @@ export interface ParserOptions {
     isArray?: boolean;
     /** automatically unwind joins, by default is set to false and unwind should be done by using unwind in the select or join */
     unwindJoins?: boolean;
-    /** Specifies the type of database that Nodejs SQL Parser will use, e.g. 'PostgresQL' */
-    database?: string;
     /** Specifies the type that Nodejs SQL Parser will use e.g. 'table', 'column'*/
     type?: string;
     /** force the unset of the _id field if it's not in the select list */
@@ -198,7 +198,7 @@ export interface NoqlContext extends ParserOptions {
     /** The cleaned SQL statement */
     cleanedStatement?: string;
     tables: string[];
-    fullAst:TableColumnAst;
+    fullAst: TableColumnAst;
 }
 
 export interface ParseResult {
@@ -235,6 +235,7 @@ export interface ColumnParseResult {
     countDistinct: string;
     groupByProject?: object;
     windowFields: SetWindowFields[];
+    subQueryRootProjections: string[];
 }
 
 export interface MongoQueryFunction {
