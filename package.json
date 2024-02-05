@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "webpack --mode=production --config webpack.config.js",
+    "build-dev": "webpack --mode=development --config webpack.config.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",

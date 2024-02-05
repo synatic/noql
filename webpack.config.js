@@ -13,7 +13,7 @@ const config = {
         filename: 'index.js',
         library: 'SqlToMongo',
         libraryTarget: 'umd',
-        globalObject: 'this',
+        globalObject: 'this || window',
         umdNamedDefine: true,
     },
     watchOptions: {
