@@ -1,6 +1,5 @@
 const playgroundButton = document.getElementById('submit-sql');
 
-const edt = document.getElementById('playground-sql-input');
 var editor = ace.edit('playground-sql-input');
 //editor.setTheme("ace/theme/sqlserver");
 editor.session.setMode('ace/mode/sql');
