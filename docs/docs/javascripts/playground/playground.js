@@ -1,5 +1,7 @@
 const playgroundButton = document.getElementById('submit-sql');
 
+const edt = document.getElementById('playground-sql-input');
+console.log({playgroundButton, edt});
 var editor = ace.edit('playground-sql-input');
 //editor.setTheme("ace/theme/sqlserver");
 editor.session.setMode('ace/mode/sql');
@@ -13,8 +15,8 @@ function isDarkModeOn() {
     // Can't just use the dark mode inputs checked attribute, as it doesn't show until the user clicks on the toggle.
     // Before that, both inputs are unchecked, so we need to check the hidden attribute of the associated labels instead.
     // The labels contain the icons for each mode, so basically looking which icon is showing.
-    if (document.getElementById('__palette_2').labels[0].hidden) return true;
-    else if (document.getElementById('__palette_1').labels[0].hidden)
+    if (document.getElementById('__palette_1').labels[0].hidden) return true;
+    else if (document.getElementById('__palette_0').labels[0].hidden)
         return false;
 }
 
@@ -28,12 +30,12 @@ function setEditorTheme() {
     }
 }
 
-// __palette_2 and __palette_1 are ids of the dark and light mode toggle radio inputs
-document
-    .getElementById(`__palette_2`)
-    .addEventListener('change', setEditorTheme);
+// __palette_1 and __palette_0 are ids of the dark and light mode toggle radio inputs
 document
     .getElementById(`__palette_1`)
+    .addEventListener('change', setEditorTheme);
+document
+    .getElementById(`__palette_0`)
     .addEventListener('change', setEditorTheme);
 
 playgroundButton.onclick = function () {
