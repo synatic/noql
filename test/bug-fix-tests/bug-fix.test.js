@@ -861,6 +861,22 @@ describe('bug-fixes', function () {
                 ignoreDateValues: true,
             });
         });
+        it('day', async () => {
+            const queryString = `
+                SELECT  orderDate,
+                        day_of_month(orderDate) as day,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate != null
+                ORDER BY orderDate ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.extract-dates.case2',
+                mode,
+                ignoreDateValues: true,
+            });
+        });
     });
     describe('scratchpad', () => {
         it('Should let you provide the full table name in the on clause on the left', async () => {

@@ -730,6 +730,18 @@
             "day": 23
           }
         ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "orderDate": "$date-placeholder",
+            "day": 9
+          },
+          {
+            "orderDate": "$date-placeholder",
+            "day": 8
+          }
+        ]
       }
     },
     "sums": {

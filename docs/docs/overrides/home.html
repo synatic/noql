@@ -1,8 +1,6 @@
 <!-- Custom HTML site displayed as the Home chapter -->
 
-{% extends "main.html" %}
-{% block tabs %}
-{{ super() }}
+{% extends "main.html" %} {% block tabs %} {{ super() }}
 <style>
     @keyframes gradient {
         0% {
@@ -19,7 +17,7 @@
     }
 
     .md-main {
-        flex-grow: 0
+        flex-grow: 0;
     }
 
     .md-main__inner {
@@ -28,11 +26,16 @@
     }
 
     .tx-container {
-        padding-top: .0rem;
-        background-color: #3E8DB9;
+        padding-top: 0rem;
+        background-color: #3e8db9;
         opacity: 1;
         /* background: linear-gradient(to bottom, var(--md-primary-fg-color), rgb(13, 3, 98) 99%,#fff 99%); */
-        background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #3E8DB9 10px), repeating-linear-gradient(#3E8DB9, #1f85bb 99%);
+        background-image: repeating-radial-gradient(
+                circle at 0 0,
+                transparent 0,
+                #3e8db9 10px
+            ),
+            repeating-linear-gradient(#3e8db9, #1f85bb 99%);
         /* background: linear-gradient(135deg, #0d1fd255 25%, transparent 25%) -10px 0/ 20px 20px, linear-gradient(225deg, #0d1fd2 25%, transparent 25%) -10px 0/ 20px 20px, linear-gradient(315deg, #0d1fd255 25%, transparent 25%) 0px 0/ 20px 20px, linear-gradient(45deg, #0d1fd2 25%, #3E8DB9 25%) 0px 0/ 20px 20px; */
 
         /* animation: gradient 5s ease infinite; */
@@ -41,8 +44,6 @@
         background-size: 20px 35px;
         background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px; */
     }
-
-
 
     .tx-hero {
         margin: 32px 2.8rem;
@@ -53,7 +54,7 @@
     .tx-hero h1 {
         margin-bottom: 1rem;
         color: currentColor;
-        font-weight: 700
+        font-weight: 700;
     }
 
     .tx-hero__content {
@@ -76,23 +77,23 @@
     }
 
     .tx-hero .md-button {
-        margin-top: .5rem;
-        margin-right: .5rem;
-        color: var(--md-primary-bg-color)
+        margin-top: 0.5rem;
+        margin-right: 0.5rem;
+        color: var(--md-primary-bg-color);
     }
 
     .tx-hero .md-button--primary {
         background-color: var(--md-primary-bg-color);
         /* color: hsla(280deg, 37%, 48%, 1); */
         color: var(--md-accent-fg-color);
-        border-color: var(--md-primary-bg-color)
+        border-color: var(--md-primary-bg-color);
     }
 
     .tx-hero .md-button:focus,
     .tx-hero .md-button:hover {
         background-color: var(--md-accent-fg-color);
         color: #ffffff;
-        border-color: var(--md-accent-fg-color)
+        border-color: var(--md-accent-fg-color);
     }
 
     .feature-item h2 svg {
@@ -102,9 +103,9 @@
         transform: translateY(10%);
     }
 
-    .feature-item h2 img{
-            margin-top: 20px;
-        }
+    .feature-item h2 img {
+        margin-top: 20px;
+    }
 
     .top-hr {
         margin-top: 42px;
@@ -118,7 +119,6 @@
         word-break: break-word;
         background-color: var(--md-code-bg-color);
     }
-
 
     .feature-item h2 {
         /* color: #333; */
@@ -145,9 +145,9 @@
         display: block;
     }
 
-    @media screen and (max-width:30em) {
+    @media screen and (max-width: 30em) {
         .tx-hero h1 {
-            font-size: 1.4rem
+            font-size: 1.4rem;
         }
 
         .feature-item {
@@ -155,9 +155,9 @@
         }
     }
 
-    @media screen and (min-width:60em) {
+    @media screen and (min-width: 60em) {
         .md-sidebar--secondary {
-            display: none
+            display: none;
         }
 
         .tx-hero {
@@ -170,17 +170,15 @@
             max-width: 22rem;
             margin-top: 3.5rem;
             margin-bottom: 3.5rem;
-            margin-left: 1.0rem;
-            margin-right: 4.0rem;
+            margin-left: 1rem;
+            margin-right: 4rem;
             align-items: center;
         }
-
-
     }
 
-    @media screen and (min-width:76.25em) {
+    @media screen and (min-width: 76.25em) {
         .md-sidebar--primary {
-            display: none
+            display: none;
         }
 
         .top-hr {
@@ -189,7 +187,7 @@
             max-width: 61rem;
             margin-right: auto;
             margin-left: auto;
-            padding: 0 .2rem;
+            padding: 0 0.2rem;
         }
 
         .bottom-hr {
@@ -199,7 +197,7 @@
             max-width: 61rem;
             margin-right: auto;
             margin-left: auto;
-            padding: 0 .2rem;
+            padding: 0 0.2rem;
         }
 
         .feature-item {
@@ -256,7 +254,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin-top: 1.0rem;
+        margin-top: 1rem;
     }
 
     .md-footer-social {
@@ -269,15 +267,21 @@
     <div class="md-grid md-typeset">
         <div class="tx-hero">
             <div class="tx-hero__image">
-                <img src="assets/rocket.svg" draggable="false">
+                <img src="assets/rocket.svg" draggable="false" />
             </div>
             <div class="tx-hero__content">
-                <img src="assets/cloud.svg" draggable="false" width="80px">
-                <h1> Convert SQL to Mongo!</h1>
-                <p>Write <b>SQL queries</b> to interact with your <b>Mongo database</b>. Useful for data scientists,
-                    engineers and product builders!</p>
-                <a href="{{ page.next_page.url | url }}" title="{{ page.next_page.title | striptags }}"
-                    class="md-button md-button--primary">
+                <img src="assets/cloud.svg" draggable="false" width="80px" />
+                <h1>Convert SQL to MongoDB!</h1>
+                <p>
+                    Write <b>SQL queries</b> to interact with your
+                    <b>Mongo database</b>. Useful for data scientists, engineers
+                    and product builders!
+                </p>
+                <a
+                    href="{{ page.next_page.url | url }}"
+                    title="{{ page.next_page.title | striptags }}"
+                    class="md-button md-button--primary"
+                >
                     Get started
                 </a>
                 <a href="/playground" title="NoQL Playground" class="md-button">
@@ -292,99 +296,123 @@
 <div class="top-hr">
     <div class="feature-item">
         <h2>
-            <img src="assets/sql-database-generic-svgrepo-com.svg" width="36px" />
+            <img
+                src="assets/sql-database-generic-svgrepo-com.svg"
+                width="36px"
+            />
             mySQL or Postgres
         </h2>
-        <p>Write in mySQL or Postgres dialects. Use the language you already know to generate MongoDB queries. You don't
-            need to figure out Mongo query syntax to use Mongo!</p>
+        <p>
+            Write in mySQL or Postgres dialects. Use the language you already
+            know to generate MongoDB queries. You don't need to figure out Mongo
+            query syntax to use Mongo!
+        </p>
     </div>
     <div class="feature-item">
         <h2>
             <img src="assets/mongodb-green.svg" width="36px" />
             Queries and Aggregates
         </h2>
-        <p>NoQL is not limited to simple queries: it can generate complex aggregate pipelines for the most challenging
-            SQL statements </p>
+        <p>
+            NoQL is not limited to simple queries: it can generate complex
+            aggregate pipelines for the most challenging SQL statements
+        </p>
     </div>
     <div class="feature-item">
         <h2>
             <img src="assets/synatic.svg" height="36px" />
-            Made by <a href="https://www.synatic.com" target="_blank">Synatic</a>
+            Made by
+            <a href="https://www.synatic.com" target="_blank">Synatic</a>
         </h2>
-        <p>NoQL is made by <a href="https://www.synatic.com" target="_blank">Synatic</a> and used in their core
-            product. That means NoQL will always be actively maintained and updated.</p>
+        <p>
+            NoQL is made by
+            <a href="https://www.synatic.com" target="_blank">Synatic</a> and
+            used in their core product. That means NoQL will always be actively
+            maintained and updated.
+        </p>
     </div>
 </div>
 
 <div class="top-hr">
-    <div class="hr">
-    </div>
+    <div class="hr"></div>
 </div>
 
+{% endblock %} {% block content %} {% endblock %} {% block footer %}
 
-{% endblock %}
-
-{% block content %}
-
-{% endblock %}
-{% block footer %}
-
-<footer class="md-footer" style="position:fixed; width: 100%; bottom:0px;">
-
+<footer class="md-footer" style="position: fixed; width: 100%; bottom: 0px">
     <div class="md-footer-meta md-typeset">
         <div class="md-footer-meta__inner md-grid">
             <div class="md-copyright">
-
                 <div class="md-copyright__highlight">
-                    Copyright © 2023 <a href="https://synatic.com">Synatic Inc.</a>
+                    Copyright © 2023
+                    <a href="https://synatic.com">Synatic Inc.</a>
                 </div>
 
-
                 Made with
-                <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+                <a
+                    href="https://squidfunk.github.io/mkdocs-material/"
+                    target="_blank"
+                    rel="noopener"
+                >
                     Material for MkDocs
                 </a>
-
             </div>
 
             <div class="md-social">
-
-                <a href="https://twitter.com/datasynatic" target="_blank" rel="noopener" title="Synatic on Twitter"
-                    class="md-social__link">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
+                <a
+                    href="https://twitter.com/datasynatic"
+                    target="_blank"
+                    rel="noopener"
+                    title="Synatic on Twitter"
+                    class="md-social__link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                    >
+                        <!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
                         <path
-                            d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
-                        </path>
+                            d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"
+                        ></path>
                     </svg>
                 </a>
 
-
-
-
-
-                <a href="https://github.com/synatic/noql" target="_blank" rel="noopener" title="NoQL on Github"
-                    class="md-social__link">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
+                <a
+                    href="https://github.com/synatic/noql"
+                    target="_blank"
+                    rel="noopener"
+                    title="NoQL on Github"
+                    class="md-social__link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 496 512"
+                    >
+                        <!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
                         <path
-                            d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
-                        </path>
+                            d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
+                        ></path>
                     </svg>
                 </a>
 
-                <a href="https://www.linkedin.com/company/15815217/" target="_blank" rel="noopener"
-                    title="Synatic on Linkedin" class="md-social__link">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
+                <a
+                    href="https://www.linkedin.com/company/15815217/"
+                    target="_blank"
+                    rel="noopener"
+                    title="Synatic on Linkedin"
+                    class="md-social__link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                    >
+                        <!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.-->
                         <path
-                            d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
-                        </path>
+                            d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"
+                        ></path>
                     </svg>
                 </a>
-
             </div>
-
         </div>
     </div>
 </footer>
