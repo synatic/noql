@@ -35,7 +35,9 @@ describe('bug-fixes', function () {
          * [] or statement instead of and
          * [] where contains table
          * [] subqueries
-         * [] 3 queries?
+         * [] 3+ queries
+         * [] support for not
+         * [] multiple and/ ors with brackets
          */
         it('should optimise the pipeline for a where statement after the join', async () => {
             const queryString = `
@@ -223,8 +225,9 @@ describe('bug-fixes', function () {
                         `;
             const {pipeline} = await queryResultTester({
                 queryString: queryString,
-                casePath: 'where.case-1',
-                mode,
+                casePath: 'where.case-4',
+                mode: 'write',
+                outputPipeline: true,
             });
             // eslint-disable-next-line no-unused-vars
             const [_rootProject, match, lookup] = pipeline;
@@ -249,7 +252,7 @@ describe('bug-fixes', function () {
                             {
                                 $match: {
                                     $expr: {
-                                        $and: [
+                                        $or: [
                                             {
                                                 $eq: ['$sku', '$$o_item'],
                                             },
@@ -264,6 +267,40 @@ describe('bug-fixes', function () {
                     },
                 })
             );
+        });
+        it('should optimise the pipeline for a where statement after the join with or both same table', async () => {
+            const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE i.id >= 0
+                        OR i.instock >= 0
+                        LIMIT 1
+                        `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'where.case-5',
+                mode: 'write',
+                outputPipeline: true,
+            });
+        });
+        it('should optimise the pipeline for a where statement after the join with or both same table', async () => {
+            const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE (i.id >= 0
+                        OR i.instock >= 0) AND (i.id >0)
+                        LIMIT 1
+                        `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'where.case-5',
+                mode: 'write',
+                outputPipeline: true,
+            });
         });
     });
 });

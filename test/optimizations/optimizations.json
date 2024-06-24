@@ -89,6 +89,234 @@
           ]
         }
       ]
+    },
+    "case-4": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            },
+            {
+              "id": 2,
+              "sku": "bread",
+              "description": "product 2",
+              "instock": 80,
+              "specialChars": "!!$"
+            },
+            {
+              "id": 3,
+              "sku": "cashews",
+              "description": "product 3",
+              "instock": 60,
+              "specialChars": "!!\""
+            },
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            }
+          ]
+        }
+      ],
+      "pipeline": [
+        {
+          "$project": {
+            "o": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "o.price": {
+              "$gte": 0
+            }
+          }
+        },
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "let": {
+              "o_item": "$o.item"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$or": [
+                      {
+                        "$eq": [
+                          "$sku",
+                          "$$o_item"
+                        ]
+                      },
+                      {
+                        "$gte": [
+                          "$instock",
+                          0
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$i"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$unset": [
+            "_id",
+            "o._id",
+            "i._id",
+            "o.orderDate"
+          ]
+        },
+        {
+          "$limit": 1
+        }
+      ]
+    },
+    "case-5": {
+      "pipeline": [
+        {
+          "$project": {
+            "o": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "let": {
+              "o_item": "$o.item"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$or": [
+                      {
+                        "$eq": [
+                          "$sku",
+                          "$$o_item"
+                        ]
+                      },
+                      {
+                        "$gte": [
+                          "$id",
+                          0
+                        ]
+                      },
+                      {
+                        "$gte": [
+                          "$instock",
+                          0
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$i"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$unset": [
+            "_id",
+            "o._id",
+            "i._id",
+            "o.orderDate"
+          ]
+        },
+        {
+          "$limit": 1
+        }
+      ],
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            },
+            {
+              "id": 2,
+              "sku": "bread",
+              "description": "product 2",
+              "instock": 80,
+              "specialChars": "!!$"
+            },
+            {
+              "id": 3,
+              "sku": "cashews",
+              "description": "product 3",
+              "instock": 60,
+              "specialChars": "!!\""
+            },
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            },
+            {
+              "id": 5,
+              "sku": null,
+              "description": "Incomplete"
+            }
+          ]
+        }
+      ]
     }
   }
 }
