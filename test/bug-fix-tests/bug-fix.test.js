@@ -1,6 +1,7 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
+
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
