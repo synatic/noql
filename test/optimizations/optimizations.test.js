@@ -410,6 +410,86 @@ describe('optimizations', function () {
                 ])
             );
         });
+        it('should optimise the pipeline for a where statement after the join with multiple ors', async () => {
+            const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE i.id >= 0
+                        OR i.instock >= 0
+                        OR i.id >0
+                        LIMIT 1
+                        `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'where.case-6',
+                mode: 'write',
+                outputPipeline: true,
+            });
+            assert(
+                isEqual(pipeline, [
+                    {
+                        $project: {
+                            o: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'inventory',
+                            as: 'i',
+                            let: {
+                                o_item: '$o.item',
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $or: [
+                                                {
+                                                    $gt: ['$id', 0],
+                                                },
+                                                {
+                                                    $gte: ['$id', 0],
+                                                },
+                                                {
+                                                    $gte: ['$instock', 0],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$sku', '$$o_item'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$i',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                    },
+                    {
+                        $limit: 1,
+                    },
+                ])
+            );
+        });
         it('should not optimise a simple join', async () => {
             const queryString = `
                         SELECT *,
