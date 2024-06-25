@@ -326,13 +326,15 @@ describe('optimizations', function () {
                 })
             );
         });
-        it('should optimise the pipeline for a where statement after the join with or both same table', async () => {
+        it('should optimise the pipeline for a where statement after the join with multiple ands', async () => {
             const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
                         FROM orders o
                         INNER JOIN inventory i on i.sku=o.item
-                        WHERE (i.id >= 0 OR i.instock >= 0 AND i.id >0)
+                        WHERE i.id >= 0
+                        AND i.instock >= 0
+                        AND i.id >0
                         LIMIT 1
                         `;
             const {pipeline} = await queryResultTester({
@@ -341,36 +343,71 @@ describe('optimizations', function () {
                 mode: 'write',
                 outputPipeline: true,
             });
-            assert.equal(pipeline.length, 5);
-            // eslint-disable-next-line no-unused-vars
-            const [_project, lookup, _innerJoinSizeCheck, _unset, _limit] =
-                pipeline;
             assert(
-                isEqual(lookup, {
-                    $lookup: {
-                        from: 'inventory',
-                        as: 'i',
-                        let: {
-                            o_item: '$o.item',
+                isEqual(pipeline, [
+                    {
+                        $project: {
+                            o: '$$ROOT',
                         },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $gt: ['$id', 0],
-                                    },
-                                },
-                            },
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: ['$sku', '$$o_item'],
-                                    },
-                                },
-                            },
-                        ],
                     },
-                })
+                    {
+                        $lookup: {
+                            from: 'inventory',
+                            as: 'i',
+                            let: {
+                                o_item: '$o.item',
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $gt: ['$id', 0],
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $gte: ['$instock', 0],
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $gte: ['$id', 0],
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$sku', '$$o_item'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$i',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                    },
+                    {
+                        $limit: 1,
+                    },
+                ])
             );
         });
         it('should not optimise a simple join', async () => {
