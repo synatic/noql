@@ -38,6 +38,8 @@ describe('optimizations', function () {
          * [] 3+ queries
          * [] support for not
          * [] multiple and/ ors with brackets
+         * source & destination | and vs or |
+         * Maybe clone the where and pipeline before optimising, return errors:true and revert?
          */
         it('should optimise the pipeline for a where statement after the join', async () => {
             const queryString = `
@@ -271,7 +273,7 @@ describe('optimizations', function () {
                 })
             );
         });
-        it.skip('should optimise the pipeline for a where statement after the join with or both same table', async () => {
+        it('should optimise the pipeline for a where statement after the join with or both same table', async () => {
             const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -607,7 +609,7 @@ describe('optimizations', function () {
                 ])
             );
         });
-        it.skip('should optimise a join with a where with misc', async () => {
+        it('should optimise a join with a where with misc', async () => {
             const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -643,25 +645,12 @@ describe('optimizations', function () {
                                 {
                                     $match: {
                                         $expr: {
-                                            $and: [
+                                            $or: [
                                                 {
-                                                    $eq: [1, 1],
+                                                    $gte: ['$instock', 0],
                                                 },
                                                 {
-                                                    $or: [
-                                                        {
-                                                            $gte: [
-                                                                '$instock',
-                                                                0,
-                                                            ],
-                                                        },
-                                                        {
-                                                            $gte: [
-                                                                '$$o_price',
-                                                                0,
-                                                            ],
-                                                        },
-                                                    ],
+                                                    $gte: ['$$o_price', 0],
                                                 },
                                             ],
                                         },
@@ -686,6 +675,13 @@ describe('optimizations', function () {
                                     },
                                     0,
                                 ],
+                            },
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: [1, 1],
                             },
                         },
                     },
