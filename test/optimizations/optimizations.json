@@ -310,34 +310,18 @@
           }
         },
         {
+          "$match": {
+            "o.id": {
+              "$gte": 0
+            }
+          }
+        },
+        {
           "$lookup": {
             "from": "inventory",
             "as": "i",
-            "let": {
-              "o_item": "$o.item"
-            },
-            "pipeline": [
-              {
-                "$match": {
-                  "$expr": {
-                    "$gte": [
-                      "$id",
-                      0
-                    ]
-                  }
-                }
-              },
-              {
-                "$match": {
-                  "$expr": {
-                    "$eq": [
-                      "$sku",
-                      "$$o_item"
-                    ]
-                  }
-                }
-              }
-            ]
+            "localField": "o.item",
+            "foreignField": "sku"
           }
         },
         {
