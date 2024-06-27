@@ -343,3 +343,10 @@ export interface FindSchemaResult {
     schema: JSONSchema6;
     required: boolean;
 }
+
+export interface OptimizationProcessResult {
+    wasOptimised: boolean;
+    pipelineStagesAdded: PipelineFn[];
+    lookupPipelineStagesAdded: PipelineFn[];
+    leftOverMatches: Record<string, unknown>[];
+}
