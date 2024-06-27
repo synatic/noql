@@ -1500,6 +1500,9 @@ describe('optimizations', function () {
                                             $expr: {
                                                 $or: [
                                                     {
+                                                        $gt: ['$id', 0],
+                                                    },
+                                                    {
                                                         $and: [
                                                             {
                                                                 $gte: [
@@ -1514,11 +1517,6 @@ describe('optimizations', function () {
                                                                 ],
                                                             },
                                                         ],
-                                                    },
-                                                    {
-                                                        'i.id': {
-                                                            $gt: 0,
-                                                        },
                                                     },
                                                 ],
                                             },
