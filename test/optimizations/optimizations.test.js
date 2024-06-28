@@ -1588,21 +1588,27 @@ describe('optimizations', function () {
                                     {
                                         $match: {
                                             $expr: {
-                                                $or: [
+                                                $and: [
                                                     {
-                                                        $gte: ['$id', 0],
+                                                        $gt: ['$id', 0],
                                                     },
                                                     {
-                                                        $gte: ['$instock', 0],
+                                                        $or: [
+                                                            {
+                                                                $gte: [
+                                                                    '$id',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                            {
+                                                                $gte: [
+                                                                    '$instock',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                        ],
                                                     },
                                                 ],
-                                            },
-                                        },
-                                    },
-                                    {
-                                        $match: {
-                                            $expr: {
-                                                $gt: ['$id', 0],
                                             },
                                         },
                                     },
