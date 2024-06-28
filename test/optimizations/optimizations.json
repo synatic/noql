@@ -497,6 +497,27 @@
       ]
     },
     "case-20": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ],
       "pipeline": [
         {
           "$project": {
@@ -504,54 +525,36 @@
           }
         },
         {
-          "$lookup": {
-            "from": "inventory",
-            "as": "i",
-            "let": {
-              "o_item": "$o.item"
-            },
-            "pipeline": [
+          "$match": {
+            "$or": [
               {
-                "$match": {
-                  "$expr": {
-                    "$or": [
-                      {
-                        "$gt": [
-                          "$id",
-                          0
-                        ]
-                      },
-                      {
-                        "$and": [
-                          {
-                            "$gte": [
-                              "$id",
-                              0
-                            ]
-                          },
-                          {
-                            "$gte": [
-                              "$instock",
-                              0
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                "o.id": {
+                  "$gt": 0
                 }
               },
               {
-                "$match": {
-                  "$expr": {
-                    "$eq": [
-                      "$sku",
-                      "$$o_item"
-                    ]
+                "$and": [
+                  {
+                    "o.customerId": {
+                      "$gte": 0
+                    }
+                  },
+                  {
+                    "o.price": {
+                      "$gte": 0
+                    }
                   }
-                }
+                ]
               }
             ]
+          }
+        },
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "localField": "o.item",
+            "foreignField": "sku"
           }
         },
         {
@@ -577,7 +580,9 @@
         {
           "$limit": 1
         }
-      ],
+      ]
+    },
+    "case-21": {
       "expectedResults": [
         {
           "o": {
