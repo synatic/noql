@@ -1656,9 +1656,9 @@ describe('optimizations', function () {
                         `;
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
-                    casePath: 'where.case-20',
-                    mode: 'write',
-                    outputPipeline: true,
+                    casePath: 'where.case-22',
+                    mode,
+                    outputPipeline,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1698,6 +1698,175 @@ describe('optimizations', function () {
                                 as: 'i',
                                 localField: 'o.item',
                                 foreignField: 'sku',
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $gt: [
+                                        {
+                                            $size: '$i',
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                        },
+                        {
+                            $limit: 1,
+                        },
+                    ])
+                );
+            });
+            it('23. Or AND, all source', async () => {
+                const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE o.customerId >=0
+                        OR o.price >= 0
+                        AND o.id >0
+                        LIMIT 1
+                        `;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'where.case-23',
+                    mode,
+                    outputPipeline,
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                o: '$$ROOT',
+                            },
+                        },
+                        {
+                            $match: {
+                                $and: [
+                                    {
+                                        'o.id': {
+                                            $gt: 0,
+                                        },
+                                    },
+                                    {
+                                        $or: [
+                                            {
+                                                'o.customerId': {
+                                                    $gte: 0,
+                                                },
+                                            },
+                                            {
+                                                'o.price': {
+                                                    $gte: 0,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'inventory',
+                                as: 'i',
+                                localField: 'o.item',
+                                foreignField: 'sku',
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $gt: [
+                                        {
+                                            $size: '$i',
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                        },
+                        {
+                            $limit: 1,
+                        },
+                    ])
+                );
+            });
+            it('24. AND Or, destination,destination,source', async () => {
+                const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE i.id >= 0
+                        AND i.instock >= 0
+                        OR o.id >0
+                        LIMIT 1
+                        `;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'where.case-24',
+                    mode: 'write',
+                    outputPipeline,
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                o: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'inventory',
+                                as: 'i',
+                                let: {
+                                    o_item: '$o.item',
+                                    o_id: '$o.id',
+                                },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $or: [
+                                                    {
+                                                        $gt: ['$$o_id', 0],
+                                                    },
+                                                    {
+                                                        $and: [
+                                                            {
+                                                                $gte: [
+                                                                    '$id',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                            {
+                                                                $gte: [
+                                                                    '$instock',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    },
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ['$sku', '$$o_item'],
+                                            },
+                                        },
+                                    },
+                                ],
                             },
                         },
                         {
