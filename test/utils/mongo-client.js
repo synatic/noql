@@ -22,7 +22,7 @@ const defaultConnectionOptions = {
     password: 'sql123#',
 };
 
-const shouldAddDataToPg = true;
+const shouldAddDataToPg = false;
 const maxRowsToInsert = 10;
 
 async function connect() {
