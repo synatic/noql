@@ -511,6 +511,77 @@
             }
           ]
         }
+      },
+      "auto-cast": {
+        "date-case1": {
+          "expectedResults": [
+            {
+              "id": 2,
+              "item": "pecans",
+              "notes": "testing",
+              "price": 20,
+              "quantity": 1,
+              "customerId": 2,
+              "specialChars": "!!$",
+              "orderDate": "$date-placeholder"
+            },
+            {
+              "id": 5,
+              "item": "potatoes",
+              "price": 7,
+              "quantity": 6,
+              "customerId": 5,
+              "specialChars": "!!*",
+              "orderDate": "$date-placeholder"
+            }
+          ]
+        },
+        "date-case2": {
+          "expectedResults": [
+            {
+              "id": 2,
+              "item": "pecans",
+              "notes": "testing",
+              "price": 20,
+              "quantity": 1,
+              "customerId": 2,
+              "specialChars": "!!$",
+              "orderDate": "$date-placeholder"
+            },
+            {
+              "id": 5,
+              "item": "potatoes",
+              "price": 7,
+              "quantity": 6,
+              "customerId": 5,
+              "specialChars": "!!*",
+              "orderDate": "$date-placeholder"
+            }
+          ]
+        },
+        "date-case3": {
+          "expectedResults": [
+            {
+              "id": 2,
+              "item": "pecans",
+              "notes": "testing",
+              "price": 20,
+              "quantity": 1,
+              "customerId": 2,
+              "specialChars": "!!$",
+              "orderDate": "$date-placeholder"
+            },
+            {
+              "id": 5,
+              "item": "potatoes",
+              "price": 7,
+              "quantity": 6,
+              "customerId": 5,
+              "specialChars": "!!*",
+              "orderDate": "$date-placeholder"
+            }
+          ]
+        }
       }
     },
     "subquery-capitalisation": {
@@ -728,6 +799,18 @@
             "year": 2022,
             "month": 4,
             "day": 23
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "orderDate": "$date-placeholder",
+            "day": 9
+          },
+          {
+            "orderDate": "$date-placeholder",
+            "day": 8
           }
         ]
       }
