@@ -22,8 +22,8 @@ const defaultConnectionOptions = {
     password: 'sql123#',
 };
 
-const shouldAddDataToPg = false;
-const maxRowsToInsert = 1;
+const shouldAddDataToPg = true;
+const maxRowsToInsert = 10;
 
 async function connect() {
     console.log('About to connect to db');
@@ -47,8 +47,13 @@ async function generateSchema(values, collectionName) {
         values
             .slice(0, 100)
             .filter((v) => Boolean)
-            .map((v) => $schema.generateSchemaFromJSON(v))
+            .map((v) => {
+                return $schema.generateSchemaFromJSON(v);
+            })
     );
+    if (collectionName === 'orders') {
+        schema.properties.orderDate.format = 'date-time';
+    }
     const flattenedSchema = $schema.flattenSchema(schema, {
         additionalProperties: ['displayOptions'],
     });

@@ -647,6 +647,50 @@ describe('bug-fixes', function () {
                 resultCounter++;
             }
         });
+        it('should auto cast date fields in a where clause with a literal on the right', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE orderDate <= '2024-01-01'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case1',
+                schemas: await getAllSchemas(database),
+                mode,
+                ignoreDateValues: true,
+            });
+        });
+        it('should auto cast date fields in a where clause with a literal on the let', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE '2024-01-01' >= orderDate
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case2',
+                schemas: await getAllSchemas(database),
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
+        it('should auto cast date fields in a where clause with 2 columns', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE orderDate <= orderDate
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case3',
+                schemas: await getAllSchemas(database),
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
     });
     describe('subquery capitalisation', () => {
         it('should not throw an error when the right hand side is capitalised', async () => {
