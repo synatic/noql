@@ -70,7 +70,7 @@
     "clone-deep": "4.0.1",
     "deepmerge": "^4.3.1",
     "lodash": "^4.17.21",
-    "node-sql-parser": "^4.18.0"
+    "node-sql-parser": "^5.2.0"
   },
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^1.0.19",
