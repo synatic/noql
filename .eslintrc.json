@@ -2,7 +2,11 @@
   "env": {},
   "extends": ["@synatic/eslint-config-synatic-node"],
   "globals": {},
-  "parserOptions": {},
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
   "overrides": [],
-  "rules": {}
+  "rules": {
+    "prettier/prettier": "warn"
+  }
 }
