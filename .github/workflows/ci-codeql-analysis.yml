@@ -2,10 +2,6 @@ name: "CodeQL Analysis"
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [main, develop]
   workflow_dispatch:
     inputs:
       reason:
@@ -26,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
