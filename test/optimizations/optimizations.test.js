@@ -1813,7 +1813,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-24',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                 });
                 assert(
@@ -1904,7 +1904,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-25',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                 });
                 assert(
