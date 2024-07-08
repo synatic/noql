@@ -1890,6 +1890,98 @@ describe('optimizations', function () {
                     ])
                 );
             });
+            it('25. AND Or, destination,source,source', async () => {
+                const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN inventory i on i.sku=o.item
+                        WHERE i.id >= 0
+                        AND o.price >= 0
+                        OR o.id >0
+                        LIMIT 1
+                        `;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'where.case-25',
+                    mode: 'write',
+                    outputPipeline,
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                o: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'inventory',
+                                as: 'i',
+                                let: {
+                                    o_item: '$o.item',
+                                    o_id: '$o.id',
+                                    o_price: '$o.price',
+                                },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $or: [
+                                                    {
+                                                        $gt: ['$$o_id', 0],
+                                                    },
+                                                    {
+                                                        $and: [
+                                                            {
+                                                                $gte: [
+                                                                    '$id',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                            {
+                                                                $gte: [
+                                                                    '$$o_price',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    },
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ['$sku', '$$o_item'],
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $gt: [
+                                        {
+                                            $size: '$i',
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                        },
+                        {
+                            $limit: 1,
+                        },
+                    ])
+                );
+            });
         });
 
         it.skip('should work for an AND for source and destination with additional AND on destination join', async () => {
