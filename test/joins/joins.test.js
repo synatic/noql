@@ -195,7 +195,7 @@ describe('joins', function () {
     });
 
     describe('join order of queries', () => {
-        it('should prase the query that was not working on prod', async () => {
+        it('should parse the query that was not working on prod', async () => {
             await queryResultTester({
                 queryString: `
                 SELECT
