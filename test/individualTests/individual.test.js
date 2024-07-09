@@ -511,7 +511,8 @@ describe('Individual tests', function () {
         it('Should work with an order by on another table', async () => {
             const queryText = `SELECT c.*,cn.*
                 FROM customers c
-                inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) cn on cn.id=c.id`;
+                inner join (select * from \`customer-notes\` ORDER BY id DESC limit 1) "cn|unwind" on cn.id=c.id
+                ORDER BY "cn.id" DESC`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)
@@ -519,7 +520,7 @@ describe('Individual tests', function () {
                 .aggregate(parsedQuery.pipeline)
                 .toArray();
             assert(results);
-            assert(results[0].cn[0].id === 5);
+            assert(results[0].cn.id === 5);
         });
         it('Should do the inner select query correctly', async () => {
             const queryText =

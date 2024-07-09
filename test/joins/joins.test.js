@@ -608,4 +608,89 @@ describe('joins', function () {
             });
         });
     });
+    describe('optimize', () => {
+        const expectedPipeline = [
+            {
+                $project: {
+                    c: '$$ROOT',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'customer-notes',
+                    as: 'cn',
+                    let: {
+                        c_id: '$c.id',
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ['$id', '$$c_id'],
+                                },
+                            },
+                        },
+                        {
+                            $match: {
+                                id: {
+                                    $gt: 2,
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $match: {
+                    $expr: {
+                        $gt: [
+                            {
+                                $size: '$cn',
+                            },
+                            0,
+                        ],
+                    },
+                },
+            },
+            {
+                $project: {
+                    c: '$c',
+                    cn: '$cn',
+                },
+            },
+        ];
+        it('should work with explicit optimize', async () => {
+            const queryString =
+                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id';
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'optimize.explicit',
+                mode: 'write',
+            });
+
+            assert.deepStrictEqual(pipeline, expectedPipeline);
+        });
+        it('should work without explicit optimize', async () => {
+            const queryString =
+                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id';
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'optimize.explicit',
+                mode: 'write',
+            });
+
+            assert.deepStrictEqual(pipeline, expectedPipeline);
+        });
+        it('should not optimize if the nooptimize is provided', async () => {
+            const queryString =
+                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|nooptimize` on cn.id=c.id';
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'optimize.explicit',
+                mode: 'write',
+            });
+
+            assert.notDeepStrictEqual(pipeline, expectedPipeline);
+        });
+    });
 });

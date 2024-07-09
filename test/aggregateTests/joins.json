@@ -378,15 +378,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               },
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               }
@@ -404,64 +404,6 @@
           "$match": {
             "cn": {
               "$ne": null
-            }
-          }
-        },
-        {
-          "$project": {
-            "c": "$c",
-            "cn": "$cn"
-          }
-        }
-      ],
-      "collections": ["customers", "customer-notes"]
-    }
-  },
-  {
-    "name": "Join: Sub Query with optimize",
-    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id",
-    "type": "aggregate",
-    "output": {
-      "pipeline": [
-        {
-          "$project": {
-            "c": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "customer-notes",
-            "as": "cn",
-            "let": {
-              "c_id": "$c.id"
-            },
-            "pipeline": [
-              {
-                "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
-                  }
-                }
-              },
-              {
-                "$match": {
-                  "id": {
-                    "$gt": 2
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$match": {
-            "$expr": {
-              "$gt": [
-                {
-                  "$size": "$cn"
-                },
-                0
-              ]
             }
           }
         },
