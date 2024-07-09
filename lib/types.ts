@@ -199,6 +199,7 @@ export interface NoqlContext extends ParserOptions {
     cleanedStatement?: string;
     tables: string[];
     fullAst: TableColumnAst;
+    joinHints?: string[];
 }
 
 export interface ParseResult {

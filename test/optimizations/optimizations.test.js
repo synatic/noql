@@ -3233,6 +3233,84 @@ describe('optimizations', function () {
                     ])
                 );
             });
+            it('41. should not optimise if the nooptimise join hint is included', async () => {
+                const queryString = `
+                        SELECT *,
+                            unset(_id, o._id, i._id,o.orderDate)
+                        FROM orders o
+                        INNER JOIN \`inventory|nooptimize\` i on i.sku=o.item
+                        WHERE o.customerId >=0
+                        AND o.price >= 0
+                        AND o.id >0
+                        LIMIT 1
+                        `;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'where.case-15',
+                    mode,
+                    outputPipeline,
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                o: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'inventory',
+                                as: 'i',
+                                localField: 'o.item',
+                                foreignField: 'sku',
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $gt: [
+                                        {
+                                            $size: '$i',
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $match: {
+                                $and: [
+                                    {
+                                        $and: [
+                                            {
+                                                'o.customerId': {
+                                                    $gte: 0,
+                                                },
+                                            },
+                                            {
+                                                'o.price': {
+                                                    $gte: 0,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        'o.id': {
+                                            $gt: 0,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $unset: ['_id', 'o._id', 'i._id', 'o.orderDate'],
+                        },
+                        {
+                            $limit: 1,
+                        },
+                    ])
+                );
+            });
         });
     });
 });

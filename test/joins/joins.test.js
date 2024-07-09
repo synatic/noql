@@ -653,15 +653,21 @@ describe('joins', function () {
                 },
             },
             {
+                $unset: ['_id', 'c._id', 'cn._id'],
+            },
+            {
                 $project: {
                     c: '$c',
                     cn: '$cn',
                 },
             },
+            {
+                $limit: 1,
+            },
         ];
         it('should work with explicit optimize', async () => {
             const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id';
+                'select c.*,cn.*, unset(_id,c._id,cn._id ) from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id LIMIT 1';
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
@@ -672,7 +678,7 @@ describe('joins', function () {
         });
         it('should work without explicit optimize', async () => {
             const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id';
+                'select c.*,cn.*, unset(_id,c._id,cn._id ) from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id LIMIT 1';
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
@@ -682,8 +688,13 @@ describe('joins', function () {
             assert.deepStrictEqual(pipeline, expectedPipeline);
         });
         it('should not optimize if the nooptimize is provided', async () => {
-            const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|nooptimize` on cn.id=c.id';
+            const queryString = `
+                 select c.*,cn.*, unset(_id,c._id,cn._id )
+                 from customers c
+                 inner join (
+                     select * from \`customer-notes\` where id>2)
+                 \`cn|nooptimize\` on cn.id=c.id
+                 LIMIT 1`;
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
