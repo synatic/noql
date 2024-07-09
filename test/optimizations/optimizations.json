@@ -1,0 +1,1048 @@
+{
+  "where": {
+    "case-01": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-02": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-03": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-04": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-05": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-06": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-07": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-08": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-09": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-10": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-11": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-12": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-16": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-17": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-15": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-13": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-14": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-18": {
+      "pipeline": [
+        {
+          "$project": {
+            "o": "$$ROOT"
+          }
+        },
+        {
+          "$match": {
+            "$or": [
+              {
+                "o.customerId": {
+                  "$gte": 0
+                }
+              },
+              {
+                "o.price": {
+                  "$gte": 0
+                }
+              },
+              {
+                "o.id": {
+                  "$gt": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$lookup": {
+            "from": "inventory",
+            "as": "i",
+            "localField": "o.item",
+            "foreignField": "sku"
+          }
+        },
+        {
+          "$match": {
+            "$expr": {
+              "$gt": [
+                {
+                  "$size": "$i"
+                },
+                0
+              ]
+            }
+          }
+        },
+        {
+          "$unset": [
+            "_id",
+            "o._id",
+            "i._id",
+            "o.orderDate"
+          ]
+        },
+        {
+          "$limit": 1
+        }
+      ],
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-19": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-20": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-21": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-24": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-22": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-23": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-25": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-26": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-27": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-28": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-30": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-29": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-32": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-31": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-33": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-34": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-35": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-36": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-37": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-38": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-3": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            },
+            {
+              "id": 2,
+              "sku": "bread",
+              "description": "product 2",
+              "instock": 80,
+              "specialChars": "!!$"
+            },
+            {
+              "id": 3,
+              "sku": "cashews",
+              "description": "product 3",
+              "instock": 60,
+              "specialChars": "!!\""
+            },
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            }
+          ]
+        }
+      ]
+    },
+    "case-39": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            },
+            {
+              "id": 2,
+              "sku": "bread",
+              "description": "product 2",
+              "instock": 80,
+              "specialChars": "!!$"
+            },
+            {
+              "id": 3,
+              "sku": "cashews",
+              "description": "product 3",
+              "instock": 60,
+              "specialChars": "!!\""
+            },
+            {
+              "id": 4,
+              "sku": "pecans",
+              "description": "product 4",
+              "instock": 70,
+              "specialChars": "!!*"
+            }
+          ]
+        }
+      ]
+    },
+    "case-40": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

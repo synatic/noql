@@ -199,6 +199,7 @@ export interface NoqlContext extends ParserOptions {
     cleanedStatement?: string;
     tables: string[];
     fullAst: TableColumnAst;
+    joinHints?: string[];
 }
 
 export interface ParseResult {
@@ -342,4 +343,11 @@ export type GetTables = (subAst: AST, context: NoqlContext) => string[];
 export interface FindSchemaResult {
     schema: JSONSchema6;
     required: boolean;
+}
+
+export interface OptimizationProcessResult {
+    wasOptimised: boolean;
+    pipelineStagesAdded: PipelineFn[];
+    lookupPipelineStagesAdded: PipelineFn[];
+    leftOverMatches: Record<string, unknown>[];
 }

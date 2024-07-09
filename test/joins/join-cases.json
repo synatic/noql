@@ -1359,5 +1359,424 @@
   },
   "join-order": {
     "case1": {}
+  },
+  "optimize": {
+    "explicit": {
+      "expectedResults": [
+        {
+          "c": {
+            "Address": {
+              "Address": "692 Joliet Street",
+              "City": "Athenai",
+              "Country": "Greece",
+              "District": "Attika"
+            },
+            "First Name": "LINDA",
+            "Last Name": "WILLIAMS",
+            "Phone": "448477190408",
+            "Rentals": [
+              {
+                "Film Title": "RINGS HEARTBREAKERS",
+                "Payments": [
+                  {
+                    "Amount": 1.9900000095367432,
+                    "Payment Date": "2005-05-27 17:17:09.0",
+                    "Payment Id": 60
+                  }
+                ],
+                "Rental Date": "2005-05-27 17:17:09.0",
+                "Return Date": "2005-06-02 11:20:09.0",
+                "filmId": 732,
+                "rentalId": 435,
+                "staffId": 2
+              },
+              {
+                "Film Title": "ANACONDA CONFESSIONS",
+                "Payments": [
+                  {
+                    "Amount": 6.989999771118164,
+                    "Payment Date": "2005-06-16 15:19:10.0",
+                    "Payment Id": 63
+                  }
+                ],
+                "Rental Date": "2005-06-16 15:19:10.0",
+                "Return Date": "2005-06-25 11:39:10.0",
+                "filmId": 23,
+                "rentalId": 1726,
+                "staffId": 2
+              },
+              {
+                "Film Title": "DADDY PITTSBURGH",
+                "Payments": [
+                  {
+                    "Amount": 6.989999771118164,
+                    "Payment Date": "2005-06-17 05:15:15.0",
+                    "Payment Id": 64
+                  }
+                ],
+                "Rental Date": "2005-06-17 05:15:15.0",
+                "Return Date": "2005-06-24 11:05:15.0",
+                "filmId": 202,
+                "rentalId": 1911,
+                "staffId": 2
+              },
+              {
+                "Film Title": "STREAK RIDGEMONT",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-06-19 08:34:53.0",
+                    "Payment Id": 65
+                  }
+                ],
+                "Rental Date": "2005-06-19 08:34:53.0",
+                "Return Date": "2005-06-28 04:19:53.0",
+                "filmId": 855,
+                "rentalId": 2628,
+                "staffId": 2
+              },
+              {
+                "Film Title": "GOSFORD DONNIE",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-07-07 10:23:25.0",
+                    "Payment Id": 66
+                  }
+                ],
+                "Rental Date": "2005-07-07 10:23:25.0",
+                "Return Date": "2005-07-10 13:18:25.0",
+                "filmId": 371,
+                "rentalId": 4180,
+                "staffId": 1
+              },
+              {
+                "Film Title": "ICE CROSSING",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-07-08 12:47:11.0",
+                    "Payment Id": 67
+                  }
+                ],
+                "Rental Date": "2005-07-08 12:47:11.0",
+                "Return Date": "2005-07-15 09:08:11.0",
+                "filmId": 447,
+                "rentalId": 4725,
+                "staffId": 2
+              },
+              {
+                "Film Title": "BIRDS PERDITION",
+                "Payments": [
+                  {
+                    "Amount": 6.989999771118164,
+                    "Payment Date": "2005-07-28 04:46:30.0",
+                    "Payment Id": 71
+                  }
+                ],
+                "Rental Date": "2005-07-28 04:46:30.0",
+                "Return Date": "2005-08-04 08:41:30.0",
+                "filmId": 77,
+                "rentalId": 7724,
+                "staffId": 1
+              },
+              {
+                "Film Title": "BOOGIE AMELIE",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-07-28 11:46:45.0",
+                    "Payment Id": 72
+                  }
+                ],
+                "Rental Date": "2005-07-28 11:46:45.0",
+                "Return Date": "2005-07-29 07:19:45.0",
+                "filmId": 86,
+                "rentalId": 7911,
+                "staffId": 1
+              },
+              {
+                "Film Title": "DURHAM PANKY",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-07-28 18:17:14.0",
+                    "Payment Id": 73
+                  }
+                ],
+                "Rental Date": "2005-07-28 18:17:14.0",
+                "Return Date": "2005-07-30 18:22:14.0",
+                "filmId": 263,
+                "rentalId": 8086,
+                "staffId": 2
+              },
+              {
+                "Film Title": "VICTORY ACADEMY",
+                "Payments": [
+                  {
+                    "Amount": 1.9900000095367432,
+                    "Payment Date": "2005-07-30 13:31:20.0",
+                    "Payment Id": 75
+                  }
+                ],
+                "Rental Date": "2005-07-30 13:31:20.0",
+                "Return Date": "2005-08-06 16:42:20.0",
+                "filmId": 940,
+                "rentalId": 9226,
+                "staffId": 1
+              },
+              {
+                "Film Title": "GOLDFINGER SENSIBILITY",
+                "Payments": [
+                  {
+                    "Amount": 3.990000009536743,
+                    "Payment Date": "2005-07-30 21:45:46.0",
+                    "Payment Id": 76
+                  }
+                ],
+                "Rental Date": "2005-07-30 21:45:46.0",
+                "Return Date": "2005-08-05 21:22:46.0",
+                "filmId": 366,
+                "rentalId": 9443,
+                "staffId": 1
+              },
+              {
+                "Film Title": "NETWORK PEAK",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-07-31 03:27:58.0",
+                    "Payment Id": 77
+                  }
+                ],
+                "Rental Date": "2005-07-31 03:27:58.0",
+                "Return Date": "2005-08-03 05:58:58.0",
+                "filmId": 621,
+                "rentalId": 9595,
+                "staffId": 1
+              },
+              {
+                "Film Title": "YENTL IDAHO",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-07-31 11:32:58.0",
+                    "Payment Id": 78
+                  }
+                ],
+                "Rental Date": "2005-07-31 11:32:58.0",
+                "Return Date": "2005-08-04 17:12:58.0",
+                "filmId": 995,
+                "rentalId": 9816,
+                "staffId": 2
+              },
+              {
+                "Film Title": "REQUIEM TYCOON",
+                "Payments": [
+                  {
+                    "Amount": 5.989999771118164,
+                    "Payment Date": "2005-08-01 14:19:48.0",
+                    "Payment Id": 79
+                  }
+                ],
+                "Rental Date": "2005-08-01 14:19:48.0",
+                "Return Date": "2005-08-08 20:01:48.0",
+                "filmId": 725,
+                "rentalId": 10597,
+                "staffId": 1
+              },
+              {
+                "Film Title": "HORN WORKING",
+                "Payments": [
+                  {
+                    "Amount": 4.989999771118164,
+                    "Payment Date": "2005-08-18 14:49:55.0",
+                    "Payment Id": 80
+                  }
+                ],
+                "Rental Date": "2005-08-18 14:49:55.0",
+                "Return Date": "2005-08-24 15:20:55.0",
+                "filmId": 433,
+                "rentalId": 12556,
+                "staffId": 2
+              },
+              {
+                "Film Title": "MALLRATS UNITED",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-08-20 06:14:12.0",
+                    "Payment Id": 82
+                  }
+                ],
+                "Rental Date": "2005-08-20 06:14:12.0",
+                "Return Date": "2005-08-26 00:44:12.0",
+                "filmId": 555,
+                "rentalId": 13610,
+                "staffId": 2
+              },
+              {
+                "Film Title": "LUCKY FLYING",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-08-23 07:10:14.0",
+                    "Payment Id": 85
+                  }
+                ],
+                "Rental Date": "2005-08-23 07:10:14.0",
+                "Return Date": "2005-08-26 07:21:14.0",
+                "filmId": 540,
+                "rentalId": 15619,
+                "staffId": 2
+              },
+              {
+                "Film Title": "SALUTE APOLLO",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-05-29 22:43:55.0",
+                    "Payment Id": 61
+                  }
+                ],
+                "Rental Date": "2005-05-29 22:43:55.0",
+                "Return Date": "2005-06-01 17:43:55.0",
+                "filmId": 759,
+                "rentalId": 830,
+                "staffId": 1
+              },
+              {
+                "Film Title": "STRANGERS GRAFFITI",
+                "Payments": [
+                  {
+                    "Amount": 8.989999771118164,
+                    "Payment Date": "2005-06-16 01:34:05.0",
+                    "Payment Id": 62
+                  }
+                ],
+                "Rental Date": "2005-06-16 01:34:05.0",
+                "Return Date": "2005-06-24 04:27:05.0",
+                "filmId": 854,
+                "rentalId": 1546,
+                "staffId": 1
+              },
+              {
+                "Film Title": "MASSACRE USUAL",
+                "Payments": [
+                  {
+                    "Amount": 5.989999771118164,
+                    "Payment Date": "2005-07-27 04:54:42.0",
+                    "Payment Id": 68
+                  }
+                ],
+                "Rental Date": "2005-07-27 04:54:42.0",
+                "Return Date": "2005-08-03 01:42:42.0",
+                "filmId": 563,
+                "rentalId": 7096,
+                "staffId": 2
+              },
+              {
+                "Film Title": "CASUALTIES ENCINO",
+                "Payments": [
+                  {
+                    "Amount": 10.989999771118164,
+                    "Payment Date": "2005-07-27 20:23:12.0",
+                    "Payment Id": 69
+                  }
+                ],
+                "Rental Date": "2005-07-27 20:23:12.0",
+                "Return Date": "2005-08-05 18:46:12.0",
+                "filmId": 126,
+                "rentalId": 7503,
+                "staffId": 2
+              },
+              {
+                "Film Title": "INTENTIONS EMPIRE",
+                "Payments": [
+                  {
+                    "Amount": 7.989999771118164,
+                    "Payment Date": "2005-07-28 03:59:21.0",
+                    "Payment Id": 70
+                  }
+                ],
+                "Rental Date": "2005-07-28 03:59:21.0",
+                "Return Date": "2005-08-05 08:52:21.0",
+                "filmId": 464,
+                "rentalId": 7703,
+                "staffId": 1
+              },
+              {
+                "Film Title": "REAR TRADING",
+                "Payments": [
+                  {
+                    "Amount": 2.990000009536743,
+                    "Payment Date": "2005-07-29 11:07:04.0",
+                    "Payment Id": 74
+                  }
+                ],
+                "Rental Date": "2005-07-29 11:07:04.0",
+                "Return Date": "2005-08-06 13:30:04.0",
+                "filmId": 717,
+                "rentalId": 8545,
+                "staffId": 2
+              },
+              {
+                "Film Title": "RAGING AIRPLANE",
+                "Payments": [
+                  {
+                    "Amount": 8.989999771118164,
+                    "Payment Date": "2005-08-19 22:18:07.0",
+                    "Payment Id": 81
+                  }
+                ],
+                "Rental Date": "2005-08-19 22:18:07.0",
+                "Return Date": "2005-08-27 19:23:07.0",
+                "filmId": 711,
+                "rentalId": 13403,
+                "staffId": 1
+              },
+              {
+                "Film Title": "FIDDLER LOST",
+                "Payments": [
+                  {
+                    "Amount": 8.989999771118164,
+                    "Payment Date": "2005-08-21 20:50:48.0",
+                    "Payment Id": 83
+                  }
+                ],
+                "Rental Date": "2005-08-21 20:50:48.0",
+                "Return Date": "2005-08-29 18:08:48.0",
+                "filmId": 312,
+                "rentalId": 14699,
+                "staffId": 2
+              },
+              {
+                "Film Title": "GOLDMINE TYCOON",
+                "Payments": [
+                  {
+                    "Amount": 0.9900000095367432,
+                    "Payment Date": "2005-08-22 09:37:27.0",
+                    "Payment Id": 84
+                  }
+                ],
+                "Rental Date": "2005-08-22 09:37:27.0",
+                "Return Date": "2005-08-23 14:39:27.0",
+                "filmId": 367,
+                "rentalId": 15038,
+                "staffId": 1
+              }
+            ],
+            "id": 3
+          },
+          "cn": [
+            {
+              "id": 3,
+              "notes": "Notes for id 3",
+              "date": "2020-12:15"
+            }
+          ]
+        }
+      ]
+    }
   }
 }

@@ -139,63 +139,6 @@
     }
   },
   {
-    "name": "Join:Simple with where",
-    "query": "select c.*,cn.*  from customers c inner join `customer-notes` cn on c.id=cn.id where cn.id>1 and c.id>2",
-    "type": "aggregate",
-    "output": {
-      "pipeline": [
-        {
-          "$project": {
-            "c": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "customer-notes",
-            "as": "cn",
-            "localField": "c.id",
-            "foreignField": "id"
-          }
-        },
-        {
-          "$match": {
-            "$expr": {
-              "$gt": [
-                {
-                  "$size": "$cn"
-                },
-                0
-              ]
-            }
-          }
-        },
-        {
-          "$match": {
-            "$and": [
-              {
-                "cn.id": {
-                  "$gt": 1
-                }
-              },
-              {
-                "c.id": {
-                  "$gt": 2
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$project": {
-            "c": "$c",
-            "cn": "$cn"
-          }
-        }
-      ],
-      "collections": ["customers", "customer-notes"]
-    }
-  },
-  {
     "name": "Join: With $$ROOT",
     "query": "select MERGE_OBJECTS(c,FIRST_IN_ARRAY(cn)) as `$$ROOT` from customers c inner join `customer-notes` cn on c.id=cn.id",
     "type": "aggregate",
@@ -378,15 +321,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               },
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               }
@@ -404,64 +347,6 @@
           "$match": {
             "cn": {
               "$ne": null
-            }
-          }
-        },
-        {
-          "$project": {
-            "c": "$c",
-            "cn": "$cn"
-          }
-        }
-      ],
-      "collections": ["customers", "customer-notes"]
-    }
-  },
-  {
-    "name": "Join: Sub Query with optimize",
-    "query": "select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id",
-    "type": "aggregate",
-    "output": {
-      "pipeline": [
-        {
-          "$project": {
-            "c": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "customer-notes",
-            "as": "cn",
-            "let": {
-              "c_id": "$c.id"
-            },
-            "pipeline": [
-              {
-                "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
-                  }
-                }
-              },
-              {
-                "$match": {
-                  "id": {
-                    "$gt": 2
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$match": {
-            "$expr": {
-              "$gt": [
-                {
-                  "$size": "$cn"
-                },
-                0
-              ]
             }
           }
         },
@@ -745,72 +630,6 @@
           "$match": {
             "cn": {
               "$ne": null
-            }
-          }
-        },
-        {
-          "$project": {
-            "c": "$c",
-            "cn": "$cn"
-          }
-        }
-      ],
-      "collections": ["customers", "customer-notes"]
-    }
-  },
-  {
-    "name": "Join:Unwind hint with where",
-    "query": "select c.*,cn.* from customers c inner join `customer-notes|unwind` as cn on `cn`.id=c.id and cn.id<5 where c.id>1",
-    "type": "aggregate",
-    "output": {
-      "pipeline": [
-        {
-          "$project": {
-            "c": "$$ROOT"
-          }
-        },
-        {
-          "$lookup": {
-            "from": "customer-notes",
-            "as": "cn",
-            "let": {
-              "c_id": "$c.id"
-            },
-            "pipeline": [
-              {
-                "$match": {
-                  "$expr": {
-                    "$and": [
-                      {
-                        "$eq": ["$id", "$$c_id"]
-                      },
-                      {
-                        "$lt": ["$id", 5]
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "$unwind": {
-            "path": "$cn",
-            "preserveNullAndEmptyArrays": true
-          }
-        },
-        {
-          "$match": {
-            "cn": {
-              "$ne": null
-            }
-          }
-        },
-        {
-          "$match": {
-            "c.id": {
-              "$gt": 1
             }
           }
         },
