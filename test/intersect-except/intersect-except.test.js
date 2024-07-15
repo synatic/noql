@@ -94,13 +94,11 @@ describe('intersect & except', function () {
             const queryString = `
             SELECT  *,unset(_id)
             FROM "most-popular-films"
-            WHERE 1=1
 
             INTERSECT
 
             SELECT  *,unset(_id)
             FROM "top-rated-films"
-            WHERE 1=1
             ORDER BY name
         `;
             await queryResultTester({
@@ -122,7 +120,6 @@ describe('intersect & except', function () {
 
                 SELECT  *,unset(_id)
                 FROM "most-popular-films"
-                WHERE 1=1
                 ORDER BY name
 `;
             await queryResultTester({
