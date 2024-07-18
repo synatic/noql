@@ -1016,7 +1016,7 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath: 'post-optimization.case1',
                 mode: 'test',
-                outputPipeline: true,
+                outputPipeline: false,
             });
         });
     });
