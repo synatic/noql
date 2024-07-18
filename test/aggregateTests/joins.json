@@ -321,15 +321,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               },
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               }
@@ -381,15 +381,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               },
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               }
@@ -441,15 +441,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$$c_id", "$id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               },
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$$c_id", "$id"]
                   }
                 }
               }
