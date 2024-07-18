@@ -966,4 +966,58 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('post-optimizations', () => {
+        it('should work on the example query', async () => {
+            const queryString = `
+                SELECT
+                    currentUser._id,
+                    currentUser.establishment,
+                    currentUser.access_all_child_establishments,
+                    establishments.*,
+                    child_establishments.*
+                FROM
+                    \`nfk-users|first\` currentUser
+                    LEFT JOIN (
+                        SELECT
+                            user_establishment.user,
+                            establishment._id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-establishments\` user_establishment
+                            LEFT JOIN \`nfk-user-county-establishments|first\` establishment ON user_establishment.establishment = TO_STRING(establishment._id)
+                        WHERE
+                            user_establishment.user = '66261fd83316a727b53610da'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS establishments ON establishments.user_establishment.user = TO_STRING(currentUser._id)
+                    LEFT JOIN (
+                        SELECT
+                            TO_STRING(establishment._id) as id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-county-establishments\` establishment
+                        WHERE
+                            TO_STRING(establishment._id) = '662545865f01249a315ff1fd'
+                            OR establishment.main_establishment = '662545865f01249a315ff1fd'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS child_establishments ON child_establishments.establishment.id = currentUser.establishment
+                    OR child_establishments.establishment.main_establishment = currentUser.establishment
+                WHERE
+                    TO_STRING(currentUser._id) = '66261fd83316a727b53610da'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimization.case1',
+                mode: 'test',
+                outputPipeline: false,
+            });
+        });
+    });
 });

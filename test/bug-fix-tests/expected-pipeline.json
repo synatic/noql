@@ -1,0 +1,179 @@
+{
+  "pipeline": [
+    {
+      "$project": {
+        "currentUser": "$$ROOT"
+      }
+    },
+    {
+      "$lookup": {
+        "from": "nfk-establishments",
+        "as": "establishments",
+        "let": {
+          "currentUser__id": "$currentUser._id"
+        },
+        "pipeline": [
+          {
+            "$match": {
+              "$expr": {
+                "$eq": [
+                  "$user",
+                  {
+                    "$toString": "$$currentUser__id"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "$project": {
+              "user_establishment": "$$ROOT"
+            }
+          },
+          {
+            "$lookup": {
+              "from": "nfk-user-county-establishments",
+              "as": "establishment",
+              "let": {
+                "user_establishment_establishment": "$user_establishment.establishment"
+              },
+              "pipeline": [
+                {
+                  "$match": {
+                    "$expr": {
+                      "$eq": [
+                        "$$user_establishment_establishment",
+                        {
+                          "$toString": "$_id"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "$set": {
+              "establishment": {
+                "$first": "$establishment"
+              }
+            }
+          },
+          {
+            "$match": {
+              "user_establishment_user": {
+                "$eq": "66261fd83316a727b53610da"
+              }
+            }
+          },
+          {
+            "$project": {
+              "user": "$user_establishment.user",
+              "$id": "$establishment._id",
+              "name": "$establishment.name",
+              "main$establishment": "$establishment.main_establishment",
+              "level": "$establishment.level"
+            }
+          },
+          {
+            "$sort": {
+              "level": 1,
+              "name": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$lookup": {
+        "from": "nfk-user-county-establishments",
+        "as": "child_establishments",
+        "let": {
+          "currentUser_establishment": "$currentUser.establishment"
+        },
+        "pipeline": [
+          {
+            "$match": {
+              "$expr": {
+                "$or": [
+                  {
+                    "$eq": ["$id", "$$currentUser_establishment"]
+                  },
+                  {
+                    "$eq": ["$main_establishment", "$$currentUser_establishment"]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "$project": {
+              "establishment": "$$ROOT"
+            }
+          },
+          {
+            "$match": {
+              "$or": [
+                {
+                  "$expr": {
+                    "$eq": [
+                      {
+                        "$toString": "$establishment._id"
+                      },
+                      "662545865f01249a315ff1fd"
+                    ]
+                  }
+                },
+                {
+                  "establishment_main_establishment": {
+                    "$eq": "662545865f01249a315ff1fd"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "$project": {
+              "id": {
+                "$toString": "$establishment._id"
+              },
+              "name": "$establishment.name",
+              "main_establishment": "$establishment.main_establishment",
+              "level": "$establishment.level"
+            }
+          },
+          {
+            "$sort": {
+              "level": 1,
+              "name": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$match": {
+        "$expr": {
+          "$eq": [
+            {
+              "$toString": "$currentUser._id"
+            },
+            "66261fd83316a727b53610da"
+          ]
+        }
+      }
+    },
+    {
+      "$project": {
+        "$id": "$currentUser._id",
+        "establishment": "$currentUser.establishment",
+        "access_all_child_establishments": "$currentUser.access_all_child_establishments",
+        "establishments": "$establishments",
+        "child_establishments": "$child_establishments"
+      }
+    }
+  ],
+  "collections": ["nfk-users", "nfk-establishments", "nfk-user-county-establishments"],
+  "type": "aggregate"
+}

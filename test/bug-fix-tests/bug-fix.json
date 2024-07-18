@@ -1024,5 +1024,34 @@
         }
       ]
     }
+  },
+  "post-optimization": {
+    "case1": {
+      "expectedResults": [
+        {
+          "_id": "66261fd83316a727b53610da",
+          "establishment": "662545865f01249a315ff1fd",
+          "access_all_child_establishments": true,
+          "establishments": [
+            {
+              "user": "66261fd83316a727b53610da",
+              "_id": "662545865f01249a315ff1fd",
+              "name": "The Primary School",
+              "main_establishment": "66151d3c1985a10d08db5dce",
+              "level": 1
+            }
+          ],
+          "child_establishments": [
+            {
+              "_id": "662545865f01249a315ff1fd",
+              "id": "662545865f01249a315ff1fd",
+              "name": "The Primary School",
+              "main_establishment": "66151d3c1985a10d08db5dce",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    }
   }
 }

@@ -31,7 +31,6 @@ function buildQueryResultTester(options) {
 
 /**
  * Used to write the query + expected results to the output file
- *
  * @param {import("./types.js").AllQueryResultOptions} options The options to use
  * @returns {Promise<import("./types").QueryTesterResult>}
  */
@@ -98,6 +97,12 @@ function checkForMongoTypes(obj, ignoreDateValues) {
     for (const [key, value] of Object.entries(obj)) {
         if (Array.isArray(value)) {
             obj[key] = value.sort();
+            for (const arrayItem of value) {
+                if ($check.primitive(arrayItem)) {
+                    continue;
+                }
+                checkForMongoTypes(arrayItem, ignoreDateValues);
+            }
         } else if ($check.date(value)) {
             if (ignoreDateValues) {
                 obj[key] = '$date-placeholder';
