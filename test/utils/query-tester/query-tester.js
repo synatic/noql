@@ -98,6 +98,9 @@ function checkForMongoTypes(obj, ignoreDateValues) {
         if (Array.isArray(value)) {
             obj[key] = value.sort();
             for (const arrayItem of value) {
+                if ($check.primitive(arrayItem)) {
+                    continue;
+                }
                 checkForMongoTypes(arrayItem, ignoreDateValues);
             }
         } else if ($check.date(value)) {
