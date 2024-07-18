@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "66261fd83316a727b53610da",
+    "active": true,
+    "establishment": "662545865f01249a315ff1fd",
+    "access_all_child_establishments": true,
+    "name": "Test Blofield",
+    "email": "test.blofield@testingonncc.com",
+    "user_name": "test.blofield",
+    "internal": false,
+    "_dateUpdated": "2024-04-22T08:30:31.129Z"
+  }
+]
