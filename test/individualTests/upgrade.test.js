@@ -296,7 +296,7 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'new.dateAdd.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 ignoreDateValues: true,
             });
@@ -314,9 +314,47 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'new.dateAdd.case2',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
-                ignoreDateValues: false,
+                ignoreDateValues: true,
+            });
+        });
+    });
+    describe('date_subtract', () => {
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        item,
+                        orderDate as od1,
+                        date_subtract(orderDate,'hour',2) as od2,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.dateSubtract.case1',
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        item,
+                        orderDate as od1,
+                        date_subtract(orderDate,'hour',2,"America/New_York") as od2,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.dateSubtract.case2',
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
             });
         });
     });
