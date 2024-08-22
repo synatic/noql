@@ -141,6 +141,25 @@ describe('node-sql-parser upgrade tests', function () {
                 throw err;
             }
         });
+        it('should return the current date in a select for alias getdate', async () => {
+            const queryText = `
+            SELECT getdate() as currDate
+            FROM orders`;
+            try {
+                const parsedQuery = SQLParser.makeMongoAggregate(queryText);
+                const results = await mongoClient
+                    .db(dbName)
+                    .collection(parsedQuery.collections[0])
+                    .aggregate(parsedQuery.pipeline)
+                    .toArray();
+                assert(results);
+                assert(results.length === 5);
+                assert($check.date(results[0].currDate));
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
         it('should allow other functions on current date in a select', async () => {
             const queryText = `
             SELECT YEAR(CURRENT_DATE()) as currDate
@@ -245,6 +264,59 @@ describe('node-sql-parser upgrade tests', function () {
                 casePath: 'bugfix.join-fn.case1',
                 mode,
                 outputPipeline: false,
+            });
+        });
+    });
+    describe('IIF', () => {
+        it('should work', async () => {
+            const queryString = `
+                SELECT  item,
+                        IIF(price>10,'double digits','single digits') as digits
+                FROM orders
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.iif.case1',
+                mode: 'write',
+                outputPipeline: false,
+            });
+        });
+    });
+    describe('date_add', () => {
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        item,
+                        orderDate as od1,
+                        date_add(orderDate,'hour',2) as od2,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.dateAdd.case1',
+                mode: 'write',
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        item,
+                        orderDate as od1,
+                        date_add(orderDate,'hour',2,"America/New_York") as od2,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.dateAdd.case2',
+                mode: 'write',
+                outputPipeline: false,
+                ignoreDateValues: false,
             });
         });
     });

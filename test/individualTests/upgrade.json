@@ -18,5 +18,40 @@
         ]
       }
     }
+  },
+  "new": {
+    "iif": {
+      "case1": {
+        "expectedResults": [
+          {
+            "_id": "66c72a94857050d952feff29",
+            "item": "almonds",
+            "digits": "double digits"
+          }
+        ]
+      }
+    },
+    "dateAdd": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "$date-placeholder",
+            "od2": "$date-placeholder"
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "2022-04-08T00:00:00.000Z",
+            "od2": "2022-04-08T02:00:00.000Z"
+          }
+        ]
+      }
+    }
   }
 }
