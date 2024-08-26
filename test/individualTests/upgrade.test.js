@@ -379,4 +379,21 @@ describe('node-sql-parser upgrade tests', function () {
             });
         });
     });
+    describe('left', () => {
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        left(item,2) as firstTwoChars,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.left.case1',
+                mode: 'write',
+                outputPipeline: false,
+            });
+        });
+    });
 });

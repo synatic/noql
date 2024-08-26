@@ -87,6 +87,16 @@
           }
         ]
       }
+    },
+    "left": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "firstTwoChars": "pe"
+          }
+        ]
+      }
     }
   }
 }
