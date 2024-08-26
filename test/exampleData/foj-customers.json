@@ -1,0 +1,14 @@
+[
+  {
+    "customerId": 1,
+    "customerName": "Alfreds Futterkiste"
+  },
+  {
+    "customerId": 2,
+    "customerName": "Ana Trujillo Emparedados y helados"
+  },
+  {
+    "customerId": 3,
+    "customerName": "Antonio Moreno Taquería"
+  }
+]

@@ -145,6 +145,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('left join', () => {
         it('should be able to do a left join', async () => {
             await queryResultTester({
@@ -608,6 +609,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('optimize', () => {
         const expectedPipeline = [
             {
@@ -687,6 +689,24 @@ describe('joins', function () {
             });
 
             assert.deepStrictEqual(pipeline, expectedPipeline);
+        });
+    });
+
+    describe('full outer join', () => {
+        it.skip('should work', async () => {
+            const queryString = `
+                 SELECT c.customerName as customerName,
+                        o.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-customers" c
+                 FULL OUTER JOIN "foj-orders" o
+                    ON c.customerId = o.customerId
+                 ORDER BY c.customerName DESC`;
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case1',
+                mode: 'write',
+            });
         });
     });
 });
