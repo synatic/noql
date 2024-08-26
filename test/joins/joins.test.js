@@ -707,6 +707,71 @@ describe('joins', function () {
                 casePath: 'full-outer-join.case1',
                 mode: 'write',
             });
+            const expectedPipeline = [
+                {
+                    $lookup: {
+                        from: 'foj-customers',
+                        localField: 'customerId',
+                        foreignField: 'customerId',
+                        as: 'customers',
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$customers',
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+                {
+                    $unionWith: {
+                        coll: 'foj-customers',
+                        pipeline: [
+                            {
+                                $lookup: {
+                                    from: 'foj-orders',
+                                    localField: 'customerId',
+                                    foreignField: 'customerId',
+                                    as: 'orders',
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$orders',
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+                {
+                    $project: {
+                        customerName: {
+                            $ifNull: [
+                                '$customerName',
+                                '$customers.customerName',
+                            ],
+                        },
+                        orderId: {
+                            $ifNull: ['$orderId', '$orders.orderId'],
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            customerName: '$customerName',
+                            orderId: '$orderId',
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        customerName: '$_id.customerName',
+                        orderId: '$_id.orderId',
+                    },
+                },
+            ];
         });
     });
 });
