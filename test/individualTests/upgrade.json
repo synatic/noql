@@ -18,5 +18,84 @@
         ]
       }
     }
+  },
+  "new": {
+    "iif": {
+      "case1": {
+        "expectedResults": [
+          {
+            "item": "almonds",
+            "digits": "double digits"
+          }
+        ]
+      }
+    },
+    "dateAdd": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "$date-placeholder",
+            "od2": "$date-placeholder"
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "$date-placeholder",
+            "od2": "$date-placeholder"
+          }
+        ]
+      }
+    },
+    "dateSubtract": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "$date-placeholder",
+            "od2": "$date-placeholder"
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "od1": "$date-placeholder",
+            "od2": "$date-placeholder"
+          }
+        ]
+      }
+    },
+    "dateDiff": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "orderDate": "$date-placeholder",
+            "now": "$date-placeholder",
+            "diff": 2
+          }
+        ]
+      }
+    },
+    "left": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "firstTwoChars": "pe"
+          }
+        ]
+      }
+    }
   }
 }
