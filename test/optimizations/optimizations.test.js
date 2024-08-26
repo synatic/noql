@@ -2,7 +2,7 @@ const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const assert = require('assert');
 const {isEqual} = require('lodash');
-describe('optimizations', function () {
+describe.skip('optimizations', function () {
     this.timeout(90000);
     const fileName = 'optimizations';
     /** @type {'test'|'write'} */

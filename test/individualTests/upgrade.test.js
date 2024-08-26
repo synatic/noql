@@ -271,13 +271,14 @@ describe('node-sql-parser upgrade tests', function () {
         it('should work', async () => {
             const queryString = `
                 SELECT  item,
-                        IIF(price>10,'double digits','single digits') as digits
+                        IIF(price>10,'double digits','single digits') as digits,
+                        unset(_id)
                 FROM orders
                 LIMIT 1`;
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'new.iif.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
             });
         });
