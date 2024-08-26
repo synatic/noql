@@ -24,7 +24,6 @@
       "case1": {
         "expectedResults": [
           {
-            "_id": "66c72a94857050d952feff29",
             "item": "almonds",
             "digits": "double digits"
           }
