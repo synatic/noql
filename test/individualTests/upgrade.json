@@ -74,6 +74,19 @@
           }
         ]
       }
+    },
+    "dateDiff": {
+      "case1": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "item": "pecans",
+            "orderDate": "$date-placeholder",
+            "now": "$date-placeholder",
+            "diff": 2
+          }
+        ]
+      }
     }
   }
 }

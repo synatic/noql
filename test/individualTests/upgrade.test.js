@@ -301,7 +301,7 @@ describe('node-sql-parser upgrade tests', function () {
                 ignoreDateValues: true,
             });
         });
-        it('should work without a timezone', async () => {
+        it('should work with a timezone', async () => {
             const queryString = `
                 SELECT  id,
                         item,
@@ -339,7 +339,7 @@ describe('node-sql-parser upgrade tests', function () {
                 ignoreDateValues: true,
             });
         });
-        it('should work without a timezone', async () => {
+        it('should work with a timezone', async () => {
             const queryString = `
                 SELECT  id,
                         item,
@@ -352,6 +352,27 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'new.dateSubtract.case2',
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
+    });
+    describe('date_diff', () => {
+        it('should work without a timezone', async () => {
+            const queryString = `
+                SELECT  id,
+                        item,
+                        orderDate,
+                        getdate() as now,
+                        date_diff(orderDate, date_add(orderDate,'day',2),'day') as diff,
+                        unset(_id)
+                FROM orders
+                WHERE id=2
+                LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'new.dateDiff.case1',
                 mode,
                 outputPipeline: false,
                 ignoreDateValues: true,
