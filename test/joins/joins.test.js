@@ -696,8 +696,7 @@ describe('joins', function () {
         it('should work', async () => {
             const queryString = `
                  SELECT c.customerName as customerName,
-                        o.orderId as orderId,
-                        unset(_id)
+                        o.orderId as orderId
                  FROM "foj-customers" c
                  FULL OUTER JOIN "foj-orders" o
                     ON c.customerId = o.customerId
@@ -706,6 +705,7 @@ describe('joins', function () {
                 queryString,
                 casePath: 'full-outer-join.case1',
                 mode: 'write',
+                outputPipeline: true,
             });
             const expectedPipeline = [
                 {

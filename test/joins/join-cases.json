@@ -1778,5 +1778,86 @@
         }
       ]
     }
+  },
+  "full-outer-join": {
+    "case1": {
+      "pipeline": [
+        {
+          "$project": {
+            "c": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "foj-orders",
+            "as": "o",
+            "localField": "c.customerId",
+            "foreignField": "customerId"
+          }
+        },
+        {
+          "$unionWith": {
+            "coll": "foj-orders",
+            "pipeline": [
+              {
+                "$lookup": {
+                  "from": "foj-orders",
+                  "localField": "customerId",
+                  "foreignField": "customerId",
+                  "as": "o"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$unwind": {
+            "path": "$o",
+            "preserveNullAndEmptyArrays": true
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "customerName": "$c.customerName",
+              "orderId": "$o.orderId"
+            }
+          }
+        },
+        {
+          "$project": {
+            "customerName": "$_id.customerName",
+            "orderId": "$_id.orderId",
+            "_id": 0
+          }
+        },
+        {
+          "$sort": {
+            "customerName": -1
+          }
+        }
+      ],
+      "expectedResults": [
+        {
+          "customerName": "Antonio Moreno Taquería"
+        },
+        {
+          "customerName": "Ana Trujillo Emparedados y helados",
+          "orderId": 10308
+        },
+        {
+          "customerName": "Alfreds Futterkiste"
+        },
+        {
+          "orderId": 10308
+        },
+        {
+          "orderId": 10309
+        },
+        {
+          "orderId": 10310
+        }
+      ]
+    }
   }
 }
