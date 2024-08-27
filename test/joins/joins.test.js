@@ -693,7 +693,7 @@ describe('joins', function () {
     });
 
     describe('full outer join', () => {
-        it.skip('should work', async () => {
+        it('should work', async () => {
             const queryString = `
                  SELECT c.customerName as customerName,
                         o.orderId as orderId,
