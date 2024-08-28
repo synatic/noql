@@ -1,7 +1,8 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
-
+const {parseSQLtoAST} = require('../../lib/SQLParser');
+const fs = require('fs/promises');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -1018,6 +1019,34 @@ describe('bug-fixes', function () {
                 mode: 'test',
                 outputPipeline: false,
             });
+        });
+    });
+    describe('empty-results', () => {
+        it("should work with Avi's example", async () => {
+            const queryString = `
+                SELECT bp.CustId, bp.PolId, bp.PolNo, bp.PolEffDate, bp.PolExpDate, lob.LineOfBus
+                FROM \`faizel-polinfo\` bp
+                    INNER JOIN (SELECT PolId, LineOfBus
+                                FROM \`faizel-lob\`) \`lob|optimize\` ON lob.PolId = bp.PolId AND lob.EffDate >= bp.PolEffDate
+                WHERE bp.Status != 'D'
+                AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
+                AND TO_DATE(bp.PolExpDate) > TO_DATE('{@runInfo.timeStamp}')
+                AND bp.PolSubType != 'S'
+                AND bp.CustId = '38CE71B6-2B7C-421A-8BC9-000EF8149C93'
+                LIMIT 10`;
+            const ast = parseSQLtoAST(queryString);
+            await fs.writeFile(
+                './test/bug-fix-tests/empty-results-ast.json',
+                JSON.stringify(ast, null, 4),
+                {encoding: 'utf8'}
+            );
+            // await queryResultTester({
+            //     queryString: queryString,
+            //     casePath: 'empty-results.case1',
+            //     mode: 'write',
+            //     expectZeroResults: false,
+            //     outputPipeline: true,
+            // });
         });
     });
 });
