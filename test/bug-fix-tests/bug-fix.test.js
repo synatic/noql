@@ -1,7 +1,7 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
-const {parseSQLtoAST} = require('../../lib/SQLParser');
+const {parseSQLtoAST, makeMongoAggregate} = require('../../lib/SQLParser');
 const fs = require('fs/promises');
 describe('bug-fixes', function () {
     this.timeout(90000);
@@ -1030,7 +1030,7 @@ describe('bug-fixes', function () {
                                 FROM \`faizel-lob\`) \`lob|optimize\` ON lob.PolId = bp.PolId AND lob.EffDate >= bp.PolEffDate
                 WHERE bp.Status != 'D'
                 AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
-                AND TO_DATE(bp.PolExpDate) > TO_DATE('{@runInfo.timeStamp}')
+                AND TO_DATE(bp.PolExpDate) >= TO_DATE(bp.PolExpDate)
                 AND bp.PolSubType != 'S'
                 AND bp.CustId = '38CE71B6-2B7C-421A-8BC9-000EF8149C93'
                 LIMIT 10`;
@@ -1038,6 +1038,13 @@ describe('bug-fixes', function () {
             await fs.writeFile(
                 './test/bug-fix-tests/empty-results-ast.json',
                 JSON.stringify(ast, null, 4),
+                {encoding: 'utf8'}
+            );
+            const aggregate = makeMongoAggregate(queryString);
+
+            await fs.writeFile(
+                './test/bug-fix-tests/empty-results-pipeline.json',
+                JSON.stringify(aggregate.pipeline, null, 4),
                 {encoding: 'utf8'}
             );
             // await queryResultTester({

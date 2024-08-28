@@ -295,7 +295,7 @@
                         },
                         "right": {
                             "type": "binary_expr",
-                            "operator": ">",
+                            "operator": ">=",
                             "left": {
                                 "type": "function",
                                 "name": "TO_DATE",
@@ -317,8 +317,9 @@
                                     "type": "expr_list",
                                     "value": [
                                         {
-                                            "type": "single_quote_string",
-                                            "value": "{@runInfo.timeStamp}"
+                                            "type": "column_ref",
+                                            "table": "bp",
+                                            "column": "PolExpDate"
                                         }
                                     ]
                                 }
