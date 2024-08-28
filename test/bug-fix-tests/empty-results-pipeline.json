@@ -1,0 +1,137 @@
+[
+    {
+        "$project": {
+            "bp": "$$ROOT"
+        }
+    },
+    {
+        "$lookup": {
+            "from": "faizel-lob",
+            "as": "lob",
+            "let": {
+                "bp_PolId": "$bp.PolId",
+                "bp_PolEffDate": "$bp.PolEffDate"
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {
+                            "$and": [
+                                {
+                                    "$eq": [
+                                        "$PolId",
+                                        "$$bp_PolId"
+                                    ]
+                                },
+                                {
+                                    "$gte": [
+                                        "$EffDate",
+                                        "$$bp_PolEffDate"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "PolId": "$PolId",
+                        "LineOfBus": "$LineOfBus"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "$match": {
+            "$expr": {
+                "$gt": [
+                    {
+                        "$size": "$lob"
+                    },
+                    0
+                ]
+            }
+        }
+    },
+    {
+        "$match": {
+            "$and": [
+                {
+                    "$and": [
+                        {
+                            "$and": [
+                                {
+                                    "bp.Status": {
+                                        "$ne": "D"
+                                    }
+                                },
+                                {
+                                    "$and": [
+                                        {
+                                            "lob.LineOfBus": {
+                                                "$in": [
+                                                    "CGL",
+                                                    "WORK",
+                                                    "AUTOB",
+                                                    "CUMBR",
+                                                    "ELIAB",
+                                                    "XLIB",
+                                                    "INMRC",
+                                                    "PROP",
+                                                    "BOPGL",
+                                                    "CFIRE",
+                                                    "EMP LIAB OH",
+                                                    "EPLI",
+                                                    "MTRTK",
+                                                    "PL",
+                                                    "RFRBR",
+                                                    "POLL"
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$expr": {
+                                                "$gte": [
+                                                    {
+                                                        "$toDate": "$bp.PolExpDate"
+                                                    },
+                                                    {
+                                                        "$toDate": "$bp.PolExpDate"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "bp.PolSubType": {
+                                "$ne": "S"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "bp.CustId": {
+                        "$eq": "38CE71B6-2B7C-421A-8BC9-000EF8149C93"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "$project": {
+            "CustId": "$bp.CustId",
+            "PolId": "$bp.PolId",
+            "PolNo": "$bp.PolNo",
+            "PolEffDate": "$bp.PolEffDate",
+            "PolExpDate": "$bp.PolExpDate",
+            "LineOfBus": "$lob.LineOfBus"
+        }
+    },
+    {
+        "$limit": 10
+    }
+]
