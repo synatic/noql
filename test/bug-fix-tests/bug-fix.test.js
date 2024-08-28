@@ -1,6 +1,8 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
+const {parseSQLtoAST} = require('../../lib/SQLParser');
+const fs = require('fs/promises');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -963,6 +965,88 @@ describe('bug-fixes', function () {
                 casePath: 'scratchpad.case2',
                 mode,
             });
+        });
+    });
+    describe('post-optimizations', () => {
+        it('should work on the example query', async () => {
+            const queryString = `
+                SELECT
+                    currentUser._id,
+                    currentUser.establishment,
+                    currentUser.access_all_child_establishments,
+                    establishments.*,
+                    child_establishments.*
+                FROM
+                    \`nfk-users|first\` currentUser
+                    LEFT JOIN (
+                        SELECT
+                            user_establishment.user,
+                            establishment._id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-establishments\` user_establishment
+                            LEFT JOIN \`nfk-user-county-establishments|first\` establishment ON user_establishment.establishment = TO_STRING(establishment._id)
+                        WHERE
+                            user_establishment.user = '66261fd83316a727b53610da'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS establishments ON establishments.user_establishment.user = TO_STRING(currentUser._id)
+                    LEFT JOIN (
+                        SELECT
+                            TO_STRING(establishment._id) as id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-county-establishments\` establishment
+                        WHERE
+                            TO_STRING(establishment._id) = '662545865f01249a315ff1fd'
+                            OR establishment.main_establishment = '662545865f01249a315ff1fd'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS child_establishments ON child_establishments.establishment.id = currentUser.establishment
+                    OR child_establishments.establishment.main_establishment = currentUser.establishment
+                WHERE
+                    TO_STRING(currentUser._id) = '66261fd83316a727b53610da'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimization.case1',
+                mode: 'test',
+                outputPipeline: false,
+            });
+        });
+    });
+    describe('empty-results', () => {
+        it("should work with Avi's example", async () => {
+            const queryString = `
+                SELECT bp.CustId, bp.PolId, bp.PolNo, bp.PolEffDate, bp.PolExpDate, lob.LineOfBus
+                FROM \`faizel-polinfo\` bp
+                    INNER JOIN (SELECT PolId, LineOfBus
+                                FROM \`faizel-lob\`) \`lob|optimize\` ON lob.PolId = bp.PolId AND lob.EffDate >= bp.PolEffDate
+                WHERE bp.Status != 'D'
+                AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
+                AND TO_DATE(bp.PolExpDate) > TO_DATE('{@runInfo.timeStamp}')
+                AND bp.PolSubType != 'S'
+                AND bp.CustId = '38CE71B6-2B7C-421A-8BC9-000EF8149C93'
+                LIMIT 10`;
+            const ast = parseSQLtoAST(queryString);
+            await fs.writeFile(
+                './test/bug-fix-tests/empty-results-ast.json',
+                JSON.stringify(ast, null, 4),
+                {encoding: 'utf8'}
+            );
+            // await queryResultTester({
+            //     queryString: queryString,
+            //     casePath: 'empty-results.case1',
+            //     mode: 'write',
+            //     expectZeroResults: false,
+            //     outputPipeline: true,
+            // });
         });
     });
 });

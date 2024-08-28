@@ -1,0 +1,371 @@
+{
+    "tableList": [
+        "select::null::faizel-lob",
+        "select::null::faizel-polinfo"
+    ],
+    "columnList": [
+        "select::faizel-polinfo::CustId",
+        "select::faizel-polinfo::PolId",
+        "select::faizel-polinfo::PolNo",
+        "select::faizel-polinfo::PolEffDate",
+        "select::faizel-polinfo::PolExpDate",
+        "select::lob::LineOfBus",
+        "select::null::PolId",
+        "select::null::LineOfBus",
+        "select::lob::PolId",
+        "select::lob::EffDate",
+        "select::faizel-polinfo::Status",
+        "select::faizel-polinfo::PolSubType"
+    ],
+    "ast": {
+        "with": null,
+        "type": "select",
+        "options": null,
+        "distinct": {
+            "type": null
+        },
+        "columns": [
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "CustId"
+                },
+                "as": null
+            },
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "PolId"
+                },
+                "as": null
+            },
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "PolNo"
+                },
+                "as": null
+            },
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "PolEffDate"
+                },
+                "as": null
+            },
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "PolExpDate"
+                },
+                "as": null
+            },
+            {
+                "type": "expr",
+                "expr": {
+                    "type": "column_ref",
+                    "table": "lob",
+                    "column": "LineOfBus"
+                },
+                "as": null
+            }
+        ],
+        "into": {
+            "position": null
+        },
+        "from": [
+            {
+                "db": null,
+                "table": "faizel-polinfo",
+                "as": "bp"
+            },
+            {
+                "prefix": null,
+                "expr": {
+                    "tableList": [
+                        "select::null::faizel-lob"
+                    ],
+                    "columnList": [
+                        "select::bp::CustId",
+                        "select::bp::PolId",
+                        "select::bp::PolNo",
+                        "select::bp::PolEffDate",
+                        "select::bp::PolExpDate",
+                        "select::lob::LineOfBus",
+                        "select::null::PolId",
+                        "select::null::LineOfBus"
+                    ],
+                    "ast": {
+                        "with": null,
+                        "type": "select",
+                        "options": null,
+                        "distinct": {
+                            "type": null
+                        },
+                        "columns": [
+                            {
+                                "type": "expr",
+                                "expr": {
+                                    "type": "column_ref",
+                                    "table": null,
+                                    "column": "PolId"
+                                },
+                                "as": null
+                            },
+                            {
+                                "type": "expr",
+                                "expr": {
+                                    "type": "column_ref",
+                                    "table": null,
+                                    "column": "LineOfBus"
+                                },
+                                "as": null
+                            }
+                        ],
+                        "into": {
+                            "position": null
+                        },
+                        "from": [
+                            {
+                                "db": null,
+                                "table": "faizel-lob",
+                                "as": null
+                            }
+                        ],
+                        "where": null,
+                        "groupby": null,
+                        "having": null,
+                        "orderby": null,
+                        "limit": {
+                            "seperator": "",
+                            "value": []
+                        },
+                        "window": null
+                    },
+                    "parentheses": true
+                },
+                "as": "lob|optimize",
+                "join": "INNER JOIN",
+                "on": {
+                    "type": "binary_expr",
+                    "operator": "AND",
+                    "left": {
+                        "type": "binary_expr",
+                        "operator": "=",
+                        "left": {
+                            "type": "column_ref",
+                            "table": "lob",
+                            "column": "PolId"
+                        },
+                        "right": {
+                            "type": "column_ref",
+                            "table": "bp",
+                            "column": "PolId"
+                        }
+                    },
+                    "right": {
+                        "type": "binary_expr",
+                        "operator": ">=",
+                        "left": {
+                            "type": "column_ref",
+                            "table": "lob",
+                            "column": "EffDate"
+                        },
+                        "right": {
+                            "type": "column_ref",
+                            "table": "bp",
+                            "column": "PolEffDate"
+                        }
+                    }
+                }
+            }
+        ],
+        "where": {
+            "type": "binary_expr",
+            "operator": "AND",
+            "left": {
+                "type": "binary_expr",
+                "operator": "AND",
+                "left": {
+                    "type": "binary_expr",
+                    "operator": "AND",
+                    "left": {
+                        "type": "binary_expr",
+                        "operator": "!=",
+                        "left": {
+                            "type": "column_ref",
+                            "table": "bp",
+                            "column": "Status"
+                        },
+                        "right": {
+                            "type": "single_quote_string",
+                            "value": "D"
+                        }
+                    },
+                    "right": {
+                        "type": "binary_expr",
+                        "operator": "AND",
+                        "left": {
+                            "type": "binary_expr",
+                            "operator": "IN",
+                            "left": {
+                                "type": "column_ref",
+                                "table": "lob",
+                                "column": "LineOfBus"
+                            },
+                            "right": {
+                                "type": "expr_list",
+                                "value": [
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "CGL"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "WORK"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "AUTOB"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "CUMBR"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "ELIAB"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "XLIB"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "INMRC"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "PROP"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "BOPGL"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "CFIRE"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "EMP LIAB OH"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "EPLI"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "MTRTK"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "PL"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "RFRBR"
+                                    },
+                                    {
+                                        "type": "single_quote_string",
+                                        "value": "POLL"
+                                    }
+                                ]
+                            }
+                        },
+                        "right": {
+                            "type": "binary_expr",
+                            "operator": ">",
+                            "left": {
+                                "type": "function",
+                                "name": "TO_DATE",
+                                "args": {
+                                    "type": "expr_list",
+                                    "value": [
+                                        {
+                                            "type": "column_ref",
+                                            "table": "bp",
+                                            "column": "PolExpDate"
+                                        }
+                                    ]
+                                }
+                            },
+                            "right": {
+                                "type": "function",
+                                "name": "TO_DATE",
+                                "args": {
+                                    "type": "expr_list",
+                                    "value": [
+                                        {
+                                            "type": "single_quote_string",
+                                            "value": "{@runInfo.timeStamp}"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "right": {
+                    "type": "binary_expr",
+                    "operator": "!=",
+                    "left": {
+                        "type": "column_ref",
+                        "table": "bp",
+                        "column": "PolSubType"
+                    },
+                    "right": {
+                        "type": "single_quote_string",
+                        "value": "S"
+                    }
+                }
+            },
+            "right": {
+                "type": "binary_expr",
+                "operator": "=",
+                "left": {
+                    "type": "column_ref",
+                    "table": "bp",
+                    "column": "CustId"
+                },
+                "right": {
+                    "type": "single_quote_string",
+                    "value": "38CE71B6-2B7C-421A-8BC9-000EF8149C93"
+                }
+            }
+        },
+        "groupby": null,
+        "having": null,
+        "orderby": null,
+        "limit": {
+            "seperator": "",
+            "value": [
+                {
+                    "type": "number",
+                    "value": 10
+                }
+            ]
+        },
+        "window": null
+    }
+}
