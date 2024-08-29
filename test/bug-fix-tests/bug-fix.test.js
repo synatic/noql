@@ -3,6 +3,9 @@ const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
 const {parseSQLtoAST, makeMongoAggregate} = require('../../lib/SQLParser');
 const fs = require('fs/promises');
+const emptyResultsBugPipeline = require('./empty-results-pipeline.json');
+const isEqual = require('lodash/isEqual');
+const assert = require('node:assert');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -1044,26 +1047,9 @@ describe('bug-fixes', function () {
                 AND bp.PolSubType != 'S'
                 AND bp.CustId = 'test-customer-1'
                 LIMIT 10 `;
-            const ast = parseSQLtoAST(queryString);
-            await fs.writeFile(
-                './test/bug-fix-tests/empty-results-ast.json',
-                JSON.stringify(ast, null, 4),
-                {encoding: 'utf8'}
-            );
             const aggregate = makeMongoAggregate(queryString);
 
-            await fs.writeFile(
-                './test/bug-fix-tests/empty-results-pipeline.json',
-                JSON.stringify(aggregate.pipeline, null, 4),
-                {encoding: 'utf8'}
-            );
-            // await queryResultTester({
-            //     queryString: queryString,
-            //     casePath: 'empty-results.case1',
-            //     mode: 'write',
-            //     expectZeroResults: false,
-            //     outputPipeline: true,
-            // });
+            assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
         });
     });
 });
