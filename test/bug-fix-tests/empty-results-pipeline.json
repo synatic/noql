@@ -67,42 +67,14 @@
                                     }
                                 },
                                 {
-                                    "$and": [
-                                        {
-                                            "lob.LineOfBus": {
-                                                "$in": [
-                                                    "CGL",
-                                                    "WORK",
-                                                    "AUTOB",
-                                                    "CUMBR",
-                                                    "ELIAB",
-                                                    "XLIB",
-                                                    "INMRC",
-                                                    "PROP",
-                                                    "BOPGL",
-                                                    "CFIRE",
-                                                    "EMP LIAB OH",
-                                                    "EPLI",
-                                                    "MTRTK",
-                                                    "PL",
-                                                    "RFRBR",
-                                                    "POLL"
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$expr": {
-                                                "$gte": [
-                                                    {
-                                                        "$toDate": "$bp.PolExpDate"
-                                                    },
-                                                    {
-                                                        "$toDate": "$bp.PolExpDate"
-                                                    }
-                                                ]
-                                            }
-                                        }
-                                    ]
+                                    "$expr": {
+                                        "$gt": [
+                                            {
+                                                "$toDate": "$bp.PolExpDate"
+                                            },
+                                            "$$NOW"
+                                        ]
+                                    }
                                 }
                             ]
                         },
@@ -115,7 +87,7 @@
                 },
                 {
                     "bp.CustId": {
-                        "$eq": "38CE71B6-2B7C-421A-8BC9-000EF8149C93"
+                        "$eq": "test-customer-1"
                     }
                 }
             ]
