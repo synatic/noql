@@ -1024,16 +1024,26 @@ describe('bug-fixes', function () {
     describe('empty-results', () => {
         it("should work with Avi's example", async () => {
             const queryString = `
-                SELECT bp.CustId, bp.PolId, bp.PolNo, bp.PolEffDate, bp.PolExpDate, lob.LineOfBus
+                SELECT  bp.CustId,
+                        bp.PolId,
+                        bp.PolNo,
+                        bp.PolEffDate,
+                        bp.PolExpDate,
+                        lob.LineOfBus
                 FROM \`faizel-polinfo\` bp
-                    INNER JOIN (SELECT PolId, LineOfBus
-                                FROM \`faizel-lob\`) \`lob|optimize\` ON lob.PolId = bp.PolId AND lob.EffDate >= bp.PolEffDate
+                INNER JOIN (
+                        SELECT  PolId,
+                                LineOfBus
+                                --,EffDate
+                        FROM \`faizel-lob\`) \`lob|optimize\`
+                        ON lob.PolId = bp.PolId
+                                AND lob.EffDate >= bp.PolEffDate
                 WHERE bp.Status != 'D'
-                AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
-                AND TO_DATE(bp.PolExpDate) >= TO_DATE(bp.PolExpDate)
+                --AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
+                AND TO_DATE(bp.PolExpDate) > CURRENT_DATE()
                 AND bp.PolSubType != 'S'
-                AND bp.CustId = '38CE71B6-2B7C-421A-8BC9-000EF8149C93'
-                LIMIT 10`;
+                AND bp.CustId = 'test-customer-1'
+                LIMIT 10 `;
             const ast = parseSQLtoAST(queryString);
             await fs.writeFile(
                 './test/bug-fix-tests/empty-results-ast.json',

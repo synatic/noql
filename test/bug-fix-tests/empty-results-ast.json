@@ -214,116 +214,29 @@
                     },
                     "right": {
                         "type": "binary_expr",
-                        "operator": "AND",
+                        "operator": ">",
                         "left": {
-                            "type": "binary_expr",
-                            "operator": "IN",
-                            "left": {
-                                "type": "column_ref",
-                                "table": "lob",
-                                "column": "LineOfBus"
-                            },
-                            "right": {
+                            "type": "function",
+                            "name": "TO_DATE",
+                            "args": {
                                 "type": "expr_list",
                                 "value": [
                                     {
-                                        "type": "single_quote_string",
-                                        "value": "CGL"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "WORK"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "AUTOB"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "CUMBR"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "ELIAB"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "XLIB"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "INMRC"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "PROP"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "BOPGL"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "CFIRE"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "EMP LIAB OH"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "EPLI"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "MTRTK"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "PL"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "RFRBR"
-                                    },
-                                    {
-                                        "type": "single_quote_string",
-                                        "value": "POLL"
+                                        "type": "column_ref",
+                                        "table": "bp",
+                                        "column": "PolExpDate"
                                     }
                                 ]
                             }
                         },
                         "right": {
-                            "type": "binary_expr",
-                            "operator": ">=",
-                            "left": {
-                                "type": "function",
-                                "name": "TO_DATE",
-                                "args": {
-                                    "type": "expr_list",
-                                    "value": [
-                                        {
-                                            "type": "column_ref",
-                                            "table": "bp",
-                                            "column": "PolExpDate"
-                                        }
-                                    ]
-                                }
+                            "type": "function",
+                            "name": "CURRENT_DATE",
+                            "args": {
+                                "type": "expr_list",
+                                "value": []
                             },
-                            "right": {
-                                "type": "function",
-                                "name": "TO_DATE",
-                                "args": {
-                                    "type": "expr_list",
-                                    "value": [
-                                        {
-                                            "type": "column_ref",
-                                            "table": "bp",
-                                            "column": "PolExpDate"
-                                        }
-                                    ]
-                                }
-                            }
+                            "over": null
                         }
                     }
                 },
@@ -351,7 +264,7 @@
                 },
                 "right": {
                     "type": "single_quote_string",
-                    "value": "38CE71B6-2B7C-421A-8BC9-000EF8149C93"
+                    "value": "test-customer-1"
                 }
             }
         },
