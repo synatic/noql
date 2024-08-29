@@ -1053,5 +1053,22 @@
         }
       ]
     }
+  },
+  "deeply-nested-divide": {
+    "case1": {
+      "expectedResults": [
+        {
+          "TotalFunded": 10,
+          "BrokerBuyRatePerTerm": 5,
+          "FactorAsPercent": 2,
+          "CheckText": -0.3,
+          "NetRevenue": 0.09166666666666667,
+          "BrokerBuyRate": 0.025,
+          "BrokerBuyRateCommission": -0.3,
+          "FundedYear": 2022,
+          "FundedMonth": 4
+        }
+      ]
+    }
   }
 }
