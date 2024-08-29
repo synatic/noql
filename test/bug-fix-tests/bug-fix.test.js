@@ -1052,4 +1052,42 @@ describe('bug-fixes', function () {
             assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
         });
     });
+    describe('deeply-nested-divide', () => {
+        it('should work in the basic select', async () => {
+            const queryString = `
+                SELECT
+                    disbursedAmount AS TotalFunded,
+                    (2.5 * latestQuoteTerm) AS BrokerBuyRatePerTerm,
+                    latestQuoteTotalFactor AS FactorAsPercent,
+                    disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100) AS CheckText,
+                    ((disbursedAmount * (latestQuoteTotalFactor / 100)) - ((disbursedAmount * (0.13 / 12)) * (latestQuoteTerm / 2))) AS NetRevenue,
+                    CASE
+                        WHEN type != 'New Deal' THEN (2 / 100)
+                        ELSE
+                            CASE
+                                WHEN latestQuoteTerm < 6 THEN (2.5 / 100)
+                                WHEN latestQuoteTerm > 5 THEN (2.2 / 100)
+                                ELSE 0.00
+                            END
+                    END AS BrokerBuyRate,
+                    CASE
+                        WHEN type = 'New Deal' AND latestQuoteTerm < 6 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100))
+                        WHEN type = 'New Deal' AND latestQuoteTerm > 5 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.2 * latestQuoteTerm)) / 100))
+                        WHEN type != 'New Deal' THEN disbursedAmount * 0.020
+                        ELSE 0
+                    END AS BrokerBuyRateCommission,
+                    YEAR(DATE_FROM_STRING(disbursedDate)) AS FundedYear,
+                    MONTH(DATE_FROM_STRING(disbursedDate)) AS FundedMonth,
+                    unset(_id)
+                FROM
+                "function-test-data"
+                WHERE testId = "bugfix.deeply-nested-divide.case1"`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'deeply-nested-divide.case1',
+                mode: 'write',
+                outputPipeline: false,
+            });
+        });
+    });
 });
