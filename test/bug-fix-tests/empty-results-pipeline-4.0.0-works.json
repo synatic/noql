@@ -18,16 +18,10 @@
             "$expr": {
               "$and": [
                 {
-                  "$eq": [
-                    "$PolId",
-                    "$$bp_PolId"
-                  ]
+                  "$eq": ["$PolId", "$$bp_PolId"]
                 },
                 {
-                  "$gte": [
-                    "$EffDate",
-                    "$$bp_PolEffDate"
-                  ]
+                  "$gte": ["$EffDate", "$$bp_PolEffDate"]
                 }
               ]
             }

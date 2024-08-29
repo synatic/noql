@@ -1,109 +1,103 @@
 [
-    {
-        "$project": {
-            "bp": "$$ROOT"
-        }
-    },
-    {
-        "$lookup": {
-            "from": "faizel-lob",
-            "as": "lob",
-            "let": {
-                "bp_PolId": "$bp.PolId",
-                "bp_PolEffDate": "$bp.PolEffDate"
-            },
-            "pipeline": [
-                {
-                    "$match": {
-                        "$expr": {
-                            "$and": [
-                                {
-                                    "$eq": [
-                                        "$PolId",
-                                        "$$bp_PolId"
-                                    ]
-                                },
-                                {
-                                    "$gte": [
-                                        "$EffDate",
-                                        "$$bp_PolEffDate"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "$project": {
-                        "PolId": "$PolId",
-                        "LineOfBus": "$LineOfBus"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "$match": {
-            "$expr": {
-                "$gt": [
-                    {
-                        "$size": "$lob"
-                    },
-                    0
-                ]
-            }
-        }
-    },
-    {
-        "$match": {
-            "$and": [
-                {
-                    "$and": [
-                        {
-                            "$and": [
-                                {
-                                    "bp.Status": {
-                                        "$ne": "D"
-                                    }
-                                },
-                                {
-                                    "$expr": {
-                                        "$gt": [
-                                            {
-                                                "$toDate": "$bp.PolExpDate"
-                                            },
-                                            "$$NOW"
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "bp.PolSubType": {
-                                "$ne": "S"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "bp.CustId": {
-                        "$eq": "test-customer-1"
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "$project": {
-            "CustId": "$bp.CustId",
-            "PolId": "$bp.PolId",
-            "PolNo": "$bp.PolNo",
-            "PolEffDate": "$bp.PolEffDate",
-            "PolExpDate": "$bp.PolExpDate",
-            "LineOfBus": "$lob.LineOfBus"
-        }
-    },
-    {
-        "$limit": 10
+  {
+    "$project": {
+      "bp": "$$ROOT"
     }
+  },
+  {
+    "$lookup": {
+      "from": "faizel-lob",
+      "as": "lob",
+      "let": {
+        "bp_PolId": "$bp.PolId",
+        "bp_PolEffDate": "$bp.PolEffDate"
+      },
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$and": [
+                {
+                  "$eq": ["$PolId", "$$bp_PolId"]
+                },
+                {
+                  "$gte": ["$EffDate", "$$bp_PolEffDate"]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "PolId": "$PolId",
+            "LineOfBus": "$LineOfBus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "$match": {
+      "$expr": {
+        "$gt": [
+          {
+            "$size": "$lob"
+          },
+          0
+        ]
+      }
+    }
+  },
+  {
+    "$match": {
+      "$and": [
+        {
+          "$and": [
+            {
+              "$and": [
+                {
+                  "bp.Status": {
+                    "$ne": "D"
+                  }
+                },
+                {
+                  "$expr": {
+                    "$gt": [
+                      {
+                        "$toDate": "$bp.PolExpDate"
+                      },
+                      "$$NOW"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "bp.PolSubType": {
+                "$ne": "S"
+              }
+            }
+          ]
+        },
+        {
+          "bp.CustId": {
+            "$eq": "test-customer-1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "$project": {
+      "CustId": "$bp.CustId",
+      "PolId": "$bp.PolId",
+      "PolNo": "$bp.PolNo",
+      "PolEffDate": "$bp.PolEffDate",
+      "PolExpDate": "$bp.PolExpDate",
+      "LineOfBus": "$lob.LineOfBus"
+    }
+  },
+  {
+    "$limit": 10
+  }
 ]
