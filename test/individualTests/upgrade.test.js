@@ -414,7 +414,7 @@ describe('node-sql-parser upgrade tests', function () {
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'pivot.case1',
-                    mode: 'write',
+                    mode,
                     outputPipeline: false,
                 });
                 // const expected = {
@@ -430,7 +430,7 @@ describe('node-sql-parser upgrade tests', function () {
         describe('UNPIVOT', () => {
             it('should unpivot employee columns to rows', async () => {
                 const queryText = `
-                    SELECT *
+                    SELECT VendorID, Employee, Orders
                     FROM (
                         SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5
                         FROM pvt
