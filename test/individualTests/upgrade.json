@@ -97,5 +97,30 @@
         ]
       }
     }
+  },
+  "pivot": {
+    "case1": {
+      "expectedResults": [
+        {
+          "0": {
+            "StandardCost": 5.0885,
+            "MaxCost": 5.0885
+          },
+          "1": {
+            "StandardCost": 223.88,
+            "MaxCost": 223.88
+          },
+          "2": {
+            "StandardCost": 359.1082,
+            "MaxCost": 359.1082
+          },
+          "3": null,
+          "4": {
+            "StandardCost": 949.4105,
+            "MaxCost": 949.4105
+          }
+        }
+      ]
+    }
   }
 }
