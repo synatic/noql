@@ -399,7 +399,33 @@ describe('node-sql-parser upgrade tests', function () {
     });
     describe('PIVOT and UNPIVOT', () => {
         describe('PIVOT', () => {
-            it('should pivot DaysToManufacture to columns', async () => {
+            it('should pivot DaysToManufacture to columns with one aggregation function', async () => {
+                const queryText = `
+                    SELECT *
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost)],DaysToManufacture,[0,1,2,3,4])'
+                `;
+
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'pivot.case1',
+                    mode,
+                    outputPipeline: false,
+                });
+                // const expected = {
+                //     0: 5.0885,
+                //     1: 223.88,
+                //     2: 359.1082,
+                //     3: null,
+                //     4: 949.4105,
+                // };
+            });
+            it('should pivot DaysToManufacture to columns with two aggregation functions, one with an as', async () => {
                 const queryText = `
                     SELECT *
                     FROM (
@@ -413,7 +439,7 @@ describe('node-sql-parser upgrade tests', function () {
 
                 await queryResultTester({
                     queryString: queryText,
-                    casePath: 'pivot.case1',
+                    casePath: 'pivot.case2',
                     mode,
                     outputPipeline: false,
                 });

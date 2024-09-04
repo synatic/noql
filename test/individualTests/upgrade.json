@@ -102,6 +102,17 @@
     "case1": {
       "expectedResults": [
         {
+          "0": 5.0885,
+          "1": 223.88,
+          "2": 359.1082,
+          "3": null,
+          "4": 949.4105
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
           "0": {
             "StandardCost": 5.0885,
             "MaxCost": 5.0885
