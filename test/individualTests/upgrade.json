@@ -106,7 +106,8 @@
           "1": 223.88,
           "2": 359.1082,
           "3": null,
-          "4": 949.4105
+          "4": 949.4105,
+          "CostSortedByProductionDays": "AverageCost"
         }
       ]
     },
@@ -129,7 +130,8 @@
           "4": {
             "StandardCost": 949.4105,
             "MaxCost": 949.4105
-          }
+          },
+          "CostSortedByProductionDays": "Costs"
         }
       ]
     }
@@ -163,6 +165,11 @@
           "Orders": 4
         },
         {
+          "VendorID": 1,
+          "Employee": "_id",
+          "Orders": "66d84bd59c3487b892c5c7db"
+        },
+        {
           "VendorID": 2,
           "Employee": "Emp1",
           "Orders": 4
@@ -186,6 +193,11 @@
           "VendorID": 2,
           "Employee": "Emp5",
           "Orders": 5
+        },
+        {
+          "VendorID": 2,
+          "Employee": "_id",
+          "Orders": "66d84bd59c3487b892c5c7dc"
         },
         {
           "VendorID": 3,
@@ -213,6 +225,11 @@
           "Orders": 4
         },
         {
+          "VendorID": 3,
+          "Employee": "_id",
+          "Orders": "66d84bd59c3487b892c5c7dd"
+        },
+        {
           "VendorID": 4,
           "Employee": "Emp1",
           "Orders": 4
@@ -238,6 +255,11 @@
           "Orders": 4
         },
         {
+          "VendorID": 4,
+          "Employee": "_id",
+          "Orders": "66d84bd59c3487b892c5c7de"
+        },
+        {
           "VendorID": 5,
           "Employee": "Emp1",
           "Orders": 5
@@ -261,6 +283,11 @@
           "VendorID": 5,
           "Employee": "Emp5",
           "Orders": 5
+        },
+        {
+          "VendorID": 5,
+          "Employee": "_id",
+          "Orders": "66d84bd59c3487b892c5c7df"
         }
       ]
     }

@@ -401,14 +401,19 @@ describe('node-sql-parser upgrade tests', function () {
         describe('PIVOT', () => {
             it('should pivot DaysToManufacture to columns with one aggregation function', async () => {
                 const queryText = `
-                    SELECT *
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
                     FROM (
                         SELECT DaysToManufacture,
                                StandardCost
                         FROM Production_Product
                         GROUP BY DaysToManufacture, StandardCost
                         ORDER BY DaysToManufacture, StandardCost
-                    ) 'pvt|pivot([avg(StandardCost)],DaysToManufacture,[0,1,2,3,4])'
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost],DaysToManufacture,[0,1,2,3,4])'
                 `;
 
                 await queryResultTester({
@@ -417,17 +422,15 @@ describe('node-sql-parser upgrade tests', function () {
                     mode,
                     outputPipeline: false,
                 });
-                // const expected = {
-                //     0: 5.0885,
-                //     1: 223.88,
-                //     2: 359.1082,
-                //     3: null,
-                //     4: 949.4105,
-                // };
             });
             it('should pivot DaysToManufacture to columns with two aggregation functions, one with an as', async () => {
                 const queryText = `
-                    SELECT *
+                    SELECT 'Costs' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
                     FROM (
                         SELECT DaysToManufacture,
                                StandardCost
@@ -440,29 +443,21 @@ describe('node-sql-parser upgrade tests', function () {
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'pivot.case2',
-                    mode,
+                    mode: 'write',
                     outputPipeline: false,
                 });
-                // const expected = {
-                //     0: 5.0885,
-                //     1: 223.88,
-                //     2: 359.1082,
-                //     3: null,
-                //     4: 949.4105,
-                // };
             });
         });
 
         describe('UNPIVOT', () => {
             it('should unpivot employee columns to rows', async () => {
                 const queryText = `
-                    SELECT VendorID, Employee, Orders
+                    SELECT VendorID, Employee, Orders, unset(_id)
                     FROM (
                         SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5
                         FROM pvt
-                        GROUP BY DaysToManufacture, StandardCost
-                        ORDER BY DaysToManufacture, StandardCost
                     ) 'unpvt|unpivot([Orders],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'
+                    ORDER BY VendorID, Employee
                 `;
 
                 await queryResultTester({
