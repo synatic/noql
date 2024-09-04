@@ -443,7 +443,7 @@ describe('node-sql-parser upgrade tests', function () {
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'pivot.case2',
-                    mode: 'write',
+                    mode,
                     outputPipeline: false,
                 });
             });
@@ -452,9 +452,9 @@ describe('node-sql-parser upgrade tests', function () {
         describe('UNPIVOT', () => {
             it('should unpivot employee columns to rows', async () => {
                 const queryText = `
-                    SELECT VendorID, Employee, Orders, unset(_id)
+                    SELECT VendorID, Employee, Orders
                     FROM (
-                        SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5
+                        SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5, unset(_id)
                         FROM pvt
                     ) 'unpvt|unpivot([Orders],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'
                     ORDER BY VendorID, Employee
@@ -463,7 +463,7 @@ describe('node-sql-parser upgrade tests', function () {
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'unpivot.case1',
-                    mode: 'write',
+                    mode,
                     outputPipeline: false,
                 });
             });
