@@ -467,6 +467,24 @@ describe('node-sql-parser upgrade tests', function () {
                     outputPipeline: false,
                 });
             });
+            it('should support multiple unpivots', async () => {
+                // See https://dba.stackexchange.com/a/222745
+                const queryText = `
+                    SELECT VendorID, Employee, Orders
+                    FROM (
+                        SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5, unset(_id)
+                        FROM pvt
+                    ) 'unpvt|unpivot([Orders],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])|unpivot([Orders2],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'
+                    ORDER BY VendorID, Employee
+                `;
+
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'unpivot.case2',
+                    mode: 'write',
+                    outputPipeline: false,
+                });
+            });
         });
     });
 });
