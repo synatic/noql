@@ -470,19 +470,22 @@ describe('node-sql-parser upgrade tests', function () {
             it('should support multiple unpivots', async () => {
                 // See https://dba.stackexchange.com/a/222745
                 const queryText = `
-                    SELECT VendorID, Employee, Orders
+                    SELECT SalesID,
+                    ROW_NUMBER() OVER (
+                            ORDER BY OrderName
+                        ) OrderNum,
+                    OrderName,
+                    OrderDate
                     FROM (
-                        SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5, unset(_id)
-                        FROM pvt
-                    ) 'unpvt|unpivot([Orders],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])|unpivot([Orders2],Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'
-                    ORDER BY VendorID, Employee
+                        SELECT SalesID, Order1Name, Order2Name, Order1Date, Order2Date, Order1Amt, Order2Amt, unset(_id)
+                        FROM multiple-unpivot
+                    ) 'unpvt|unpivot([OrderName],OrderNames,[Order1Name, Order2Name])|unpivot([OrderDate],OrderDates,[Order1Date, Order2Date])'
                 `;
-
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'unpivot.case2',
                     mode: 'write',
-                    outputPipeline: false,
+                    outputPipeline: true,
                 });
             });
         });

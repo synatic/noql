@@ -265,6 +265,207 @@
           "Orders": 5
         }
       ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "SalesID": 1001,
+          "OrderNum": 1,
+          "OrderName": "first",
+          "OrderDate": "2018-01-01"
+        },
+        {
+          "SalesID": 1001,
+          "OrderNum": 2,
+          "OrderName": "second",
+          "OrderDate": "2018-02-01"
+        }
+      ],
+      "pipeline": [
+        {
+          "$unset": [
+            "_id"
+          ]
+        },
+        {
+          "$project": {
+            "SalesID": "$SalesID",
+            "Order1Name": "$Order1Name",
+            "Order2Name": "$Order2Name",
+            "Order1Date": "$Order1Date",
+            "Order2Date": "$Order2Date",
+            "Order1Amt": "$Order1Amt",
+            "Order2Amt": "$Order2Amt"
+          }
+        },
+        {
+          "$project": {
+            "SalesID": "$SalesID",
+            "fields": {
+              "$objectToArray": "$$ROOT"
+            }
+          }
+        },
+        {
+          "$project": {
+            "SalesID": 1,
+            "fields": {
+              "$filter": {
+                "input": "$fields",
+                "as": "field",
+                "cond": {
+                  "$and": [
+                    {
+                      "$ne": [
+                        "$$field.k",
+                        "SalesID"
+                      ]
+                    },
+                    {
+                      "$or": [
+                        {
+                          "$eq": [
+                            "$$field.k",
+                            "Order1Name"
+                          ]
+                        },
+                        {
+                          "$eq": [
+                            "$$field.k",
+                            "Order2Name"
+                          ]
+                        },
+                        {
+                          "$eq": [
+                            "$$field.k",
+                            "Order1Date"
+                          ]
+                        },
+                        {
+                          "$eq": [
+                            "$$field.k",
+                            "Order2Date"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "$unwind": "$fields"
+        },
+        {
+          "$project": {
+            "SalesID": 1,
+            "OrderName": {
+              "$cond": {
+                "if": {
+                  "$or": [
+                    {
+                      "$eq": [
+                        "$fields.k",
+                        "Order1Name"
+                      ]
+                    },
+                    {
+                      "$eq": [
+                        "$fields.k",
+                        "Order2Name"
+                      ]
+                    }
+                  ]
+                },
+                "then": "$fields.v",
+                "else": "$$REMOVE"
+              }
+            },
+            "OrderDate": {
+              "$cond": {
+                "if": {
+                  "$or": [
+                    {
+                      "$eq": [
+                        "$fields.k",
+                        "Order1Date"
+                      ]
+                    },
+                    {
+                      "$eq": [
+                        "$fields.k",
+                        "Order2Date"
+                      ]
+                    }
+                  ]
+                },
+                "then": "$fields.v",
+                "else": "$$REMOVE"
+              }
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "SalesID": "$SalesID"
+            },
+            "OrderNames": {
+              "$push": "$OrderName"
+            },
+            "OrderDates": {
+              "$push": "$OrderDate"
+            }
+          }
+        },
+        {
+          "$unwind": {
+            "path": "$OrderNames",
+            "includeArrayIndex": "__unwindIndex",
+            "preserveNullAndEmptyArrays": false
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "SalesID": "$_id.SalesID",
+            "OrderName": "$OrderNames",
+            "OrderDate": {
+              "$arrayElemAt": [
+                "$OrderDates",
+                "$__unwindIndex"
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "unpvt": "$$ROOT"
+          }
+        },
+        {
+          "$setWindowFields": {
+            "sortBy": {
+              "OrderName": 1
+            },
+            "output": {
+              "OrderNum": {
+                "$documentNumber": {}
+              }
+            }
+          }
+        },
+        {
+          "$project": {
+            "SalesID": "$unpvt.SalesID",
+            "OrderNum": "$OrderNum",
+            "OrderName": "$unpvt.OrderName",
+            "OrderDate": "$unpvt.OrderDate"
+          }
+        }
+      ]
     }
   }
 }
