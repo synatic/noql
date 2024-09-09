@@ -381,15 +381,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$id", "$$c_id"]
                   }
                 }
               },
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$id", "$$c_id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               }
@@ -441,15 +441,15 @@
             "pipeline": [
               {
                 "$match": {
-                  "id": {
-                    "$gt": 2
+                  "$expr": {
+                    "$eq": ["$$c_id", "$id"]
                   }
                 }
               },
               {
                 "$match": {
-                  "$expr": {
-                    "$eq": ["$$c_id", "$id"]
+                  "id": {
+                    "$gt": 2
                   }
                 }
               }

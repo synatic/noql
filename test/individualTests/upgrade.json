@@ -97,5 +97,192 @@
         ]
       }
     }
+  },
+  "pivot": {
+    "case1": {
+      "expectedResults": [
+        {
+          "0": 5.0885,
+          "1": 223.88,
+          "2": 359.1082,
+          "3": null,
+          "4": 949.4105,
+          "CostSortedByProductionDays": "AverageCost"
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "0": {
+            "StandardCost": 5.0885,
+            "MaxCost": 5.0885
+          },
+          "1": {
+            "StandardCost": 223.88,
+            "MaxCost": 223.88
+          },
+          "2": {
+            "StandardCost": 359.1082,
+            "MaxCost": 359.1082
+          },
+          "3": null,
+          "4": {
+            "StandardCost": 949.4105,
+            "MaxCost": 949.4105
+          },
+          "CostSortedByProductionDays": "Costs"
+        }
+      ]
+    }
+  },
+  "unpivot": {
+    "case1": {
+      "expectedResults": [
+        {
+          "VendorID": 1,
+          "Employee": "Emp1",
+          "Orders": 4
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp2",
+          "Orders": 3
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp4",
+          "Orders": 4
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp5",
+          "Orders": 4
+        },
+        {
+          "VendorID": 2,
+          "Employee": "Emp1",
+          "Orders": 4
+        },
+        {
+          "VendorID": 2,
+          "Employee": "Emp2",
+          "Orders": 1
+        },
+        {
+          "VendorID": 2,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 2,
+          "Employee": "Emp4",
+          "Orders": 5
+        },
+        {
+          "VendorID": 2,
+          "Employee": "Emp5",
+          "Orders": 5
+        },
+        {
+          "VendorID": 3,
+          "Employee": "Emp1",
+          "Orders": 4
+        },
+        {
+          "VendorID": 3,
+          "Employee": "Emp2",
+          "Orders": 3
+        },
+        {
+          "VendorID": 3,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 3,
+          "Employee": "Emp4",
+          "Orders": 4
+        },
+        {
+          "VendorID": 3,
+          "Employee": "Emp5",
+          "Orders": 4
+        },
+        {
+          "VendorID": 4,
+          "Employee": "Emp1",
+          "Orders": 4
+        },
+        {
+          "VendorID": 4,
+          "Employee": "Emp2",
+          "Orders": 2
+        },
+        {
+          "VendorID": 4,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 4,
+          "Employee": "Emp4",
+          "Orders": 5
+        },
+        {
+          "VendorID": 4,
+          "Employee": "Emp5",
+          "Orders": 4
+        },
+        {
+          "VendorID": 5,
+          "Employee": "Emp1",
+          "Orders": 5
+        },
+        {
+          "VendorID": 5,
+          "Employee": "Emp2",
+          "Orders": 1
+        },
+        {
+          "VendorID": 5,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 5,
+          "Employee": "Emp4",
+          "Orders": 5
+        },
+        {
+          "VendorID": 5,
+          "Employee": "Emp5",
+          "Orders": 5
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "SalesID": 1001,
+          "OrderNum": 1,
+          "OrderName": "first",
+          "OrderDate": "2018-01-01",
+          "OrderAmt": 111
+        },
+        {
+          "SalesID": 1001,
+          "OrderNum": 2,
+          "OrderName": "second",
+          "OrderDate": "2018-02-01",
+          "OrderAmt": 222
+        }
+      ]
+    }
   }
 }

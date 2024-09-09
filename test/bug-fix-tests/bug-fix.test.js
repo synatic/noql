@@ -1,7 +1,11 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
-
+const {parseSQLtoAST, makeMongoAggregate} = require('../../lib/SQLParser');
+const fs = require('fs/promises');
+const emptyResultsBugPipeline = require('./empty-results-pipeline.json');
+const isEqual = require('lodash/isEqual');
+const assert = require('node:assert');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -1016,6 +1020,72 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath: 'post-optimization.case1',
                 mode: 'test',
+                outputPipeline: false,
+            });
+        });
+    });
+    describe('empty-results', () => {
+        it("should work with Avi's example", async () => {
+            const queryString = `
+                SELECT  bp.CustId,
+                        bp.PolId,
+                        bp.PolNo,
+                        bp.PolEffDate,
+                        bp.PolExpDate,
+                        lob.LineOfBus
+                FROM \`faizel-polinfo\` bp
+                INNER JOIN (
+                        SELECT  PolId,
+                                LineOfBus
+                                --,EffDate
+                        FROM \`faizel-lob\`) \`lob|optimize\`
+                        ON lob.PolId = bp.PolId
+                                AND lob.EffDate >= bp.PolEffDate
+                WHERE bp.Status != 'D'
+                --AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
+                AND TO_DATE(bp.PolExpDate) > CURRENT_DATE()
+                AND bp.PolSubType != 'S'
+                AND bp.CustId = 'test-customer-1'
+                LIMIT 10 `;
+            const aggregate = makeMongoAggregate(queryString);
+
+            assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
+        });
+    });
+    describe('deeply-nested-divide', () => {
+        it('should work in the basic select', async () => {
+            const queryString = `
+                SELECT
+                    disbursedAmount AS TotalFunded,
+                    (2.5 * latestQuoteTerm) AS BrokerBuyRatePerTerm,
+                    latestQuoteTotalFactor AS FactorAsPercent,
+                    disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100) AS CheckText,
+                    ((disbursedAmount * (latestQuoteTotalFactor / 100)) - ((disbursedAmount * (0.13 / 12)) * (latestQuoteTerm / 2))) AS NetRevenue,
+                    CASE
+                        WHEN type != 'New Deal' THEN (2 / 100)
+                        ELSE
+                            CASE
+                                WHEN latestQuoteTerm < 6 THEN (2.5 / 100)
+                                WHEN latestQuoteTerm > 5 THEN (2.2 / 100)
+                                ELSE 0.00
+                            END
+                    END AS BrokerBuyRate,
+                    CASE
+                        WHEN type = 'New Deal' AND latestQuoteTerm < 6 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100))
+                        WHEN type = 'New Deal' AND latestQuoteTerm > 5 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.2 * latestQuoteTerm)) / 100))
+                        WHEN type != 'New Deal' THEN disbursedAmount * 0.020
+                        ELSE 0
+                    END AS BrokerBuyRateCommission,
+                    YEAR(DATE_FROM_STRING(disbursedDate)) AS FundedYear,
+                    MONTH(DATE_FROM_STRING(disbursedDate)) AS FundedMonth,
+                    unset(_id)
+                FROM
+                "function-test-data"
+                WHERE testId = "bugfix.deeply-nested-divide.case1"`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'deeply-nested-divide.case1',
+                mode: 'write',
                 outputPipeline: false,
             });
         });

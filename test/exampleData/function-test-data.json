@@ -279,5 +279,13 @@
     },
     "testCategory": "stringify",
     "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case5"
+  },
+  {
+    "disbursedAmount": 10,
+    "latestQuoteTotalFactor": 2,
+    "latestQuoteTerm": 2,
+    "type": "New Deal",
+    "testId": "bugfix.deeply-nested-divide.case1",
+    "disbursedDate": "2022-04-08T00:00:00.000Z"
   }
 ]

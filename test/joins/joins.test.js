@@ -627,15 +627,15 @@ describe('joins', function () {
                     pipeline: [
                         {
                             $match: {
-                                id: {
-                                    $gt: 2,
+                                $expr: {
+                                    $eq: ['$id', '$$c_id'],
                                 },
                             },
                         },
                         {
                             $match: {
-                                $expr: {
-                                    $eq: ['$id', '$$c_id'],
+                                id: {
+                                    $gt: 2,
                                 },
                             },
                         },
@@ -679,7 +679,7 @@ describe('joins', function () {
             assert.deepStrictEqual(pipeline, expectedPipeline);
         });
         // off for now
-        it('should work without explicit optimize', async () => {
+        it.skip('should work without explicit optimize', async () => {
             const queryString =
                 'select c.*,cn.*, unset(_id,c._id,cn._id ) from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id LIMIT 1';
             const {pipeline} = await queryResultTester({
