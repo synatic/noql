@@ -475,17 +475,18 @@ describe('node-sql-parser upgrade tests', function () {
                             ORDER BY OrderName
                         ) OrderNum,
                     OrderName,
-                    OrderDate
+                    OrderDate,
+                    OrderAmt
                     FROM (
                         SELECT SalesID, Order1Name, Order2Name, Order1Date, Order2Date, Order1Amt, Order2Amt, unset(_id)
                         FROM multiple-unpivot
-                    ) 'unpvt|unpivot([OrderName],OrderNames,[Order1Name, Order2Name])|unpivot([OrderDate],OrderDates,[Order1Date, Order2Date])'
+                    ) 'unpvt|unpivot([OrderName],OrderNames,[Order1Name, Order2Name])|unpivot([OrderDate],OrderDates,[Order1Date, Order2Date])|unpivot([OrderAmt],OrderAmts,[Order1Amt, Order2Amt])'
                 `;
                 await queryResultTester({
                     queryString: queryText,
                     casePath: 'unpivot.case2',
-                    mode: 'write',
-                    outputPipeline: true,
+                    mode,
+                    outputPipeline: false,
                 });
             });
         });
