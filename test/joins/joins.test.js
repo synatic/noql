@@ -693,85 +693,39 @@ describe('joins', function () {
     });
 
     describe('full outer join', () => {
-        it('should work', async () => {
+        it('should work - case 1', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
             const queryString = `
                  SELECT c.customerName as customerName,
-                        o.orderId as orderId
+                        o.orderId as orderId,
+                        unset(_id)
                  FROM "foj-customers" c
                  FULL OUTER JOIN "foj-orders" o
                     ON c.customerId = o.customerId
-                 ORDER BY c.customerName DESC`;
-            const {pipeline} = await queryResultTester({
+                 ORDER BY c.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
                 queryString,
                 casePath: 'full-outer-join.case1',
-                mode: 'write',
-                outputPipeline: true,
+                mode,
+                outputPipeline: false,
             });
-            const expectedPipeline = [
-                {
-                    $lookup: {
-                        from: 'foj-customers',
-                        localField: 'customerId',
-                        foreignField: 'customerId',
-                        as: 'customers',
-                    },
-                },
-                {
-                    $unwind: {
-                        path: '$customers',
-                        preserveNullAndEmptyArrays: true,
-                    },
-                },
-                {
-                    $unionWith: {
-                        coll: 'foj-customers',
-                        pipeline: [
-                            {
-                                $lookup: {
-                                    from: 'foj-orders',
-                                    localField: 'customerId',
-                                    foreignField: 'customerId',
-                                    as: 'orders',
-                                },
-                            },
-                        ],
-                    },
-                },
-                {
-                    $unwind: {
-                        path: '$orders',
-                        preserveNullAndEmptyArrays: true,
-                    },
-                },
-                {
-                    $project: {
-                        customerName: {
-                            $ifNull: [
-                                '$customerName',
-                                '$customers.customerName',
-                            ],
-                        },
-                        orderId: {
-                            $ifNull: ['$orderId', '$orders.orderId'],
-                        },
-                    },
-                },
-                {
-                    $group: {
-                        _id: {
-                            customerName: '$customerName',
-                            orderId: '$orderId',
-                        },
-                    },
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        customerName: '$_id.customerName',
-                        orderId: '$_id.orderId',
-                    },
-                },
-            ];
+        });
+        it('should work - case 2', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
+            const queryString = `
+                 SELECT customers.customerName as customerName,
+                        orders.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-orders" orders
+                 FULL OUTER JOIN "foj-customers" customers
+                    ON orders.customerId = customers.customerId
+                 ORDER BY customers.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case2',
+                mode,
+                outputPipeline: false,
+            });
         });
     });
 });
