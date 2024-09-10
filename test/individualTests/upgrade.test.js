@@ -742,6 +742,32 @@ describe('node-sql-parser upgrade tests', function () {
                     outputPipeline: false,
                 });
             });
+            it('should support unpivot on an outer join', async () => {
+                const queryString = `
+                 SELECT VendorID, Employee, Orders
+                 FROM (
+                     SELECT c.customerName as customerName,
+                            o.orderId as orderId,
+                            1 as VendorID,
+                            4 as Emp1,
+                            3 as Emp2,
+                            5 as Emp3,
+                            4 as Emp4,
+                            4 as Emp5,
+                            unset(_id,orderId,customerName)
+                     FROM "foj-customers" c
+                     FULL OUTER JOIN "foj-orders" o
+                        ON c.customerId = o.customerId
+                     ORDER BY c.customerName ASC, orders.orderId ASC
+                     LIMIT 1
+                 ) 'unpvt|unpivot(Orders,Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'`;
+                await queryResultTester({
+                    queryString,
+                    casePath: 'unpivot.full-outer-join',
+                    mode,
+                    outputPipeline: false,
+                });
+            });
         });
     });
 });

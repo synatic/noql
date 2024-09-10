@@ -727,5 +727,24 @@ describe('joins', function () {
                 outputPipeline: false,
             });
         });
+        it('should support a full outer join in a subselect', async () => {
+            const queryString = `
+                 SELECT *
+                 FROM (
+                     SELECT c.customerName as customerName,
+                            o.orderId as orderId,
+                            unset(_id)
+                     FROM "foj-customers" c
+                     FULL OUTER JOIN "foj-orders" o
+                        ON c.customerId = o.customerId
+                     ORDER BY c.customerName ASC, orders.orderId ASC
+                 ) foj`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case3-sub-select',
+                mode,
+                outputPipeline: false,
+            });
+        });
     });
 });

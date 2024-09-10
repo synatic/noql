@@ -283,6 +283,35 @@
           "OrderAmt": 222
         }
       ]
+    },
+    "full-outer-join": {
+      "expectedResults": [
+        {
+          "VendorID": 1,
+          "Employee": "Emp1",
+          "Orders": 4
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp2",
+          "Orders": 3
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp3",
+          "Orders": 5
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp4",
+          "Orders": 4
+        },
+        {
+          "VendorID": 1,
+          "Employee": "Emp5",
+          "Orders": 4
+        }
+      ]
     }
   }
 }
