@@ -392,8 +392,381 @@ describe('node-sql-parser upgrade tests', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'new.left.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
+            });
+        });
+    });
+    describe('PIVOT and UNPIVOT', () => {
+        describe('PIVOT', () => {
+            it('should pivot DaysToManufacture to columns with one aggregation function', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost],DaysToManufacture,[0,1,2,3,4])'
+                `;
+
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'pivot.case1',
+                    mode,
+                    outputPipeline: false,
+                });
+            });
+            it('should pivot DaysToManufacture to columns with two aggregation functions, one with an as', async () => {
+                const queryText = `
+                    SELECT 'Costs' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost), max(StandardCost) as MaxCost],DaysToManufacture,[0,1,2,3,4])'
+                `;
+
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'pivot.case2',
+                    mode,
+                    outputPipeline: false,
+                });
+            });
+            const formatErrorSearchString = 'operation had the wrong format';
+            it('should throw an error if the pivot is en empty array', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([ ],DaysToManufacture,[0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot is not provided', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot(,DaysToManufacture,[0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot has only 2 arguments', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot(DaysToManufacture,[0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot has only 2 arguments and the first is empty', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot(,[0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot has only 1 argument', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot is missing the for argument', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost], [0,1,2,3,4])'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot is missing the columns argument', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost],DaysToManufacture'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot has an empty columns argument', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost],DaysToManufacture,[]'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+            it('should throw an error if the pivot has an empty columns argument', async () => {
+                const queryText = `
+                    SELECT 'AverageCost' as CostSortedByProductionDays,
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                    FROM (
+                        SELECT DaysToManufacture,
+                               StandardCost
+                        FROM Production_Product
+                        GROUP BY DaysToManufacture, StandardCost
+                        ORDER BY DaysToManufacture, StandardCost
+                    ) 'pvt|pivot([avg(StandardCost) as AverageCost],DaysToManufacture,[,,]'
+                `;
+                try {
+                    await queryResultTester({
+                        queryString: queryText,
+                        casePath: 'pivot.case1',
+                        mode,
+                        outputPipeline: false,
+                    });
+                    assert.fail('should not pass');
+                } catch (err) {
+                    assert(err.message.indexOf(formatErrorSearchString) !== -1);
+                }
+            });
+        });
+
+        describe('UNPIVOT', () => {
+            it('should unpivot employee columns to rows', async () => {
+                const queryText = `
+                    SELECT VendorID, Employee, Orders
+                    FROM (
+                        SELECT VendorID, Emp1, Emp2, Emp3, Emp4, Emp5, unset(_id)
+                        FROM pvt
+                    ) 'unpvt|unpivot(Orders,Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'
+                    ORDER BY VendorID, Employee
+                `;
+
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'unpivot.case1',
+                    mode,
+                    outputPipeline: false,
+                });
+            });
+            it('should support multiple unpivots', async () => {
+                // See https://dba.stackexchange.com/a/222745
+                const queryText = `
+                    SELECT SalesID,
+                    ROW_NUMBER() OVER (
+                            ORDER BY OrderName
+                        ) OrderNum,
+                    OrderName,
+                    OrderDate,
+                    OrderAmt
+                    FROM (
+                        SELECT SalesID, Order1Name, Order2Name, Order1Date, Order2Date, Order1Amt, Order2Amt, unset(_id)
+                        FROM multiple-unpivot
+                    ) 'unpvt|unpivot(OrderName,OrderNames,[Order1Name, Order2Name])|unpivot(OrderDate,OrderDates,[Order1Date, Order2Date])|unpivot(OrderAmt,OrderAmts,[Order1Amt, Order2Amt])'
+                `;
+                await queryResultTester({
+                    queryString: queryText,
+                    casePath: 'unpivot.case2',
+                    mode,
+                    outputPipeline: false,
+                });
+            });
+            it('should support unpivot on an outer join', async () => {
+                const queryString = `
+                 SELECT VendorID, Employee, Orders
+                 FROM (
+                     SELECT c.customerName as customerName,
+                            o.orderId as orderId,
+                            1 as VendorID,
+                            4 as Emp1,
+                            3 as Emp2,
+                            5 as Emp3,
+                            4 as Emp4,
+                            4 as Emp5,
+                            unset(_id,orderId,customerName)
+                     FROM "foj-customers" c
+                     FULL OUTER JOIN "foj-orders" o
+                        ON c.customerId = o.customerId
+                     ORDER BY c.customerName ASC, orders.orderId ASC
+                     LIMIT 1
+                 ) 'unpvt|unpivot(Orders,Employee,[Emp1, Emp2, Emp3, Emp4, Emp5])'`;
+                await queryResultTester({
+                    queryString,
+                    casePath: 'unpivot.full-outer-join',
+                    mode,
+                    outputPipeline: false,
+                });
             });
         });
     });

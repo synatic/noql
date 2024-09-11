@@ -200,6 +200,7 @@ export interface NoqlContext extends ParserOptions {
     tables: string[];
     fullAst: TableColumnAst;
     joinHints?: string[];
+    projectionAlreadyAdded?: boolean;
 }
 
 export interface ParseResult {
