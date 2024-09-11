@@ -1778,5 +1778,77 @@
         }
       ]
     }
+  },
+  "full-outer-join": {
+    "case1": {
+      "expectedResults": [
+        {
+          "orderId": 10309
+        },
+        {
+          "orderId": 10310
+        },
+        {
+          "customerName": "Alfreds Futterkiste"
+        },
+        {
+          "customerName": "Ana Trujillo Emparedados y helados",
+          "orderId": 10308
+        },
+        {
+          "customerName": "Antonio Moreno Taquería"
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "orderId": 10309
+        },
+        {
+          "orderId": 10310
+        },
+        {
+          "customerName": "Alfreds Futterkiste"
+        },
+        {
+          "customerName": "Ana Trujillo Emparedados y helados",
+          "orderId": 10308
+        },
+        {
+          "customerName": "Antonio Moreno Taquería"
+        }
+      ]
+    },
+    "case3-sub-select": {
+      "expectedResults": [
+        {
+          "foj": {
+            "orderId": 10309
+          }
+        },
+        {
+          "foj": {
+            "orderId": 10310
+          }
+        },
+        {
+          "foj": {
+            "customerName": "Alfreds Futterkiste"
+          }
+        },
+        {
+          "foj": {
+            "customerName": "Ana Trujillo Emparedados y helados",
+            "orderId": 10308
+          }
+        },
+        {
+          "foj": {
+            "customerName": "Antonio Moreno Taquería"
+          }
+        }
+      ]
+    }
   }
 }

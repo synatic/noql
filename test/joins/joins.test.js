@@ -145,6 +145,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('left join', () => {
         it('should be able to do a left join', async () => {
             await queryResultTester({
@@ -608,6 +609,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('optimize', () => {
         const expectedPipeline = [
             {
@@ -687,6 +689,62 @@ describe('joins', function () {
             });
 
             assert.deepStrictEqual(pipeline, expectedPipeline);
+        });
+    });
+
+    describe('full outer join', () => {
+        it('should work - case 1', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
+            const queryString = `
+                 SELECT c.customerName as customerName,
+                        o.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-customers" c
+                 FULL OUTER JOIN "foj-orders" o
+                    ON c.customerId = o.customerId
+                 ORDER BY c.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case1',
+                mode,
+                outputPipeline: false,
+            });
+        });
+        it('should work - case 2', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
+            const queryString = `
+                 SELECT customers.customerName as customerName,
+                        orders.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-orders" orders
+                 FULL OUTER JOIN "foj-customers" customers
+                    ON orders.customerId = customers.customerId
+                 ORDER BY customers.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case2',
+                mode,
+                outputPipeline: false,
+            });
+        });
+        it('should support a full outer join in a subselect', async () => {
+            const queryString = `
+                 SELECT *
+                 FROM (
+                     SELECT c.customerName as customerName,
+                            o.orderId as orderId,
+                            unset(_id)
+                     FROM "foj-customers" c
+                     FULL OUTER JOIN "foj-orders" o
+                        ON c.customerId = o.customerId
+                     ORDER BY c.customerName ASC, orders.orderId ASC
+                 ) foj`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case3-sub-select',
+                mode,
+                outputPipeline: false,
+            });
         });
     });
 });
