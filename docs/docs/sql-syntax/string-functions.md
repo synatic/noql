@@ -253,3 +253,52 @@ Finds the first index of the substring within the expression. Returns 0 if not f
     WHERE
         LOCATE(Title,'B') > 0;
     ```
+
+### LEFT
+
+`LEFT(expr, length)`
+
+Returns the leftmost characters from the expression.
+
+???+ example "Example `LEFT` usage"
+
+    ```sql
+    SELECT
+        LEFT(`First Name`, 3) AS firstThreeChars
+    FROM `customers`;
+    ```
+
+### STARTS_WITH
+
+`STARTS_WITH(expr, prefix)`
+
+Returns true if the expression starts with the specified prefix.
+
+???+ example "Example `STARTS_WITH` usage"
+
+    ```sql
+    SELECT
+        id,
+        `First Name`,
+        STARTS_WITH(`First Name`, 'Jo') AS startsWithJo
+    FROM `customers`;
+    ```
+
+### WRAP_PARAM
+
+`WRAP_PARAM(expr, [forceString])`
+
+Wraps a parameter, typically used for handling special characters or ensuring correct interpretation of a string.
+
+???+ example "Example `WRAP_PARAM` usage"
+
+    ```sql
+    SELECT
+        WRAP_PARAM('Hello, "World"!') as wrappedString,
+        WRAP_PARAM(42, true) as wrappedNumber
+    FROM
+        `customers`
+    LIMIT 1
+    ```
+
+In this example, `WRAP_PARAM` ensures that the string with quotes is properly handled, and when `forceString` is set to true, it forces the number to be treated as a string.

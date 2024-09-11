@@ -86,4 +86,31 @@ Parses the JSON string. Use in conjunction with `ARRAY_TO_OBJECT` to convert an 
     FROM `customers`;
     ```
 
+### EMPTY_OBJECT
 
+`EMPTY_OBJECT()`
+
+Creates an empty object.
+
+???+ example "Example `EMPTY_OBJECT` usage"
+
+    ```sql
+    SELECT
+        id,
+        EMPTY_OBJECT() AS emptyObj,
+        MERGE_OBJECTS(EMPTY_OBJECT(), `Address`) AS filledObj
+    FROM `customers`;
+    ```
+
+???+ example "Example `EMPTY_OBJECT` usage in a condition"
+
+    ```sql
+    SELECT
+        id,
+        `Address`,
+        CASE
+            WHEN `Address` = EMPTY_OBJECT() THEN 'No Address'
+            ELSE 'Has Address'
+        END AS addressStatus
+    FROM `customers`;
+    ```

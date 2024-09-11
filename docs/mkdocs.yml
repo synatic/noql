@@ -116,6 +116,7 @@ nav:
       - Window Functions: sql-syntax/window-functions.md
       - Limits and Offsets: sql-syntax/limits-and-offsets.md
       - Union: sql-syntax/union.md
+      - Pivot And Unpivot: sql-syntax/pivot-unpivot.md
   - Playground: playground/index.md
   - JS Library:
       - Getting Started: js-library/getting-started.md
