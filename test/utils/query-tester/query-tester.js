@@ -46,12 +46,16 @@ async function queryResultTester(options) {
         ignoreDateValues = false,
         outputPipeline = false,
         schemas,
+        unwindJoins = false,
+        unsetId = true,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
     const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
         schemas,
+        unwindJoins,
+        unsetId,
     });
     const filePath = $path.resolve(dirName, fileName);
     /** @type {import("mongodb").Document[]} */

@@ -416,6 +416,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.to_objectid.case1',
+                unsetId: false,
             });
         });
     });
@@ -430,6 +431,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.object_to_array.case1',
+                unsetId: false,
             });
         });
     });
@@ -1019,8 +1021,9 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'post-optimization.case1',
-                mode: 'test',
+                mode,
                 outputPipeline: false,
+                unsetId: false,
             });
         });
     });
