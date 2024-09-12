@@ -35,6 +35,7 @@ describe('joins', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
+
     describe('regression tests', () => {
         it('should work for case 1', async () => {
             await queryResultTester({
@@ -674,6 +675,7 @@ describe('joins', function () {
                 queryString,
                 casePath: 'optimize.explicit',
                 mode: 'write',
+                unsetId: false,
             });
 
             assert.deepStrictEqual(pipeline, expectedPipeline);
@@ -744,6 +746,18 @@ describe('joins', function () {
                 casePath: 'full-outer-join.case3-sub-select',
                 mode,
                 outputPipeline: false,
+            });
+        });
+    });
+
+    describe('Automatic Unwinding of joins', () => {
+        it('should be able to automatically unwind a left join', async () => {
+            await queryResultTester({
+                queryString:
+                    'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i  on o.item=i.sku limit 1',
+                casePath: 'auto-unwind.left.case1',
+                mode,
+                unwindJoins: true,
             });
         });
     });

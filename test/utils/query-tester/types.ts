@@ -1,5 +1,5 @@
 import {MongoClient, Document} from 'mongodb';
-import {PipelineFn, Schemas} from '../../../lib/types';
+import {PipelineFn, Schemas, ParserOptions} from '../../../lib/types';
 
 /** Options to use when running the function to test/generate test outputs */
 export interface BuildQueryResultOptions {
@@ -13,7 +13,7 @@ export interface BuildQueryResultOptions {
     mode?: 'write' | 'test';
 }
 /** Options to use when running the function to test/generate test outputs */
-export interface QueryResultOptions {
+export interface QueryResultOptions extends ParserOptions {
     /** The query string to run against the db */
     queryString: string;
     /** The JSON path in the target file at which to store the results */
@@ -26,8 +26,6 @@ export interface QueryResultOptions {
     ignoreDateValues?: boolean;
     /** Specifies if the pipeline should be written to the file, useful for debugging */
     outputPipeline?: boolean;
-    /** Specifies a map of schemas the library should use that to produce better queries */
-    schemas?: Schemas;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &
