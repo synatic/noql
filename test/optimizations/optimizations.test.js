@@ -2,7 +2,7 @@ const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const assert = require('assert');
 const {isEqual} = require('lodash');
-describe.skip('optimizations', function () {
+describe('optimizations', function () {
     this.timeout(90000);
     const fileName = 'optimizations';
     /** @type {'test'|'write'} */
@@ -13,12 +13,9 @@ describe.skip('optimizations', function () {
     let queryResultTester;
     /** @type {import("mongodb").MongoClient} */
     let mongoClient;
-    /** @type {import("mongodb").Db} */
-    let database;
     before(async function () {
         const {client, db} = await setup();
         mongoClient = client;
-        database = db;
         queryResultTester = buildQueryResultTester({
             dirName,
             fileName,
@@ -30,6 +27,7 @@ describe.skip('optimizations', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
+
     describe('where statements on joins', () => {
         /**
          * TODO Test for:
@@ -41,7 +39,7 @@ describe.skip('optimizations', function () {
          * Maybe clone the where and pipeline before optimising, return errors:true and revert?
          */
         describe('simple', () => {
-            it('01. should not optimise a simple join', async () => {
+            it('01. should not optimize a simple join', async () => {
                 const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -54,6 +52,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-01',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -91,7 +91,7 @@ describe.skip('optimizations', function () {
                     ])
                 );
             });
-            it('02. should optimise a simple join with a where on destination', async () => {
+            it('02. should optimize a simple join with a where on destination', async () => {
                 const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -105,6 +105,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-02',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -159,7 +161,7 @@ describe.skip('optimizations', function () {
                     ])
                 );
             });
-            it('03. should optimise a simple join with a where on source', async () => {
+            it('03. should optimize a simple join with a where on source', async () => {
                 const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -173,6 +175,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-03',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -235,6 +239,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-04',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -303,6 +309,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-05',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -379,6 +387,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-06',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -455,6 +465,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-07',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -534,6 +546,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-08',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -602,6 +616,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-09',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -678,6 +694,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-10',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -755,6 +773,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-11',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -836,6 +856,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-12',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -916,6 +938,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-13',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1000,6 +1024,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-14',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1085,6 +1111,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-15',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1162,6 +1190,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-16',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1242,6 +1272,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-17',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1323,6 +1355,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-14',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1405,6 +1439,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-19',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1482,6 +1518,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-21',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1572,6 +1610,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-22',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1663,6 +1703,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-23',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1755,6 +1797,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-24',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1847,6 +1891,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-25',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -1938,6 +1984,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-26',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2019,6 +2067,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-27',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2109,6 +2159,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-28',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2197,6 +2249,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-29',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2287,6 +2341,8 @@ describe.skip('optimizations', function () {
                     mode,
                     outputPipeline,
                     expectZeroResults: true,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2379,6 +2435,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-31',
                     mode: 'write',
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2470,6 +2528,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-32',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2552,6 +2612,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-33',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2642,6 +2704,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-34',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2730,6 +2794,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-35',
                     mode: 'write',
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2819,6 +2885,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-36',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2912,6 +2980,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-37',
                     mode: 'write',
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -2994,6 +3064,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-38',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -3077,6 +3149,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-39',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -3148,7 +3222,7 @@ describe.skip('optimizations', function () {
                     ])
                 );
             });
-            it('40. should optimise a join with a where with misc', async () => {
+            it('40. should optimize a join with a where with misc', async () => {
                 const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -3164,6 +3238,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-40',
                     mode: 'write',
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -3233,7 +3309,7 @@ describe.skip('optimizations', function () {
                     ])
                 );
             });
-            it('41. should not optimise if the nooptimise join hint is included', async () => {
+            it('41. should not optimize if the nooptimize join hint is included', async () => {
                 const queryString = `
                         SELECT *,
                             unset(_id, o._id, i._id,o.orderDate)
@@ -3249,6 +3325,8 @@ describe.skip('optimizations', function () {
                     casePath: 'where.case-15',
                     mode,
                     outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: false,
                 });
                 assert(
                     isEqual(pipeline, [
@@ -3307,6 +3385,144 @@ describe.skip('optimizations', function () {
                         },
                         {
                             $limit: 1,
+                        },
+                    ])
+                );
+            });
+        });
+
+        describe('use-cases', () => {
+            it('1. should correctly optimise the query', async () => {
+                const queryString = `
+                        SELECT   T0_0."BilledPremium" AS "p0_0",
+                                 T0_0."FullTermPremium" AS "p1_0",
+                                 T0_0."Premium" AS "p2_0",
+                                 T0_0."WrittenPremium" AS "p3_0",
+                                 T1_0."PolNo" AS "p4_0",
+                                 T0_0."LineOfBus" AS "p5_0",
+                                 T0_0."EstRevenue" AS "p6_0",
+                                 T1_0."PolType" AS "p7_0",
+                                 T2_0."Name" AS "p8_0",
+                                 T3_0."Name" AS "p9_0",
+                                 T4_0."Name" AS "p10_0",
+                                 T5_0."Name" AS "p11_0",
+                                 T6_0."Name" AS "p12_0",
+                                 T0_0."EffDate" AS "p13_0",
+                                 T0_0."EnteredDate" AS "p14_0"
+                        FROM "public"."ams360-data-warehouse-dds-buffers--afw_policytranpremium" T0_0
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afwbasicpolinfo" T1_0 ON T0_0."PolId" = T1_0."PolId"
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afw_company" T2_0 ON T1_0."WritingCode" = T2_0."CoCode"
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afw_company" T3_0 ON T1_0."Cocode" = T3_0."CoCode"
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afw_generalledgerdepartment" T4_0 ON T1_0."GLDeptCode" = T4_0."GLDeptCode"
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afw_generalledgerdivision" T5_0 ON T1_0."GLDivCode" = T5_0."GLDivCode"
+                        LEFT OUTER JOIN "public"."ams360-data-warehouse-dds-buffers--afw_generalledgergroup" T6_0 ON T1_0."GlGrpCode" = T6_0."GlGrpCode"
+                        WHERE (T1_0."PolExpDate" >= '2024-09-10 00:00:00.000')
+                        `;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'use-cases.case-1',
+                    mode: 'write',
+                    outputPipeline,
+                    skipDbQuery: true,
+                    optimizeJoins: true,
+                    unsetId: false,
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                T0_0: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afwbasicpolinfo',
+                                as: 'T1_0',
+                                let: {
+                                    t_0_0_pol_id: '$T0_0.PolId',
+                                },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $gte: [
+                                                    '$PolExpDate',
+                                                    '2024-09-10 00:00:00.000',
+                                                ],
+                                            },
+                                        },
+                                    },
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: [
+                                                    '$PolId',
+                                                    '$$t_0_0_pol_id',
+                                                ],
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afw_company',
+                                as: 'T2_0',
+                                localField: 'T1_0.WritingCode',
+                                foreignField: 'CoCode',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afw_company',
+                                as: 'T3_0',
+                                localField: 'T1_0.Cocode',
+                                foreignField: 'CoCode',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afw_generalledgerdepartment',
+                                as: 'T4_0',
+                                localField: 'T1_0.GLDeptCode',
+                                foreignField: 'GLDeptCode',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afw_generalledgerdivision',
+                                as: 'T5_0',
+                                localField: 'T1_0.GLDivCode',
+                                foreignField: 'GLDivCode',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afw_generalledgergroup',
+                                as: 'T6_0',
+                                localField: 'T1_0.GlGrpCode',
+                                foreignField: 'GlGrpCode',
+                            },
+                        },
+                        {
+                            $project: {
+                                p0_0: '$T0_0.BilledPremium',
+                                p1_0: '$T0_0.FullTermPremium',
+                                p2_0: '$T0_0.Premium',
+                                p3_0: '$T0_0.WrittenPremium',
+                                p4_0: '$T1_0.PolNo',
+                                p5_0: '$T0_0.LineOfBus',
+                                p6_0: '$T0_0.EstRevenue',
+                                p7_0: '$T1_0.PolType',
+                                p8_0: '$T2_0.Name',
+                                p9_0: '$T3_0.Name',
+                                p10_0: '$T4_0.Name',
+                                p11_0: '$T5_0.Name',
+                                p12_0: '$T6_0.Name',
+                                p13_0: '$T0_0.EffDate',
+                                p14_0: '$T0_0.EnteredDate',
+                            },
                         },
                     ])
                 );

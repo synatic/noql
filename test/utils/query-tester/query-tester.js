@@ -48,6 +48,8 @@ async function queryResultTester(options) {
         schemas,
         unwindJoins = false,
         unsetId = true,
+        optimizeJoins = false,
+        skipDbQuery = false,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -56,20 +58,24 @@ async function queryResultTester(options) {
         schemas,
         unwindJoins,
         unsetId,
+        optimizeJoins,
     });
     const filePath = $path.resolve(dirName, fileName);
     /** @type {import("mongodb").Document[]} */
     let results = [];
-    try {
-        results = await mongoClient
-            .db(dbName)
-            .collection(collections[0])
-            .aggregate(pipeline)
-            .toArray();
-    } catch (err) {
-        console.error(err);
+    if (!skipDbQuery) {
+        try {
+            results = await mongoClient
+                .db(dbName)
+                .collection(collections[0])
+                .aggregate(pipeline)
+                .toArray();
+        } catch (err) {
+            console.error(err);
+        }
+        results.map((o) => checkForMongoTypes(o, ignoreDateValues));
     }
-    results.map((o) => checkForMongoTypes(o, ignoreDateValues));
+
     const obj = await readCases(filePath);
     if (mode === 'write') {
         if (outputPipeline) {
@@ -77,7 +83,7 @@ async function queryResultTester(options) {
         } else {
             set(obj, casePath + '.pipeline', undefined);
         }
-        if (!expectZeroResults) {
+        if (!expectZeroResults && !skipDbQuery) {
             set(obj, casePath + '.expectedResults', results);
         }
         await writeFile(filePath, obj);
@@ -85,7 +91,7 @@ async function queryResultTester(options) {
         set(obj, casePath + '.pipeline', pipeline);
         await writeFile(filePath, obj);
     }
-    if (!expectZeroResults) {
+    if (!expectZeroResults && !skipDbQuery) {
         assert(results.length);
         const expectedResults = get(obj, casePath + '.expectedResults');
         assert.deepStrictEqual(results, expectedResults);

@@ -190,6 +190,8 @@ export interface ParserOptions {
     unsetId?: boolean;
     /** If provided, the library will use the schemas to generate better queries */
     schemas?: Schemas;
+    /** If true, will optimize the join for better performance */
+    optimizeJoins?: boolean;
 }
 
 export interface NoqlContext extends ParserOptions {
@@ -347,7 +349,7 @@ export interface FindSchemaResult {
 }
 
 export interface OptimizationProcessResult {
-    wasOptimised: boolean;
+    wasOptimized: boolean;
     pipelineStagesAdded: PipelineFn[];
     lookupPipelineStagesAdded: PipelineFn[];
     leftOverMatches: Record<string, unknown>[];

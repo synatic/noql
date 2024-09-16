@@ -1,5 +1,5 @@
 import {MongoClient, Document} from 'mongodb';
-import {PipelineFn, Schemas, ParserOptions} from '../../../lib/types';
+import {PipelineFn, ParserOptions} from '../../../lib/types';
 
 /** Options to use when running the function to test/generate test outputs */
 export interface BuildQueryResultOptions {
@@ -26,6 +26,8 @@ export interface QueryResultOptions extends ParserOptions {
     ignoreDateValues?: boolean;
     /** Specifies if the pipeline should be written to the file, useful for debugging */
     outputPipeline?: boolean;
+    /** If true the tester won't query the db, just generate the pipeline */
+    skipDbQuery?: boolean;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &
