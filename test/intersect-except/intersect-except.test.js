@@ -129,5 +129,21 @@ describe('intersect & except', function () {
                 schemas: await getAllSchemas(database),
             });
         });
+        it.skip('should allow you to get the EXCEPT of two queries from different tables for a * with string and number values and order by without a where clause', async () => {
+            const queryString = `
+                SELECT *,unset(_id)
+                FROM "top-rated-films"
+                EXCEPT
+                SELECT *,unset(_id)
+                FROM "most-popular-films"
+                ORDER BY name
+`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'except.case2',
+                mode,
+                schemas: await getAllSchemas(database),
+            });
+        });
     });
 });
