@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "4.1.10",
+  "version": "4.1.11",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -68,6 +68,7 @@
     "bson": "^6.7.0",
     "check-types": "11.2.3",
     "clone-deep": "4.0.1",
+    "dayjs": "^1.11.13",
     "deepmerge": "^4.3.1",
     "lodash": "^4.17.21",
     "node-sql-parser": "^5.2.0"
