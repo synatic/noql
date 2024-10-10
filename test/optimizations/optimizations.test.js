@@ -5073,6 +5073,7 @@ describe('optimizations', function () {
                                 as: 't1_0',
                                 let: {
                                     t_0_0_exec_code: '$t0_0.ExecCode',
+                                    t_0_0_pol_exp_date: '$t0_0.PolExpDate',
                                 },
                                 pipeline: [
                                     {
@@ -5091,7 +5092,7 @@ describe('optimizations', function () {
                                                                 $gte: [
                                                                     {
                                                                         $toDate:
-                                                                            '$t0_0.PolExpDate',
+                                                                            't_0_0_pol_exp_date',
                                                                     },
                                                                     {
                                                                         $toDate:
@@ -5105,7 +5106,7 @@ describe('optimizations', function () {
                                                             {
                                                                 $ne: [
                                                                     {
-                                                                        $type: '$t0_0.PolExpDate',
+                                                                        $type: 't_0_0_pol_exp_date',
                                                                     },
                                                                     'null',
                                                                 ],
@@ -5113,7 +5114,7 @@ describe('optimizations', function () {
                                                             {
                                                                 $ne: [
                                                                     {
-                                                                        $type: '$t0_0.PolExpDate',
+                                                                        $type: 't_0_0_pol_exp_date',
                                                                     },
                                                                     'missing',
                                                                 ],
