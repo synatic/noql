@@ -4427,6 +4427,738 @@ describe('optimizations', function () {
                     ])
                 );
             });
+            it('4. should correctly optimise the query when the schema implicitly casts to $date', async () => {
+                const queryString = `
+                        select  t0_0."PolNo" as "p0_0",
+                                t0_0."PolEffDate" as "p1_0",
+                                t0_0."PolExpDate" as "p2_0",
+                                t1_0."FirstName" as "p3_0",
+                                t1_0."LastName" as "p4_0"
+                        from "public"."ams360-data-warehouse-dds-buffers--afwbasicpolinfo" t0_0
+                        left outer join "public"."ams360-data-warehouse-dds-buffers--afwemployee" t1_0
+                            on t0_0."ExecCode" = t1_0."EmpCode"
+                        where (t0_0."PolExpDate" >= '2024-10-09 00:00:00.000' and t1_0."LastName" = 'Anderson' and t0_0."PolEffDate" < '2024-10-09 00:00:00.000')`;
+                const {pipeline} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'use-cases.case-2',
+                    mode: 'write',
+                    outputPipeline,
+                    skipDbQuery: true,
+                    optimizeJoins: true,
+                    unwindJoins: true,
+                    unsetId: true,
+                    schemas: {
+                        'ams360-data-warehouse-dds-buffers--afwbasicpolinfo': {
+                            type: 'object',
+                            properties: {
+                                _id: {
+                                    type: 'string',
+                                    format: 'mongoid',
+                                },
+                                AgcyBusClass: {
+                                    type: ['null', 'string'],
+                                    stringLength: 13,
+                                },
+                                AnotId: {
+                                    type: ['null', 'string'],
+                                    stringLength: 36,
+                                },
+                                AuditFlag: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                AuditPeriod: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                BillAcctNo: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                BilledStmtPrem: {
+                                    type: 'integer',
+                                },
+                                BillMethod: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                BrokerCode: {
+                                    type: 'null',
+                                },
+                                BusOriginCode: {
+                                    type: 'null',
+                                },
+                                CarrierStatus: {
+                                    type: 'null',
+                                },
+                                ChangedBy: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                ChangedDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                Cocode: {
+                                    type: ['string', 'null'],
+                                    stringLength: 3,
+                                },
+                                Compcustno: {
+                                    type: 'null',
+                                },
+                                Cotype: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                CsrCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                CustId: {
+                                    type: 'string',
+                                    stringLength: 36,
+                                },
+                                DescriptionBpol: {
+                                    type: 'string',
+                                    stringLength: 30,
+                                },
+                                EnteredDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                ExcludeFrmDownload: {
+                                    type: ['string', 'null'],
+                                    stringLength: 1,
+                                },
+                                ExecCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                FirstWrittenDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                FlatAmount: {
+                                    type: 'null',
+                                },
+                                FullTermPremium: {
+                                    type: 'integer',
+                                },
+                                Glbrnchcode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                GLDeptCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                GLDivCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                GlGrpCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                InstDay: {
+                                    type: 'integer',
+                                },
+                                IsContinuous: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsExclDelete: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsFiltered: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsFinanced: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                IsMultiEntity: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsNewBPol: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                IsPosted: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsProdCredRequire100: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsProductionCreditEnabled: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                IsReinsuranceEnabled: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IssuedState: {
+                                    type: 'string',
+                                    stringLength: 2,
+                                },
+                                IsSuspended: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IstId: {
+                                    type: 'null',
+                                },
+                                MasterAgent: {
+                                    type: ['null', 'string'],
+                                    stringLength: 6,
+                                },
+                                Method: {
+                                    type: 'null',
+                                },
+                                MethodOfPayments: {
+                                    type: 'null',
+                                },
+                                MultiEntityARFlag: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                NatlProdCode: {
+                                    type: 'null',
+                                },
+                                NegCommValidDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                NotRenewable: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                NumOfPayments: {
+                                    type: 'null',
+                                },
+                                PayPid: {
+                                    type: ['null', 'string'],
+                                    stringLength: 36,
+                                },
+                                Percentage: {
+                                    type: 'null',
+                                },
+                                PolChangedDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                PolEffDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                PolExpDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                PolId: {
+                                    type: 'string',
+                                    stringLength: 36,
+                                },
+                                PolNo: {
+                                    type: 'string',
+                                    stringLength: 19,
+                                },
+                                PolSubtype: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                PolType: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                PolTypeLob: {
+                                    type: 'string',
+                                    stringLength: 20,
+                                },
+                                Premadj: {
+                                    type: 'null',
+                                },
+                                PriorPolicy: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                PriorPolid: {
+                                    type: ['string', 'null'],
+                                    stringLength: 36,
+                                },
+                                RenewalList: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                RenewalRptFlag: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                ShortPolNo: {
+                                    type: 'string',
+                                    stringLength: 17,
+                                },
+                                SourcePolId: {
+                                    type: ['null', 'string'],
+                                    stringLength: 36,
+                                },
+                                Status: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                SubAgent: {
+                                    type: ['null', 'string'],
+                                },
+                                TicomId: {
+                                    type: 'null',
+                                },
+                                TypeOfBus: {
+                                    type: 'integer',
+                                },
+                                Underwriter: {
+                                    type: ['null', 'string'],
+                                    stringLength: 17,
+                                },
+                                WritingCode: {
+                                    type: ['string', 'null'],
+                                    stringLength: 3,
+                                },
+                                RenewalTermCount: {
+                                    type: 'null',
+                                },
+                                _dateUpdated: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                            },
+                        },
+                        'ams360-data-warehouse-dds-buffers--afwemployee': {
+                            type: 'object',
+                            properties: {
+                                _id: {
+                                    type: 'string',
+                                    format: 'mongoid',
+                                },
+                                Address1: {
+                                    type: ['null', 'string'],
+                                    stringLength: 18,
+                                },
+                                Address2: {
+                                    type: 'null',
+                                },
+                                BJEClosedStatus: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                BUAcsId: {
+                                    type: ['null', 'string'],
+                                    stringLength: 36,
+                                },
+                                BusAreaCode: {
+                                    type: ['null', 'string'],
+                                    stringLength: 3,
+                                },
+                                BusExt: {
+                                    type: 'null',
+                                },
+                                BusFullPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                BusPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 7,
+                                },
+                                ChangedBy: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                ChangedDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                City: {
+                                    type: ['null', 'string'],
+                                    stringLength: 14,
+                                },
+                                ContactAreaCode: {
+                                    type: ['null', 'string'],
+                                    stringLength: 3,
+                                },
+                                ContactExt: {
+                                    type: 'null',
+                                },
+                                ContactFullPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                ContactPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 7,
+                                },
+                                CountryCode: {
+                                    type: ['null', 'string'],
+                                },
+                                DefaultGLBrnchCode: {
+                                    type: 'null',
+                                },
+                                DefaultGLDeptCode: {
+                                    type: 'null',
+                                },
+                                DefaultGLDivCode: {
+                                    type: 'null',
+                                },
+                                DefaultGLGrpCode: {
+                                    type: 'null',
+                                },
+                                DOB: {
+                                    type: ['null', 'string'],
+                                    stringLength: 19,
+                                },
+                                Doc360HotFolderLoc: {
+                                    type: 'null',
+                                },
+                                Doc360Hotspot: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                Email: {
+                                    type: ['null', 'string'],
+                                    stringLength: 27,
+                                },
+                                EmergencyContact: {
+                                    type: ['null', 'string'],
+                                    stringLength: 11,
+                                },
+                                EmpCode: {
+                                    type: 'string',
+                                    stringLength: 3,
+                                },
+                                EmpId: {
+                                    type: 'string',
+                                    stringLength: 36,
+                                },
+                                EmployeeId: {
+                                    type: 'null',
+                                },
+                                EmpSupervisorCode: {
+                                    type: 'null',
+                                },
+                                EnteredDate: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                                FaxAreaCode: {
+                                    type: ['null', 'string'],
+                                    stringLength: 3,
+                                },
+                                FaxExt: {
+                                    type: 'null',
+                                },
+                                FaxFullPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                FaxPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 7,
+                                },
+                                FirstName: {
+                                    type: ['string', 'null'],
+                                    stringLength: 8,
+                                },
+                                FullPartTimeInd: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                HomeAreaCode: {
+                                    type: ['null', 'string'],
+                                    stringLength: 3,
+                                },
+                                HomeExt: {
+                                    type: 'null',
+                                },
+                                HomeFullPhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 10,
+                                },
+                                HomePhone: {
+                                    type: ['null', 'string'],
+                                    stringLength: 7,
+                                },
+                                ImageId: {
+                                    type: 'null',
+                                },
+                                ImageType: {
+                                    type: ['integer', 'null'],
+                                },
+                                IsDefaultBuforCustomer: {
+                                    type: 'null',
+                                },
+                                IsDefaultBufOrPolicy: {
+                                    type: 'null',
+                                },
+                                IsForeign: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsLicensed: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                IsLimitCustAccess: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsMemoCommissions: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                IsOther: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsProd: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsRep: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                IsTelemarketer: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                LastName: {
+                                    type: 'string',
+                                    stringLength: 18,
+                                },
+                                LimitAmount: {
+                                    type: 'null',
+                                },
+                                LogSuspense: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                MiddleName: {
+                                    type: ['null', 'string'],
+                                    stringLength: 1,
+                                },
+                                MobileAreaCode: {
+                                    type: 'null',
+                                },
+                                MobileExt: {
+                                    type: 'null',
+                                },
+                                MobileFullPhone: {
+                                    type: 'null',
+                                },
+                                MobilePhone: {
+                                    type: 'null',
+                                },
+                                NatlProdCode: {
+                                    type: 'null',
+                                },
+                                PagerAreaCode: {
+                                    type: 'null',
+                                },
+                                PagerExt: {
+                                    type: 'null',
+                                },
+                                PagerFullPhone: {
+                                    type: 'null',
+                                },
+                                PagerPhone: {
+                                    type: 'null',
+                                },
+                                S1099Category: {
+                                    type: ['null', 'integer'],
+                                },
+                                S1099Type: {
+                                    type: ['null', 'integer'],
+                                },
+                                ShortName: {
+                                    type: 'string',
+                                    stringLength: 6,
+                                },
+                                SSN: {
+                                    type: ['null', 'string'],
+                                    stringLength: 9,
+                                },
+                                State: {
+                                    type: ['null', 'string'],
+                                    stringLength: 2,
+                                },
+                                Status: {
+                                    type: 'string',
+                                    stringLength: 1,
+                                },
+                                Title: {
+                                    type: ['null', 'string'],
+                                    stringLength: 15,
+                                },
+                                TzCode: {
+                                    type: 'integer',
+                                },
+                                YearEmployed: {
+                                    type: ['null', 'string'],
+                                    stringLength: 4,
+                                },
+                                Zip: {
+                                    type: ['null', 'string'],
+                                    stringLength: 5,
+                                },
+                                _dateUpdated: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                },
+                            },
+                        },
+                    },
+                });
+                assert(
+                    isEqual(pipeline, [
+                        {
+                            $project: {
+                                t0_0: '$$ROOT',
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $lt: [
+                                                {
+                                                    $toDate: '$t0_0.PolEffDate',
+                                                },
+                                                {
+                                                    $toDate: {
+                                                        $literal:
+                                                            '2024-10-09T00:00:00.000Z',
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            $ne: [
+                                                {
+                                                    $type: '$t0_0.PolEffDate',
+                                                },
+                                                'null',
+                                            ],
+                                        },
+                                        {
+                                            $ne: [
+                                                {
+                                                    $type: '$t0_0.PolEffDate',
+                                                },
+                                                'missing',
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'ams360-data-warehouse-dds-buffers--afwemployee',
+                                as: 't1_0',
+                                let: {
+                                    t_0_0_exec_code: '$t0_0.ExecCode',
+                                    t_0_0_pol_exp_date: '$t0_0.PolExpDate',
+                                },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [
+                                                            '$LastName',
+                                                            'Anderson',
+                                                        ],
+                                                    },
+                                                    {
+                                                        $and: [
+                                                            {
+                                                                $gte: [
+                                                                    {
+                                                                        $toDate:
+                                                                            't_0_0_pol_exp_date',
+                                                                    },
+                                                                    {
+                                                                        $toDate:
+                                                                            {
+                                                                                $literal:
+                                                                                    '2024-10-09T00:00:00.000Z',
+                                                                            },
+                                                                    },
+                                                                ],
+                                                            },
+                                                            {
+                                                                $ne: [
+                                                                    {
+                                                                        $type: 't_0_0_pol_exp_date',
+                                                                    },
+                                                                    'null',
+                                                                ],
+                                                            },
+                                                            {
+                                                                $ne: [
+                                                                    {
+                                                                        $type: 't_0_0_pol_exp_date',
+                                                                    },
+                                                                    'missing',
+                                                                ],
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    },
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: [
+                                                    '$EmpCode',
+                                                    '$$t_0_0_exec_code',
+                                                ],
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: '$t1_0',
+                                preserveNullAndEmptyArrays: true,
+                            },
+                        },
+                        {
+                            $project: {
+                                p0_0: '$t0_0.PolNo',
+                                p1_0: '$t0_0.PolEffDate',
+                                p2_0: '$t0_0.PolExpDate',
+                                p3_0: '$t1_0.FirstName',
+                                p4_0: '$t1_0.LastName',
+                            },
+                        },
+                        {
+                            $unset: '_id',
+                        },
+                    ])
+                );
+            });
         });
     });
 });
