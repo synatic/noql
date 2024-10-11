@@ -5092,7 +5092,7 @@ describe('optimizations', function () {
                                                                 $gte: [
                                                                     {
                                                                         $toDate:
-                                                                            't_0_0_pol_exp_date',
+                                                                            '$t_0_0_pol_exp_date',
                                                                     },
                                                                     {
                                                                         $toDate:
@@ -5106,7 +5106,7 @@ describe('optimizations', function () {
                                                             {
                                                                 $ne: [
                                                                     {
-                                                                        $type: 't_0_0_pol_exp_date',
+                                                                        $type: '$t_0_0_pol_exp_date',
                                                                     },
                                                                     'null',
                                                                 ],
@@ -5114,7 +5114,7 @@ describe('optimizations', function () {
                                                             {
                                                                 $ne: [
                                                                     {
-                                                                        $type: 't_0_0_pol_exp_date',
+                                                                        $type: '$t_0_0_pol_exp_date',
                                                                     },
                                                                     'missing',
                                                                 ],
