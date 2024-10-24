@@ -49,7 +49,7 @@
           "$lookup": {
             "from": "inventory",
             "as": "inventory",
-            "localField": "orders.item",
+            "localField": "item",
             "foreignField": "sku"
           }
         },
