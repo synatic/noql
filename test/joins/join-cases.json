@@ -916,6 +916,24 @@
           "i": []
         }
       ]
+    },
+    "no-alias": {
+      "case-1": {
+        "expectedResults": [
+          {
+            "item": "almonds",
+            "sku": [
+              "almonds"
+            ]
+          },
+          {
+            "item": "pecans",
+            "sku": [
+              "pecans"
+            ]
+          }
+        ]
+      }
     }
   },
   "n-level-join": {

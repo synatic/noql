@@ -194,6 +194,27 @@ describe('joins', function () {
                 casePath: 'left-join.basic-reversed',
             });
         });
+
+        it('should not need table aliases', async () => {
+            const queryString = `
+                select  item,
+                        inventory.sku
+                from
+                    \`orders\`
+                left outer JOIN \`inventory\` on \`inventory\`.\`sku\` =  \`item\`
+                LIMIT 2
+                `;
+            const {pipeline, results} = await queryResultTester({
+                queryString,
+                casePath: 'left-join.no-alias.case-1',
+                mode: 'write',
+                skipDbQuery: false,
+            });
+            const lookup = pipeline.find((p) => !!p.$lookup);
+            for (const result of results) {
+                assert.deepEqual(result.item, result.sku[0]);
+            }
+        });
     });
 
     describe('join order of queries', () => {
