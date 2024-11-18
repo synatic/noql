@@ -1988,4 +1988,29 @@ describe('bug-fixes', function () {
             );
         });
     });
+    describe('$nin', () => {
+        it('should generate and execute a valid query', async () => {
+            // noinspection SqlNoDataSourceInspection
+            const queryString = `
+                SELECT
+                    id,
+                    CASE
+                        WHEN item NOT IN ('pecans','potatoes')
+                        THEN 1
+                        ELSE 0
+                    END AS "Funded"
+                FROM orders
+                    `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'nin.case-1',
+                mode: 'test',
+                outputPipeline: false,
+                skipDbQuery: false,
+                optimizeJoins: false,
+                unsetId: true,
+                schemas: {},
+            });
+        });
+    });
 });
