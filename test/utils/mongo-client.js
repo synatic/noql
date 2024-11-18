@@ -27,7 +27,7 @@ const maxRowsToInsert = 10;
 
 async function connect() {
     console.log('About to connect to db');
-    mongoClient = new MongoClient(connectionString);
+    mongoClient = new MongoClient(connectionString, {directConnection: true});
     await mongoClient.connect();
     console.log('Connected!');
     db = mongoClient.db(dbName);

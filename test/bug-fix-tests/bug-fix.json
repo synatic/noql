@@ -1073,5 +1073,31 @@
   },
   "and-or-nor": {
     "case-1": {}
+  },
+  "nin": {
+    "case-1": {
+      "expectedResults": [
+        {
+          "id": 1,
+          "Funded": 1
+        },
+        {
+          "id": 2,
+          "Funded": 0
+        },
+        {
+          "id": 3,
+          "Funded": 1
+        },
+        {
+          "id": 4,
+          "Funded": 1
+        },
+        {
+          "id": 5,
+          "Funded": 0
+        }
+      ]
+    }
   }
 }
