@@ -1098,6 +1098,162 @@
           "Funded": 0
         }
       ]
+    },
+    "case-2": {
+      "pipeline": [
+        {
+          "$project": {
+            "_id": "$_id",
+            "Id": "$Id",
+            "Account": "$Account__c",
+            "AccountName": "$Account_Name",
+            "AccountFundingStatus": "$Account_Account_Funding_Status",
+            "AccountLegalName": "$Account_Legal_Name__c",
+            "AccountContractPrinciple": "$Account_Contract_Principle",
+            "ApplicationStatus": "$Application_Status__c",
+            "ClosedBy": "$Closed_By__c",
+            "Funded": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$and": [
+                        {
+                          "$and": [
+                            {
+                              "$and": [
+                                {
+                                  "$and": [
+                                    {
+                                      "$and": [
+                                        {
+                                          "$and": [
+                                            {
+                                              "$and": [
+                                                {
+                                                  "$and": [
+                                                    {
+                                                      "$and": [
+                                                        {
+                                                          "$and": [
+                                                            {
+                                                              "$ne": [
+                                                                "$Source_Initiative",
+                                                                "Automated Mining"
+                                                              ]
+                                                            },
+                                                            {
+                                                              "$eq": [
+                                                                "$Product__c",
+                                                                "merchantcashadvance"
+                                                              ]
+                                                            }
+                                                          ]
+                                                        },
+                                                        {
+                                                          "$eq": [
+                                                            "$Type__c",
+                                                            "New Deal"
+                                                          ]
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "$ne": [
+                                                        "$Sales_Executive_User",
+                                                        "Pool of Hope"
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "$ne": [
+                                                    "$Closed_By__c",
+                                                    "System"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "$ne": [
+                                                "$Account_Name",
+                                                null
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "$ne": [
+                                            "$Account_Account_Funding_Status",
+                                            "Contactless"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "$and": [
+                                        {
+                                          "$not": {
+                                            "$in": [
+                                              "$Closed_Reason_New__c",
+                                              [
+                                                "Duplicate",
+                                                "Qualifying Criteria",
+                                                "Contact data wrong",
+                                                "poor contactability",
+                                                "unsupported industry",
+                                                "MC Balance too high",
+                                                "wants to become MC partner",
+                                                "poor MC payment efficiency"
+                                              ]
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "$eq": [
+                                            "$Application_Status__c",
+                                            "Complete"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$ne": [
+                                    "$Closed_By__c",
+                                    "Underwriting"
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$eq": [
+                                "$Credit_Status__c",
+                                "Approved"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "$eq": [
+                            "$Status__c",
+                            "Active - Disbursed"
+                          ]
+                        }
+                      ]
+                    },
+                    "then": 1
+                  }
+                ],
+                "default": {
+                  "$literal": 0
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

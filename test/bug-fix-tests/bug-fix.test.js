@@ -2012,5 +2012,47 @@ describe('bug-fixes', function () {
                 schemas: {},
             });
         });
+        it('should generate and execute a valid query when complicated', async () => {
+            // noinspection SqlNoDataSourceInspection
+            const queryString = `
+                SELECT
+                    _id,
+                    Id,
+                    Account__c AS Account,
+                    Account_Name AS AccountName,
+                    Account_Account_Funding_Status AS AccountFundingStatus,
+                    Account_Legal_Name__c AS AccountLegalName,
+                    Account_Contract_Principle AS AccountContractPrinciple,
+                    Application_Status__c AS ApplicationStatus,
+                    Closed_By__c AS ClosedBy,
+                    CASE
+                        WHEN Source_Initiative != 'Automated Mining'
+                            AND Product__c = 'merchantcashadvance'
+                            AND Type__c = 'New Deal'
+                            AND Sales_Executive_User != 'Pool of Hope'
+                            AND Closed_By__c != 'System'
+                            AND Account_Name IS NOT NULL
+                            AND Account_Account_Funding_Status != 'Contactless'
+                            AND Closed_Reason_New__c NOT IN ('Duplicate','Qualifying Criteria','Contact data wrong','poor contactability','unsupported industry','MC Balance too high','wants to become MC partner','poor MC payment efficiency')
+                            AND Application_Status__c = 'Complete'
+                            AND Closed_By__c != 'Underwriting'
+                            AND Credit_Status__c = 'Approved'
+                            AND Status__c = 'Active - Disbursed'
+                        THEN 1
+                        ELSE 0
+                    END AS "Funded"
+                FROM public."global-00--00--flat-offers-full-set"
+                    `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'nin.case-2',
+                mode: 'write',
+                outputPipeline: true,
+                skipDbQuery: true,
+                optimizeJoins: false,
+                unsetId: true,
+                schemas: {},
+            });
+        });
     });
 });
