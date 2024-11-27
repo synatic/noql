@@ -2055,4 +2055,144 @@ describe('bug-fixes', function () {
             });
         });
     });
+    describe('nested case statements', () => {
+        it('should parse nested complex case statements correctly', async () => {
+            const queryString = `
+                    select  "_"."active" as "c52",
+                            "_"."email" as "c55",
+                            "_"."name" as "c59"
+                        from
+                        (
+                            select "active",
+                                "email",
+                                "name",
+                                "_"."t2_0" as "t2_0",
+                                "_"."t3_0" as "t3_0"
+                            from
+                            (
+                                select "_"."active",
+                                    "_"."email",
+                                    "_"."name",
+                                    "_"."o2",
+                                    "_"."t2_0",
+                                    "_"."t3_0"
+                                from
+                                (
+                                    select "_"."active" as "active",
+                                        "_"."email" as "email",
+                                        "_"."name" as "name",
+                                        "_"."o2" as "o2",
+                                        case
+                                            when "_"."o2" is not null
+                                            then (case
+                                                when "_"."o2" is null
+                                                then null
+                                                when "_"."o2" = true
+                                                then 1
+                                                else 0
+                                            end)
+                                            else 0
+                                        end as "t2_0",
+                                        case
+                                            when "_"."o2" is null
+                                            then 0
+                                            else 1
+                                        end as "t3_0"
+                                    from
+                                    (
+                                        select "rows"."active" as "active",
+                                            "rows"."email" as "email",
+                                            "rows"."name" as "name",
+                                            "rows"."o2" as "o2"
+                                        from
+                                        (
+                                            select "active" as "active",
+                                                "email" as "email",
+                                                "name" as "name",
+                                                "active" as "o2"
+                                            from "public"."Agencies" "$Table"
+                                        ) "rows"
+                                        group by "active",
+                                            "email",
+                                            "name",
+                                            "o2"
+                                    ) "_"
+                                ) "_"
+                            ) "_"
+                        ) "_"
+                        order by "_"."name",
+                                "_"."email",
+                                "_"."t2_0",
+                                "_"."t3_0"
+                        limit 501`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'nested-case.case-1',
+                mode: 'write',
+                outputPipeline: false,
+                skipDbQuery: true,
+                optimizeJoins: false,
+                unsetId: false,
+                schemas: {},
+            });
+        });
+        it('should parse nested complex case statements correctly and get the right data', async () => {
+            const queryString = `
+                    select  "_"."id",
+                            "_"."item",
+                            "_"."category"
+                        from
+                        (
+                            select
+                                "_"."id",
+                                "_"."item",
+                                "_"."category"
+                            from
+                            (
+                                select
+                                    "_"."id",
+                                    "_"."item",
+                                    "_"."category"
+                                from
+                                (
+                                    select
+                                        id,
+                                        item,
+                                        case
+                                            when item is not null
+                                            then (
+                                                case
+                                                    when _.item = "almonds"
+                                                        then "nut"
+                                                    when _.item = "pecans"
+                                                        then "nut"
+                                                    when _.item = "potatoes"
+                                                        then "starch"
+                                                    else "uncategorized"
+                                                end
+                                            )
+                                            else "Null"
+                                        end as category
+                                    from
+                                    (
+                                        select *
+                                        from orders
+                                    ) "_"
+                                ) "_"
+                            ) "_"
+                        ) "_"
+                        order by id
+                        limit 501`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'nested-case.case-2',
+                mode: 'write',
+                outputPipeline: false,
+                skipDbQuery: false,
+                optimizeJoins: false,
+                unsetId: true,
+                schemas: {},
+            });
+        });
+    });
 });
