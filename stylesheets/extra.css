@@ -1,0 +1,65 @@
+[data-md-color-scheme="synatic"]{
+    --md-primary-fg-color:        #3E8DB9;
+    --md-primary-fg-color--light: #3E8DB9;
+    --md-primary-fg-color--dark:  #3E8DB9;
+    --md-accent-fg-color:         #DA7E2E;
+}
+
+:root {
+    --md-primary-fg-color:        #3E8DB9;
+    --md-primary-fg-color--light: #3E8DB9;
+    --md-primary-fg-color--dark:  #3E8DB9;
+    --md-accent-fg-color:         #DA7E2E;
+  }
+
+.playground-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    /* height: 50vh;  */
+}
+
+.playground-box {
+    margin: 10px;
+    width: 25%
+
+}
+
+.playground-code-input {
+    margin-top: 10px;
+    padding: 10px;
+    /* width: 50%; */
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none; 
+}
+
+.playground-code-output {
+    margin: 50px;
+    padding: 10px;
+    width: 100%;
+    /* height: 200px; */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+
+.playground-error-output {
+    margin: 50px;
+    padding: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+
+.playground-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
