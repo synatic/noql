@@ -18,16 +18,6 @@
         ]
       }
     },
-    "current-date": {
-      "case1": {
-        "expectedResults": [
-          {
-            "Today": "$date-placeholder",
-            "Today2": "$date-placeholder"
-          }
-        ]
-      }
-    },
     "join-fn": {
       "case1": {
         "expectedResults": [
@@ -629,20 +619,6 @@
         ]
       }
     },
-    "current_date": {
-      "case1": {
-        "expectedResults": [
-          {
-            "id": 2,
-            "orderDate": "$date-placeholder"
-          },
-          {
-            "id": 5,
-            "orderDate": "$date-placeholder"
-          }
-        ]
-      }
-    },
     "unique": {
       "case1": {
         "expectedResults": [
@@ -842,6 +818,48 @@
           {
             "id": 5,
             "cnt": 1
+          }
+        ]
+      }
+    },
+    "current-date": {
+      "case1": {
+        "expectedResults": [
+          {
+            "Today": "$date-placeholder",
+            "Today2": "$date-placeholder"
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 2,
+            "orderDate": "$date-placeholder"
+          },
+          {
+            "id": 5,
+            "orderDate": "$date-placeholder"
+          }
+        ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "id": 1,
+            "orderDate": null
+          },
+          {
+            "id": 2,
+            "orderDate": "$date-placeholder"
+          },
+          {
+            "id": 3,
+            "orderDate": null
+          },
+          {
+            "id": 4,
+            "orderDate": null
           }
         ]
       }

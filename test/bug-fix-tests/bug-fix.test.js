@@ -58,21 +58,6 @@ describe('bug-fixes', function () {
             });
         });
     });
-    describe('currentDate', async () => {
-        it('should work with or without parentheses', async () => {
-            const queryString = `
-            SELECT  CURRENT_DATE() as Today,
-                    current_date as Today2,
-                    unset(_id)
-            FROM function-test-data
-            LIMIT 1`;
-            await queryResultTester({
-                queryString: queryString,
-                casePath: 'bugfix.current-date.case1',
-                ignoreDateValues: true,
-            });
-        });
-    });
     describe('join function', () => {
         it('should be able to join strings together with a symbol in a standard select', async () => {
             const queryString = `
@@ -751,6 +736,20 @@ describe('bug-fixes', function () {
         });
     });
     describe('Current_Date', () => {
+        it('should work with or without parentheses', async () => {
+            const queryString = `
+                SELECT  CURRENT_DATE() as Today,
+                        current_date as Today2,
+                        unset(_id)
+                FROM function-test-data
+            LIMIT 1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.current-date.case1',
+                ignoreDateValues: true,
+                mode,
+            });
+        });
         it('should allow you to compare dates', async () => {
             const queryString = `
                 SELECT  id,
@@ -761,9 +760,26 @@ describe('bug-fixes', function () {
             `;
             await queryResultTester({
                 queryString: queryString,
-                casePath: 'bugfix.current_date.case1',
+                casePath: 'bugfix.current-date.case2',
                 mode,
                 ignoreDateValues: true,
+            });
+        });
+        it('should allow you to use current_date in the on clause', async () => {
+            const queryString = `
+                SELECT  o.id,
+                        o.orderDate
+                FROM orders o
+                INNER JOIN inventory i on o.item = i.sku
+                    AND o.orderDate <= CURRENT_DATE()
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.current-date.case3',
+                mode,
+                ignoreDateValues: true,
+                unsetId: true,
+                outputPipeline: false,
             });
         });
     });
