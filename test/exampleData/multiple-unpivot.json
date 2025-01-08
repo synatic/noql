@@ -1,0 +1,9 @@
+[{
+  "SalesID": 1001,
+  "Order1Name": "first",
+  "Order1Date": "2018-01-01",
+  "Order1Amt": 111.00,
+  "Order2Name": "second",
+  "Order2Date": "2018-02-01",
+  "Order2Amt": 222.00
+}]

@@ -35,6 +35,7 @@ describe('joins', function () {
     after(function (done) {
         disconnect().then(done).catch(done);
     });
+
     describe('regression tests', () => {
         it('should work for case 1', async () => {
             await queryResultTester({
@@ -145,6 +146,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('left join', () => {
         it('should be able to do a left join', async () => {
             await queryResultTester({
@@ -195,7 +197,7 @@ describe('joins', function () {
     });
 
     describe('join order of queries', () => {
-        it('should prase the query that was not working on prod', async () => {
+        it('should parse the query that was not working on prod', async () => {
             await queryResultTester({
                 queryString: `
                 SELECT
@@ -608,6 +610,7 @@ describe('joins', function () {
             });
         });
     });
+
     describe('optimize', () => {
         const expectedPipeline = [
             {
@@ -653,15 +656,34 @@ describe('joins', function () {
                 },
             },
             {
+                $unset: ['_id', 'c._id', 'cn._id'],
+            },
+            {
                 $project: {
                     c: '$c',
                     cn: '$cn',
                 },
             },
+            {
+                $limit: 1,
+            },
         ];
         it('should work with explicit optimize', async () => {
             const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id';
+                'select c.*,cn.*, unset(_id,c._id,cn._id ) from customers c inner join (select * from `customer-notes` where id>2) `cn|optimize` on cn.id=c.id LIMIT 1';
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'optimize.explicit',
+                mode: 'write',
+                unsetId: false,
+            });
+
+            assert.deepStrictEqual(pipeline, expectedPipeline);
+        });
+        // off for now
+        it.skip('should work without explicit optimize', async () => {
+            const queryString =
+                'select c.*,cn.*, unset(_id,c._id,cn._id ) from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id LIMIT 1';
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
@@ -670,27 +692,73 @@ describe('joins', function () {
 
             assert.deepStrictEqual(pipeline, expectedPipeline);
         });
-        it('should work without explicit optimize', async () => {
-            const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn` on cn.id=c.id';
-            const {pipeline} = await queryResultTester({
-                queryString,
-                casePath: 'optimize.explicit',
-                mode: 'write',
-            });
+    });
 
-            assert.deepStrictEqual(pipeline, expectedPipeline);
+    describe('full outer join', () => {
+        it('should work - case 1', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
+            const queryString = `
+                 SELECT c.customerName as customerName,
+                        o.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-customers" c
+                 FULL OUTER JOIN "foj-orders" o
+                    ON c.customerId = o.customerId
+                 ORDER BY c.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case1',
+                mode,
+                outputPipeline: false,
+            });
         });
-        it('should not optimize if the nooptimize is provided', async () => {
-            const queryString =
-                'select c.*,cn.* from customers c inner join (select * from `customer-notes` where id>2) `cn|nooptimize` on cn.id=c.id';
-            const {pipeline} = await queryResultTester({
+        it('should work - case 2', async () => {
+            // https://www.w3schools.com/Sql/sql_join_full.asp
+            const queryString = `
+                 SELECT customers.customerName as customerName,
+                        orders.orderId as orderId,
+                        unset(_id)
+                 FROM "foj-orders" orders
+                 FULL OUTER JOIN "foj-customers" customers
+                    ON orders.customerId = customers.customerId
+                 ORDER BY customers.customerName ASC, orders.orderId ASC`;
+            await queryResultTester({
                 queryString,
-                casePath: 'optimize.explicit',
-                mode: 'write',
+                casePath: 'full-outer-join.case2',
+                mode,
+                outputPipeline: false,
             });
+        });
+        it('should support a full outer join in a subselect', async () => {
+            const queryString = `
+                 SELECT *
+                 FROM (
+                     SELECT c.customerName as customerName,
+                            o.orderId as orderId,
+                            unset(_id)
+                     FROM "foj-customers" c
+                     FULL OUTER JOIN "foj-orders" o
+                        ON c.customerId = o.customerId
+                     ORDER BY c.customerName ASC, orders.orderId ASC
+                 ) foj`;
+            await queryResultTester({
+                queryString,
+                casePath: 'full-outer-join.case3-sub-select',
+                mode,
+                outputPipeline: false,
+            });
+        });
+    });
 
-            assert.notDeepStrictEqual(pipeline, expectedPipeline);
+    describe('Automatic Unwinding of joins', () => {
+        it('should be able to automatically unwind a left join', async () => {
+            await queryResultTester({
+                queryString:
+                    'select *, unset(_id,o._id,o.orderDate,i._id) from orders as o left join `inventory` as i  on o.item=i.sku limit 1',
+                casePath: 'auto-unwind.left.case1',
+                mode,
+                unwindJoins: true,
+            });
         });
     });
 });

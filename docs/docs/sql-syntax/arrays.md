@@ -10,8 +10,8 @@ NoQL uses sub-selects with a FROM array field to query array fields in collectio
 
     ```sql
     SELECT
-        (SELECT * FROM Rentals WHERE staffId=2) AS t 
-    FROM 
+        (SELECT * FROM Rentals WHERE staffId=2) AS t
+    FROM
         `customers`
     ```
 
@@ -20,9 +20,9 @@ Using '$$ROOT' in sub select promotes the field to the root value of the array
 ???+ example "Using '$$ROOT' in sub select"
 
     ```sql
-    SELECT 
-        (SELECT filmId AS '$$ROOT' FROM Rentals WHERE staffId=2) AS t 
-    FROM 
+    SELECT
+        (SELECT filmId AS '$$ROOT' FROM Rentals WHERE staffId=2) AS t
+    FROM
         `customers`
     ```
 
@@ -31,9 +31,9 @@ Slicing the array is supported by limit and offset in queries
 ???+ example "Slicing an array with limit and offset"
 
     ```sql
-    SELECT 
-        (SELECT * FROM Rentals WHERE staffId=2 LIMIT 10 OFFSET 5) AS t 
-    FROM 
+    SELECT
+        (SELECT * FROM Rentals WHERE staffId=2 LIMIT 10 OFFSET 5) AS t
+    FROM
         `customers`
     ```
 
@@ -46,15 +46,15 @@ Sorting Arrays is supported in MongoDB 5.2+ and NoQL
         (SELECT * FROM Rentals ORDER BY id DESC) AS totalRentals
     FROM customers
     ```
-   
+
 !!! warning "Aggregation functions are not supported in a sub select"
-    Aggregation functions are not supported in a sub select. For example, the following won't work
-    ```sql
+Aggregation functions are not supported in a sub select. For example, the following won't work
+`sql
     --Wont'Work
     SELECT id,
         (SELECT count(*) AS count FROM Rentals) AS totalRentals
     FROM customers
-    ```
+    `
 
 ## UNWIND Function
 
@@ -65,28 +65,29 @@ NoQL has a high level unwind function that will unwind array fields. For Joins, 
 ???+ example "UNWIND in SELECT"
 
     ```sql
-    SELECT 
+    SELECT
       field1,
       UNWIND(arrFld) as arrFld
     FROM
       test
     ```
+
 ???+ example "Complex UNWIND"
 
     ```sql
-    SELECT 
+    SELECT
         MERGE_OBJECTS(
-            (SELECT 
+            (SELECT
                 t.CustomerID
                 ,t.Name
             )
             ,t.Rental
-            ) AS `$$ROOT` 
-    FROM 
-        (SELECT 
+            ) AS `$$ROOT`
+    FROM
+        (SELECT
             id AS CustomerID
             ,`First Name` AS Name
-            ,UNWIND(Rentals) AS Rental 
+            ,UNWIND(Rentals) AS Rental
         FROM customers) AS t
     ```
 
@@ -161,6 +162,7 @@ Converts the array to an object.
         ARRAY_TO_OBJECT(OBJECT_TO_ARRAY(`Address`)) AS test
     FROM `customers`;
     ```
+
 ### CONCAT_ARRAYS
 
 `CONCAT_ARRAYS(array expr,...)`
@@ -174,6 +176,7 @@ Concatenate the provided list of arrays.
         CONCAT_ARRAYS((SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`), ARRAY_RANGE(0,10,2)) AS test
     FROM `customers`;
     ```
+
 ### FIRST_IN_ARRAY
 
 `FIRST_IN_ARRAY(array expr)`
@@ -229,6 +232,7 @@ Returns the last element of an array.
         LAST_IN_ARRAY(`Rentals`) AS test
     FROM `customers`;
     ```
+
 ### OBJECT_TO_ARRAY
 
 `OBJECT_TO_ARRAY(expr)`
@@ -362,8 +366,8 @@ Sums the values in an array given an array field or sub-select and the field to 
         `First Name`,
         `Last Name`,
         SUM_ARRAY(
-            (SELECT 
-                SUM_ARRAY(`Payments`, ‘Amount’) AS total 
+            (SELECT
+                SUM_ARRAY(`Payments`, ‘Amount’) AS total
             FROM `Rentals`), ‘total’) AS t
     FROM customers;
     ```

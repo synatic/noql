@@ -190,6 +190,8 @@ export interface ParserOptions {
     unsetId?: boolean;
     /** If provided, the library will use the schemas to generate better queries */
     schemas?: Schemas;
+    /** If true, will optimize the join for better performance */
+    optimizeJoins?: boolean;
 }
 
 export interface NoqlContext extends ParserOptions {
@@ -199,6 +201,8 @@ export interface NoqlContext extends ParserOptions {
     cleanedStatement?: string;
     tables: string[];
     fullAst: TableColumnAst;
+    joinHints?: string[];
+    projectionAlreadyAdded?: boolean;
 }
 
 export interface ParseResult {
@@ -342,4 +346,11 @@ export type GetTables = (subAst: AST, context: NoqlContext) => string[];
 export interface FindSchemaResult {
     schema: JSONSchema6;
     required: boolean;
+}
+
+export interface OptimizationProcessResult {
+    wasOptimized: boolean;
+    pipelineStagesAdded: PipelineFn[];
+    lookupPipelineStagesAdded: PipelineFn[];
+    leftOverMatches: Record<string, unknown>[];
 }

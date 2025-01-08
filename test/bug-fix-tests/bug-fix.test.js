@@ -1,6 +1,11 @@
 const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
+const {parseSQLtoAST, makeMongoAggregate} = require('../../lib/SQLParser');
+const fs = require('fs/promises');
+const emptyResultsBugPipeline = require('./empty-results-pipeline.json');
+const isEqual = require('lodash/isEqual');
+const assert = require('node:assert');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -411,6 +416,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.to_objectid.case1',
+                unsetId: false,
             });
         });
     });
@@ -425,6 +431,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.object_to_array.case1',
+                unsetId: false,
             });
         });
     });
@@ -647,6 +654,50 @@ describe('bug-fixes', function () {
                 resultCounter++;
             }
         });
+        it('should auto cast date fields in a where clause with a literal on the right', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE orderDate <= '2024-01-01'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case1',
+                schemas: await getAllSchemas(database),
+                mode,
+                ignoreDateValues: true,
+            });
+        });
+        it('should auto cast date fields in a where clause with a literal on the let', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE '2024-01-01' >= orderDate
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case2',
+                schemas: await getAllSchemas(database),
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
+        it('should auto cast date fields in a where clause with 2 columns', async () => {
+            const queryString = `
+                SELECT  *, unset(_id)
+                FROM orders
+                WHERE orderDate <= orderDate
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.schema-aware-queries.auto-cast.date-case3',
+                schemas: await getAllSchemas(database),
+                mode,
+                outputPipeline: false,
+                ignoreDateValues: true,
+            });
+        });
     });
     describe('subquery capitalisation', () => {
         it('should not throw an error when the right hand side is capitalised', async () => {
@@ -861,6 +912,22 @@ describe('bug-fixes', function () {
                 ignoreDateValues: true,
             });
         });
+        it('day', async () => {
+            const queryString = `
+                SELECT  orderDate,
+                        day_of_month(orderDate) as day,
+                        unset(_id)
+                FROM orders
+                WHERE orderDate != null
+                ORDER BY orderDate ASC
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.extract-dates.case2',
+                mode,
+                ignoreDateValues: true,
+            });
+        });
     });
     describe('scratchpad', () => {
         it('Should let you provide the full table name in the on clause on the left', async () => {
@@ -902,6 +969,127 @@ describe('bug-fixes', function () {
                 queryString: queryString,
                 casePath: 'scratchpad.case2',
                 mode,
+            });
+        });
+    });
+    describe('post-optimizations', () => {
+        it('should work on the example query', async () => {
+            const queryString = `
+                SELECT
+                    currentUser._id,
+                    currentUser.establishment,
+                    currentUser.access_all_child_establishments,
+                    establishments.*,
+                    child_establishments.*
+                FROM
+                    \`nfk-users|first\` currentUser
+                    LEFT JOIN (
+                        SELECT
+                            user_establishment.user,
+                            establishment._id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-establishments\` user_establishment
+                            LEFT JOIN \`nfk-user-county-establishments|first\` establishment ON user_establishment.establishment = TO_STRING(establishment._id)
+                        WHERE
+                            user_establishment.user = '66261fd83316a727b53610da'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS establishments ON establishments.user_establishment.user = TO_STRING(currentUser._id)
+                    LEFT JOIN (
+                        SELECT
+                            TO_STRING(establishment._id) as id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-county-establishments\` establishment
+                        WHERE
+                            TO_STRING(establishment._id) = '662545865f01249a315ff1fd'
+                            OR establishment.main_establishment = '662545865f01249a315ff1fd'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.name ASC
+                    ) AS child_establishments ON child_establishments.establishment.id = currentUser.establishment
+                    OR child_establishments.establishment.main_establishment = currentUser.establishment
+                WHERE
+                    TO_STRING(currentUser._id) = '66261fd83316a727b53610da'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimization.case1',
+                mode,
+                outputPipeline: false,
+                unsetId: false,
+            });
+        });
+    });
+    describe('empty-results', () => {
+        it("should work with Avi's example", async () => {
+            const queryString = `
+                SELECT  bp.CustId,
+                        bp.PolId,
+                        bp.PolNo,
+                        bp.PolEffDate,
+                        bp.PolExpDate,
+                        lob.LineOfBus
+                FROM \`faizel-polinfo\` bp
+                INNER JOIN (
+                        SELECT  PolId,
+                                LineOfBus
+                                --,EffDate
+                        FROM \`faizel-lob\`) \`lob|optimize\`
+                        ON lob.PolId = bp.PolId
+                                AND lob.EffDate >= bp.PolEffDate
+                WHERE bp.Status != 'D'
+                --AND lob.LineOfBus IN ('CGL','WORK','AUTOB', 'CUMBR','ELIAB', 'XLIB','INMRC', 'PROP', 'BOPGL', 'CFIRE', 'EMP LIAB OH', 'EPLI', 'MTRTK', 'PL', 'RFRBR', 'POLL' )
+                AND TO_DATE(bp.PolExpDate) > CURRENT_DATE()
+                AND bp.PolSubType != 'S'
+                AND bp.CustId = 'test-customer-1'
+                LIMIT 10 `;
+            const aggregate = makeMongoAggregate(queryString);
+
+            assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
+        });
+    });
+    describe('deeply-nested-divide', () => {
+        it('should work in the basic select', async () => {
+            const queryString = `
+                SELECT
+                    disbursedAmount AS TotalFunded,
+                    (2.5 * latestQuoteTerm) AS BrokerBuyRatePerTerm,
+                    latestQuoteTotalFactor AS FactorAsPercent,
+                    disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100) AS CheckText,
+                    ((disbursedAmount * (latestQuoteTotalFactor / 100)) - ((disbursedAmount * (0.13 / 12)) * (latestQuoteTerm / 2))) AS NetRevenue,
+                    CASE
+                        WHEN type != 'New Deal' THEN (2 / 100)
+                        ELSE
+                            CASE
+                                WHEN latestQuoteTerm < 6 THEN (2.5 / 100)
+                                WHEN latestQuoteTerm > 5 THEN (2.2 / 100)
+                                ELSE 0.00
+                            END
+                    END AS BrokerBuyRate,
+                    CASE
+                        WHEN type = 'New Deal' AND latestQuoteTerm < 6 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.5 * latestQuoteTerm)) / 100))
+                        WHEN type = 'New Deal' AND latestQuoteTerm > 5 THEN (disbursedAmount * (((latestQuoteTotalFactor) - (2.2 * latestQuoteTerm)) / 100))
+                        WHEN type != 'New Deal' THEN disbursedAmount * 0.020
+                        ELSE 0
+                    END AS BrokerBuyRateCommission,
+                    YEAR(DATE_FROM_STRING(disbursedDate)) AS FundedYear,
+                    MONTH(DATE_FROM_STRING(disbursedDate)) AS FundedMonth,
+                    unset(_id)
+                FROM
+                "function-test-data"
+                WHERE testId = "bugfix.deeply-nested-divide.case1"`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'deeply-nested-divide.case1',
+                mode: 'write',
+                outputPipeline: false,
             });
         });
     });

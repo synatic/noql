@@ -610,7 +610,7 @@ describe('SQL Parser', function () {
             }),
             {
                 collections: ['customers'],
-                pipeline: [],
+                pipeline: [{$unset: '_id'}],
                 type: 'aggregate',
             },
             'Invalid parse'
