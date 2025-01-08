@@ -1,6 +1,7 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 const {canQuery} = require('../lib/canQuery');
+const optimizer = require("../lib/optimizer");
 const _queryTests = [].concat(
     require('./queryTests/queryTests.json'),
     require('./queryTests/objectOperators.json'),
@@ -627,21 +628,150 @@ describe('SQL Parser', function () {
                 collections: ['customers'],
                 pipeline: [
                     {
+                        $sort: {
+                            _id: 1,
+                        },
+                    },
+                    {
                         $project: {
                             x: '$x',
                             y: '$y',
                         },
                     },
                     {
-                        $sort: {
-                            _id: 1,
-                        },
+                        $unset: '_id',
                     },
-                    {$unset: '_id'},
                 ],
                 type: 'aggregate',
             },
             'Invalid parse'
         );
+    });
+
+    describe('Should optimize a mongo query', function () {
+        it('Should optimize a mongo aggregate', function () {
+            const sql = `select "_"."StartOfWeekYear" as "c98"
+                         from
+                             (
+                                 select "StartOfWeekYear",
+                                        "_"."t0_0" as "t0_0",
+                                        "_"."t1_0" as "t1_0"
+                                 from
+                                     (
+                                         select "_"."StartOfWeekYear",
+                                                "_"."o0",
+                                                "_"."t0_0",
+                                                "_"."t1_0"
+                                         from
+                                             (
+                                                 select "_"."StartOfWeekYear" as "StartOfWeekYear",
+                                                        "_"."o0" as "o0",
+                                                        case
+                                                            when "_"."o0" is not null
+                                                                then "_"."o0"
+                                                            else 0
+                                                            end as "t0_0",
+                                                        case
+                                                            when "_"."o0" is null
+                                                                then 0
+                                                            else 1
+                                                            end as "t1_0"
+                                                 from
+                                                     (
+                                                         select "rows"."StartOfWeekYear" as "StartOfWeekYear",
+                                                                "rows"."o0" as "o0"
+                                                         from
+                                                             (
+                                                                 select "StartOfWeekYear" as "StartOfWeekYear",
+                                                                        "StartOfWeekYear" as "o0"
+                                                                 from "public"."Activities" "$Table"
+                                                             ) "rows"
+                                                         group by "StartOfWeekYear",
+                                                                  "o0"
+                                                     ) "_"
+                                             ) "_"
+                                     ) "_"
+                             ) "_"
+                         order by "_"."t0_0",
+                                  "_"."t1_0"
+                             limit 101
+            `;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = SQLParser.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $group: {
+                            _id: {
+                                StartOfWeekYear: '$StartOfWeekYear',
+                                o0: '$StartOfWeekYear',
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            StartOfWeekYear: '$_id.StartOfWeekYear',
+                            o0: '$_id.o0',
+                            _id: 0,
+                        },
+                    },
+                    {
+                        $project: {
+                            StartOfWeekYear: '$StartOfWeekYear',
+                            t0_0: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: {
+                                                $ne: ['$o0', null],
+                                            },
+                                            then: '$o0',
+                                        },
+                                    ],
+                                    default: {
+                                        $literal: 0,
+                                    },
+                                },
+                            },
+                            t1_0: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: {
+                                                $eq: ['$o0', null],
+                                            },
+                                            then: 0,
+                                        },
+                                    ],
+                                    default: {
+                                        $literal: 1,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        $sort: {
+                            t0_0: 1,
+                            t1_0: 1,
+                        },
+                    },
+                    {
+                        $project: {
+                            c98: '$StartOfWeekYear',
+                        },
+                    },
+                    {
+                        $limit: 101,
+                    },
+                ],
+                'did not optimize'
+            );
+        });
     });
 });
