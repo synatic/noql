@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
-    "@synatic/schema-magic": "^1.2.2",
+    "@synatic/schema-magic": "^2.0.0",
     "@synatic/type-magic": "^1.0.0",
     "bson": "^4.7.2",
     "check-types": "11.2.2",
