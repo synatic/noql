@@ -46,6 +46,18 @@
           "year": 1994
         }
       ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "name": "12 Angry Men",
+          "year": 1957
+        },
+        {
+          "name": "The Shawshank Redemption",
+          "year": 1994
+        }
+      ]
     }
   }
 }
