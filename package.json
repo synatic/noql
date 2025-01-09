@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "4.1.20",
+  "version": "4.2.1",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -71,7 +71,8 @@
     "dayjs": "^1.11.13",
     "deepmerge": "^4.3.1",
     "lodash": "^4.17.21",
-    "node-sql-parser": "^5.3.3"
+    "node-sql-parser": "^5.3.3",
+    "object-hash": "^3.0.0"
   },
   "devDependencies": {
     "@synatic/eslint-config-synatic-node": "^2.0.0",
