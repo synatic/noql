@@ -1277,33 +1277,10 @@
   "nested-case": {
     "case-1": {},
     "case-2": {
-      "expectedResults": [
-        {
-          "id": 1,
-          "item": "almonds",
-          "category": "nut"
-        },
-        {
-          "id": 2,
-          "item": "pecans",
-          "category": "nut"
-        },
-        {
-          "id": 3,
-          "item": "almonds",
-          "category": "nut"
-        },
-        {
-          "id": 4,
-          "item": "almonds",
-          "category": "nut"
-        },
-        {
-          "id": 5,
-          "item": "potatoes",
-          "category": "starch"
-        }
-      ]
+      "expectedResults": []
     }
+  },
+  "sort-after-project": {
+    "case-1": {}
   }
 }
