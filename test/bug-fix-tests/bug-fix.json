@@ -1308,5 +1308,30 @@
   },
   "sort-after-project": {
     "case-1": {}
+  },
+  "invalid-sort-order": {
+    "case-1": {
+      "expectedResults": [
+        {
+          "RecordId": "recordId",
+          "AncestorInstanceId": null,
+          "AncestorRecordId": null,
+          "AncestorRecordNumber": null,
+          "ChecklistStatusId": "ChecklistStatusId",
+          "CurrentDv": "2021-08-28T06:57:40.097Z",
+          "InsertDv": "2021-08-28T06:54:50.200Z",
+          "InstanceId": "InstanceId",
+          "IsInUseByOtherRecords": 0,
+          "ModuleId": "ModuleId",
+          "ProcessFlowId": "ProcessFlowId",
+          "RecordNumber": 1,
+          "RecordStatus": "active",
+          "SQ": 12345,
+          "CreatedByUserId": "admin",
+          "LatestModifiedByUserId": "admin",
+          "DeletedByUserId": null
+        }
+      ]
+    }
   }
 }

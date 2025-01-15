@@ -3077,181 +3077,22 @@ from (select    RecordId,
                 CreatedByUserId,
                 LatestModifiedByUserId,
                 DeletedByUserId
-    from \`global-list-module-records--vbfr-std-glb-module-record\`
+    from \`global-list-module-records-vbfr-std-glb-module-record\`
     where RecordStatus in ('active')
-    and InstanceId in ('19F881AA-94BA-4F9A-8E04-C37B172AF652' )
+    and InstanceId in ('InstanceId' )
     ) as records
 where 1=1
 order by CurrentDv asc , SQ asc`;
             await queryResultTester({
                 queryString: sql,
-                casePath: 'nested-case.case-2',
-                mode: 'write',
+                casePath: 'invalid-sort-order.case-1',
+                mode,
                 outputPipeline: false,
-                skipDbQuery: true,
+                expectZeroResults: false,
+                skipDbQuery: false,
                 optimizeJoins: false,
                 unsetId: true,
-                schemas: {
-                    // 'global-list-module-records--vbfr-std-glb-module-record': {
-                    //     type: 'object',
-                    //     properties: {
-                    //         _id: {
-                    //             type: 'string',
-                    //             format: 'mongoid',
-                    //         },
-                    //         RecordId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         AncestorInstanceId: {
-                    //             type: 'null',
-                    //         },
-                    //         AncestorRecordId: {
-                    //             type: 'null',
-                    //         },
-                    //         AncestorRecordNumber: {
-                    //             type: 'null',
-                    //         },
-                    //         AuditSQ: {
-                    //             type: 'null',
-                    //         },
-                    //         ChecklistStatusId: {
-                    //             type: ['null', 'string'],
-                    //             stringLength: 36,
-                    //         },
-                    //         CreatedByUserId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         CurrentDv: {
-                    //             type: 'string',
-                    //             format: 'date-time',
-                    //         },
-                    //         DeletedByUserId: {
-                    //             type: 'null',
-                    //         },
-                    //         InsertDv: {
-                    //             type: 'string',
-                    //             format: 'date-time',
-                    //         },
-                    //         InstanceId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         IsInUseByOtherRecords: {
-                    //             type: 'integer',
-                    //         },
-                    //         LatestModifiedByUserId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         ModuleId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         ProcessFlowId: {
-                    //             type: 'string',
-                    //             stringLength: 36,
-                    //         },
-                    //         RecordNumber: {
-                    //             type: 'integer',
-                    //         },
-                    //         RecordStatus: {
-                    //             type: 'string',
-                    //             stringLength: 6,
-                    //         },
-                    //         SQ: {
-                    //             type: 'integer',
-                    //         },
-                    //         _dateUpdated: {
-                    //             type: 'string',
-                    //             format: 'date-time',
-                    //         },
-                    //     },
-                    // },
-                },
             });
-            const aggr = makeMongoAggregate(sql);
-            assert.deepStrictEqual(
-                aggr,
-                {
-                    pipeline: [
-                        {
-                            $match: {
-                                $and: [
-                                    {
-                                        RecordStatus: {
-                                            $in: ['active'],
-                                        },
-                                    },
-                                    {
-                                        InstanceId: {
-                                            $in: [
-                                                '19F881AA-94BA-4F9A-8E04-C37B172AF652',
-                                            ],
-                                        },
-                                    },
-                                ],
-                            },
-                        },
-                        {
-                            $project: {
-                                RecordId: '$RecordId',
-                                AncestorInstanceId: '$AncestorInstanceId',
-                                AncestorRecordId: '$AncestorRecordId',
-                                AncestorRecordNumber: '$AncestorRecordNumber',
-                                ChecklistStatusId: '$ChecklistStatusId',
-                                CurrentDv: '$CurrentDv',
-                                InsertDv: '$InsertDv',
-                                InstanceId: '$InstanceId',
-                                IsInUseByOtherRecords: '$IsInUseByOtherRecords',
-                                ModuleId: '$ModuleId',
-                                ProcessFlowId: '$ProcessFlowId',
-                                RecordNumber: '$RecordNumber',
-                                RecordStatus: '$RecordStatus',
-                                SQ: '$SQ',
-                                CreatedByUserId: '$CreatedByUserId',
-                                LatestModifiedByUserId:
-                                    '$LatestModifiedByUserId',
-                                DeletedByUserId: '$DeletedByUserId',
-                            },
-                        },
-                        {
-                            $match: {
-                                $expr: {
-                                    $eq: [1, 1],
-                                },
-                            },
-                        },
-                        {
-                            $replaceRoot: {
-                                newRoot: '$records',
-                            },
-                        },
-                        {
-                            $project: {
-                                records: '$$ROOT',
-                                CurrentDv: 1,
-                                SQ: 1,
-                            },
-                        },
-                        {
-                            $sort: {
-                                CurrentDv: 1,
-                                SQ: 1,
-                            },
-                        },
-                        {
-                            $unset: ['CurrentDv', 'SQ'],
-                        },
-                    ],
-                    collections: [
-                        'global-list-module-records--vbfr-std-glb-module-record',
-                    ],
-                    type: 'aggregate',
-                },
-                'Invalid sort order'
-            );
         });
     });
 });
