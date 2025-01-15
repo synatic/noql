@@ -207,7 +207,7 @@ describe('joins', function () {
             const {pipeline, results} = await queryResultTester({
                 queryString,
                 casePath: 'left-join.no-alias.case-1',
-                mode: 'write',
+                mode,
                 skipDbQuery: false,
             });
             const lookup = pipeline.find((p) => !!p.$lookup);
@@ -695,7 +695,7 @@ describe('joins', function () {
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
-                mode: 'write',
+                mode,
                 unsetId: false,
             });
 
@@ -708,7 +708,7 @@ describe('joins', function () {
             const {pipeline} = await queryResultTester({
                 queryString,
                 casePath: 'optimize.explicit',
-                mode: 'write',
+                mode,
             });
 
             assert.deepStrictEqual(pipeline, expectedPipeline);
