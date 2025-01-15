@@ -83,7 +83,7 @@ describe('bug-fixes', function () {
         //     const res = await queryResultTester({
         //         queryString: queryString,
         //         casePath: 'bugfix.current-date.case2',
-        //         mode: 'write',
+        //         mode,
         //     });
         //     const correctHcp = [
         //         {
@@ -387,7 +387,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.ntile.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: true,
             });
         });
@@ -1159,7 +1159,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'deeply-nested-divide.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
             });
         });
@@ -1189,7 +1189,7 @@ describe('bug-fixes', function () {
             const {pipeline} = await queryResultTester({
                 queryString: queryString,
                 casePath: 'and-or-nor.case-1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: true,
                 optimizeJoins: true,
@@ -2117,7 +2117,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nin.case-2',
-                mode: 'write',
+                mode,
                 outputPipeline: true,
                 skipDbQuery: true,
                 optimizeJoins: false,
@@ -2199,7 +2199,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nested-case.case-1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: true,
                 optimizeJoins: false,
@@ -2257,7 +2257,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nested-case.case-2',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: false,
                 optimizeJoins: false,
