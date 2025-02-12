@@ -3095,4 +3095,188 @@ order by CurrentDv asc , SQ asc`;
             });
         });
     });
+
+    describe('ifNull', () => {
+        it('should handle ifNull for a simple statement', async () => {
+            const sql = `
+                SELECT ifNull(sku, 'Not Specified') as SKU
+                FROM inventory
+                WHERE id in (1,5)`;
+            const {pipeline, results} = await queryResultTester({
+                queryString: sql,
+                casePath: 'ifNull.case-1',
+                mode,
+                unsetId: true,
+            });
+            assert.deepStrictEqual(results, [
+                {
+                    SKU: 'almonds',
+                },
+                {
+                    SKU: 'Not Specified',
+                },
+            ]);
+            assert.deepStrictEqual(pipeline, [
+                {
+                    $match: {
+                        id: {
+                            $in: [1, 5],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        SKU: {
+                            $ifNull: [
+                                '$sku',
+                                {
+                                    $literal: 'Not Specified',
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    $unset: '_id',
+                },
+            ]);
+        });
+        it('should handle ifNull for a simple statement with a table alias', async () => {
+            const sql = `
+                SELECT ifNull(i.sku, 'Not Specified') as SKU
+                FROM inventory i
+                WHERE id in (1,5)`;
+            const {pipeline, results} = await queryResultTester({
+                queryString: sql,
+                casePath: 'ifNull.case-2',
+                mode,
+                unsetId: true,
+            });
+            assert.deepStrictEqual(results, [
+                {
+                    SKU: 'almonds',
+                },
+                {
+                    SKU: 'Not Specified',
+                },
+            ]);
+            assert.deepStrictEqual(pipeline, [
+                {
+                    $project: {
+                        i: '$$ROOT',
+                    },
+                },
+                {
+                    $match: {
+                        'i.id': {
+                            $in: [1, 5],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        SKU: {
+                            $ifNull: [
+                                '$i.sku',
+                                {
+                                    $literal: 'Not Specified',
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    $unset: '_id',
+                },
+            ]);
+        });
+        it('should handle ifNull for a simple statement with a nested field', async () => {
+            const sql = `
+                SELECT ifNull(Address.City, 'Not Specified') as City
+                FROM customers
+                WHERE id in (1,599)`;
+            const {pipeline, results} = await queryResultTester({
+                queryString: sql,
+                casePath: 'ifNull.case-3',
+                mode,
+                unsetId: true,
+            });
+            assert.deepStrictEqual(results, [
+                {
+                    City: 'Sasebo',
+                },
+                {
+                    City: 'Not Specified',
+                },
+            ]);
+            assert.deepStrictEqual(pipeline, [
+                {
+                    $match: {
+                        id: {
+                            $in: [1, 599],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        City: {
+                            $ifNull: [
+                                '$Address.City',
+                                {
+                                    $literal: 'Not Specified',
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    $unset: '_id',
+                },
+            ]);
+        });
+        it('should handle ifNull for a simple statement with double quotes', async () => {
+            const sql = `
+                SELECT ifNull("sku", 'Not Specified') as SKU
+                FROM inventory
+                WHERE id in (1,5)`;
+            const {pipeline, results} = await queryResultTester({
+                queryString: sql,
+                casePath: 'ifNull.case-4',
+                mode,
+                unsetId: true,
+            });
+            assert.deepStrictEqual(results, [
+                {
+                    SKU: 'almonds',
+                },
+                {
+                    SKU: 'Not Specified',
+                },
+            ]);
+            assert.deepStrictEqual(pipeline, [
+                {
+                    $match: {
+                        id: {
+                            $in: [1, 5],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        SKU: {
+                            $ifNull: [
+                                '$sku',
+                                {
+                                    $literal: 'Not Specified',
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    $unset: '_id',
+                },
+            ]);
+        });
+    });
 });
