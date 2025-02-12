@@ -1333,47 +1333,5 @@
         }
       ]
     }
-  },
-  "ifNull": {
-    "case-1": {
-      "expectedResults": [
-        {
-          "SKU": "almonds"
-        },
-        {
-          "SKU": "Not Specified"
-        }
-      ]
-    },
-    "case-2": {
-      "expectedResults": [
-        {
-          "SKU": "almonds"
-        },
-        {
-          "SKU": "Not Specified"
-        }
-      ]
-    },
-    "case-3": {
-      "expectedResults": [
-        {
-          "City": "Sasebo"
-        },
-        {
-          "City": "Not Specified"
-        }
-      ]
-    },
-    "case-4": {
-      "expectedResults": [
-        {
-          "SKU": "almonds"
-        },
-        {
-          "SKU": "Not Specified"
-        }
-      ]
-    }
   }
 }

@@ -307,7 +307,7 @@ describe('node-sql-parser upgrade tests', function () {
                 SELECT  id,
                         item,
                         orderDate as od1,
-                        date_add(orderDate,'hour',2,'America/New_York') as od2,
+                        date_add(orderDate,'hour',2,"America/New_York") as od2,
                         unset(_id)
                 FROM orders
                 WHERE id=2
@@ -345,7 +345,7 @@ describe('node-sql-parser upgrade tests', function () {
                 SELECT  id,
                         item,
                         orderDate as od1,
-                        date_subtract(orderDate,'hour',2,'America/New_York') as od2,
+                        date_subtract(orderDate,'hour',2,"America/New_York") as od2,
                         unset(_id)
                 FROM orders
                 WHERE id=2
