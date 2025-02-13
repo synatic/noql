@@ -107,6 +107,20 @@ Returns true when all elements in the array are true.
     FROM `customers`;
     ```
 
+### JOIN
+
+`JOIN(array expr, delimiter)`
+
+Joins all values into a string.
+
+???+ example "Example `JOIN` usage"
+
+    ```sql
+    SELECT id,
+        JOIN((SELECT Name FROM Rentals),',') AS RentalNames
+    FROM customers;
+    ```
+
 ### ANY_ELEMENT_TRUE
 
 `ANY_ELEMENT_TRUE(array expr)`
