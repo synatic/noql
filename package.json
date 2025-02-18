@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "4.2.7",
+  "version": "5.0.0",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -58,12 +58,12 @@
   },
   "homepage": "https://noql.synatic.dev",
   "engines": {
-    "node": ">=16",
+    "node": ">=18",
     "npm": ">=8.0.0"
   },
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
-    "@synatic/schema-magic": "^1.2.2",
+    "@synatic/schema-magic": "^2.0.0",
     "@synatic/type-magic": "^1.0.0",
     "bson": "6.10.1",
     "check-types": "11.2.3",
