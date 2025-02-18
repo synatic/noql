@@ -6,6 +6,7 @@ const fs = require('fs/promises');
 const emptyResultsBugPipeline = require('./empty-results-pipeline.json');
 const isEqual = require('lodash/isEqual');
 const assert = require('node:assert');
+const {makeMongoQuery} = require('../../lib/make');
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -82,7 +83,7 @@ describe('bug-fixes', function () {
         //     const res = await queryResultTester({
         //         queryString: queryString,
         //         casePath: 'bugfix.current-date.case2',
-        //         mode: 'write',
+        //         mode,
         //     });
         //     const correctHcp = [
         //         {
@@ -386,7 +387,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.ntile.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: true,
             });
         });
@@ -1042,6 +1043,60 @@ describe('bug-fixes', function () {
                 unsetId: false,
             });
         });
+
+        it('should work on the example query 2 with invalid field', async () => {
+            const queryString = `
+                SELECT
+                    currentUser._id,
+                    currentUser.establishment,
+                    currentUser.access_all_child_establishments,
+                    establishments.*,
+                    child_establishments.*
+                FROM
+                    \`nfk-users|first\` currentUser
+                    LEFT JOIN (
+                        SELECT
+                            user_establishment.user,
+                            establishment._id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-establishments\` user_establishment
+                            LEFT JOIN \`nfk-user-county-establishments|first\` establishment ON user_establishment.establishment = TO_STRING(establishment._id)
+                        WHERE
+                            user_establishment.user = '66261fd83316a727b53610da'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.xxx ASC
+                    ) AS establishments ON establishments.user_establishment.user = TO_STRING(currentUser._id)
+                    LEFT JOIN (
+                        SELECT
+                            TO_STRING(establishment._id) as id,
+                            establishment.name,
+                            establishment.main_establishment,
+                            establishment.level
+                        FROM
+                            \`nfk-user-county-establishments\` establishment
+                        WHERE
+                            TO_STRING(establishment._id) = '662545865f01249a315ff1fd'
+                            OR establishment.main_establishment = '662545865f01249a315ff1fd'
+                        ORDER BY
+                            establishment.level ASC,
+                            establishment.xxx ASC
+                    ) AS child_establishments ON child_establishments.establishment.id = currentUser.establishment
+                    OR child_establishments.establishment.main_establishment = currentUser.establishment
+                WHERE
+                    TO_STRING(currentUser._id) = '66261fd83316a727b53610da'
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimization.case1',
+                mode,
+                outputPipeline: false,
+                unsetId: false,
+            });
+        });
     });
     describe('empty-results', () => {
         it("should work with Avi's example", async () => {
@@ -1104,7 +1159,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'deeply-nested-divide.case1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
             });
         });
@@ -1134,7 +1189,7 @@ describe('bug-fixes', function () {
             const {pipeline} = await queryResultTester({
                 queryString: queryString,
                 casePath: 'and-or-nor.case-1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: true,
                 optimizeJoins: true,
@@ -2062,7 +2117,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nin.case-2',
-                mode: 'write',
+                mode,
                 outputPipeline: true,
                 skipDbQuery: true,
                 optimizeJoins: false,
@@ -2144,7 +2199,7 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nested-case.case-1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: true,
                 optimizeJoins: false,
@@ -2202,12 +2257,841 @@ describe('bug-fixes', function () {
             await queryResultTester({
                 queryString: queryString,
                 casePath: 'nested-case.case-2',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 skipDbQuery: false,
                 optimizeJoins: false,
                 unsetId: true,
                 schemas: {},
+            });
+        });
+    });
+
+    describe('invalid sort fields after project', () => {
+        it('should handle a simple sort', async () => {
+            const sql = `
+                SELECT *
+                FROM users
+                ORDER BY name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $sort: {
+                                name: -1,
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a complex project sort', async () => {
+            const sql = `
+                SELECT
+                    LOWER(name) as full_name
+                FROM users
+                ORDER BY full_name,first_name`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                full_name: {
+                                    $toLower: '$name',
+                                },
+                                first_name: 1,
+                            },
+                        },
+                        {
+                            $sort: {
+                                full_name: 1,
+                                first_name: 1,
+                            },
+                        },
+                        {
+                            $unset: ['first_name'],
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a complex project sort with alias', async () => {
+            const sql = `
+                SELECT
+                    LOWER(u.name) as full_name
+                FROM users u
+                ORDER BY full_name,u.first_name`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                u: '$$ROOT',
+                            },
+                        },
+                        {
+                            $project: {
+                                full_name: {
+                                    $toLower: '$u.name',
+                                },
+                                'u.first_name': 1,
+                            },
+                        },
+                        {
+                            $sort: {
+                                full_name: 1,
+                                'u.first_name': 1,
+                            },
+                        },
+                        {
+                            $unset: ['u.first_name'],
+                        },
+                        {
+                            $unset: ['u'],
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a complex project sort with alias no unset prefix', async () => {
+            const sql = `
+                SELECT
+                    LOWER(u.name) as "u.full_name"
+                FROM users u
+                ORDER BY u.full_name,u.first_name`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                u: '$$ROOT',
+                            },
+                        },
+                        {
+                            $project: {
+                                'u.full_name': {
+                                    $toLower: '$u.name',
+                                },
+                                'u.first_name': 1,
+                            },
+                        },
+                        {
+                            $sort: {
+                                'u.full_name': 1,
+                                'u.first_name': 1,
+                            },
+                        },
+                        {
+                            $unset: ['u.first_name'],
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection', async () => {
+            const sql = `
+                SELECT name, email
+                FROM users
+                ORDER BY name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                name: '$name',
+                                email: '$email',
+                            },
+                        },
+                        {
+                            $sort: {
+                                name: -1,
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection and non selected column', async () => {
+            const sql = `
+                SELECT email
+                FROM users
+                ORDER BY name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $sort: {
+                                name: -1,
+                            },
+                        },
+                        {
+                            $project: {
+                                email: '$email',
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection and root', async () => {
+            const sql = `
+                SELECT _.email
+                FROM users _
+                ORDER BY _.name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.name': -1,
+                            },
+                        },
+                        {
+                            $project: {
+                                email: '$_.email',
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection and root and alias', async () => {
+            const sql = `
+                SELECT _.email as t
+                FROM users _
+                ORDER BY _.name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.name': -1,
+                            },
+                        },
+                        {
+                            $project: {
+                                t: '$_.email',
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection and root unset', async () => {
+            const sql = `
+                SELECT _.email as "_.email"
+                FROM users _
+                ORDER BY _.name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.name': -1,
+                            },
+                        },
+                        {
+                            $project: {
+                                '_.email': '$_.email',
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a simple sort with projection and *', async () => {
+            const sql = `
+                SELECT _.*
+                FROM users _
+                ORDER BY _.name desc`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.name': -1,
+                            },
+                        },
+                        {
+                            $project: {
+                                _: '$_',
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should handle a function in sort', async () => {
+            console.warn(
+                'should handle a function in sort: ORDER BY LOWER(name)`'
+            );
+            // todo this needs to be catered for:
+
+            // const sql = `
+            //     SELECT
+            //         name
+            //     FROM test_names
+            //     ORDER BY LOWER(name)`;
+        });
+
+        it('should sort after project with subquery', async () => {
+            const sql = `
+                select "_"."AgentFullName" as "c122",
+                    "_"."CarrierName" as "c134",
+                    "_"."DateCreated" as "c153",
+                    "_"."HolderName" as "c179"
+                from
+                (
+                    select "AgentFullName",
+                    "CarrierName",
+                    "DateCreated",
+                    "HolderName"
+                from "test_table") _
+
+                order by "_"."AgentFullName",
+                    "_"."HolderName",
+                    "_"."CarrierName"`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                AgentFullName: '$AgentFullName',
+                                CarrierName: '$CarrierName',
+                                DateCreated: '$DateCreated',
+                                HolderName: '$HolderName',
+                            },
+                        },
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.AgentFullName': 1,
+                                '_.HolderName': 1,
+                                '_.CarrierName': 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                c122: '$_.AgentFullName',
+                                c134: '$_.CarrierName',
+                                c153: '$_.DateCreated',
+                                c179: '$_.HolderName',
+                            },
+                        },
+                    ],
+                    collections: ['test_table'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should sort after project with subquery and sort', async () => {
+            const sql = `
+                select "_"."AgentFullName" as "c122",
+                       "_"."CarrierName" as "c134",
+                       "_"."DateCreated" as "c153",
+                       "_"."HolderName" as "c179"
+                from
+                    (
+                        select "AgentFullName",
+                               "CarrierName",
+                               "DateCreated",
+                               "HolderName"
+                        from "test_table" order by AgentFullName) _
+
+                order by "_"."AgentFullName",
+                         "_"."HolderName",
+                         "_"."CarrierName"`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                AgentFullName: '$AgentFullName',
+                                CarrierName: '$CarrierName',
+                                DateCreated: '$DateCreated',
+                                HolderName: '$HolderName',
+                            },
+                        },
+                        {
+                            $sort: {
+                                AgentFullName: 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                _: '$$ROOT',
+                            },
+                        },
+                        {
+                            $sort: {
+                                '_.AgentFullName': 1,
+                                '_.HolderName': 1,
+                                '_.CarrierName': 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                c122: '$_.AgentFullName',
+                                c134: '$_.CarrierName',
+                                c153: '$_.DateCreated',
+                                c179: '$_.HolderName',
+                            },
+                        },
+                    ],
+                    collections: ['test_table'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should sort after project is correct with no alias', async () => {
+            const sql = `
+                select "AgentFullName" as "c122",
+                    "CarrierName" as "c134",
+                    "DateCreated" as "c153",
+                    "HolderName" as "c179"
+
+                from "test_table"
+
+                order by "AgentFullName",
+                    "HolderName",
+                    "CarrierName"`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $sort: {
+                                AgentFullName: 1,
+                                HolderName: 1,
+                                CarrierName: 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                c122: '$AgentFullName',
+                                c134: '$CarrierName',
+                                c153: '$DateCreated',
+                                c179: '$HolderName',
+                            },
+                        },
+                    ],
+                    collections: ['test_table'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('test that sort after project is correct with alias and function no alias', async () => {
+            const sql = `
+                SELECT
+                    LOWER(name) as full_name
+                FROM users
+                ORDER BY full_name`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                full_name: {
+                                    $toLower: '$name',
+                                },
+                            },
+                        },
+                        {
+                            $sort: {
+                                full_name: 1,
+                            },
+                        },
+                    ],
+                    collections: ['users'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('test that sort with full outer joing', async () => {
+            const sql = `
+                SELECT c.customerName as customerName,
+                       o.orderId as orderId,
+                       unset(_id)
+                FROM "foj-customers" c
+                         FULL OUTER JOIN "foj-orders" o
+                                         ON c.customerId = o.customerId
+                ORDER BY c.customerName ASC, o.orderId ASC
+            `;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                c: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'foj-orders',
+                                as: 'o',
+                                localField: 'c.customerId',
+                                foreignField: 'customerId',
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: '$o',
+                                preserveNullAndEmptyArrays: true,
+                            },
+                        },
+                        {
+                            $unionWith: {
+                                coll: 'foj-orders',
+                                pipeline: [
+                                    {
+                                        $lookup: {
+                                            from: 'foj-customers',
+                                            localField: 'customerId',
+                                            foreignField: 'customerId',
+                                            as: 'c',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: '$c',
+                                preserveNullAndEmptyArrays: true,
+                            },
+                        },
+                        {
+                            $project: {
+                                customerName: {
+                                    $ifNull: [
+                                        '$customerName',
+                                        '$c.customerName',
+                                    ],
+                                },
+                                orderId: {
+                                    $ifNull: ['$orderId', '$o.orderId'],
+                                },
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: {
+                                    customerName: '$customerName',
+                                    orderId: '$orderId',
+                                },
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                customerName: '$_id.customerName',
+                                orderId: '$_id.orderId',
+                            },
+                        },
+                        {
+                            $unset: ['_id'],
+                        },
+                        {
+                            $sort: {
+                                customerName: 1,
+                                orderId: 1,
+                            },
+                        },
+                    ],
+                    collections: ['foj-customers', 'foj-orders'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('test that sort with having join', async () => {
+            const sql = `
+                SELECT  c.id,
+                        sum(1) as cnt
+                FROM customers c
+                         INNER JOIN \`customer-notes\` cn on c.id=cn.id
+                WHERE cn.id>1 and c.id>2
+                GROUP BY c.id
+                HAVING cnt >0
+                ORDER BY c.id ASC
+            `;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $project: {
+                                c: '$$ROOT',
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'customer-notes',
+                                as: 'cn',
+                                localField: 'c.id',
+                                foreignField: 'id',
+                            },
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $gt: [
+                                        {
+                                            $size: '$cn',
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $match: {
+                                $and: [
+                                    {
+                                        'cn.id': {
+                                            $gt: 1,
+                                        },
+                                    },
+                                    {
+                                        'c.id': {
+                                            $gt: 2,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: {
+                                    id: '$c.id',
+                                },
+                                cnt: {
+                                    $sum: 1,
+                                },
+                            },
+                        },
+                        {
+                            $project: {
+                                id: '$_id.id',
+                                _id: 0,
+                                cnt: '$cnt',
+                            },
+                        },
+                        {
+                            $match: {
+                                cnt: {
+                                    $gt: 0,
+                                },
+                            },
+                        },
+                        {
+                            $sort: {
+                                id: 1,
+                            },
+                        },
+                    ],
+                    collections: ['customers', 'customer-notes'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('test that sort after project is correct with no alias', async () => {
+            const sql = `
+                select "AgentFullName" as "c122",
+                    "CarrierName" as "c134",
+                    "DateCreated" as "c153",
+                    "HolderName" as "c179"
+
+                from "test_table"
+
+                order by "AgentFullName",
+                    "HolderName",
+                    "CarrierName"`;
+
+            const aggr = makeMongoAggregate(sql);
+            assert.deepStrictEqual(
+                aggr,
+                {
+                    pipeline: [
+                        {
+                            $sort: {
+                                AgentFullName: 1,
+                                HolderName: 1,
+                                CarrierName: 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                c122: '$AgentFullName',
+                                c134: '$CarrierName',
+                                c153: '$DateCreated',
+                                c179: '$HolderName',
+                            },
+                        },
+                    ],
+                    collections: ['test_table'],
+                    type: 'aggregate',
+                },
+                'Invalid sort order'
+            );
+        });
+
+        it('should successfully call findLastIndex if pipeline is empty', async () => {
+            const sql = `
+                select records as \`$$ROOT\`
+from (select    RecordId,
+                AncestorInstanceId,
+                AncestorRecordId,
+                AncestorRecordNumber,
+                ChecklistStatusId,
+                CurrentDv,
+                InsertDv,
+                InstanceId,
+                IsInUseByOtherRecords,
+                ModuleId,
+                ProcessFlowId,
+                RecordNumber,
+                RecordStatus,
+                SQ,
+                CreatedByUserId,
+                LatestModifiedByUserId,
+                DeletedByUserId
+    from \`global-list-module-records-vbfr-std-glb-module-record\`
+    where RecordStatus in ('active')
+    and InstanceId in ('InstanceId' )
+    ) as records
+where 1=1
+order by CurrentDv asc , SQ asc`;
+            await queryResultTester({
+                queryString: sql,
+                casePath: 'invalid-sort-order.case-1',
+                mode,
+                outputPipeline: false,
+                expectZeroResults: false,
+                skipDbQuery: false,
+                optimizeJoins: false,
+                unsetId: true,
             });
         });
     });

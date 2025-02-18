@@ -2433,7 +2433,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-31',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     optimizeJoins: true,
                     unsetId: false,
@@ -2792,7 +2792,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-35',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     optimizeJoins: true,
                     unsetId: false,
@@ -2978,7 +2978,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-37',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     optimizeJoins: true,
                     unsetId: false,
@@ -3236,7 +3236,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'where.case-40',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     optimizeJoins: true,
                     unsetId: false,
@@ -3421,7 +3421,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'use-cases.case-1',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     skipDbQuery: true,
                     optimizeJoins: true,
@@ -3543,7 +3543,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'use-cases.case-2',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     skipDbQuery: true,
                     optimizeJoins: true,
@@ -3873,7 +3873,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'use-cases.case-2',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     skipDbQuery: true,
                     optimizeJoins: true,
@@ -4441,7 +4441,7 @@ describe('optimizations', function () {
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'use-cases.case-2',
-                    mode: 'write',
+                    mode,
                     outputPipeline,
                     skipDbQuery: true,
                     optimizeJoins: true,
