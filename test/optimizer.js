@@ -132,6 +132,54 @@ describe('Optimizer', function () {
             );
         });
 
+        it('should optimize a cast decimal', function () {
+            // used by powerbi for dropdowns
+            const sql = `SELECT "_"."_id"         AS "t1._id",
+                                "_"."policyid"    AS "t1.PolicyID",
+                                "_"."productname" AS "t1.ProductName"
+                         FROM   "dwh-data-views-policies" AS "_"
+                         WHERE  Cast("_"."startofweekdatecreatedyear" AS DECIMAL) = Cast(2025 AS DECIMAL) `;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: [
+                                    {
+                                        $convert: {
+                                            input: '$startofweekdatecreatedyear',
+                                            to: 'decimal',
+                                        },
+                                    },
+                                    {
+                                        $convert: {
+                                            input: 2025,
+                                            to: 'decimal',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            't1._id': '$_id',
+                            't1.PolicyID': '$policyid',
+                            't1.ProductName': '$productname',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
         it('should optimize a powerbi basic filter query', function () {
             // used by powerbi for dropdowns
             const sql = `select "rows"."ActivityType" as "ActivityType"

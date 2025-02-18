@@ -21,7 +21,7 @@ Using '$$ROOT' in sub select promotes the field to the root value of the array
 
     ```sql
     SELECT
-        (SELECT filmId AS '$$ROOT' FROM Rentals WHERE staffId=2) AS t
+        (SELECT filmId AS `$$ROOT` FROM Rentals WHERE staffId=2) AS t
     FROM
         `customers`
     ```
@@ -103,7 +103,7 @@ Returns true when all elements in the array are true.
 
     ```sql
     SELECT id,
-        (CASE WHEN ALL_ELEMENTS_TRUE(Rentals) THEN ‘Yes’ ELSE ‘No’ END) AS test
+        (CASE WHEN ALL_ELEMENTS_TRUE(Rentals) THEN 'Yes' ELSE 'No' END) AS test
     FROM `customers`;
     ```
 
@@ -131,7 +131,7 @@ Returns true when any element in the array is true.
 
     ```sql
     SELECT id,
-        (CASE WHEN ANY_ELEMENT_TRUE(Rentals) THEN ‘Yes’ ELSE ‘No’ END) AS test
+        (CASE WHEN ANY_ELEMENT_TRUE(Rentals) THEN 'Yes' ELSE 'No' END) AS test
     FROM `customers`;
     ```
 
@@ -187,7 +187,7 @@ Concatenate the provided list of arrays.
 
     ```sql
     SELECT id,
-        CONCAT_ARRAYS((SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`), ARRAY_RANGE(0,10,2)) AS test
+        CONCAT_ARRAYS((SELECT `Film Title` AS `$$ROOT` FROM `Rentals`), ARRAY_RANGE(0,10,2)) AS test
     FROM `customers`;
     ```
 
@@ -215,7 +215,7 @@ Returns the index of the value in the array.
 
     ```sql
     SELECT id,
-        INDEXOF_ARRAY((SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`),5) AS test
+        INDEXOF_ARRAY((SELECT `Film Title` AS `$$ROOT` FROM `Rentals`),5) AS test
     FROM `customers`;
     ```
 
@@ -229,7 +229,7 @@ Returns true when the field is an array.
 
     ```sql
     SELECT id,
-        (CASE WHEN IS_ARRAY(Rentals) THEN ‘Yes’ ELSE ‘No’ END) AS test
+        (CASE WHEN IS_ARRAY(Rentals) THEN 'Yes' ELSE 'No' END) AS test
     FROM `customers`;
     ```
 
@@ -285,7 +285,7 @@ Returns an array as the difference of the provided arrays.
 
     ```sql
     SELECT id,
-        SET_DIFFERENCE((SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
+        SET_DIFFERENCE((SELECT `Film Title` AS `$$ROOT` FROM `Rentals`), PARSE_JSON('[ 1,2,3,4]')) AS test
     FROM `customers`;
     ```
 
@@ -299,7 +299,7 @@ Returns true or false if the arrays are equal.
 
     ```sql
     SELECT id,
-        SET_EQUALS((SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
+        SET_EQUALS((SELECT `Film Title` AS `$$ROOT` FROM `Rentals`), PARSE_JSON('[ 1,2,3,4]')) AS test
     FROM `customers`;
     ```
 
@@ -313,7 +313,7 @@ Returns an array as the difference of the provided arrays.
 
     ```sql
     SELECT id,
-        SET_INTERSECTION((SELECT filmId AS ‘$$ROOT’ FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS
+        SET_INTERSECTION((SELECT filmId AS `$$ROOT` FROM `Rentals`), PARSE_JSON('[ 1,2,3,4]')) AS
     test FROM `customers`;
     ```
 
@@ -327,7 +327,7 @@ Returns whether an array is a subset of another.
 
     ```sql
     SELECT id,
-        SET_IS_SUBSET((SELECT filmId AS ‘$$ROOT’ FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
+        SET_IS_SUBSET((SELECT filmId AS `$$ROOT` FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
     FROM `customers`;
     ```
 
@@ -341,7 +341,7 @@ Returns an array as the union of the provided arrays.
 
     ```sql
     SELECT id,
-        SET_UNION((SELECT filmId AS ‘$$ROOT’ FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
+        SET_UNION((SELECT filmId AS `$$ROOT` FROM `Rentals`), PARSE_JSON(‘[ 1,2,3,4] ‘)) AS test
     FROM `customers`;
     ```
 
@@ -369,7 +369,7 @@ Sums the values in an array given an array field or sub-select and the field to 
 
     ```sql
     SELECT
-        SUM_ARRAY(`Rentals`, ‘staffId’) AS totalStaffIds
+        SUM_ARRAY(`Rentals`, 'staffId') AS totalStaffIds
     FROM `customers`;
     ```
 
@@ -396,7 +396,7 @@ Averages the values in an array given an array field or sub-select and the field
 
     ```sql
     SELECT
-        AVG_ARRAY(`Rentals`, ‘staffId’) AS avgStaffIds
+        AVG_ARRAY(`Rentals`, 'staffId') AS avgStaffIds
     FROM `customers`;
     ```
 
@@ -411,6 +411,6 @@ Transposes an array of input arrays so that the first element of the output arra
     ```sql
     SELECT id,
         ZIP_ARRAY(
-            (SELECT `Film Title` AS ‘$$ROOT’ FROM `Rentals`),ARRAY_RANGE(0,10,2)) AS test
+            (SELECT `Film Title` AS `$$ROOT` FROM `Rentals`),ARRAY_RANGE(0,10,2)) AS test
     FROM `customers`;
     ```

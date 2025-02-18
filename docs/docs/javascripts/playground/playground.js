@@ -43,32 +43,56 @@ playgroundButton.onclick = function () {
     let nodeQuery = '';
     let errorMessage = '';
 
+    let optimizedPipeline = null;
+
     document.getElementById('playground-error-container').style.display =
         'none';
     document.getElementById('playground-output-container').style.display =
         'none';
 
     let dbDialect = 'postgresql';
-    if (document.getElementById('dialect-mysql').checked) {
-        dbDialect = 'mysql';
-    }
     const inputSql = editor.session.getValue();
     try {
+        const unwindJoins = !!document.getElementById('unwind-joins').checked;
+        const optimizeJoins =
+            !!document.getElementById('optimize-joins').checked;
+
         if (document.getElementById('force-aggregate').checked) {
             noqlOutput = SqlToMongo.makeMongoAggregate(inputSql, {
                 database: dbDialect,
+                unwindJoins: unwindJoins,
+                optimizeJoins: optimizeJoins,
             });
         } else {
-            noqlOutput = SqlToMongo.parseSQL(inputSql, {database: dbDialect});
+            noqlOutput = SqlToMongo.parseSQL(inputSql, {
+                database: dbDialect,
+                unwindJoins: unwindJoins,
+                optimizeJoins: optimizeJoins,
+            });
         }
+
+        if (noqlOutput.type === 'aggregate' && noqlOutput.pipeline) {
+            optimizedPipeline = SqlToMongo.optimizeMongoAggregate(
+                noqlOutput.pipeline,
+                {}
+            );
+        }
+
         shellQuery = constructShellQuery(noqlOutput);
         nodeQuery = constructNodeQuery(noqlOutput);
+
         document.getElementById('playground-noql-result').textContent =
             JSON.stringify(noqlOutput, null, 4);
         document.getElementById('playground-mongo-result').textContent =
             shellQuery;
         document.getElementById('playground-node-result').textContent =
             nodeQuery;
+        document.getElementById(
+            'playground-noql-optimized-result'
+        ).textContent = optimizedPipeline
+            ? JSON.stringify(optimizedPipeline, null, 4)
+            : '';
+
         document.getElementById('playground-output-container').style.display =
             'block';
         document.getElementById('playground-output-container').scrollIntoView({
