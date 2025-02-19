@@ -16,15 +16,20 @@ Enter a SQL statement below to see NoQL's output, as well as the equivalent Mong
 
 <div>
     <div class="admonition example">
-        <p class="admonition-title">Choose your dialect:
-          <input type="radio" id="dialect-postgres" name="dialect" value="postgresql" checked="checked">
-          <label for="postgres">Postgresql</label>
-          <input type="radio" id="dialect-mysql" name="dialect" value="mysql">
-          <label for="mysql">mySQL</label>
-          &nbsp;|&nbsp;
-          <input type="checkbox" id="force-aggregate" name="force-aggregate">
-          <label for="force-aggregate">Alway create an aggregate</label>
-        </p>
+          <div style="display: flex; align-items: center; gap:1rem;margin-bottom: 0.5rem;margin-top:0.5rem">
+              <div style="display: flex; align-items: center; gap:0.25rem;">
+                <input type="checkbox" id="force-aggregate" name="force-aggregate">
+                <label for="force-aggregate">Always create an aggregate</label>
+              </div>
+              <div style="display: flex; align-items: center; gap:0.25rem;">
+                <input type="checkbox" id="unwind-joins" name="unwind-joins">
+                <label for="unwind-joins">Automatically Unwind Joins</label>
+              </div>
+              <div style="display: flex; align-items: center; gap:0.25rem;">
+                <input type="checkbox" id="optimize-joins" name="unwind-joins">
+                <label for="optimize-joins">Optimize Joins</label>
+              </div>
+          </div>
         <div class="playground-code-input" id="playground-sql-input">SELECT * FROM rockets</div>
     </div>
     <button class="md-button md-button--primary" id="submit-sql">Convert</button>
@@ -42,10 +47,12 @@ Enter a SQL statement below to see NoQL's output, as well as the equivalent Mong
             <input checked="checked" id="mongo-shell-output" name="__tabbed_5" type="radio">
             <input id="node-code-output" name="__tabbed_5" type="radio">
             <input id="noql-output" name="__tabbed_5" type="radio">
+            <input id="noql-optimized-output" name="__tabbed_5" type="radio">
             <div class="tabbed-labels tabbed-labels--linked">
               <label for="mongo-shell-output">Mongo Shell Query</label>
               <label for="node-code-output">Node.js Code</label>
               <label for="noql-output">NoQL Output</label>
+              <label for="noql-optimized-output">Optimized Pipeline</label>
             </div>
             <div class="tabbed-content">
                 <div class="tabbed-block">
@@ -61,6 +68,11 @@ Enter a SQL statement below to see NoQL's output, as well as the equivalent Mong
                 <div class="tabbed-block">
                     <div class="language-javascript highlight">
                         <pre><code class="playground-code-output language-javascript hljs" id="playground-noql-result"></code></pre>
+                    </div>
+                </div>
+                <div class="tabbed-block">
+                    <div class="language-javascript highlight">
+                        <pre><code class="playground-code-output language-javascript hljs" id="playground-noql-optimized-result"></code></pre>
                     </div>
                 </div>
             </div>

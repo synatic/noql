@@ -114,3 +114,28 @@ Creates an empty object.
         END AS addressStatus
     FROM `customers`;
     ```
+
+[//]: # (todo add back when flatten implemented)
+[//]: # (### FLATTEN)
+
+[//]: # ()
+[//]: # (`FLATTEN&#40;field, prefix&#41;`)
+
+[//]: # ()
+[//]: # (Flattens an object into a set of fields.)
+
+[//]: # ()
+[//]: # (???+ example "Example `FLATTEN` usage")
+
+[//]: # ()
+[//]: # (    ```sql)
+
+[//]: # (    SELECT)
+
+[//]: # (        id,)
+
+[//]: # (        FLATTEN&#40;`address`,'addr_'&#41;)
+
+[//]: # (    FROM `customers`;)
+
+[//]: # (    ```)
