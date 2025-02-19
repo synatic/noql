@@ -770,4 +770,30 @@ describe('node-sql-parser upgrade tests', function () {
             });
         });
     });
+
+    describe('flatten', () => {
+        it('should flatten a object but keep the nested object by default', async () => {
+            const queryString = `
+                SELECT flatten(Address,'Address_'), unset(Rentals)
+                FROM customers
+                WHERE id=1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case1',
+                mode: 'write',
+            });
+        });
+        it('should flatten a object and unset the nested object if specified', async () => {
+            const queryString = `
+                SELECT flatten(Address,'Address_',true), unset(Rentals)
+                FROM customers
+                WHERE id=1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case2',
+                mode: 'write',
+                outputPipeline: true,
+            });
+        });
+    });
 });

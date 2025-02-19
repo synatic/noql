@@ -313,5 +313,77 @@
         }
       ]
     }
+  },
+  "flatten": {
+    "case1": {
+      "expectedResults": [
+        {
+          "Address": {
+            "Address": "1913 Hanoi Way",
+            "City": "Sasebo",
+            "Country": "Japan",
+            "District": "Nagasaki"
+          },
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1,
+          "Address_Address": "1913 Hanoi Way",
+          "Address_City": "Sasebo",
+          "Address_Country": "Japan",
+          "Address_District": "Nagasaki"
+        }
+      ]
+    },
+    "case2": {
+      "pipeline": [
+        {
+          "$match": {
+            "id": {
+              "$eq": 1
+            }
+          }
+        },
+        {
+          "$unset": ["Address", "Rentals"]
+        },
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": [
+                "$$ROOT",
+                {
+                  "$arrayToObject": {
+                    "$map": {
+                      "input": {
+                        "$objectToArray": "$Address"
+                      },
+                      "as": "temp_flatten",
+                      "in": {
+                        "k": {
+                          "$concat": ["Address_", "$$temp_flatten.k"]
+                        },
+                        "v": "$$temp_flatten.v"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$unset": "_id"
+        }
+      ],
+      "expectedResults": [
+        {
+          "First Name": "MARY",
+          "Last Name": "SMITH",
+          "Phone": "28303384290",
+          "id": 1
+        }
+      ]
+    }
   }
 }

@@ -7,16 +7,16 @@ Specifying `$$ROOT` as a column alias sets the value to root object but only wor
 ???+ example "Example `$$ROOT` usage"
 
     ```sql
-    SELECT 
-        t AS `$$ROOT` 
-    FROM 
+    SELECT
+        t AS `$$ROOT`
+    FROM
         (
-        SELECT 
+        SELECT
             id
             ,`First Name`
             ,`Last Name`
-            ,LENGTHOFARRAY(Rentals,'id')  AS numRentals 
-        FROM customers) 
+            ,LENGTHOFARRAY(Rentals,'id')  AS numRentals
+        FROM customers)
     AS t
     ```
 
@@ -27,9 +27,9 @@ Only available in aggregates. Use a `SELECT` without specifying a table to creat
 ???+ example "Creating a new object"
 
     ```sql
-    SELECT 
-        (SELECT id,`First Name` AS Name) AS t 
-    FROM 
+    SELECT
+        (SELECT id,`First Name` AS Name) AS t
+    FROM
         customers
     ```
 
@@ -38,17 +38,15 @@ Create a new Object and assign to root
 ???+ example "Creating a new object and assigning to root"
 
     ```sql
-    SELECT 
+    SELECT
         (SELECT id,`First Name` AS Name) AS t1
         ,(SELECT id,`Last Name` AS LastName) AS t2
-        ,MERGE_OBJECTS(t1,t2) AS `$$ROOT`  
-    FROM 
+        ,MERGE_OBJECTS(t1,t2) AS `$$ROOT`
+    FROM
         customers
     ```
 
 ## Supported Object Functions
-
-
 
 ### PARSE_JSON
 
@@ -59,11 +57,12 @@ Parses the JSON string. Use in conjunction with `ARRAY_TO_OBJECT` to convert an 
 ???+ example "Example `PARSE_JSON` usage"
 
     ```sql
-    SELECT 
+    SELECT
         id,
         ARRAY_TO_OBJECT(PARSE_JSON('[{"k":"val","v":1}]')) AS test
     FROM `customers`;
     ```
+
 ### MERGE_OBJECTS
 
 `MERGE_OBJECTS(expr)`
@@ -71,7 +70,7 @@ Parses the JSON string. Use in conjunction with `ARRAY_TO_OBJECT` to convert an 
 ???+ example "Example `MERGE_OBJECTS` usage"
 
     ```sql
-    SELECT 
+    SELECT
         id,
         MERGE_OBJECTS(`Address`,PARSE_JSON('{"val":1}')) AS test
     FROM `customers`;
@@ -80,7 +79,7 @@ Parses the JSON string. Use in conjunction with `ARRAY_TO_OBJECT` to convert an 
 ???+ example "Example `MERGE_OBJECTS` usage with sub select"
 
     ```sql
-    SELECT 
+    SELECT
         id,
         MERGE_OBJECTS(`Address`,(SELECT 1 AS val)) AS test
     FROM `customers`;
@@ -115,27 +114,17 @@ Creates an empty object.
     FROM `customers`;
     ```
 
-[//]: # (todo add back when flatten implemented)
-[//]: # (### FLATTEN)
+### FLATTEN
 
-[//]: # ()
-[//]: # (`FLATTEN&#40;field, prefix&#41;`)
+`FLATTEN(field, prefix)`
 
-[//]: # ()
-[//]: # (Flattens an object into a set of fields.)
+Flattens an object into a set of fields.
 
-[//]: # ()
-[//]: # (???+ example "Example `FLATTEN` usage")
+???+ example "Example `FLATTEN` usage"
 
-[//]: # ()
-[//]: # (    ```sql)
-
-[//]: # (    SELECT)
-
-[//]: # (        id,)
-
-[//]: # (        FLATTEN&#40;`address`,'addr_'&#41;)
-
-[//]: # (    FROM `customers`;)
-
-[//]: # (    ```)
+```sql'
+   SELECT
+       id,
+       FLATTEN(`address`,'addr_')
+   FROM `customers`;
+```
