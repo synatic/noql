@@ -318,16 +318,13 @@
     "case1": {
       "expectedResults": [
         {
+          "First Name": "MARY",
           "Address": {
             "Address": "1913 Hanoi Way",
             "City": "Sasebo",
             "Country": "Japan",
             "District": "Nagasaki"
           },
-          "First Name": "MARY",
-          "Last Name": "SMITH",
-          "Phone": "28303384290",
-          "id": 1,
           "Address_Address": "1913 Hanoi Way",
           "Address_City": "Sasebo",
           "Address_Country": "Japan",
@@ -336,52 +333,85 @@
       ]
     },
     "case2": {
-      "pipeline": [
-        {
-          "$match": {
-            "id": {
-              "$eq": 1
-            }
-          }
-        },
-        {
-          "$unset": ["Address", "Rentals"]
-        },
-        {
-          "$replaceRoot": {
-            "newRoot": {
-              "$mergeObjects": [
-                "$$ROOT",
-                {
-                  "$arrayToObject": {
-                    "$map": {
-                      "input": {
-                        "$objectToArray": "$Address"
-                      },
-                      "as": "temp_flatten",
-                      "in": {
-                        "k": {
-                          "$concat": ["Address_", "$$temp_flatten.k"]
-                        },
-                        "v": "$$temp_flatten.v"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "$unset": "_id"
-        }
-      ],
       "expectedResults": [
         {
           "First Name": "MARY",
-          "Last Name": "SMITH",
-          "Phone": "28303384290",
-          "id": 1
+          "Address_Address": "1913 Hanoi Way",
+          "Address_City": "Sasebo",
+          "Address_Country": "Japan",
+          "Address_District": "Nagasaki"
+        }
+      ]
+    },
+    "case3": {
+      "expectedResults": [
+        {
+          "jsonObjValues": {
+            "string": "Testing",
+            "integer": 1,
+            "boolean": true,
+            "number": 1.5,
+            "nested": {
+              "string": "Testing",
+              "secondLevel": {
+                "string": "Testing"
+              }
+            },
+            "nestedStrArray": [
+              "A",
+              "b"
+            ],
+            "nestedObjArray": [
+              {
+                "string": "Testing",
+                "integer": 1
+              },
+              {
+                "string": "",
+                "integer": 0
+              },
+              {}
+            ],
+            "stringOrInt": "asd",
+            "nested_string": "Testing",
+            "nested_secondLevel": {
+              "string": "Testing"
+            }
+          },
+          "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
+        }
+      ]
+    },
+    "case4": {
+      "expectedResults": [
+        {
+          "jsonObjValues": {
+            "string": "Testing",
+            "integer": 1,
+            "boolean": true,
+            "number": 1.5,
+            "nestedStrArray": [
+              "A",
+              "b"
+            ],
+            "nestedObjArray": [
+              {
+                "string": "Testing",
+                "integer": 1
+              },
+              {
+                "string": "",
+                "integer": 0
+              },
+              {}
+            ],
+            "stringOrInt": "asd",
+            "nested_string": "Testing",
+            "nested_secondLevel": {
+              "string": "Testing"
+            }
+          },
+          "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
         }
       ]
     }
