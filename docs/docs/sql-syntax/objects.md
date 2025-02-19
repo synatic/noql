@@ -118,7 +118,7 @@ Creates an empty object.
 
 `FLATTEN(field, prefix)`
 
-Flattens an object into a set of fields.
+Flattens an object into a set of fields. You can optionally add a
 
 ???+ example "Example `FLATTEN` usage"
 
@@ -128,3 +128,14 @@ Flattens an object into a set of fields.
        FLATTEN(`address`,'addr_')
    FROM `customers`;
 ```
+
+???+ example "Example `FLATTEN` usage with unset"
+
+```sql'
+   SELECT
+       id,
+       FLATTEN(`address`,'addr_',true)
+   FROM `customers`;
+```
+
+> Will remove the `address` field from the output and will only have the `addr_` prefixed fields.
