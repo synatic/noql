@@ -770,4 +770,57 @@ describe('node-sql-parser upgrade tests', function () {
             });
         });
     });
+
+    describe('flatten', () => {
+        it('should flatten an object but keep the nested object by default', async () => {
+            const queryString = `
+                SELECT "First Name",
+                    "Address",
+                    flatten(Address,'Address_'),
+                    unset(Rentals)
+                FROM customers
+                WHERE id=1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case1',
+                mode,
+            });
+        });
+        it('should flatten an object and unset the nested object if specified', async () => {
+            const queryString = `
+                SELECT "First Name",
+                    "Address",
+                    flatten(Address,'Address_',true),
+                    unset(Rentals)
+                FROM customers
+                WHERE id=1`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case2',
+                mode,
+            });
+        });
+        it('should flatten an objects nested property', async () => {
+            const queryString = `
+                SELECT flatten(\`jsonObjValues.nested\`,'nested_'), unset(stringArray,numberArray,jsonArray,mixedArray,mixedPrimitiveArray,objOrArray,stringOrObject,commaTest,testCategory)
+                FROM "function-test-data"
+                WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case3',
+                mode,
+            });
+        });
+        it('should flatten an objects nested property with unset', async () => {
+            const queryString = `
+                SELECT flatten(\`jsonObjValues.nested\`,'nested_',true), unset(stringArray,numberArray,jsonArray,mixedArray,mixedPrimitiveArray,objOrArray,stringOrObject,commaTest,testCategory)
+                FROM "function-test-data"
+                WHERE testId='bugfix.schema-aware-queries.cast-json-array-to-varchar.case1'`;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'flatten.case4',
+                mode,
+            });
+        });
+    });
 });

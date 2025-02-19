@@ -236,10 +236,12 @@ export interface ColumnParseResult {
     exprToMerge: (string | {[key: string]: string | {$literal: string}})[];
     count: {$count: string}[];
     unset: {$unset: string[]};
+    set: {$set: any};
     countDistinct: string;
     groupByProject?: object;
     windowFields: SetWindowFields[];
     subQueryRootProjections: string[];
+    unsetAfterReplaceOrSet: {$unset: string[]};
 }
 
 export interface MongoQueryFunction {
