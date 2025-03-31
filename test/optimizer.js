@@ -132,6 +132,54 @@ describe('Optimizer', function () {
             );
         });
 
+        it('should optimize a cast decimal', function () {
+            // used by powerbi for dropdowns
+            const sql = `SELECT "_"."_id"         AS "t1._id",
+                                "_"."policyid"    AS "t1.PolicyID",
+                                "_"."productname" AS "t1.ProductName"
+                         FROM   "dwh-data-views-policies" AS "_"
+                         WHERE  Cast("_"."startofweekdatecreatedyear" AS DECIMAL) = Cast(2025 AS DECIMAL) `;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: [
+                                    {
+                                        $convert: {
+                                            input: '$startofweekdatecreatedyear',
+                                            to: 'decimal',
+                                        },
+                                    },
+                                    {
+                                        $convert: {
+                                            input: 2025,
+                                            to: 'decimal',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            't1._id': '$_id',
+                            't1.PolicyID': '$policyid',
+                            't1.ProductName': '$productname',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
         it('should optimize a powerbi basic filter query', function () {
             // used by powerbi for dropdowns
             const sql = `select "rows"."ActivityType" as "ActivityType"
@@ -1499,197 +1547,1079 @@ limit 501`;
                 optimized,
                 [
                     {
-                        "$match": {
-                            "$and": [
+                        $match: {
+                            $and: [
                                 {
-                                    "$and": [
+                                    $and: [
                                         {
-                                            "$and": [
+                                            $and: [
                                                 {
-                                                    "$and": [
+                                                    $and: [
                                                         {
-                                                            "$and": [
+                                                            $and: [
                                                                 {
-                                                                    "AccountType": {
-                                                                        "$eq": "EXPENSE"
-                                                                    }
+                                                                    AccountType:
+                                                                        {
+                                                                            $eq: 'EXPENSE',
+                                                                        },
                                                                 },
                                                                 {
-                                                                    "$expr": {
-                                                                        "$eq": [
+                                                                    $expr: {
+                                                                        $eq: [
                                                                             {
-                                                                                "$convert": {
-                                                                                    "input": "$Year",
-                                                                                    "to": "decimal"
-                                                                                }
+                                                                                $convert:
+                                                                                    {
+                                                                                        input: '$Year',
+                                                                                        to: 'decimal',
+                                                                                    },
                                                                             },
                                                                             {
-                                                                                "$convert": {
-                                                                                    "input": 2024,
-                                                                                    "to": "decimal"
-                                                                                }
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                }
-                                                            ]
+                                                                                $convert:
+                                                                                    {
+                                                                                        input: 2024,
+                                                                                        to: 'decimal',
+                                                                                    },
+                                                                            },
+                                                                        ],
+                                                                    },
+                                                                },
+                                                            ],
                                                         },
                                                         {
-                                                            "$nor": [
+                                                            $nor: [
                                                                 {
-                                                                    "$expr": {
-                                                                        "$eq": [
+                                                                    $expr: {
+                                                                        $eq: [
                                                                             {
-                                                                                "$add": [
+                                                                                $add: [
                                                                                     {
-                                                                                        "$indexOfCP": [
-                                                                                            {
-                                                                                                "$switch": {
-                                                                                                    "branches": [
+                                                                                        $indexOfCP:
+                                                                                            [
+                                                                                                {
+                                                                                                    $switch:
                                                                                                         {
-                                                                                                            "case": {
-                                                                                                                "$ne": [
-                                                                                                                    "$AccountName",
-                                                                                                                    null
-                                                                                                                ]
-                                                                                                            },
-                                                                                                            "then": "$AccountName"
-                                                                                                        }
-                                                                                                    ],
-                                                                                                    "default": {
-                                                                                                        "$literal": ""
-                                                                                                    }
-                                                                                                }
-                                                                                            },
-                                                                                            {
-                                                                                                "$literal": "Unrealized Currency"
-                                                                                            }
-                                                                                        ]
+                                                                                                            branches:
+                                                                                                                [
+                                                                                                                    {
+                                                                                                                        case: {
+                                                                                                                            $ne: [
+                                                                                                                                '$AccountName',
+                                                                                                                                null,
+                                                                                                                            ],
+                                                                                                                        },
+                                                                                                                        then: '$AccountName',
+                                                                                                                    },
+                                                                                                                ],
+                                                                                                            default:
+                                                                                                                {
+                                                                                                                    $literal:
+                                                                                                                        '',
+                                                                                                                },
+                                                                                                        },
+                                                                                                },
+                                                                                                {
+                                                                                                    $literal:
+                                                                                                        'Unrealized Currency',
+                                                                                                },
+                                                                                            ],
                                                                                     },
-                                                                                    1
-                                                                                ]
+                                                                                    1,
+                                                                                ],
                                                                             },
-                                                                            1
-                                                                        ]
-                                                                    }
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
+                                                                            1,
+                                                                        ],
+                                                                    },
+                                                                },
+                                                            ],
+                                                        },
+                                                    ],
                                                 },
                                                 {
-                                                    "$nor": [
+                                                    $nor: [
                                                         {
-                                                            "$expr": {
-                                                                "$eq": [
+                                                            $expr: {
+                                                                $eq: [
                                                                     {
-                                                                        "$add": [
+                                                                        $add: [
                                                                             {
-                                                                                "$indexOfCP": [
-                                                                                    {
-                                                                                        "$switch": {
-                                                                                            "branches": [
+                                                                                $indexOfCP:
+                                                                                    [
+                                                                                        {
+                                                                                            $switch:
                                                                                                 {
-                                                                                                    "case": {
-                                                                                                        "$ne": [
-                                                                                                            "$AccountName",
-                                                                                                            null
-                                                                                                        ]
-                                                                                                    },
-                                                                                                    "then": "$AccountName"
-                                                                                                }
-                                                                                            ],
-                                                                                            "default": {
-                                                                                                "$literal": ""
-                                                                                            }
-                                                                                        }
-                                                                                    },
-                                                                                    {
-                                                                                        "$literal": "EE: Leave Pay"
-                                                                                    }
-                                                                                ]
+                                                                                                    branches:
+                                                                                                        [
+                                                                                                            {
+                                                                                                                case: {
+                                                                                                                    $ne: [
+                                                                                                                        '$AccountName',
+                                                                                                                        null,
+                                                                                                                    ],
+                                                                                                                },
+                                                                                                                then: '$AccountName',
+                                                                                                            },
+                                                                                                        ],
+                                                                                                    default:
+                                                                                                        {
+                                                                                                            $literal:
+                                                                                                                '',
+                                                                                                        },
+                                                                                                },
+                                                                                        },
+                                                                                        {
+                                                                                            $literal:
+                                                                                                'EE: Leave Pay',
+                                                                                        },
+                                                                                    ],
                                                                             },
-                                                                            1
-                                                                        ]
+                                                                            1,
+                                                                        ],
                                                                     },
-                                                                    1
-                                                                ]
-                                                            }
-                                                        }
-                                                    ]
-                                                }
-                                            ]
+                                                                    1,
+                                                                ],
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            ],
                                         },
                                         {
-                                            "$nor": [
+                                            $nor: [
                                                 {
-                                                    "$expr": {
-                                                        "$eq": [
+                                                    $expr: {
+                                                        $eq: [
                                                             {
-                                                                "$add": [
+                                                                $add: [
                                                                     {
-                                                                        "$indexOfCP": [
-                                                                            {
-                                                                                "$switch": {
-                                                                                    "branches": [
+                                                                        $indexOfCP:
+                                                                            [
+                                                                                {
+                                                                                    $switch:
                                                                                         {
-                                                                                            "case": {
-                                                                                                "$ne": [
-                                                                                                    "$AccountName",
-                                                                                                    null
-                                                                                                ]
-                                                                                            },
-                                                                                            "then": "$AccountName"
-                                                                                        }
-                                                                                    ],
-                                                                                    "default": {
-                                                                                        "$literal": ""
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                "$literal": "Inter-company"
-                                                                            }
-                                                                        ]
+                                                                                            branches:
+                                                                                                [
+                                                                                                    {
+                                                                                                        case: {
+                                                                                                            $ne: [
+                                                                                                                '$AccountName',
+                                                                                                                null,
+                                                                                                            ],
+                                                                                                        },
+                                                                                                        then: '$AccountName',
+                                                                                                    },
+                                                                                                ],
+                                                                                            default:
+                                                                                                {
+                                                                                                    $literal:
+                                                                                                        '',
+                                                                                                },
+                                                                                        },
+                                                                                },
+                                                                                {
+                                                                                    $literal:
+                                                                                        'Inter-company',
+                                                                                },
+                                                                            ],
                                                                     },
-                                                                    1
-                                                                ]
+                                                                    1,
+                                                                ],
                                                             },
-                                                            1
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    ]
+                                                            1,
+                                                        ],
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    ],
                                 },
                                 {
-                                    "Year": {
-                                        "$gte": 2022
-                                    }
-                                }
-                            ]
-                        }
+                                    Year: {
+                                        $gte: 2022,
+                                    },
+                                },
+                            ],
+                        },
                     },
                     {
-                        "$group": {
-                            "_id": {},
-                            "a0": {
-                                "$sum": {
-                                    "$convert": {
-                                        "input": "$ValueUSD",
-                                        "to": "decimal"
-                                    }
-                                }
-                            }
-                        }
+                        $group: {
+                            _id: {},
+                            a0: {
+                                $sum: {
+                                    $convert: {
+                                        input: '$ValueUSD',
+                                        to: 'decimal',
+                                    },
+                                },
+                            },
+                        },
                     },
                     {
-                        "$project": {
-                            "_id": 0,
-                            "a0": "$a0"
-                        }
-                    }
+                        $project: {
+                            _id: 0,
+                            a0: '$a0',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should optimize aggregates recursively', function () {
+            const sql = `
+                select t2.name from table1 t1 inner join (select _table2.id2 from (
+                                                                                      select "id2","val"
+                                                                                      from "Table2" "_Table"
+                                                                                  ) _table2 where _table2.val>3) t2 on t1.id1=t2.id2`;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $project: {
+                            t1: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'Table2',
+                            as: 't2',
+                            let: {
+                                t1_id1: '$t1.id1',
+                            },
+                            pipeline: [
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                        val: '$val',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        val: {
+                                            $gt: 3,
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$$t1_id1', '$id2'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$t2',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            name: '$t2.name',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should optimize with simple join1', function () {
+            const sql = `
+                select t2.name from (select * from table1 where x=1) t1 inner join (select _table2.id2 from (
+                                                                                      select "id2","val"
+                                                                                      from "Table2" "_Table"
+                                                                                  ) _table2 where _table2.val>3) t2 on t1.id1=t2.id2`;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            x: {
+                                $eq: 1,
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            t1: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'Table2',
+                            as: 't2',
+                            let: {
+                                t1_id1: '$t1.id1',
+                            },
+                            pipeline: [
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                        val: '$val',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        val: {
+                                            $gt: 3,
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$$t1_id1', '$id2'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$t2',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            name: '$t2.name',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should optimize where at end', function () {
+            const sql = `
+                select t2.name from table1 t1 inner join (select _table2.id2 from (
+        select "id2","val"
+    from "Table2" "_Table"
+) _table2 where _table2.val>3) t2 on t1.id1=t2.id2 where t1.val2>100 and to_int(t1.val2)<200`;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            $and: [
+                                {
+                                    val2: {
+                                        $gt: 100,
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $lt: [
+                                            {
+                                                $toInt: '$val2',
+                                            },
+                                            200,
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $project: {
+                            t1: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'Table2',
+                            as: 't2',
+                            let: {
+                                t1_id1: '$t1.id1',
+                            },
+                            pipeline: [
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                        val: '$val',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        val: {
+                                            $gt: 3,
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        id2: '$id2',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$$t1_id1', '$id2'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$t2',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            name: '$t2.name',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should optimize where at end 2', function () {
+            const sql = `
+                select t2.name from table1 t1 inner join "Table2" t2 on t1.id1=t2.id2 where t1.val2>100 and to_int(t1.val2)<200`;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            $and: [
+                                {
+                                    val2: {
+                                        $gt: 100,
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $lt: [
+                                            {
+                                                $toInt: '$val2',
+                                            },
+                                            200,
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $project: {
+                            t1: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'Table2',
+                            as: 't2',
+                            localField: 't1.id1',
+                            foreignField: 'id2',
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$t2',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            name: '$t2.name',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should not optimize when cross table', function () {
+            const sql = `
+                select t2.name from table1 t1 inner join "Table2" t2 on t1.id1=t2.id2 where t1.val2>100 and to_int(t2.val2)<200`;
+            const aggr = SQLParser.parseSQL(sql);
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(
+                aggr.pipeline,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $project: {
+                            t1: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'Table2',
+                            as: 't2',
+                            localField: 't1.id1',
+                            foreignField: 'id2',
+                        },
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $gt: [
+                                    {
+                                        $size: '$t2',
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $match: {
+                            $and: [
+                                {
+                                    't1.val2': {
+                                        $gt: 100,
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $lt: [
+                                            {
+                                                $toInt: '$t2.val2',
+                                            },
+                                            200,
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $project: {
+                            name: '$t2.name',
+                        },
+                    },
+                ],
+                'did not optimize'
+            );
+        });
+
+        it('should optimize when match isnt at end in lookup', function () {
+            const pipeline = [
+                {
+                    $project: {
+                        cust: '$$ROOT',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'buffer664390eeefc55bc633d3189b',
+                        as: 'empsCsr',
+                        let: {},
+                        pipeline: [
+                            {
+                                $project: {
+                                    customer: '$$ROOT',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'buffer664b503510da713033caa13e',
+                                    as: 'empCsr',
+                                    let: {},
+                                    pipeline: [
+                                        {
+                                            $match: {
+                                                $expr: {
+                                                    $eq: [
+                                                        '$Id',
+                                                        '0056g000003H71UAAS',
+                                                    ],
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                            {
+                                $set: {
+                                    empCsr: {
+                                        $first: '$empCsr',
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    empCsr: {
+                                        $ne: null,
+                                    },
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'buffer66420ac72c5748d51acd2808',
+                                    as: 'certiAgents',
+                                    localField: 'empCsr.Id',
+                                    foreignField: 'Id',
+                                },
+                            },
+                            {
+                                $set: {
+                                    certiAgents: {
+                                        $first: '$certiAgents',
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    certiAgents: {
+                                        $ne: null,
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    'customer.Id': {
+                                        $eq: '0016g00000RwgtpAAB',
+                                    },
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: {
+                                        Id: '$empCsr.Id',
+                                        CUST: '$cust.Id',
+                                        userId: '$certiAgents.userId',
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    Id: '$_id.Id',
+                                    CUST: '$_id.CUST',
+                                    userId: '$_id.userId',
+                                    _id: 0,
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$Id', '0056g000003H71UAAS'],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'buffer664390eeefc55bc633d3189b',
+                        as: 'empsProd',
+                        let: {},
+                        pipeline: [
+                            {
+                                $project: {
+                                    customer: '$$ROOT',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'buffer664b503510da713033caa13e',
+                                    as: 'empProd',
+                                    let: {},
+                                    pipeline: [
+                                        {
+                                            $match: {
+                                                $expr: {
+                                                    $eq: [
+                                                        '$Id',
+                                                        '0056g000005UjGgAAK',
+                                                    ],
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                            {
+                                $set: {
+                                    empProd: {
+                                        $first: '$empProd',
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    empProd: {
+                                        $ne: null,
+                                    },
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'buffer66420ac72c5748d51acd2808',
+                                    as: 'certiAgents',
+                                    localField: 'empProd.Id',
+                                    foreignField: 'Id',
+                                },
+                            },
+                            {
+                                $set: {
+                                    certiAgents: {
+                                        $first: '$certiAgents',
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    certiAgents: {
+                                        $ne: null,
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    'customer.Id': {
+                                        $eq: '0016g00000RwgtpAAB',
+                                    },
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: {
+                                        Id: '$empProd.Id',
+                                        CUST: '$cust.Id',
+                                        userId: '$certiAgents.userId',
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    Id: '$_id.Id',
+                                    CUST: '$_id.CUST',
+                                    userId: '$_id.userId',
+                                    _id: 0,
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$Id', '0056g000005UjGgAAK'],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
+                    $match: {
+                        'cust.Id': {
+                            $eq: '0016g00000RwgtpAAB',
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        agentIds: {
+                            $concatArrays: [
+                                '$empsCsr.userId',
+                                '$empsProd.userId',
+                            ],
+                        },
+                    },
+                },
+                {
+                    $limit: 1,
+                },
+            ];
+            // console.log(JSON.stringify(aggr.pipeline, null, 4));
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $match: {
+                            Id: {
+                                $eq: '0016g00000RwgtpAAB',
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            cust: '$$ROOT',
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'buffer664390eeefc55bc633d3189b',
+                            as: 'empsCsr',
+                            let: {},
+                            pipeline: [
+                                {
+                                    $match: {
+                                        Id: {
+                                            $eq: '0016g00000RwgtpAAB',
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        customer: '$$ROOT',
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: 'buffer664b503510da713033caa13e',
+                                        as: 'empCsr',
+                                        let: {},
+                                        pipeline: [
+                                            {
+                                                $match: {
+                                                    $expr: {
+                                                        $eq: [
+                                                            '$Id',
+                                                            '0056g000003H71UAAS',
+                                                        ],
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                {
+                                    $set: {
+                                        empCsr: {
+                                            $first: '$empCsr',
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        empCsr: {
+                                            $ne: null,
+                                        },
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: 'buffer66420ac72c5748d51acd2808',
+                                        as: 'certiAgents',
+                                        localField: 'empCsr.Id',
+                                        foreignField: 'Id',
+                                    },
+                                },
+                                {
+                                    $set: {
+                                        certiAgents: {
+                                            $first: '$certiAgents',
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        certiAgents: {
+                                            $ne: null,
+                                        },
+                                    },
+                                },
+                                {
+                                    $group: {
+                                        _id: {
+                                            Id: '$empCsr.Id',
+                                            CUST: '$cust.Id',
+                                            userId: '$certiAgents.userId',
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        Id: '$_id.Id',
+                                        CUST: '$_id.CUST',
+                                        userId: '$_id.userId',
+                                        _id: 0,
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$Id', '0056g000003H71UAAS'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: 'buffer664390eeefc55bc633d3189b',
+                            as: 'empsProd',
+                            let: {},
+                            pipeline: [
+                                {
+                                    $match: {
+                                        Id: {
+                                            $eq: '0016g00000RwgtpAAB',
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        customer: '$$ROOT',
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: 'buffer664b503510da713033caa13e',
+                                        as: 'empProd',
+                                        let: {},
+                                        pipeline: [
+                                            {
+                                                $match: {
+                                                    $expr: {
+                                                        $eq: [
+                                                            '$Id',
+                                                            '0056g000005UjGgAAK',
+                                                        ],
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                {
+                                    $set: {
+                                        empProd: {
+                                            $first: '$empProd',
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        empProd: {
+                                            $ne: null,
+                                        },
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: 'buffer66420ac72c5748d51acd2808',
+                                        as: 'certiAgents',
+                                        localField: 'empProd.Id',
+                                        foreignField: 'Id',
+                                    },
+                                },
+                                {
+                                    $set: {
+                                        certiAgents: {
+                                            $first: '$certiAgents',
+                                        },
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        certiAgents: {
+                                            $ne: null,
+                                        },
+                                    },
+                                },
+                                {
+                                    $group: {
+                                        _id: {
+                                            Id: '$empProd.Id',
+                                            CUST: '$cust.Id',
+                                            userId: '$certiAgents.userId',
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        Id: '$_id.Id',
+                                        CUST: '$_id.CUST',
+                                        userId: '$_id.userId',
+                                        _id: 0,
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ['$Id', '0056g000005UjGgAAK'],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        $project: {
+                            agentIds: {
+                                $concatArrays: [
+                                    '$empsCsr.userId',
+                                    '$empsProd.userId',
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $limit: 1,
+                    },
                 ],
                 'did not optimize'
             );

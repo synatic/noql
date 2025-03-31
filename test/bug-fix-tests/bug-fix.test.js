@@ -2059,6 +2059,7 @@ describe('bug-fixes', function () {
             );
         });
     });
+
     describe('$nin', () => {
         it('should generate and execute a valid query', async () => {
             // noinspection SqlNoDataSourceInspection

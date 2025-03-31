@@ -313,5 +313,107 @@
         }
       ]
     }
+  },
+  "flatten": {
+    "case1": {
+      "expectedResults": [
+        {
+          "First Name": "MARY",
+          "Address": {
+            "Address": "1913 Hanoi Way",
+            "City": "Sasebo",
+            "Country": "Japan",
+            "District": "Nagasaki"
+          },
+          "Address_Address": "1913 Hanoi Way",
+          "Address_City": "Sasebo",
+          "Address_Country": "Japan",
+          "Address_District": "Nagasaki"
+        }
+      ]
+    },
+    "case2": {
+      "expectedResults": [
+        {
+          "First Name": "MARY",
+          "Address_Address": "1913 Hanoi Way",
+          "Address_City": "Sasebo",
+          "Address_Country": "Japan",
+          "Address_District": "Nagasaki"
+        }
+      ]
+    },
+    "case3": {
+      "expectedResults": [
+        {
+          "jsonObjValues": {
+            "string": "Testing",
+            "integer": 1,
+            "boolean": true,
+            "number": 1.5,
+            "nested": {
+              "string": "Testing",
+              "secondLevel": {
+                "string": "Testing"
+              }
+            },
+            "nestedStrArray": [
+              "A",
+              "b"
+            ],
+            "nestedObjArray": [
+              {
+                "string": "Testing",
+                "integer": 1
+              },
+              {
+                "string": "",
+                "integer": 0
+              },
+              {}
+            ],
+            "stringOrInt": "asd",
+            "nested_string": "Testing",
+            "nested_secondLevel": {
+              "string": "Testing"
+            }
+          },
+          "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
+        }
+      ]
+    },
+    "case4": {
+      "expectedResults": [
+        {
+          "jsonObjValues": {
+            "string": "Testing",
+            "integer": 1,
+            "boolean": true,
+            "number": 1.5,
+            "nestedStrArray": [
+              "A",
+              "b"
+            ],
+            "nestedObjArray": [
+              {
+                "string": "Testing",
+                "integer": 1
+              },
+              {
+                "string": "",
+                "integer": 0
+              },
+              {}
+            ],
+            "stringOrInt": "asd",
+            "nested_string": "Testing",
+            "nested_secondLevel": {
+              "string": "Testing"
+            }
+          },
+          "testId": "bugfix.schema-aware-queries.cast-json-array-to-varchar.case1"
+        }
+      ]
+    }
   }
 }

@@ -115,7 +115,7 @@ Returns the distinct count of a specific field in the given group.
 
     ```sql
     SELECT 
-        COUNT(DISTINCT `Address.Town`) AS countVal
+        COUNT(DISTINCT "Address.Town") AS countVal
         ,`Address.City` AS City
     FROM
         `customers`
