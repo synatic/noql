@@ -1,6 +1,6 @@
 {
   "name": "@synatic/noql",
-  "version": "4.2.10",
+  "version": "5.0.1",
   "description": "Convert SQL statements to mongo queries or aggregates",
   "main": "index.js",
   "files": [
@@ -17,7 +17,7 @@
     "test": "mocha --reporter spec --check-leaks test/",
     "test-ci": "nyc --reporter text-summary mocha -- --reporter spec --check-leaks test/",
     "test-cov": "nyc --reporter lcov --reporter text mocha -- --reporter dot --check-leaks test/",
-    "update": "npm-check -u"
+    "update": "npx -y npm-check -u"
   },
   "repository": {
     "type": "git",
@@ -58,14 +58,14 @@
   },
   "homepage": "https://noql.synatic.dev",
   "engines": {
-    "node": ">=16",
-    "npm": ">=8.0.0"
+    "node": ">=18",
+    "npm": ">=10.0.0"
   },
   "dependencies": {
     "@synatic/json-magic": "^1.0.0",
-    "@synatic/schema-magic": "^1.2.2",
+    "@synatic/schema-magic": "^2.0.0",
     "@synatic/type-magic": "^1.0.0",
-    "bson": "6.10.1",
+    "bson": "6.10.3",
     "check-types": "11.2.3",
     "clone-deep": "4.0.1",
     "dayjs": "1.11.13",
@@ -95,7 +95,6 @@
     "moment": "^2.29.4",
     "mongodb": "^6.7.0",
     "mongodb-language-model": "^2.3.0",
-    "npm-check": "^6.0.1",
     "nyc": "^17.0.0",
     "pg": "^8.11.3",
     "prettier": "^3.3.2",
