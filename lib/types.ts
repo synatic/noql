@@ -192,6 +192,8 @@ export interface ParserOptions {
     schemas?: Schemas;
     /** If true, will optimize the join for better performance */
     optimizeJoins?: boolean;
+    /** No default limit, default is 100. If false or undefined, the default limit will be used */
+    noDefaultLimit?: boolean;
 }
 
 export interface NoqlContext extends ParserOptions {
