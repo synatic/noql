@@ -1,0 +1,72 @@
+[
+  {
+    "ParentId": "offer_001",
+    "Field": "Credit_Status__c",
+    "OldValue": "Pending",
+    "NewValue": "Approved",
+    "CreatedDate": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "ParentId": "offer_001",
+    "Field": "Credit_Status__c",
+    "OldValue": "Approved",
+    "NewValue": "Active",
+    "CreatedDate": "2024-01-16T14:30:00.000Z"
+  },
+  {
+    "ParentId": "offer_002",
+    "Field": "Credit_Status__c",
+    "OldValue": "Pending",
+    "NewValue": "Rejected",
+    "CreatedDate": "2024-01-15T11:15:00.000Z"
+  },
+  {
+    "ParentId": "offer_001",
+    "Field": "Credit_Status__c",
+    "OldValue": "Active",
+    "NewValue": "Suspended",
+    "CreatedDate": "2024-01-17T09:45:00.000Z"
+  },
+  {
+    "ParentId": "offer_003",
+    "Field": "Credit_Status__c",
+    "OldValue": "Pending",
+    "NewValue": "Approved",
+    "CreatedDate": "2024-01-16T16:20:00.000Z"
+  },
+  {
+    "ParentId": "offer_002",
+    "Field": "Credit_Status__c",
+    "OldValue": "Rejected",
+    "NewValue": "Under Review",
+    "CreatedDate": "2024-01-18T13:10:00.000Z"
+  },
+  {
+    "ParentId": "offer_003",
+    "Field": "Credit_Status__c",
+    "OldValue": "Approved",
+    "NewValue": "Active",
+    "CreatedDate": "2024-01-17T11:30:00.000Z"
+  },
+  {
+    "ParentId": "offer_001",
+    "Field": "Amount__c",
+    "OldValue": "1000",
+    "NewValue": "1200",
+    "CreatedDate": "2024-01-15T12:00:00.000Z"
+  },
+  {
+    "ParentId": "offer_004",
+    "Field": "Credit_Status__c",
+    "OldValue": "Pending",
+    "NewValue": "Approved",
+    "CreatedDate": "2024-01-19T08:15:00.000Z"
+  },
+  {
+    "ParentId": "offer_004",
+    "Field": "Credit_Status__c",
+    "OldValue": "Approved",
+    "NewValue": "Active",
+    "CreatedDate": "2024-01-20T10:45:00.000Z"
+  }
+]
