@@ -53,8 +53,3 @@ jobs:
 
       - name: Run NPM pack
         run: npm pack
-
-  docs:
-    name: Build and Publish Docs
-    needs: build
-    uses: ./.github/workflows/ci-docs.yml
