@@ -2,11 +2,11 @@ const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const {getAllSchemas} = require('../utils/get-all-schemas.js');
 const {parseSQLtoAST, makeMongoAggregate} = require('../../lib/SQLParser');
-const fs = require('fs/promises');
 const emptyResultsBugPipeline = require('./empty-results-pipeline.json');
 const isEqual = require('lodash/isEqual');
 const assert = require('node:assert');
-const {makeMongoQuery} = require('../../lib/make');
+const {dbName} = require('../utils/mongo-client.js');
+
 describe('bug-fixes', function () {
     this.timeout(90000);
     const fileName = 'bug-fix';
@@ -287,7 +287,107 @@ describe('bug-fixes', function () {
                 casePath: 'bugfix.row-number.case2',
             });
         });
+        it('should be able to work in the order that core does it', async () => {
+            const queryString = `SELECT "ParentId", "Field", "OldValue", "NewValue", "CreatedDate", ROW_NUMBER() OVER (PARTITION BY "ParentId" ORDER BY "CreatedDate" ASC) AS "RowNum" FROM "flat-offer-history" WHERE "Field" = 'Credit_Status__c'`;
+            const options = {
+                asStream: true,
+                forceAggregate: true,
+                allowDiskUse: true,
+                preferSecondary: true,
+                unwindJoins: undefined,
+                optimizeJoins: undefined,
+                skip: undefined,
+                limit: undefined,
+                bufferMappings: [
+                    {
+                        from: 'categories',
+                        to: '68ff3fb54b8033b274b9360a',
+                    },
+                    {
+                        from: 'customers',
+                        to: '68ff3fb54b8033b274b9360d',
+                    },
+                    {
+                        from: 'flat-offer-history',
+                        to: '68ff3fb54b8033b274b93865',
+                    },
+                    {
+                        from: 'inventory',
+                        to: '68ff3fb54b8033b274b93866',
+                    },
+                    {
+                        from: 'metrics',
+                        to: '68ff3fb54b8033b274b9386c',
+                    },
+                    {
+                        from: 'orders',
+                        to: '68ff3fb94b8033b274b9386d',
+                    },
+                    {
+                        from: 'products',
+                        to: '68ff3fba4b8033b274babf0c',
+                    },
+                    {
+                        from: 'structure',
+                        to: '68ff3fba4b8033b274babf0f',
+                    },
+                ],
+                unsetId: true,
+                sql: 'SELECT "ParentId", "Field", "OldValue", "NewValue", "CreatedDate", ROW_NUMBER() OVER (PARTITION BY "ParentId" ORDER BY "CreatedDate" ASC) AS "RowNum" FROM "flat-offer-history" WHERE "Field" = \'Credit_Status__c\'',
+                optimizePipeline: undefined,
+                schemas: {
+                    'flat-offer-history': {
+                        type: 'object',
+                        properties: {
+                            _id: {
+                                type: 'string',
+                                stringLength: 2,
+                            },
+                            ParentId: {
+                                type: 'string',
+                                stringLength: 9,
+                            },
+                            Field: {
+                                type: 'string',
+                                stringLength: 16,
+                            },
+                            OldValue: {
+                                type: 'string',
+                                stringLength: 8,
+                            },
+                            NewValue: {
+                                type: 'string',
+                                stringLength: 12,
+                            },
+                            CreatedDate: {
+                                type: 'string',
+                                stringLength: 24,
+                            },
+                        },
+                    },
+                },
+                noDefaultLimit: true,
+            };
+            const parsedAST = parseSQLtoAST(queryString, options);
+            const parsedQuery = makeMongoAggregate(parsedAST, options);
+            const results = await mongoClient
+                .db(dbName)
+                .collection(parsedQuery.collections[0])
+                .aggregate(parsedQuery.pipeline)
+                .toArray();
+            assert(results.length === 9);
+            assert(results[0].RowNum === 1);
+            assert(results[1].RowNum === 2);
+            assert(results[2].RowNum === 3);
+            assert(results[3].RowNum === 1);
+            assert(results[4].RowNum === 2);
+            assert(results[5].RowNum === 1);
+            assert(results[6].RowNum === 2);
+            assert(results[7].RowNum === 1);
+            assert(results[8].RowNum === 2);
+        });
     });
+
     describe('ntile', () => {
         it.skip('Should correctly group the results', async () => {
             // https://www.postgresqltutorial.com/postgresql-window-function/postgresql-ntile-function/

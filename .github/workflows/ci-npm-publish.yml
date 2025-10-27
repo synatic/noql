@@ -3,6 +3,10 @@ name: "NPM Publish"
 on:
   release:
     types: [created]
+      
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build:
@@ -49,8 +53,7 @@ jobs:
 
       - name: Run NPM publish
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN_SYNATIC}}
+
   docs:
     name: Build and Publish Docs
     needs: publish-npm
