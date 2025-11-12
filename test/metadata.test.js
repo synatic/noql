@@ -161,9 +161,8 @@ describe('metadata', () => {
         it('should be able to do a replace root query', async () => {
             const queryString =
                 'select t as `$$ROOT` from (select id, `First Name` from customers limit 1) as t';
-            const {schema, results} = await getEstimatedSchemaAndResults(
-                queryString
-            );
+            const {schema, results} =
+                await getEstimatedSchemaAndResults(queryString);
             compareSchemaWithResults(schema, results);
         });
 
@@ -631,9 +630,8 @@ describe('metadata', () => {
         it('should return the first tables column when there are two columns with the same name', async () => {
             const queryString =
                 'select id from orders inner join `inventory` on sku=item limit 1';
-            const {schema, results} = await getEstimatedSchemaAndResults(
-                queryString
-            );
+            const {schema, results} =
+                await getEstimatedSchemaAndResults(queryString);
             compareSchemaWithResults(schema, results);
             assert.deepStrictEqual(schema.length, 2);
             const _idColumn = schema[1];

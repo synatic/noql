@@ -884,6 +884,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('unique', () => {
         it.skip('should get unique values', async () => {
             const queryString = `
@@ -2071,21 +2072,27 @@ describe('bug-fixes', function () {
                                 {
                                     $match: {
                                         $expr: {
-                                            $or: [
+                                            $and: [
                                                 {
-                                                    $eq: ['$CommPersType', 'A'],
+                                                    $ne: ['$CommAmt', 0],
                                                 },
                                                 {
-                                                    $eq: ['$CommPersType', 'P'],
+                                                    $or: [
+                                                        {
+                                                            $eq: [
+                                                                '$CommPersType',
+                                                                'A',
+                                                            ],
+                                                        },
+                                                        {
+                                                            $eq: [
+                                                                '$CommPersType',
+                                                                'P',
+                                                            ],
+                                                        },
+                                                    ],
                                                 },
                                             ],
-                                        },
-                                    },
-                                },
-                                {
-                                    $match: {
-                                        $expr: {
-                                            $ne: ['$CommAmt', 0],
                                         },
                                     },
                                 },
