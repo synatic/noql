@@ -274,18 +274,14 @@ describe('Optimizer', function () {
                         $match: {
                             $and: [
                                 {
-                                    $and: [
-                                        {
-                                            StartOfWeekYear: {
-                                                $in: [2024, 2023],
-                                            },
-                                        },
-                                        {
-                                            ActivityType: {
-                                                $eq: 'Learning Opportunity ',
-                                            },
-                                        },
-                                    ],
+                                    StartOfWeekYear: {
+                                        $in: [2024, 2023],
+                                    },
+                                },
+                                {
+                                    ActivityType: {
+                                        $eq: 'Learning Opportunity ',
+                                    },
                                 },
                                 {
                                     Status: {
@@ -359,14 +355,37 @@ describe('Optimizer', function () {
                         $match: {
                             $and: [
                                 {
-                                    $and: [
+                                    ActivityType: {
+                                        $eq: 'Learning Opportunity ',
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $eq: [
+                                            {
+                                                $convert: {
+                                                    input: '$StartOfWeekYear',
+                                                    to: 'decimal',
+                                                },
+                                            },
+                                            {
+                                                $convert: {
+                                                    input: 2024,
+                                                    to: 'decimal',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                {
+                                    Status: {
+                                        $eq: 'Complete',
+                                    },
+                                },
+                                {
+                                    $or: [
                                         {
                                             $and: [
-                                                {
-                                                    ActivityType: {
-                                                        $eq: 'Learning Opportunity ',
-                                                    },
-                                                },
                                                 {
                                                     $expr: {
                                                         $eq: [
@@ -385,75 +404,18 @@ describe('Optimizer', function () {
                                                         ],
                                                     },
                                                 },
-                                            ],
-                                        },
-                                        {
-                                            Status: {
-                                                $eq: 'Complete',
-                                            },
-                                        },
-                                    ],
-                                },
-                                {
-                                    $and: [
-                                        {
-                                            $or: [
-                                                {
-                                                    $and: [
-                                                        {
-                                                            $expr: {
-                                                                $eq: [
-                                                                    {
-                                                                        $convert:
-                                                                            {
-                                                                                input: '$StartOfWeekYear',
-                                                                                to: 'decimal',
-                                                                            },
-                                                                    },
-                                                                    {
-                                                                        $convert:
-                                                                            {
-                                                                                input: 2024,
-                                                                                to: 'decimal',
-                                                                            },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            $expr: {
-                                                                $eq: [
-                                                                    {
-                                                                        $convert:
-                                                                            {
-                                                                                input: '$StartOfWeekQuarter',
-                                                                                to: 'decimal',
-                                                                            },
-                                                                    },
-                                                                    {
-                                                                        $convert:
-                                                                            {
-                                                                                input: 3,
-                                                                                to: 'decimal',
-                                                                            },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
                                                 {
                                                     $expr: {
                                                         $eq: [
                                                             {
                                                                 $convert: {
-                                                                    input: '$StartOfWeekYear',
+                                                                    input: '$StartOfWeekQuarter',
                                                                     to: 'decimal',
                                                                 },
                                                             },
                                                             {
                                                                 $convert: {
-                                                                    input: 2024,
+                                                                    input: 3,
                                                                     to: 'decimal',
                                                                 },
                                                             },
@@ -467,13 +429,13 @@ describe('Optimizer', function () {
                                                 $eq: [
                                                     {
                                                         $convert: {
-                                                            input: '$StartOfWeekQuarter',
+                                                            input: '$StartOfWeekYear',
                                                             to: 'decimal',
                                                         },
                                                     },
                                                     {
                                                         $convert: {
-                                                            input: 4,
+                                                            input: 2024,
                                                             to: 'decimal',
                                                         },
                                                     },
@@ -481,6 +443,24 @@ describe('Optimizer', function () {
                                             },
                                         },
                                     ],
+                                },
+                                {
+                                    $expr: {
+                                        $eq: [
+                                            {
+                                                $convert: {
+                                                    input: '$StartOfWeekQuarter',
+                                                    to: 'decimal',
+                                                },
+                                            },
+                                            {
+                                                $convert: {
+                                                    input: 4,
+                                                    to: 'decimal',
+                                                },
+                                            },
+                                        ],
+                                    },
                                 },
                             ],
                         },
@@ -693,47 +673,43 @@ limit 101
                         $match: {
                             $and: [
                                 {
-                                    $and: [
-                                        {
-                                            StartOfWeekYear: {
-                                                $in: [2024, 2023],
-                                            },
-                                        },
-                                        {
-                                            $expr: {
-                                                $eq: [
-                                                    {
-                                                        $switch: {
-                                                            branches: [
-                                                                {
-                                                                    case: {
-                                                                        $eq: [
-                                                                            '$Last12Weeks',
-                                                                            null,
-                                                                        ],
-                                                                    },
-                                                                    then: null,
-                                                                },
-                                                                {
-                                                                    case: {
-                                                                        $eq: [
-                                                                            '$Last12Weeks',
-                                                                            true,
-                                                                        ],
-                                                                    },
-                                                                    then: 1,
-                                                                },
-                                                            ],
-                                                            default: {
-                                                                $literal: 0,
+                                    StartOfWeekYear: {
+                                        $in: [2024, 2023],
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $eq: [
+                                            {
+                                                $switch: {
+                                                    branches: [
+                                                        {
+                                                            case: {
+                                                                $eq: [
+                                                                    '$Last12Weeks',
+                                                                    null,
+                                                                ],
                                                             },
+                                                            then: null,
                                                         },
+                                                        {
+                                                            case: {
+                                                                $eq: [
+                                                                    '$Last12Weeks',
+                                                                    true,
+                                                                ],
+                                                            },
+                                                            then: 1,
+                                                        },
+                                                    ],
+                                                    default: {
+                                                        $literal: 0,
                                                     },
-                                                    1,
-                                                ],
+                                                },
                                             },
-                                        },
-                                    ],
+                                            1,
+                                        ],
+                                    },
                                 },
                                 {
                                     CreatedByUserFullName: {
@@ -875,18 +851,14 @@ limit 501`;
                         $match: {
                             $and: [
                                 {
-                                    $and: [
-                                        {
-                                            DateCreated: {
-                                                $lt: '2025-01-05 00:00:00',
-                                            },
-                                        },
-                                        {
-                                            DateCreated: {
-                                                $gte: '2024-07-05 00:00:00',
-                                            },
-                                        },
-                                    ],
+                                    DateCreated: {
+                                        $lt: '2025-01-05 00:00:00',
+                                    },
+                                },
+                                {
+                                    DateCreated: {
+                                        $gte: '2024-07-05 00:00:00',
+                                    },
                                 },
                                 {
                                     PolicyStatus: {
@@ -972,7 +944,6 @@ limit 501`;
                             c179: '$HolderName',
                         },
                     },
-
                     {
                         $limit: 501,
                     },
@@ -1550,185 +1521,163 @@ limit 501`;
                         $match: {
                             $and: [
                                 {
-                                    $and: [
-                                        {
-                                            $and: [
-                                                {
-                                                    $and: [
-                                                        {
-                                                            $and: [
-                                                                {
-                                                                    AccountType:
-                                                                        {
-                                                                            $eq: 'EXPENSE',
-                                                                        },
-                                                                },
-                                                                {
-                                                                    $expr: {
-                                                                        $eq: [
-                                                                            {
-                                                                                $convert:
-                                                                                    {
-                                                                                        input: '$Year',
-                                                                                        to: 'decimal',
-                                                                                    },
-                                                                            },
-                                                                            {
-                                                                                $convert:
-                                                                                    {
-                                                                                        input: 2024,
-                                                                                        to: 'decimal',
-                                                                                    },
-                                                                            },
-                                                                        ],
-                                                                    },
-                                                                },
-                                                            ],
-                                                        },
-                                                        {
-                                                            $nor: [
-                                                                {
-                                                                    $expr: {
-                                                                        $eq: [
-                                                                            {
-                                                                                $add: [
-                                                                                    {
-                                                                                        $indexOfCP:
-                                                                                            [
-                                                                                                {
-                                                                                                    $switch:
-                                                                                                        {
-                                                                                                            branches:
-                                                                                                                [
-                                                                                                                    {
-                                                                                                                        case: {
-                                                                                                                            $ne: [
-                                                                                                                                '$AccountName',
-                                                                                                                                null,
-                                                                                                                            ],
-                                                                                                                        },
-                                                                                                                        then: '$AccountName',
-                                                                                                                    },
-                                                                                                                ],
-                                                                                                            default:
-                                                                                                                {
-                                                                                                                    $literal:
-                                                                                                                        '',
-                                                                                                                },
-                                                                                                        },
-                                                                                                },
-                                                                                                {
-                                                                                                    $literal:
-                                                                                                        'Unrealized Currency',
-                                                                                                },
-                                                                                            ],
-                                                                                    },
-                                                                                    1,
-                                                                                ],
-                                                                            },
-                                                                            1,
-                                                                        ],
-                                                                    },
-                                                                },
-                                                            ],
-                                                        },
-                                                    ],
+                                    AccountType: {
+                                        $eq: 'EXPENSE',
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $eq: [
+                                            {
+                                                $convert: {
+                                                    input: '$Year',
+                                                    to: 'decimal',
                                                 },
-                                                {
-                                                    $nor: [
-                                                        {
-                                                            $expr: {
-                                                                $eq: [
+                                            },
+                                            {
+                                                $convert: {
+                                                    input: 2024,
+                                                    to: 'decimal',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                {
+                                    $nor: [
+                                        {
+                                            $expr: {
+                                                $eq: [
+                                                    {
+                                                        $add: [
+                                                            {
+                                                                $indexOfCP: [
                                                                     {
-                                                                        $add: [
+                                                                        $switch:
                                                                             {
-                                                                                $indexOfCP:
+                                                                                branches:
                                                                                     [
                                                                                         {
-                                                                                            $switch:
-                                                                                                {
-                                                                                                    branches:
-                                                                                                        [
-                                                                                                            {
-                                                                                                                case: {
-                                                                                                                    $ne: [
-                                                                                                                        '$AccountName',
-                                                                                                                        null,
-                                                                                                                    ],
-                                                                                                                },
-                                                                                                                then: '$AccountName',
-                                                                                                            },
-                                                                                                        ],
-                                                                                                    default:
-                                                                                                        {
-                                                                                                            $literal:
-                                                                                                                '',
-                                                                                                        },
-                                                                                                },
-                                                                                        },
-                                                                                        {
-                                                                                            $literal:
-                                                                                                'EE: Leave Pay',
+                                                                                            case: {
+                                                                                                $ne: [
+                                                                                                    '$AccountName',
+                                                                                                    null,
+                                                                                                ],
+                                                                                            },
+                                                                                            then: '$AccountName',
                                                                                         },
                                                                                     ],
+                                                                                default:
+                                                                                    {
+                                                                                        $literal:
+                                                                                            '',
+                                                                                    },
                                                                             },
-                                                                            1,
-                                                                        ],
                                                                     },
-                                                                    1,
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            $nor: [
-                                                {
-                                                    $expr: {
-                                                        $eq: [
-                                                            {
-                                                                $add: [
                                                                     {
-                                                                        $indexOfCP:
-                                                                            [
-                                                                                {
-                                                                                    $switch:
-                                                                                        {
-                                                                                            branches:
-                                                                                                [
-                                                                                                    {
-                                                                                                        case: {
-                                                                                                            $ne: [
-                                                                                                                '$AccountName',
-                                                                                                                null,
-                                                                                                            ],
-                                                                                                        },
-                                                                                                        then: '$AccountName',
-                                                                                                    },
-                                                                                                ],
-                                                                                            default:
-                                                                                                {
-                                                                                                    $literal:
-                                                                                                        '',
-                                                                                                },
-                                                                                        },
-                                                                                },
-                                                                                {
-                                                                                    $literal:
-                                                                                        'Inter-company',
-                                                                                },
-                                                                            ],
+                                                                        $literal:
+                                                                            'Unrealized Currency',
                                                                     },
-                                                                    1,
                                                                 ],
                                                             },
                                                             1,
                                                         ],
                                                     },
-                                                },
-                                            ],
+                                                    1,
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                                {
+                                    $nor: [
+                                        {
+                                            $expr: {
+                                                $eq: [
+                                                    {
+                                                        $add: [
+                                                            {
+                                                                $indexOfCP: [
+                                                                    {
+                                                                        $switch:
+                                                                            {
+                                                                                branches:
+                                                                                    [
+                                                                                        {
+                                                                                            case: {
+                                                                                                $ne: [
+                                                                                                    '$AccountName',
+                                                                                                    null,
+                                                                                                ],
+                                                                                            },
+                                                                                            then: '$AccountName',
+                                                                                        },
+                                                                                    ],
+                                                                                default:
+                                                                                    {
+                                                                                        $literal:
+                                                                                            '',
+                                                                                    },
+                                                                            },
+                                                                    },
+                                                                    {
+                                                                        $literal:
+                                                                            'EE: Leave Pay',
+                                                                    },
+                                                                ],
+                                                            },
+                                                            1,
+                                                        ],
+                                                    },
+                                                    1,
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                                {
+                                    $nor: [
+                                        {
+                                            $expr: {
+                                                $eq: [
+                                                    {
+                                                        $add: [
+                                                            {
+                                                                $indexOfCP: [
+                                                                    {
+                                                                        $switch:
+                                                                            {
+                                                                                branches:
+                                                                                    [
+                                                                                        {
+                                                                                            case: {
+                                                                                                $ne: [
+                                                                                                    '$AccountName',
+                                                                                                    null,
+                                                                                                ],
+                                                                                            },
+                                                                                            then: '$AccountName',
+                                                                                        },
+                                                                                    ],
+                                                                                default:
+                                                                                    {
+                                                                                        $literal:
+                                                                                            '',
+                                                                                    },
+                                                                            },
+                                                                    },
+                                                                    {
+                                                                        $literal:
+                                                                            'Inter-company',
+                                                                    },
+                                                                ],
+                                                            },
+                                                            1,
+                                                        ],
+                                                    },
+                                                    1,
+                                                ],
+                                            },
                                         },
                                     ],
                                 },

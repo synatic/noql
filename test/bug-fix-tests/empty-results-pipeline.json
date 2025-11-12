@@ -52,32 +52,24 @@
     "$match": {
       "$and": [
         {
-          "$and": [
-            {
-              "$and": [
-                {
-                  "bp.Status": {
-                    "$ne": "D"
-                  }
-                },
-                {
-                  "$expr": {
-                    "$gt": [
-                      {
-                        "$toDate": "$bp.PolExpDate"
-                      },
-                      "$$NOW"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "bp.PolSubType": {
-                "$ne": "S"
-              }
-            }
-          ]
+          "bp.Status": {
+            "$ne": "D"
+          }
+        },
+        {
+          "$expr": {
+            "$gt": [
+              {
+                "$toDate": "$bp.PolExpDate"
+              },
+              "$$NOW"
+            ]
+          }
+        },
+        {
+          "bp.PolSubType": {
+            "$ne": "S"
+          }
         },
         {
           "bp.CustId": {

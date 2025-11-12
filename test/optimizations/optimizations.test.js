@@ -14,7 +14,7 @@ describe('optimizations', function () {
     /** @type {import("mongodb").MongoClient} */
     let mongoClient;
     before(async function () {
-        const {client, db} = await setup();
+        const {client} = await setup();
         mongoClient = client;
         queryResultTester = buildQueryResultTester({
             dirName,
@@ -1036,9 +1036,18 @@ describe('optimizations', function () {
                         },
                         {
                             $match: {
-                                'o.id': {
-                                    $gt: 0,
-                                },
+                                $and: [
+                                    {
+                                        'o.price': {
+                                            $gte: 0,
+                                        },
+                                    },
+                                    {
+                                        'o.id': {
+                                            $gt: 0,
+                                        },
+                                    },
+                                ],
                             },
                         },
                         {
@@ -1047,20 +1056,12 @@ describe('optimizations', function () {
                                 as: 'i',
                                 let: {
                                     o_item: '$o.item',
-                                    o_price: '$o.price',
                                 },
                                 pipeline: [
                                     {
                                         $match: {
                                             $expr: {
-                                                $and: [
-                                                    {
-                                                        $gte: ['$id', 0],
-                                                    },
-                                                    {
-                                                        $gte: ['$$o_price', 0],
-                                                    },
-                                                ],
+                                                $gte: ['$id', 0],
                                             },
                                         },
                                     },
@@ -1634,9 +1635,6 @@ describe('optimizations', function () {
                                             $expr: {
                                                 $or: [
                                                     {
-                                                        $gt: ['$$o_id', 0],
-                                                    },
-                                                    {
                                                         $and: [
                                                             {
                                                                 $gte: [
@@ -1651,6 +1649,9 @@ describe('optimizations', function () {
                                                                 ],
                                                             },
                                                         ],
+                                                    },
+                                                    {
+                                                        $gt: ['$$o_id', 0],
                                                     },
                                                 ],
                                             },
@@ -1719,17 +1720,14 @@ describe('optimizations', function () {
                                 as: 'i',
                                 let: {
                                     o_item: '$o.item',
-                                    o_id: '$o.id',
                                     o_price: '$o.price',
+                                    o_id: '$o.id',
                                 },
                                 pipeline: [
                                     {
                                         $match: {
                                             $expr: {
                                                 $or: [
-                                                    {
-                                                        $gt: ['$$o_id', 0],
-                                                    },
                                                     {
                                                         $and: [
                                                             {
@@ -1745,6 +1743,9 @@ describe('optimizations', function () {
                                                                 ],
                                                             },
                                                         ],
+                                                    },
+                                                    {
+                                                        $gt: ['$$o_id', 0],
                                                     },
                                                 ],
                                             },
@@ -1813,8 +1814,8 @@ describe('optimizations', function () {
                                 as: 'i',
                                 let: {
                                     o_item: '$o.item',
-                                    o_id: '$o.id',
                                     o_customer_id: '$o.customerId',
+                                    o_id: '$o.id',
                                 },
                                 pipeline: [
                                     {
@@ -1822,23 +1823,23 @@ describe('optimizations', function () {
                                             $expr: {
                                                 $or: [
                                                     {
-                                                        $gt: ['$$o_id', 0],
-                                                    },
-                                                    {
                                                         $and: [
-                                                            {
-                                                                $gte: [
-                                                                    '$instock',
-                                                                    0,
-                                                                ],
-                                                            },
                                                             {
                                                                 $gte: [
                                                                     '$$o_customer_id',
                                                                     0,
                                                                 ],
                                                             },
+                                                            {
+                                                                $gte: [
+                                                                    '$instock',
+                                                                    0,
+                                                                ],
+                                                            },
                                                         ],
+                                                    },
+                                                    {
+                                                        $gt: ['$$o_id', 0],
                                                     },
                                                 ],
                                             },
@@ -1998,11 +1999,6 @@ describe('optimizations', function () {
                             $match: {
                                 $or: [
                                     {
-                                        'o.id': {
-                                            $gt: 0,
-                                        },
-                                    },
-                                    {
                                         $and: [
                                             {
                                                 'o.customerId': {
@@ -2015,6 +2011,11 @@ describe('optimizations', function () {
                                                 },
                                             },
                                         ],
+                                    },
+                                    {
+                                        'o.id': {
+                                            $gt: 0,
+                                        },
                                     },
                                 ],
                             },
@@ -3359,18 +3360,14 @@ describe('optimizations', function () {
                             $match: {
                                 $and: [
                                     {
-                                        $and: [
-                                            {
-                                                'o.customerId': {
-                                                    $gte: 0,
-                                                },
-                                            },
-                                            {
-                                                'o.price': {
-                                                    $gte: 0,
-                                                },
-                                            },
-                                        ],
+                                        'o.customerId': {
+                                            $gte: 0,
+                                        },
+                                    },
+                                    {
+                                        'o.price': {
+                                            $gte: 0,
+                                        },
                                     },
                                     {
                                         'o.id': {
@@ -4437,7 +4434,10 @@ describe('optimizations', function () {
                         from "public"."ams360-data-warehouse-dds-buffers--afwbasicpolinfo" t0_0
                         left outer join "public"."ams360-data-warehouse-dds-buffers--afwemployee" t1_0
                             on t0_0."ExecCode" = t1_0."EmpCode"
-                        where (t0_0."PolExpDate" >= '2024-10-09 00:00:00.000' and t1_0."LastName" = 'Anderson' and t0_0."PolEffDate" < '2024-10-09 00:00:00.000')`;
+                        where (
+                            t0_0."PolExpDate" >= '2024-10-09 00:00:00.000'
+                            AND t1_0."LastName" = 'Anderson'
+                            AND t0_0."PolEffDate" < '2024-10-09 00:00:00.000')`;
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
                     casePath: 'use-cases.case-2',
@@ -5032,39 +5032,80 @@ describe('optimizations', function () {
                         },
                         {
                             $match: {
-                                $expr: {
-                                    $and: [
-                                        {
-                                            $lt: [
+                                $and: [
+                                    {
+                                        $expr: {
+                                            $and: [
                                                 {
-                                                    $toDate: '$t0_0.PolEffDate',
+                                                    $gte: [
+                                                        {
+                                                            $toDate:
+                                                                '$t0_0.PolExpDate',
+                                                        },
+                                                        {
+                                                            $toDate: {
+                                                                $literal:
+                                                                    '2024-10-09T00:00:00.000Z',
+                                                            },
+                                                        },
+                                                    ],
                                                 },
                                                 {
-                                                    $toDate: {
-                                                        $literal:
-                                                            '2024-10-09T00:00:00.000Z',
-                                                    },
+                                                    $ne: [
+                                                        {
+                                                            $type: '$t0_0.PolExpDate',
+                                                        },
+                                                        'null',
+                                                    ],
+                                                },
+                                                {
+                                                    $ne: [
+                                                        {
+                                                            $type: '$t0_0.PolExpDate',
+                                                        },
+                                                        'missing',
+                                                    ],
                                                 },
                                             ],
                                         },
-                                        {
-                                            $ne: [
+                                    },
+                                    {
+                                        $expr: {
+                                            $and: [
                                                 {
-                                                    $type: '$t0_0.PolEffDate',
+                                                    $lt: [
+                                                        {
+                                                            $toDate:
+                                                                '$t0_0.PolEffDate',
+                                                        },
+                                                        {
+                                                            $toDate: {
+                                                                $literal:
+                                                                    '2024-10-09T00:00:00.000Z',
+                                                            },
+                                                        },
+                                                    ],
                                                 },
-                                                'null',
+                                                {
+                                                    $ne: [
+                                                        {
+                                                            $type: '$t0_0.PolEffDate',
+                                                        },
+                                                        'null',
+                                                    ],
+                                                },
+                                                {
+                                                    $ne: [
+                                                        {
+                                                            $type: '$t0_0.PolEffDate',
+                                                        },
+                                                        'missing',
+                                                    ],
+                                                },
                                             ],
                                         },
-                                        {
-                                            $ne: [
-                                                {
-                                                    $type: '$t0_0.PolEffDate',
-                                                },
-                                                'missing',
-                                            ],
-                                        },
-                                    ],
-                                },
+                                    },
+                                ],
                             },
                         },
                         {
@@ -5073,55 +5114,12 @@ describe('optimizations', function () {
                                 as: 't1_0',
                                 let: {
                                     t_0_0_exec_code: '$t0_0.ExecCode',
-                                    t_0_0_pol_exp_date: '$t0_0.PolExpDate',
                                 },
                                 pipeline: [
                                     {
                                         $match: {
                                             $expr: {
-                                                $and: [
-                                                    {
-                                                        $eq: [
-                                                            '$LastName',
-                                                            'Anderson',
-                                                        ],
-                                                    },
-                                                    {
-                                                        $and: [
-                                                            {
-                                                                $gte: [
-                                                                    {
-                                                                        $toDate:
-                                                                            '$t_0_0_pol_exp_date',
-                                                                    },
-                                                                    {
-                                                                        $toDate:
-                                                                            {
-                                                                                $literal:
-                                                                                    '2024-10-09T00:00:00.000Z',
-                                                                            },
-                                                                    },
-                                                                ],
-                                                            },
-                                                            {
-                                                                $ne: [
-                                                                    {
-                                                                        $type: '$t_0_0_pol_exp_date',
-                                                                    },
-                                                                    'null',
-                                                                ],
-                                                            },
-                                                            {
-                                                                $ne: [
-                                                                    {
-                                                                        $type: '$t_0_0_pol_exp_date',
-                                                                    },
-                                                                    'missing',
-                                                                ],
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
+                                                $eq: ['$LastName', 'Anderson'],
                                             },
                                         },
                                     },
