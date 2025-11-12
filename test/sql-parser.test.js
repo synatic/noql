@@ -1,7 +1,7 @@
 const assert = require('assert');
 const SQLParser = require('../lib/SQLParser.js');
 const {canQuery} = require('../lib/canQuery');
-const optimizer = require("../lib/optimizer");
+const optimizer = require('../lib/optimizer');
 const _queryTests = [].concat(
     require('./queryTests/queryTests.json'),
     require('./queryTests/objectOperators.json'),
