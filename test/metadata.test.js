@@ -225,7 +225,10 @@ describe('metadata', () => {
                     assert.deepStrictEqual(schema.length, 2);
                     const itemSplit = schema[1];
                     assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                    assert.deepStrictEqual(itemSplit.type, 'integer');
+                    assert.deepStrictEqual(itemSplit.type, [
+                        'integer',
+                        'string',
+                    ]);
                     assert.deepStrictEqual(itemSplit.isArray, true);
                 });
             });
@@ -287,7 +290,10 @@ describe('metadata', () => {
                     assert.deepStrictEqual(schema.length, 2);
                     const itemSplit = schema[1];
                     assert.deepStrictEqual(itemSplit.as, 'itemSplit');
-                    assert.deepStrictEqual(itemSplit.type, 'integer');
+                    assert.deepStrictEqual(itemSplit.type, [
+                        'integer',
+                        'string',
+                    ]);
                     assert.deepStrictEqual(itemSplit.isArray, true);
                 });
             });
