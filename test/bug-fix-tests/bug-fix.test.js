@@ -1224,7 +1224,7 @@ describe('bug-fixes', function () {
                 LIMIT 10 `;
             const aggregate = makeMongoAggregate(queryString);
 
-            assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
+            assert.deepStrictEqual(aggregate.pipeline, emptyResultsBugPipeline);
         });
     });
     describe('deeply-nested-divide', () => {
@@ -3201,6 +3201,41 @@ order by CurrentDv asc , SQ asc`;
                 optimizeJoins: false,
                 unsetId: true,
             });
+        });
+    });
+
+    describe('multiple unwinds', () => {
+        it('should handle a simple unwind', async () => {
+            const sql = `
+                select *
+                from (
+                    select
+                    \`details.id\` as clientId,
+                    clientNumber,
+                    unwind(people) as person,
+                    unwind(contacts) as contact
+                    from "agencysync-hawksoft-raw-data"
+                    where _connectionId='global-flathead-hawksoft'
+                    and _entity='Clients'
+                ) t
+                where t.\`person.id\` = t.\`contact.personId\``;
+            const {pipeline} = await queryResultTester({
+                queryString: sql,
+                casePath: 'multiple-unwinds.case-1',
+                mode: 'write',
+                outputPipeline: false,
+                expectZeroResults: true,
+                skipDbQuery: true,
+            });
+            const matchStage = pipeline.find((stage) => {
+                return (
+                    stage.$match &&
+                    stage.$match?.$expr?.$eq?.length === 2 &&
+                    stage.$match?.$expr?.$eq?.[0] === '$t.person.id'
+                );
+            });
+            console.log(pipeline);
+            assert.equal(matchStage.$match.$expr.$eq[1], '$t.contact.personId');
         });
     });
 });

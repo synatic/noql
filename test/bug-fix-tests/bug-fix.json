@@ -1333,5 +1333,8 @@
         }
       ]
     }
+  },
+  "multiple-unwinds": {
+    "case-1": {}
   }
 }
