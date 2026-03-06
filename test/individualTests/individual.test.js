@@ -357,7 +357,7 @@ describe('Individual tests', function () {
             }
         });
         it('should be able to do a count * without a group by with a where item=almonds', async () => {
-            const queryText = `select count(1) as countVal from orders where item=almonds`;
+            const queryText = `select count(1) as countVal from orders where item="almonds"`;
             const parsedQuery = SQLParser.parseSQL(queryText);
             try {
                 const results = await mongoClient
@@ -655,7 +655,7 @@ describe('Individual tests', function () {
             const queryText = `
                         select distinct item
                         from "orders"
-                        where id in (select id from orders where item=almonds)`;
+                        where id in (select id from orders where item="almonds")`;
             const parsedQuery = SQLParser.makeMongoAggregate(queryText);
             const results = await mongoClient
                 .db(dbName)

@@ -1224,7 +1224,7 @@ describe('bug-fixes', function () {
                 LIMIT 10 `;
             const aggregate = makeMongoAggregate(queryString);
 
-            assert.ok(isEqual(aggregate.pipeline, emptyResultsBugPipeline));
+            assert.deepStrictEqual(aggregate.pipeline, emptyResultsBugPipeline);
         });
     });
     describe('deeply-nested-divide', () => {
@@ -3201,6 +3201,135 @@ order by CurrentDv asc , SQ asc`;
                 optimizeJoins: false,
                 unsetId: true,
             });
+        });
+    });
+
+    describe('multiple unwinds', () => {
+        it('should handle a simple unwind', async () => {
+            const sql = `
+                select *
+                from (
+                    select
+                    \`details.id\` as clientId,
+                    clientNumber,
+                    unwind(people) as person,
+                    unwind(contacts) as contact
+                    from "agencysync-hawksoft-raw-data"
+                    where _connectionId='global-flathead-hawksoft'
+                    and _entity='Clients'
+                ) t
+                where t.\`person.id\` = t.\`contact.personId\``;
+            const {pipeline} = await queryResultTester({
+                queryString: sql,
+                casePath: 'multiple-unwinds.case-1',
+                mode,
+                outputPipeline: false,
+                expectZeroResults: true,
+                skipDbQuery: true,
+            });
+            const matchStage = pipeline.find((stage) => {
+                return (
+                    stage.$match &&
+                    stage.$match?.$expr?.$eq?.length === 2 &&
+                    stage.$match?.$expr?.$eq?.[0] === '$t.person.id'
+                );
+            });
+            console.log(pipeline);
+            assert.equal(matchStage.$match.$expr.$eq[1], '$t.contact.personId');
+        });
+    });
+
+    describe('Field exists', () => {
+        it('should only return if the field does exist', async () => {
+            const queryString = `
+                SELECT  sku,
+                        instock
+                FROM inventory
+                WHERE FIELD_EXISTS('instock',true)
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case1',
+                mode: 'write',
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(key, 'instock should be defined');
+            }
+        });
+        it('should only return if the field does notexist', async () => {
+            const queryString = `
+                SELECT *
+                FROM inventory
+                WHERE FIELD_EXISTS('instock',false)
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case2',
+                mode,
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(!key, 'instock should not be defined');
+            }
+        });
+        it('should only return if the field does exist and no second argument is provided', async () => {
+            const queryString = `
+                SELECT  sku,
+                        instock
+                FROM inventory
+                WHERE FIELD_EXISTS('instock')
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case3',
+                mode: 'write',
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(key, 'instock should be defined');
+            }
+        });
+    });
+    describe('Multiple Unwinds', () => {
+        it('should handle a simple unwind', async () => {
+            const queryString = `
+                SELECT  *
+                FROM \`auth-auth\` as "auth|unwind"
+                INNER JOIN \`statements-agencies\` as "agencies|unwind" on agencies.Email = username
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on users.email = username
+            `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-1',
+                mode: 'write',
+                skipDbQuery: true,
+            });
+            const secondLookupStage = pipeline.find((stage) => {
+                return stage.$lookup && stage.$lookup.as === 'users';
+            });
+            assert.ok(
+                secondLookupStage,
+                'second lookup stage should be present'
+            );
+            assert.equal(secondLookupStage.$lookup.as, 'users');
+            assert.equal(secondLookupStage.$lookup.foreignField, 'email');
+            assert.equal(secondLookupStage.$lookup.from, 'auth-users');
+            assert.equal(
+                secondLookupStage.$lookup.localField,
+                'agencies.username'
+            );
+
+            console.log(pipeline);
         });
     });
 });
