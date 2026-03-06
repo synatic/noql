@@ -3300,4 +3300,36 @@ order by CurrentDv asc , SQ asc`;
             }
         });
     });
+    describe('Multiple Unwinds', () => {
+        it('should handle a simple unwind', async () => {
+            const queryString = `
+                SELECT  *
+                FROM \`auth-auth\` as "auth|unwind"
+                INNER JOIN \`statements-agencies\` as "agencies|unwind" on agencies.Email = username
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on users.email = username
+            `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-1',
+                mode: 'write',
+                skipDbQuery: true,
+            });
+            const secondLookupStage = pipeline.find((stage) => {
+                return stage.$lookup && stage.$lookup.as === 'users';
+            });
+            assert.ok(
+                secondLookupStage,
+                'second lookup stage should be present'
+            );
+            assert.equal(secondLookupStage.$lookup.as, 'users');
+            assert.equal(secondLookupStage.$lookup.foreignField, 'email');
+            assert.equal(secondLookupStage.$lookup.from, 'auth-users');
+            assert.equal(
+                secondLookupStage.$lookup.localField,
+                'agencies.username'
+            );
+
+            console.log(pipeline);
+        });
+    });
 });
