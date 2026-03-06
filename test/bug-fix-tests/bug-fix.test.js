@@ -3222,7 +3222,7 @@ order by CurrentDv asc , SQ asc`;
             const {pipeline} = await queryResultTester({
                 queryString: sql,
                 casePath: 'multiple-unwinds.case-1',
-                mode: 'write',
+                mode,
                 outputPipeline: false,
                 expectZeroResults: true,
                 skipDbQuery: true,
@@ -3236,6 +3236,68 @@ order by CurrentDv asc , SQ asc`;
             });
             console.log(pipeline);
             assert.equal(matchStage.$match.$expr.$eq[1], '$t.contact.personId');
+        });
+    });
+
+    describe('Field exists', () => {
+        it('should only return if the field does exist', async () => {
+            const queryString = `
+                SELECT  sku,
+                        instock
+                FROM inventory
+                WHERE FIELD_EXISTS('instock',true)
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case1',
+                mode: 'write',
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(key, 'instock should be defined');
+            }
+        });
+        it('should only return if the field does notexist', async () => {
+            const queryString = `
+                SELECT *
+                FROM inventory
+                WHERE FIELD_EXISTS('instock',false)
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case2',
+                mode,
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(!key, 'instock should not be defined');
+            }
+        });
+        it('should only return if the field does exist and no second argument is provided', async () => {
+            const queryString = `
+                SELECT  sku,
+                        instock
+                FROM inventory
+                WHERE FIELD_EXISTS('instock')
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bugfix.field-exists.case3',
+                mode: 'write',
+                ignoreDateValues: true,
+            });
+            for (const result of results) {
+                const key = Object.keys(result).find(
+                    (key) => key === 'instock'
+                );
+                assert.ok(key, 'instock should be defined');
+            }
         });
     });
 });

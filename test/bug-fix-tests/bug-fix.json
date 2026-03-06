@@ -863,6 +863,57 @@
           }
         ]
       }
+    },
+    "field-exists": {
+      "case1": {
+        "expectedResults": [
+          {
+            "sku": "almonds",
+            "instock": 120
+          },
+          {
+            "sku": "bread",
+            "instock": 80
+          },
+          {
+            "sku": "cashews",
+            "instock": 60
+          },
+          {
+            "sku": "pecans",
+            "instock": 70
+          }
+        ]
+      },
+      "case2": {
+        "expectedResults": [
+          {
+            "id": 5,
+            "sku": null,
+            "description": "Incomplete"
+          }
+        ]
+      },
+      "case3": {
+        "expectedResults": [
+          {
+            "sku": "almonds",
+            "instock": 120
+          },
+          {
+            "sku": "bread",
+            "instock": 80
+          },
+          {
+            "sku": "cashews",
+            "instock": 60
+          },
+          {
+            "sku": "pecans",
+            "instock": 70
+          }
+        ]
+      }
     }
   },
   "scratchpad": {
