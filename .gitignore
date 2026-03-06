@@ -69,3 +69,4 @@ yarn.lock
 dist/
 .DS_Store
 sql-to-mongo.code-workspace
+package-lock.json
