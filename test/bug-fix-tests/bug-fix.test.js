@@ -3250,7 +3250,7 @@ order by CurrentDv asc , SQ asc`;
             const {results} = await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.field-exists.case1',
-                mode: 'write',
+                mode,
                 ignoreDateValues: true,
             });
             for (const result of results) {
@@ -3289,7 +3289,7 @@ order by CurrentDv asc , SQ asc`;
             const {results} = await queryResultTester({
                 queryString: queryString,
                 casePath: 'bugfix.field-exists.case3',
-                mode: 'write',
+                mode,
                 ignoreDateValues: true,
             });
             for (const result of results) {
@@ -3301,17 +3301,17 @@ order by CurrentDv asc , SQ asc`;
         });
     });
     describe('Multiple Unwinds', () => {
-        it('should handle a simple unwind', async () => {
+        it('should handle two unwind statements', async () => {
             const queryString = `
                 SELECT  *
-                FROM \`auth-auth\` as "auth|unwind"
-                INNER JOIN \`statements-agencies\` as "agencies|unwind" on agencies.Email = username
+                FROM \`auth-auth\` as "auth"
+                INNER JOIN \`auth-agencies\` as "agencies|unwind" on agencies.Email = username
                 LEFT OUTER JOIN \`auth-users\` as "users|unwind" on users.email = username
             `;
             const {pipeline} = await queryResultTester({
                 queryString: queryString,
                 casePath: 'multiple-unwinds.case-1',
-                mode: 'write',
+                mode,
                 skipDbQuery: true,
             });
             const secondLookupStage = pipeline.find((stage) => {
@@ -3324,12 +3324,117 @@ order by CurrentDv asc , SQ asc`;
             assert.equal(secondLookupStage.$lookup.as, 'users');
             assert.equal(secondLookupStage.$lookup.foreignField, 'email');
             assert.equal(secondLookupStage.$lookup.from, 'auth-users');
-            assert.equal(
-                secondLookupStage.$lookup.localField,
-                'agencies.username'
-            );
-
-            console.log(pipeline);
+            assert.equal(secondLookupStage.$lookup.localField, 'auth.username');
+        });
+        it('should return the correct data when there are two unwind statements', async () => {
+            const queryString = `
+                SELECT  o.id as orderId,
+                        o.item as orderItem,
+                        i.id as inventoryId,
+                        i.sku as inventorySku,
+                        c.id as customerId,
+                        c."First Name" as customerName
+                FROM orders o
+                INNER JOIN inventory "i|unwind" on o.item = i.sku
+                INNER JOIN customers "c|unwind" on o.customerId = c.id
+                LIMIT 1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-2',
+                mode,
+                unsetId: true,
+            });
+        });
+        it('should join on the correct field without an alias', async () => {
+            const queryString = `
+                SELECT
+                        Email as agencyEmail,
+                        auth.password as oldPassword,
+                        users.auth0Id as usersAuth0Id
+                FROM \`auth-agencies\`
+                LEFT OUTER JOIN \`auth-auth\` as "auth|unwind" on Email = auth.username
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on Email = users.email
+                WHERE FIELD_EXISTS("auth.auth0Id",TRUE)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-3',
+                mode,
+                unsetId: true,
+            });
+        });
+        it('should join on the correct field with an alias', async () => {
+            const queryString = `
+                SELECT
+                        agency.Email as agencyEmail,
+                        auth.password as oldPassword,
+                        users.auth0Id as usersAuth0Id
+                FROM \`auth-agencies\` as "agency"
+                LEFT OUTER JOIN \`auth-auth\` as "auth|unwind" on agency.Email = auth.username
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on agency.Email = users.email
+                WHERE FIELD_EXISTS("auth.auth0Id",TRUE)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-4',
+                mode,
+                unsetId: true,
+            });
+        });
+        it('should join on the correct field with an alias but no alias in the join', async () => {
+            const queryString = `
+                SELECT
+                        agency.Email as agencyEmail,
+                        auth.password as oldPassword,
+                        users.auth0Id as usersAuth0Id
+                FROM \`auth-agencies\` as "agency"
+                LEFT OUTER JOIN \`auth-auth\` as "auth|unwind" on Email = auth.username
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on Email = users.email
+                WHERE FIELD_EXISTS("auth.auth0Id",TRUE)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-5',
+                mode,
+                unsetId: true,
+            });
+        });
+        it('should join on the correct field with an alias but no alias in the join and order of join reversed', async () => {
+            const queryString = `
+                SELECT
+                        agency.Email as agencyEmail,
+                        auth.password as oldPassword,
+                        users.auth0Id as usersAuth0Id
+                FROM \`auth-agencies\` as "agency"
+                LEFT OUTER JOIN \`auth-auth\` as "auth|unwind" on auth.username = Email
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on users.email = Email
+                WHERE FIELD_EXISTS("auth.auth0Id",TRUE)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-6',
+                mode,
+                unsetId: true,
+            });
+        });
+        it('should join on the correct field with an alias but no alias in the join and order of join reversed with the join tables swapped', async () => {
+            const queryString = `
+                SELECT
+                        agency.Email as agencyEmail,
+                        auth.password as oldPassword,
+                        users.auth0Id as usersAuth0Id
+                FROM \`auth-agencies\` as "agency"
+                LEFT OUTER JOIN \`auth-users\` as "users|unwind" on users.email = Email
+                LEFT OUTER JOIN \`auth-auth\` as "auth|unwind" on auth.username = Email
+                WHERE FIELD_EXISTS("auth.auth0Id",TRUE)
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-unwinds.case-7',
+                mode,
+                unsetId: true,
+            });
         });
     });
 });

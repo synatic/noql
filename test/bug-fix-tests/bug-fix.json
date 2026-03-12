@@ -1386,6 +1386,63 @@
     }
   },
   "multiple-unwinds": {
-    "case-1": {}
+    "case-1": {},
+    "case-2": {
+      "expectedResults": [
+        {
+          "orderId": 1,
+          "orderItem": "almonds",
+          "inventoryId": 1,
+          "inventorySku": "almonds",
+          "customerId": 1,
+          "customerName": "MARY"
+        }
+      ]
+    },
+    "case-3": {
+      "expectedResults": [
+        {
+          "agencyEmail": "ryan@synatic.com",
+          "oldPassword": "3598e76909664d58d9c0c54d8b9",
+          "usersAuth0Id": "auth0|69b17"
+        }
+      ]
+    },
+    "case-4": {
+      "expectedResults": [
+        {
+          "agencyEmail": "ryan@synatic.com",
+          "oldPassword": "3598e76909664d58d9c0c54d8b9",
+          "usersAuth0Id": "auth0|69b17"
+        }
+      ]
+    },
+    "case-5": {
+      "expectedResults": [
+        {
+          "agencyEmail": "ryan@synatic.com",
+          "oldPassword": "3598e76909664d58d9c0c54d8b9",
+          "usersAuth0Id": "auth0|69b17"
+        }
+      ]
+    },
+    "case-6": {
+      "expectedResults": [
+        {
+          "agencyEmail": "ryan@synatic.com",
+          "oldPassword": "3598e76909664d58d9c0c54d8b9",
+          "usersAuth0Id": "auth0|69b17"
+        }
+      ]
+    },
+    "case-7": {
+      "expectedResults": [
+        {
+          "agencyEmail": "ryan@synatic.com",
+          "oldPassword": "3598e76909664d58d9c0c54d8b9",
+          "usersAuth0Id": "auth0|69b17"
+        }
+      ]
+    }
   }
 }
