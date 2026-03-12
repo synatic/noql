@@ -1,0 +1,11 @@
+[
+  {
+    "AgencyNo": "rktest001",
+    "Contact": "ryan",
+    "Disabled": false,
+    "Email": "ryan@synatic.com",
+    "EmailStatement": false,
+    "Name": "Ryan",
+    "auth0Id": "org_HZA"
+  }
+]

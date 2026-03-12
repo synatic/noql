@@ -2,6 +2,8 @@ const {setup, disconnect} = require('../utils/mongo-client.js');
 const {buildQueryResultTester} = require('../utils/query-tester/index.js');
 const assert = require('assert');
 const {isEqual} = require('lodash');
+const optimizer = require('../../lib/optimizer');
+
 describe('optimizations', function () {
     this.timeout(90000);
     const fileName = 'optimizations';
@@ -5157,6 +5159,90 @@ describe('optimizations', function () {
                     ])
                 );
             });
+        });
+    });
+
+    describe('bug fixes', () => {
+        it('optimizer must not change result data when merging root-alias project stages', async () => {
+            const queryString = `
+            SELECT
+                unset(_id),
+                ifnull(c.\`c._connectionId\`,null) as _connectionId,
+                IFNULL (c.\`c.changeDate\`, NULL) AS changeDate,
+                IFNULL (c.\`c.createDate\`, NULL) AS createDate,
+                IFNULL (c.\`c.insuredDatabaseId\`, NULL) AS insuredDatabaseId,
+                IFNULL (c.\`c.policyDatabaseId\`, NULL) AS policyDatabaseId,
+                IFNULL (c.\`c.vehicleCoveragesDetail.type\`, NULL) AS type,
+                IFNULL (
+                    c.\`c.vehicleCoveragesDetail.vehicleDatabaseId\`,
+                    NULL
+                ) AS vehicleDatabaseId,
+                IFNULL (c.\`c.vehicleCoveragesDetail.vin\`, NULL) AS vin,
+                IFNULL (c.\`c.vehicleCoveragesDetail.year\`, NULL) AS \`year\`,
+                IFNULL (c.\`c.vehicleCoveragesDetail.model\`, NULL) AS model,
+                IFNULL (c.\`c.vehicleCoveragesDetail.make\`, NULL) AS make,
+                IFNULL (
+                    c.\`c.vehicleCoveragesDetail.typeOfUseAsFlag\`,
+                    NULL
+                ) AS typeOfUseAsFlag,
+                IFNULL (c.\`c.vehicleCoveragesDetail.visible\`, NULL) AS visible,
+                IFNULL (c.\`c.vehicleCoveragesDetail.active\`, NULL) AS active,
+                IFNULL (c.\`c.vehicleCoveragesDetail.drivers\`, NULL) AS drivers,
+                IFNULL (c.\`c.vehicleCoveragesDetail.lienHolders\`, NULL) AS lienHolders,
+                IFNULL (c.\`PCCoverage.CoverageCd\`, NULL) AS CoverageCd,
+                IFNULL (c.\`PCCoverage.CoverageDesc\`, NULL) AS CoverageDesc,
+                IFNULL (c.\`PCCoverage.Limit\`, NULL) AS \`Limit\`,
+                IFNULL (c.\`PCCoverage.Deductible.FormatInteger\`, NULL) AS DeductibleInteger,
+                IFNULL (c.\`PCCoverage.Deductible.DeductibleTypeCd\`, NULL) AS DeductibleTypeCd,
+                IFNULL (c.\`PCCoverage.Option.OptionTypeCd\`, NULL) AS OptionTypeCd,
+                IFNULL (c.\`PCCoverage.Option.OptionCd\`, NULL) AS OptionCd,
+                IFNULL (c.\`PCCoverage.CurrentTermAmt\`, NULL) AS CurrentTermAmt
+            FROM
+            (
+                SELECT
+
+                c.*,
+                unwind (c.\`vehicleCoveragesDetail.PCCoverage\`) AS PCCoverage
+                FROM
+                (
+                    SELECT
+                    *,
+                    unwind (vehicleCoveragesDetails) AS vehicleCoveragesDetail
+                    FROM
+                    \`agencysync-nowcerts-raw-data\`
+                    WHERE
+                    _entity = 'Coverages'
+                    AND _connectionId = 'global-nowcerts'
+                ) c
+            ) c
+            `;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'bug-fixes.case-1',
+                mode,
+                outputPipeline: false,
+                skipDbQuery: true,
+                optimizeJoins: true,
+                unsetId: false,
+            });
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+
+            // Merged $project must preserve root alias as $$ROOT so later stages can read $c.c.* and $c.PCCoverage.*
+            const mergedProjectStage = optimized.find(
+                (s) =>
+                    s.$project &&
+                    s.$project.c !== undefined &&
+                    s.$project.PCCoverage !== undefined
+            );
+            assert(
+                mergedProjectStage,
+                'Optimized pipeline should contain a $project with both c and PCCoverage'
+            );
+            assert.strictEqual(
+                mergedProjectStage.$project.c,
+                '$$ROOT',
+                'Merged project must set c to $$ROOT so root alias is preserved; otherwise $c.c.* fields become null'
+            );
         });
     });
 });
