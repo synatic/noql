@@ -640,6 +640,9 @@ describe('metadata', () => {
         });
     });
 
+    /**
+     *
+     */
     async function getSchema(collectionName) {
         const doc = await database
             .collection('schemas')

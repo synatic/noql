@@ -119,9 +119,9 @@ NoQL will output:
 
 ## Currently Unsupported SQL Statements
 
--   Over
--   CTE's
--   Pivot
--   Union
+- Over
+- CTE's
+- Pivot
+- Union
 
 See more in the full docs at [https://noql.synatic.dev/](https://noql.synatic.dev/)

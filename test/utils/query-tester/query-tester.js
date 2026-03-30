@@ -1,5 +1,4 @@
 const assert = require('assert');
-// eslint-disable-next-line node/no-extraneous-require
 const {set, get} = require('lodash');
 const fs = require('fs');
 const $path = require('path');
@@ -103,6 +102,9 @@ async function queryResultTester(options) {
     };
 }
 
+/**
+ *
+ */
 function checkForMongoTypes(obj, ignoreDateValues) {
     for (const [key, value] of Object.entries(obj)) {
         if (Array.isArray(value)) {

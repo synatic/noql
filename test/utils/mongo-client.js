@@ -25,6 +25,9 @@ const defaultConnectionOptions = {
 const shouldAddDataToPg = false;
 const maxRowsToInsert = 10;
 
+/**
+ *
+ */
 async function connect() {
     console.log('About to connect to db');
     mongoClient = new MongoClient(connectionString, {directConnection: true});
@@ -66,6 +69,9 @@ async function generateSchema(values, collectionName) {
     return schemaDoc;
 }
 
+/**
+ *
+ */
 async function addTestData() {
     if (!mongoClient || !db) {
         throw new Error('Call connect before addTestData');
@@ -99,6 +105,9 @@ async function addTestData() {
     }
 }
 
+/**
+ *
+ */
 async function dropTestDb() {
     if (!mongoClient || !db) {
         throw new Error('Call connect before dropTestDb');
@@ -109,6 +118,9 @@ async function dropTestDb() {
     }
 }
 
+/**
+ *
+ */
 async function setup() {
     // todo don't connect/disconnect from pg if not going to add data
     await connect();
@@ -123,6 +135,9 @@ async function setup() {
     return {db, client: mongoClient, dbName};
 }
 
+/**
+ *
+ */
 async function disconnect() {
     const promises = [];
     if (pgClient) {
@@ -136,6 +151,9 @@ async function disconnect() {
     }
 }
 
+/**
+ *
+ */
 async function dropPgDbAndRecreate() {
     let client = new Client({
         ...defaultConnectionOptions,
@@ -234,24 +252,24 @@ function getDropAndCreateTableStatementFromSchema(schemaDoc) {
         CREATE TABLE IF NOT EXISTS public."${tableName}"
         (
             ${
-                hasUnderscoreId
-                    ? '"_id" text COLLATE pg_catalog."default" NOT NULL,'
-                    : ''
-            }
+    hasUnderscoreId
+        ? '"_id" text COLLATE pg_catalog."default" NOT NULL,'
+        : ''
+}
             ${Object.entries(schemaDoc.schema.properties)
-                .map((prop) =>
-                    getColumnStatement(prop, schemaDoc.schema.required)
-                )
-                .filter(Boolean)
-                .join(',\n\t\t\t')}${hasUnderscoreId ? ',' : ''}
+        .map((prop) =>
+            getColumnStatement(prop, schemaDoc.schema.required)
+        )
+        .filter(Boolean)
+        .join(',\n\t\t\t')}${hasUnderscoreId ? ',' : ''}
             ${
-                hasUnderscoreId
-                    ? `CONSTRAINT ${tableName.replace(
-                          /-/g,
-                          '_'
-                      )}_pkey PRIMARY KEY ("_id")`
-                    : ''
-            }
+    hasUnderscoreId
+        ? `CONSTRAINT ${tableName.replace(
+            /-/g,
+            '_'
+        )}_pkey PRIMARY KEY ("_id")`
+        : ''
+}
         )
 
         TABLESPACE pg_default;

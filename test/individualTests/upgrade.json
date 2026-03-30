@@ -357,10 +357,7 @@
                 "string": "Testing"
               }
             },
-            "nestedStrArray": [
-              "A",
-              "b"
-            ],
+            "nestedStrArray": ["A", "b"],
             "nestedObjArray": [
               {
                 "string": "Testing",
@@ -390,10 +387,7 @@
             "integer": 1,
             "boolean": true,
             "number": 1.5,
-            "nestedStrArray": [
-              "A",
-              "b"
-            ],
+            "nestedStrArray": ["A", "b"],
             "nestedObjArray": [
               {
                 "string": "Testing",
