@@ -1,10 +1,14 @@
-[{
-  "products": [{
-    "productId": {
-      "$objectId": "629aed84d0547c4d1ebc1111"
+[
+  {
+    "products": [
+      {
+        "productId": {
+          "$objectId": "629aed84d0547c4d1ebc1111"
+        }
+      }
+    ],
+    "createdDate": {
+      "$date": "2023-12-22T00:00:00.000Z"
     }
-  }],
-  "createdDate": {
-    "$date": "2023-12-22T00:00:00.000Z"
   }
-}]
+]

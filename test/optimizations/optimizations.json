@@ -440,12 +440,7 @@
           }
         },
         {
-          "$unset": [
-            "_id",
-            "o._id",
-            "i._id",
-            "o.orderDate"
-          ]
+          "$unset": ["_id", "o._id", "i._id", "o.orderDate"]
         },
         {
           "$limit": 1

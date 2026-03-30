@@ -204,13 +204,12 @@ describe('joins', function () {
                 left outer JOIN \`inventory\` on \`inventory\`.\`sku\` =  \`item\`
                 LIMIT 2
                 `;
-            const {pipeline, results} = await queryResultTester({
+            const {results} = await queryResultTester({
                 queryString,
                 casePath: 'left-join.no-alias.case-1',
                 mode,
                 skipDbQuery: false,
             });
-            const lookup = pipeline.find((p) => !!p.$lookup);
             for (const result of results) {
                 assert.deepEqual(result.item, result.sku[0]);
             }

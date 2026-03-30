@@ -5,15 +5,12 @@ const {setup, disconnect, dbName} = require('../utils/mongo-client.js');
 
 describe('Individual tests', function () {
     this.timeout(90000);
-    const fileName = 'individual-test-cases';
-    const mode = 'test';
-    const dirname = __dirname;
     /** @type {import('mongodb').MongoClient} */
     let mongoClient;
     before(function (done) {
         const run = async () => {
             try {
-                const {client, db} = await setup();
+                const {client} = await setup();
                 mongoClient = client;
                 done();
             } catch (exp) {
@@ -142,7 +139,7 @@ describe('Individual tests', function () {
                                    from orders
                                    where item in (select * from inventory where id = 1)`;
             assert.throws(() => {
-                const parsedQuery = SQLParser.parseSQL(queryText);
+                SQLParser.parseSQL(queryText);
             }, 'no error on select * in subquery');
         });
 
@@ -151,7 +148,7 @@ describe('Individual tests', function () {
                                    from orders
                                    where item in (select id,name from inventory where id = 1)`;
             assert.throws(() => {
-                const parsedQuery = SQLParser.parseSQL(queryText);
+                SQLParser.parseSQL(queryText);
             }, 'no error on select * in subquery');
         });
         // join
