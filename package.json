@@ -68,9 +68,9 @@
     "bson": "7.2.0",
     "check-types": "11.2.3",
     "clone-deep": "4.0.1",
-    "dayjs": "^1.11.20",
+    "dayjs": "1.11.20",
     "deepmerge": "4.3.1",
-    "lodash": "^4.17.23",
+    "lodash": "4.17.23",
     "node-sql-parser": "5.3.3",
     "object-hash": "3.0.0"
   },
