@@ -2051,6 +2051,27 @@ describe('optimizations', function () {
                     ])
                 );
             });
+            it('42. AND OR, source,(destination or destination) subquery', async () => {
+                const queryString = `
+                        SELECT o.id as orderId,
+                               i.id as inventoryId
+                        FROM orders o
+                        LEFT JOIN (
+                            SELECT * FROM inventory) as "i|first" on i.sku=o.item
+                        WHERE o.item ="almonds"
+                        AND (i.sku ="almonds" OR i.sku="bread" )
+                        LIMIT 1
+                        `;
+                const {results} = await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'where.case-42',
+                    mode,
+                    outputPipeline,
+                    optimizeJoins: true,
+                    unsetId: true,
+                });
+                assert(results.length === 1);
+            });
         });
 
         describe('OR AND', () => {
@@ -3325,7 +3346,7 @@ describe('optimizations', function () {
                         `;
                 const {pipeline} = await queryResultTester({
                     queryString: queryString,
-                    casePath: 'where.case-15',
+                    casePath: 'where.case-41',
                     mode,
                     outputPipeline,
                     optimizeJoins: true,

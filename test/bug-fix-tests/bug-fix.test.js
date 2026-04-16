@@ -3151,7 +3151,6 @@ order by CurrentDv asc , SQ asc`;
                     stage.$match?.$expr?.$eq?.[0] === '$t.person.id'
                 );
             });
-            console.log(pipeline);
             assert.equal(matchStage.$match.$expr.$eq[1], '$t.contact.personId');
         });
     });
