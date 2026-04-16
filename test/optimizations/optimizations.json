@@ -440,7 +440,12 @@
           }
         },
         {
-          "$unset": ["_id", "o._id", "i._id", "o.orderDate"]
+          "$unset": [
+            "_id",
+            "o._id",
+            "i._id",
+            "o.orderDate"
+          ]
         },
         {
           "$limit": 1
@@ -1017,6 +1022,37 @@
       ]
     },
     "case-40": {
+      "expectedResults": [
+        {
+          "o": {
+            "id": 1,
+            "item": "almonds",
+            "price": 12,
+            "quantity": 2,
+            "customerId": 1,
+            "specialChars": "^^^"
+          },
+          "i": [
+            {
+              "id": 1,
+              "sku": "almonds",
+              "description": "product 1",
+              "instock": 120,
+              "specialChars": "^^^"
+            }
+          ]
+        }
+      ]
+    },
+    "case-42": {
+      "expectedResults": [
+        {
+          "orderId": 1,
+          "inventoryId": 1
+        }
+      ]
+    },
+    "case-41": {
       "expectedResults": [
         {
           "o": {
