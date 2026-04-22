@@ -6,4 +6,5 @@ module.exports = {
     reporter: 'spec',
     timeout: 2000,
     recursive: true,
+    globals: ['allowedDriverRequire'],
 };
