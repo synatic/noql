@@ -3437,4 +3437,41 @@ order by CurrentDv asc , SQ asc`;
             });
         });
     });
+
+    describe('Multiple subqueries', () => {
+        it('should handle a simple subquery', async () => {
+            const queryString = `
+                SELECT
+                        (select a, (select d) as b) as c
+                FROM "function-test-data"
+                WHERE testId='bugfix.multiple-subqueries.case-1'`;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'multiple-subqueries.case-1',
+                mode,
+            });
+            assert.deepStrictEqual(pipeline, [
+                {
+                    $match: {
+                        testId: {
+                            $eq: 'bugfix.multiple-subqueries.case-1',
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        c: {
+                            a: '$a',
+                            b: {
+                                d: '$d',
+                            },
+                        },
+                    },
+                },
+                {
+                    $unset: '_id',
+                },
+            ]);
+        });
+    });
 });
