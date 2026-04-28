@@ -1444,5 +1444,19 @@
         }
       ]
     }
+  },
+  "multiple-subqueries": {
+    "case-1": {
+      "expectedResults": [
+        {
+          "c": {
+            "a": "a",
+            "b": {
+              "d": "d"
+            }
+          }
+        }
+      ]
+    }
   }
 }
