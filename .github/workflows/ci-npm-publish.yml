@@ -57,16 +57,21 @@ jobs:
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           CURRENT_MAJOR=${CURRENT_VERSION%%.*}
-          LATEST_VERSION=$(npm view "$PACKAGE_NAME" dist-tags.latest)
-          LATEST_MAJOR=${LATEST_VERSION%%.*}
+          LATEST_VERSION=$(npm view "$PACKAGE_NAME" dist-tags.latest 2>/dev/null || true)
 
-          if [ "$CURRENT_MAJOR" -lt "$LATEST_MAJOR" ]; then
-            NPM_TAG="v$CURRENT_MAJOR"
-          else
+          if [ -z "$LATEST_VERSION" ]; then
             NPM_TAG="latest"
+          else
+            LATEST_MAJOR=${LATEST_VERSION%%.*}
+            if [ "$CURRENT_MAJOR" -lt "$LATEST_MAJOR" ]; then
+              NPM_TAG="${CURRENT_MAJOR}x"
+            else
+              NPM_TAG="latest"
+            fi
           fi
 
-          echo "Publishing $PACKAGE_NAME@$CURRENT_VERSION with tag '$NPM_TAG'"
+          echo "Publishing package version: $PACKAGE_NAME@$CURRENT_VERSION"
+          echo "Using npm dist-tag: '$NPM_TAG'"
           echo "npm_tag=$NPM_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Run NPM publish
