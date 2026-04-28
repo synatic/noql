@@ -51,8 +51,26 @@ jobs:
       - name: Install NPM dependencies
         run: npm install --ignore-scripts --production
 
+      - name: Resolve npm dist-tag
+        id: npm-tag
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          CURRENT_MAJOR=${CURRENT_VERSION%%.*}
+          LATEST_VERSION=$(npm view "$PACKAGE_NAME" dist-tags.latest)
+          LATEST_MAJOR=${LATEST_VERSION%%.*}
+
+          if [ "$CURRENT_MAJOR" -lt "$LATEST_MAJOR" ]; then
+            NPM_TAG="v$CURRENT_MAJOR"
+          else
+            NPM_TAG="latest"
+          fi
+
+          echo "Publishing $PACKAGE_NAME@$CURRENT_VERSION with tag '$NPM_TAG'"
+          echo "npm_tag=$NPM_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Run NPM publish
-        run: npm publish --access public
+        run: npm publish --access public --tag "${{ steps.npm-tag.outputs.npm_tag }}"
 
   docs:
     name: Build and Publish Docs
