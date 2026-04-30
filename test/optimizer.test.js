@@ -2382,12 +2382,7 @@ limit 501`;
                                         pipeline: [
                                             {
                                                 $match: {
-                                                    $expr: {
-                                                        $eq: [
-                                                            '$Id',
-                                                            '0056g000003H71UAAS',
-                                                        ],
-                                                    },
+                                                    Id: '0056g000003H71UAAS',
                                                 },
                                             },
                                         ],
@@ -2448,9 +2443,7 @@ limit 501`;
                                 },
                                 {
                                     $match: {
-                                        $expr: {
-                                            $eq: ['$Id', '0056g000003H71UAAS'],
-                                        },
+                                        Id: '0056g000003H71UAAS',
                                     },
                                 },
                             ],
@@ -2482,12 +2475,7 @@ limit 501`;
                                         pipeline: [
                                             {
                                                 $match: {
-                                                    $expr: {
-                                                        $eq: [
-                                                            '$Id',
-                                                            '0056g000005UjGgAAK',
-                                                        ],
-                                                    },
+                                                    Id: '0056g000005UjGgAAK',
                                                 },
                                             },
                                         ],
@@ -2548,9 +2536,7 @@ limit 501`;
                                 },
                                 {
                                     $match: {
-                                        $expr: {
-                                            $eq: ['$Id', '0056g000005UjGgAAK'],
-                                        },
+                                        Id: '0056g000005UjGgAAK',
                                     },
                                 },
                             ],
@@ -2571,6 +2557,227 @@ limit 501`;
                     },
                 ],
                 'did not optimize'
+            );
+        });
+
+        it('should hoist lookup expr literal predicates into direct match', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'comp',
+                        let: {
+                            pol_companyCode: '$pol.companyCode',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$_recordId',
+                                                    '$$pol_companyCode',
+                                                ],
+                                            },
+                                            {
+                                                $eq: ['$_entity', 'Companies'],
+                                            },
+                                            {
+                                                $eq: [
+                                                    '$_connectionId',
+                                                    'global-doneganams360',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $lookup: {
+                            from: 'agencysync-ams360-raw-data',
+                            as: 'comp',
+                            let: {
+                                pol_companyCode: '$pol.companyCode',
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        _entity: 'Companies',
+                                        _connectionId: 'global-doneganams360',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: [
+                                                '$_recordId',
+                                                '$$pol_companyCode',
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'did not hoist lookup literal predicates'
+            );
+        });
+
+        it('should hoist all literal lookup eq predicates and remove expr stage', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'comp',
+                        let: {},
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: ['$_entity', 'Companies'],
+                                            },
+                                            {
+                                                $eq: [
+                                                    'global-doneganams360',
+                                                    '$_connectionId',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $lookup: {
+                            from: 'agencysync-ams360-raw-data',
+                            as: 'comp',
+                            let: {},
+                            pipeline: [
+                                {
+                                    $match: {
+                                        _entity: 'Companies',
+                                        _connectionId: 'global-doneganams360',
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'did not fully hoist literal lookup eq predicates'
+            );
+        });
+
+        it('should not hoist non literal lookup expr predicates', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'comp',
+                        let: {
+                            pol_companyCode: '$pol.companyCode',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$_recordId',
+                                                    '$$pol_companyCode',
+                                                ],
+                                            },
+                                            {
+                                                $eq: [
+                                                    '$_entity',
+                                                    '$_entityAlias',
+                                                ],
+                                            },
+                                            {
+                                                $gt: ['$_updatedAt', 0],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                pipeline,
+                'did incorrectly hoist'
+            );
+        });
+
+        it('should keep lookup literal hoist optimization idempotent', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'comp',
+                        let: {
+                            pol_companyCode: '$pol.companyCode',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$_recordId',
+                                                    '$$pol_companyCode',
+                                                ],
+                                            },
+                                            {
+                                                $eq: ['$_entity', 'Companies'],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimizedOnce = optimizer.optimizeMongoAggregate(
+                pipeline,
+                {}
+            );
+            const optimizedTwice = optimizer.optimizeMongoAggregate(
+                optimizedOnce,
+                {}
+            );
+            assert.deepStrictEqual(
+                optimizedTwice,
+                optimizedOnce,
+                'lookup hoist optimization should be idempotent'
             );
         });
     });
