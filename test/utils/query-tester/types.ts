@@ -28,6 +28,8 @@ export interface QueryResultOptions extends ParserOptions {
     outputPipeline?: boolean;
     /** If true the tester won't query the db, just generate the pipeline */
     skipDbQuery?: boolean;
+    /** Controls if the pipeline should use the new optimizer after it is generated but before being run against the db */
+    postOptimization?: boolean;
 }
 
 export type AllQueryResultOptions = BuildQueryResultOptions &
@@ -39,6 +41,11 @@ export type QueryResultTester = (
 
 export type QueryTesterResult = {
     results: Document[];
+    /** The actual pipeline that was executed */
     pipeline: PipelineFn[];
     collections: string[];
+    /** The pipeline before optimization */
+    unoptimizedPipeline: PipelineFn[];
+    /** The pipeline after optimization */
+    optimizedPipeline?: PipelineFn[];
 };

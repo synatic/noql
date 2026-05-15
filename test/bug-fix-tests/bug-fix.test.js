@@ -59,6 +59,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('join function', () => {
         it('should be able to join strings together with a symbol in a standard select', async () => {
             const queryString = `
@@ -128,6 +129,7 @@ describe('bug-fixes', function () {
         //     ];
         // });
     });
+
     describe('sort order sub query', () => {
         it('Should correctly sort the result set', async () => {
             const queryString = `
@@ -174,6 +176,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('coalesce', () => {
         it('Should correctly coalesce the results for numbers', async () => {
             const queryString = `
@@ -189,6 +192,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -222,6 +226,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('dense rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -255,6 +260,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('row number', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -409,6 +415,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('to_objectid', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
@@ -423,6 +430,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('OBJECT_TO_ARRAY', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
@@ -438,6 +446,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Injected parameters with special characters', () => {
         const mode = 'test';
         const outputPipeline = false;
@@ -702,6 +711,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('subquery capitalisation', () => {
         it('should not throw an error when the right hand side is capitalised', async () => {
             const queryString = `
@@ -720,6 +730,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('timestamp query', () => {
         // todo RK this creates a pipeline that is not serialisable as the makeQueryPart converts it to a date object, look at how to fix
         it('should be able to query by timestamp', async () => {
@@ -737,6 +748,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Large numbers', () => {
         it('limit', async () => {
             const queryString = `
@@ -753,6 +765,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Current_Date', () => {
         it('should work with or without parentheses', async () => {
             const queryString = `
@@ -818,6 +831,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('chaining functions in group by', () => {
         it('should be able to use round + sum', async () => {
             const queryString = `
@@ -891,6 +905,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('SUM function', () => {
         it('should work with Martins example', async () => {
             const queryString = `
@@ -928,6 +943,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('extract dates', () => {
         it('Date:EXTRACT', async () => {
             const queryString = `
@@ -964,6 +980,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('scratchpad', () => {
         it('Should let you provide the full table name in the on clause on the left', async () => {
             const queryString = `
@@ -1007,6 +1024,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('post-optimizations', () => {
         it('should work on the example query', async () => {
             const queryString = `
@@ -1116,6 +1134,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('empty-results', () => {
         it("should work with Avi's example", async () => {
             const queryString = `
@@ -1144,6 +1163,7 @@ describe('bug-fixes', function () {
             assert.deepStrictEqual(aggregate.pipeline, emptyResultsBugPipeline);
         });
     });
+
     describe('deeply-nested-divide', () => {
         it('should work in the basic select', async () => {
             const queryString = `
@@ -1182,6 +1202,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('$and/$or/$nor must be a nonempty array', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -2151,6 +2172,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('nested case statements', () => {
         it('should parse nested complex case statements correctly', async () => {
             const queryString = `
@@ -3216,6 +3238,7 @@ order by CurrentDv asc , SQ asc`;
             }
         });
     });
+
     describe('Multiple Unwinds', () => {
         it('should handle two unwind statements', async () => {
             const queryString = `
@@ -3388,6 +3411,190 @@ order by CurrentDv asc , SQ asc`;
                     $unset: '_id',
                 },
             ]);
+        });
+    });
+
+    describe('post-optimizer', () => {
+        it('should work with a simple conversion function in the where', async () => {
+            const queryString = `
+                SELECT item
+                FROM orders
+                WHERE orderDate >= TO_DATE('2021-01-01')
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimizer.case-1',
+                mode,
+                postOptimization: true,
+            });
+        });
+
+        it('should work with a simple conversion function in the select', async () => {
+            const queryString = `
+                SELECT  item,
+                        CASE
+                            WHEN item IS NOT NULL
+                            THEN DATE_DIFF(
+                                TO_DATE(TO_STRING(orderDate)),
+                                CURRENT_DATE(),
+                                'day'
+                            )
+                            ELSE NULL
+                        END AS daysOnStatus
+                FROM orders
+                WHERE id=2
+            `;
+            const {results} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimizer.case-2',
+                mode: 'write',
+                postOptimization: true,
+            });
+            assert(results[0].daysOnStatus >= 1498);
+        });
+
+        it('should work with a simple conversion function in the where of the join', async () => {
+            const queryString = `
+                SELECT item
+                FROM orders
+                LEFT JOIN inventory i
+                    ON item = i.sku
+                    AND TO_STRING(i.id) = '1'
+                WHERE id=1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimizer.case-3',
+                mode,
+                postOptimization: true,
+                outputPipeline: false,
+            });
+        });
+        it('should work with a simple conversion function in the where of the join when it is a subquery', async () => {
+            const queryString = `
+                SELECT item
+                FROM orders
+                LEFT JOIN (
+                    SELECT sku
+                    FROM inventory
+                    WHERE TO_STRING(id) = '1'
+                ) i ON item = i.sku
+                WHERE id=1
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimizer.case-4',
+                mode,
+                postOptimization: true,
+            });
+        });
+
+        it('Should generate a valid pipeline', async () => {
+            const queryString = `
+            SELECT
+                t1._id,
+                t1.name,
+                t1.type,
+                t1.mimeType,
+                t1.size,
+                t1.data,
+                t1.connectionId,
+                t1.dateUploaded,
+                t1.status,
+                t1.statusLog,
+                t1.additionalInfo,
+                t1.fields,
+                t1.numberOfRecords,
+                t1.carrierId,
+                t1.carrierName,
+                t1.carrierMatches,
+                t1.statementDate,
+                t1.schemaFields,
+                t1.readerConfig,
+                t1.transactionMapping,
+                t1.category,
+                t1._dateUpdated,
+                t1.lastStatus,
+
+                CASE
+                    WHEN \`t1.lastStatus\` IS NOT NULL
+                    THEN DATE_DIFF(
+                    TO_DATE(TO_STRING(\`t1.lastStatus.statusDate\`)),
+                    CURRENT_DATE(),
+                    'day'
+                    )
+                    ELSE NULL
+                END AS daysOnStatus,
+
+                ROUND(t2.transactionCount, 2) AS transactionCount,
+                ROUND(t2.totalCommAmount, 2) AS totalCommAmount,
+                ROUND(t2.totalPremiumAmount, 2) AS totalPremiumAmount,
+                ROUND(t3.matchedCount, 2) AS matchedCount
+
+                FROM (
+                SELECT
+                    *,
+                    LAST_IN_ARRAY(statusLog) AS lastStatus
+                FROM \`agencysync-dbc-statements\`
+                ) AS t1
+
+                -- Incremental trigger from matches: any match row updated since last run
+                LEFT JOIN (
+                SELECT
+                    fileId,
+                    MAX(_dateUpdated) AS matchesDateUpdated
+                FROM \`agencysync-dbc-statement-transaction-matches\`
+                WHERE _dateUpdated >= TO_DATE('2026-05-14')
+                GROUP BY fileId
+                ) AS \`mu|first|optimize\`
+                ON mu.fileId = TO_STRING(t1._id)
+
+                LEFT JOIN (
+                SELECT
+                    _fileId,
+                    COUNT(*) AS transactionCount,
+                    SUM(commAmount) AS totalCommAmount,
+                    SUM(premiumAmount) AS totalPremiumAmount
+                FROM \`agencysync-dbc-statement-transactions\`
+                GROUP BY _fileId
+                ) AS \`t2|first|optimize\`
+                ON t2._fileId = t1._id
+
+                LEFT JOIN (
+                SELECT
+                    fileId,
+                    COUNT(*) AS matchedCount
+                FROM \`agencysync-dbc-statement-transaction-matches\`
+                WHERE hasMatches = true
+                GROUP BY fileId
+                ) AS \`t3|first|optimize\`
+                ON t3.fileId = TO_STRING(t1._id)
+
+                WHERE
+                t1._dateUpdated >= TO_DATE('2026-05-14')
+                OR mu.matchesDateUpdated IS NOT NULL`;
+            const {pipeline} = await queryResultTester({
+                queryString: queryString,
+                casePath: 'post-optimizer.case-5',
+                mode: 'write',
+                postOptimization: true,
+                outputPipeline: true,
+                skipDbQuery: true,
+            });
+            const firstLookup = pipeline[3];
+            const firstMatch = firstLookup.$lookup.pipeline[0];
+            assert.deepStrictEqual(firstMatch, {
+                $match: {
+                    $expr: {
+                        $eq: [
+                            '$fileId',
+                            {
+                                $toString: '$$t1__id',
+                            },
+                        ],
+                    },
+                },
+            });
         });
     });
 });

@@ -2688,6 +2688,41 @@ limit 501`;
             );
         });
 
+        it('should not hoist lookup expr predicates with aggregation operators', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-dbc-statement-transaction-matches',
+                        as: 'mu',
+                        let: {
+                            t1__id: '$t1._id',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [
+                                            '$fileId',
+                                            {
+                                                $toString: '$$t1__id',
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                pipeline,
+                'did incorrectly hoist aggregation expression into plain match'
+            );
+        });
+
         it('should not hoist non literal lookup expr predicates', function () {
             const pipeline = [
                 {
