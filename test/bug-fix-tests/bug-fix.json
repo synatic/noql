@@ -1458,5 +1458,10 @@
         }
       ]
     }
+  },
+  "post-optimizer": {
+    "case-1": {
+      "expectedResults": []
+    }
   }
 }

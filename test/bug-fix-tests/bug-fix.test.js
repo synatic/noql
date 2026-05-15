@@ -59,6 +59,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('join function', () => {
         it('should be able to join strings together with a symbol in a standard select', async () => {
             const queryString = `
@@ -128,6 +129,7 @@ describe('bug-fixes', function () {
         //     ];
         // });
     });
+
     describe('sort order sub query', () => {
         it('Should correctly sort the result set', async () => {
             const queryString = `
@@ -174,6 +176,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('coalesce', () => {
         it('Should correctly coalesce the results for numbers', async () => {
             const queryString = `
@@ -189,6 +192,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -222,6 +226,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('dense rank', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -255,6 +260,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('row number', () => {
         it('Should correctly rank the results without a partition by', async () => {
             const queryString = `
@@ -409,6 +415,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('to_objectid', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
@@ -423,6 +430,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('OBJECT_TO_ARRAY', () => {
         it('should be able to convert a string object id to an actual ObjectId', async () => {
             const queryString = `
@@ -438,6 +446,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Injected parameters with special characters', () => {
         const mode = 'test';
         const outputPipeline = false;
@@ -702,6 +711,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('subquery capitalisation', () => {
         it('should not throw an error when the right hand side is capitalised', async () => {
             const queryString = `
@@ -720,6 +730,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('timestamp query', () => {
         // todo RK this creates a pipeline that is not serialisable as the makeQueryPart converts it to a date object, look at how to fix
         it('should be able to query by timestamp', async () => {
@@ -737,6 +748,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Large numbers', () => {
         it('limit', async () => {
             const queryString = `
@@ -753,6 +765,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('Current_Date', () => {
         it('should work with or without parentheses', async () => {
             const queryString = `
@@ -818,6 +831,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('chaining functions in group by', () => {
         it('should be able to use round + sum', async () => {
             const queryString = `
@@ -891,6 +905,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('SUM function', () => {
         it('should work with Martins example', async () => {
             const queryString = `
@@ -928,6 +943,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('extract dates', () => {
         it('Date:EXTRACT', async () => {
             const queryString = `
@@ -964,6 +980,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('scratchpad', () => {
         it('Should let you provide the full table name in the on clause on the left', async () => {
             const queryString = `
@@ -1007,6 +1024,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('post-optimizations', () => {
         it('should work on the example query', async () => {
             const queryString = `
@@ -1116,6 +1134,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('empty-results', () => {
         it("should work with Avi's example", async () => {
             const queryString = `
@@ -1144,6 +1163,7 @@ describe('bug-fixes', function () {
             assert.deepStrictEqual(aggregate.pipeline, emptyResultsBugPipeline);
         });
     });
+
     describe('deeply-nested-divide', () => {
         it('should work in the basic select', async () => {
             const queryString = `
@@ -1182,6 +1202,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('$and/$or/$nor must be a nonempty array', () => {
         it('should work for case 1', async () => {
             const queryString = `
@@ -2151,6 +2172,7 @@ describe('bug-fixes', function () {
             });
         });
     });
+
     describe('nested case statements', () => {
         it('should parse nested complex case statements correctly', async () => {
             const queryString = `
@@ -3216,6 +3238,7 @@ order by CurrentDv asc , SQ asc`;
             }
         });
     });
+
     describe('Multiple Unwinds', () => {
         it('should handle two unwind statements', async () => {
             const queryString = `
@@ -3388,6 +3411,27 @@ order by CurrentDv asc , SQ asc`;
                     $unset: '_id',
                 },
             ]);
+        });
+    });
+
+    describe('post-optimizer', () => {
+        it('should work with conversion functions', async () => {
+            const queryString = `
+                SELECT item
+                FROM ORDERS
+                WHERE orderDate >= TO_DATE('2021-01-01')
+            `;
+            const {unoptimizedPipeline, optimizedPipeline, results} =
+                await queryResultTester({
+                    queryString: queryString,
+                    casePath: 'post-optimizer.case-1',
+                    mode: 'write',
+                    postOptimization: false,
+                    expectZeroResults: true,
+                });
+            console.log(unoptimizedPipeline);
+            console.log(optimizedPipeline);
+            console.log(results);
         });
     });
 });
