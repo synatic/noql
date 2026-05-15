@@ -1461,7 +1461,335 @@
   },
   "post-optimizer": {
     "case-1": {
-      "expectedResults": []
+      "expectedResults": [
+        {
+          "item": "pecans"
+        },
+        {
+          "item": "potatoes"
+        }
+      ]
+    },
+    "case-2": {
+      "expectedResults": [
+        {
+          "item": "pecans",
+          "daysOnStatus": 1498
+        }
+      ]
+    },
+    "case-3": {
+      "expectedResults": [
+        {
+          "item": "almonds"
+        }
+      ]
+    },
+    "case-4": {
+      "expectedResults": [
+        {
+          "item": "almonds"
+        }
+      ]
+    },
+    "case-5": {
+      "pipeline": [
+        {
+          "$replaceRoot": {
+            "newRoot": {
+              "$mergeObjects": [
+                "$$ROOT",
+                {
+                  "lastStatus": {
+                    "$last": "$statusLog"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$unset": "_id"
+        },
+        {
+          "$project": {
+            "t1": "$$ROOT"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "agencysync-dbc-statement-transaction-matches",
+            "as": "mu",
+            "let": {
+              "t1__id": "$t1._id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$fileId",
+                      {
+                        "$toString": "$$t1__id"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "_dateUpdated": {
+                    "$gte": "2026-05-14T00:00:00.000Z"
+                  }
+                }
+              },
+              {
+                "$group": {
+                  "_id": {
+                    "fileId": "$fileId"
+                  },
+                  "matchesDateUpdated": {
+                    "$max": "$_dateUpdated"
+                  }
+                }
+              },
+              {
+                "$project": {
+                  "fileId": "$_id.fileId",
+                  "_id": 0,
+                  "matchesDateUpdated": "$matchesDateUpdated"
+                }
+              },
+              {
+                "$unset": "_id"
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "mu": {
+              "$first": "$mu"
+            }
+          }
+        },
+        {
+          "$lookup": {
+            "from": "agencysync-dbc-statement-transactions",
+            "as": "t2",
+            "let": {
+              "t1__id": "$t1._id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$_fileId",
+                      "$$t1__id"
+                    ]
+                  }
+                }
+              },
+              {
+                "$group": {
+                  "_id": {
+                    "_fileId": "$_fileId"
+                  },
+                  "transactionCount": {
+                    "$sum": 1
+                  },
+                  "totalCommAmount": {
+                    "$sum": "$commAmount"
+                  },
+                  "totalPremiumAmount": {
+                    "$sum": "$premiumAmount"
+                  }
+                }
+              },
+              {
+                "$project": {
+                  "_fileId": "$_id._fileId",
+                  "_id": 0,
+                  "transactionCount": "$transactionCount",
+                  "totalCommAmount": "$totalCommAmount",
+                  "totalPremiumAmount": "$totalPremiumAmount"
+                }
+              },
+              {
+                "$unset": "_id"
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "t2": {
+              "$first": "$t2"
+            }
+          }
+        },
+        {
+          "$lookup": {
+            "from": "agencysync-dbc-statement-transaction-matches",
+            "as": "t3",
+            "let": {
+              "t1__id": "$t1._id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$eq": [
+                      "$fileId",
+                      {
+                        "$toString": "$$t1__id"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$match": {
+                  "hasMatches": {
+                    "$eq": true
+                  }
+                }
+              },
+              {
+                "$group": {
+                  "_id": {
+                    "fileId": "$fileId"
+                  },
+                  "matchedCount": {
+                    "$sum": 1
+                  }
+                }
+              },
+              {
+                "$project": {
+                  "fileId": "$_id.fileId",
+                  "_id": 0,
+                  "matchedCount": "$matchedCount"
+                }
+              },
+              {
+                "$unset": "_id"
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "t3": {
+              "$first": "$t3"
+            }
+          }
+        },
+        {
+          "$match": {
+            "$or": [
+              {
+                "t1._dateUpdated": {
+                  "$gte": "2026-05-14T00:00:00.000Z"
+                }
+              },
+              {
+                "mu.matchesDateUpdated": {
+                  "$ne": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$project": {
+            "_id": "$t1._id",
+            "name": "$t1.name",
+            "type": "$t1.type",
+            "mimeType": "$t1.mimeType",
+            "size": "$t1.size",
+            "data": "$t1.data",
+            "connectionId": "$t1.connectionId",
+            "dateUploaded": "$t1.dateUploaded",
+            "status": "$t1.status",
+            "statusLog": "$t1.statusLog",
+            "additionalInfo": "$t1.additionalInfo",
+            "fields": "$t1.fields",
+            "numberOfRecords": "$t1.numberOfRecords",
+            "carrierId": "$t1.carrierId",
+            "carrierName": "$t1.carrierName",
+            "carrierMatches": "$t1.carrierMatches",
+            "statementDate": "$t1.statementDate",
+            "schemaFields": "$t1.schemaFields",
+            "readerConfig": "$t1.readerConfig",
+            "transactionMapping": "$t1.transactionMapping",
+            "category": "$t1.category",
+            "_dateUpdated": "$t1._dateUpdated",
+            "lastStatus": "$t1.lastStatus",
+            "daysOnStatus": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$ne": [
+                        "$t1.lastStatus",
+                        null
+                      ]
+                    },
+                    "then": {
+                      "$dateDiff": {
+                        "startDate": {
+                          "$toDate": {
+                            "$toString": "$t1.lastStatus.statusDate"
+                          }
+                        },
+                        "endDate": "$$NOW",
+                        "unit": "day"
+                      }
+                    }
+                  }
+                ],
+                "default": {
+                  "$literal": null
+                }
+              }
+            },
+            "transactionCount": {
+              "$round": [
+                "$t2.transactionCount",
+                {
+                  "$literal": 2
+                }
+              ]
+            },
+            "totalCommAmount": {
+              "$round": [
+                "$t2.totalCommAmount",
+                {
+                  "$literal": 2
+                }
+              ]
+            },
+            "totalPremiumAmount": {
+              "$round": [
+                "$t2.totalPremiumAmount",
+                {
+                  "$literal": 2
+                }
+              ]
+            },
+            "matchedCount": {
+              "$round": [
+                "$t3.matchedCount",
+                {
+                  "$literal": 2
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   }
 }
