@@ -4,6 +4,7 @@ const fs = require('fs');
 const $path = require('path');
 const {dbName} = require('../mongo-client');
 const SQLParser = require('../../../lib/SQLParser.js');
+const {optimizeMongoAggregate} = require('../../../lib/optimizer.js');
 const $check = require('check-types');
 
 module.exports = {
@@ -49,6 +50,7 @@ async function queryResultTester(options) {
         unsetId = true,
         optimizeJoins = false,
         skipDbQuery = false,
+        postOptimization = false,
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
@@ -59,6 +61,9 @@ async function queryResultTester(options) {
         unsetId,
         optimizeJoins,
     });
+    const pipelineToUse = postOptimization
+        ? optimizeMongoAggregate(pipeline)
+        : pipeline;
     const filePath = $path.resolve(dirName, fileName);
     /** @type {import("mongodb").Document[]} */
     let results = [];
@@ -67,7 +72,7 @@ async function queryResultTester(options) {
             results = await mongoClient
                 .db(dbName)
                 .collection(collections[0])
-                .aggregate(pipeline)
+                .aggregate(pipelineToUse)
                 .toArray();
         } catch (err) {
             console.error(err);
@@ -78,7 +83,7 @@ async function queryResultTester(options) {
     const obj = await readCases(filePath);
     if (mode === 'write') {
         if (outputPipeline) {
-            set(obj, casePath + '.pipeline', pipeline);
+            set(obj, casePath + '.pipeline', pipelineToUse);
         } else {
             set(obj, casePath + '.pipeline', undefined);
         }
@@ -87,7 +92,7 @@ async function queryResultTester(options) {
         }
         await writeFile(filePath, obj);
     } else if (outputPipeline) {
-        set(obj, casePath + '.pipeline', pipeline);
+        set(obj, casePath + '.pipeline', pipelineToUse);
         await writeFile(filePath, obj);
     }
     if (!expectZeroResults && !skipDbQuery) {
@@ -98,7 +103,9 @@ async function queryResultTester(options) {
     return {
         results,
         collections,
-        pipeline,
+        pipeline: pipelineToUse,
+        unoptimizedPipeline: pipeline,
+        optimizedPipeline: postOptimization ? pipelineToUse : undefined,
     };
 }
 
