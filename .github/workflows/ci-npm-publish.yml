@@ -17,10 +17,11 @@ jobs:
         image: mongo:7.0
         ports:
           - 27017:27017
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
@@ -28,21 +29,21 @@ jobs:
       # script could steal NODE_AUTH_TOKEN.
       - name: Install NPM dependencies
         run: npm install --ignore-scripts
-
       - name: Run linting
         run: npm run lint
-
       - name: Run tests
         run: npm run test-ci
 
   publish-npm:
     name: NPM Publish
     needs: build
+    environment: npm-publish
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
@@ -50,7 +51,6 @@ jobs:
       # script could steal NODE_AUTH_TOKEN.
       - name: Install NPM dependencies
         run: npm install --ignore-scripts --production
-
       - name: Run NPM publish
         run: npm publish --access public
 
