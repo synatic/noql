@@ -100,7 +100,7 @@
     "prettier": "3.8.3",
     "underscore.string": "3.3.6",
     "webpack": "5.107.2",
-    "webpack-bundle-analyzer": "4.10.2",
+    "webpack-bundle-analyzer": "5.3.0",
     "webpack-cli": "5.1.4"
   },
   "sideEffects": false
