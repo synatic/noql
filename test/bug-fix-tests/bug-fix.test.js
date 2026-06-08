@@ -3414,6 +3414,52 @@ order by CurrentDv asc , SQ asc`;
         });
     });
 
+    describe('optimize joins in subquery from clause', () => {
+        it('should optimize joins inside a from subquery when optimizeJoins is enabled', () => {
+            const queryString = `
+                SELECT records AS \`$$ROOT\`
+                FROM (
+                    SELECT DISTINCT RecordId, unset(_id)
+                    FROM function-test-data AS r
+                    INNER JOIN function-test-data AS fe
+                        ON r.RecordId = fe.RecordId
+                        AND (
+                            fe.DefinitionId = 'def1'
+                            AND fe.DataValue = 'val1'
+                        )
+                    WHERE r.testId = 'bugfix.subquery-join-optimize.case1'
+                    ORDER BY AuditDt ASC, SQ ASC
+                ) AS records
+            `;
+            const errors = [];
+            const originalError = console.error;
+            console.error = (...args) => {
+                errors.push(args.join(' '));
+            };
+            try {
+                const {pipeline} = makeMongoAggregate(queryString, {
+                    optimizeJoins: true,
+                });
+                assert.strictEqual(
+                    errors.length,
+                    0,
+                    `join optimization should not log errors: ${errors.join(', ')}`
+                );
+                const lookup = pipeline.find((stage) => stage.$lookup);
+                assert(lookup, 'expected a $lookup stage for the inner join');
+                const lookupMatch = lookup.$lookup.pipeline.find(
+                    (stage) => stage.$match?.$expr?.$and
+                );
+                assert(
+                    lookupMatch,
+                    'expected join conditions to be optimized into the lookup pipeline'
+                );
+            } finally {
+                console.error = originalError;
+            }
+        });
+    });
+
     describe('post-optimizer', () => {
         it('should work with a simple conversion function in the where', async () => {
             const queryString = `
