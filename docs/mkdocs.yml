@@ -83,6 +83,7 @@ extra_javascript:
   - javascripts/playground/nodeQueryConstructor.js
   - javascripts/playground/shellQueryConstructor.js
   - javascripts/playground/playground.js
+  - javascripts/skill-download.js
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -121,3 +122,4 @@ nav:
   - JS Library:
       - Getting Started: js-library/getting-started.md
       - API: js-library/api-reference.md
+  - Skill.md: skill.md
