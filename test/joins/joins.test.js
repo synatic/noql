@@ -36,6 +36,78 @@ describe('joins', function () {
         disconnect().then(done).catch(done);
     });
 
+    describe('first hint optimization', () => {
+        it('should add $limit: 1 inside the lookup sub-pipeline for complex joins with |first hint', () => {
+            const queryText = `
+                SELECT c.id, cn.id as CNoteId
+                FROM customers c
+                left outer join 'customer-notes' 'cn|first' on cn.id=to_int(c.id)`;
+            const parsedQuery =
+                /** @type {import('../../lib/types').ParsedMongoAggregate} */ (
+                    SQLParser.parseSQL(queryText)
+                );
+            const lookupStage = parsedQuery.pipeline.find((s) => s.$lookup);
+            assert.ok(lookupStage, 'Should have a $lookup stage');
+            assert.ok(
+                lookupStage.$lookup.pipeline,
+                'Lookup should use a sub-pipeline (not localField/foreignField)'
+            );
+            const subPipeline = lookupStage.$lookup.pipeline;
+            const lastStage = subPipeline[subPipeline.length - 1];
+            assert.deepStrictEqual(
+                lastStage,
+                {$limit: 1},
+                'Last stage in lookup sub-pipeline should be {$limit: 1}'
+            );
+        });
+
+        it('should place $limit: 1 after $sort in the lookup sub-pipeline when the join subquery has ORDER BY', () => {
+            const queryText = `
+                SELECT c.id, cn.id as CNoteId
+                FROM customers c
+                inner join (SELECT * FROM 'customer-notes' ORDER BY id DESC) 'cn|first' on cn.id=c.id`;
+            const parsedQuery =
+                /** @type {import('../../lib/types').ParsedMongoAggregate} */ (
+                    SQLParser.parseSQL(queryText)
+                );
+            const lookupStage = parsedQuery.pipeline.find((s) => s.$lookup);
+            assert.ok(lookupStage, 'Should have a $lookup stage');
+            const subPipeline = lookupStage.$lookup.pipeline;
+            const sortIndex = subPipeline.findIndex((s) => s.$sort);
+            const limitIndex = subPipeline.findIndex((s) => s.$limit === 1);
+            assert.ok(
+                sortIndex >= 0,
+                'Should have a $sort stage from ORDER BY'
+            );
+            assert.ok(limitIndex >= 0, 'Should have a $limit: 1 stage');
+            assert.ok(
+                sortIndex < limitIndex,
+                '$sort should come before $limit: 1'
+            );
+        });
+
+        it('should not add $limit: 1 inside the lookup sub-pipeline for |last hint', () => {
+            const queryText = `
+                SELECT c.id, cn.id as CNoteId
+                FROM customers c
+                left outer join 'customer-notes' 'cn|last' on cn.id=to_int(c.id)`;
+            const parsedQuery =
+                /** @type {import('../../lib/types').ParsedMongoAggregate} */ (
+                    SQLParser.parseSQL(queryText)
+                );
+            const lookupStage = parsedQuery.pipeline.find((s) => s.$lookup);
+            assert.ok(lookupStage, 'Should have a $lookup stage');
+            if (lookupStage.$lookup.pipeline) {
+                const subPipeline = lookupStage.$lookup.pipeline;
+                const hasLimitOne = subPipeline.some((s) => s.$limit === 1);
+                assert.ok(
+                    !hasLimitOne,
+                    'Should NOT have $limit: 1 in sub-pipeline for |last hint'
+                );
+            }
+        });
+    });
+
     describe('regression tests', () => {
         it('should work for case 1', async () => {
             await queryResultTester({
