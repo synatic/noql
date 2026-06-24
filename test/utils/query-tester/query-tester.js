@@ -51,10 +51,12 @@ async function queryResultTester(options) {
         optimizeJoins = false,
         skipDbQuery = false,
         postOptimization = false,
+        templateValues = {},
     } = options;
     if (!fileName.endsWith('.json')) {
         fileName = fileName + '.json';
     }
+    queryString = applyTemplateValues(queryString, templateValues);
     const {collections, pipeline} = SQLParser.makeMongoAggregate(queryString, {
         schemas,
         unwindJoins,
@@ -107,6 +109,26 @@ async function queryResultTester(options) {
         unoptimizedPipeline: pipeline,
         optimizedPipeline: postOptimization ? pipelineToUse : undefined,
     };
+}
+
+/**
+ * Substitutes {@key} placeholders in a query string with values from a map.
+ * Array values are joined as comma-separated quoted strings for use in IN clauses.
+ * @param {string} queryString
+ * @param {Record<string, string|number|boolean|string[]>} templateValues
+ * @returns {string}
+ */
+function applyTemplateValues(queryString, templateValues) {
+    return queryString.replace(/\{@([^}]+)\}/g, (match, key) => {
+        if (!(key in templateValues)) {
+            return match;
+        }
+        const value = templateValues[key];
+        if (Array.isArray(value)) {
+            return value.map((v) => `"${v}"`).join(', ');
+        }
+        return String(value);
+    });
 }
 
 /**

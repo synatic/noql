@@ -1079,5 +1079,8 @@
   "use-cases": {
     "case-1": {},
     "case-2": {}
+  },
+  "bug-fixes": {
+    "case-1": {}
   }
 }

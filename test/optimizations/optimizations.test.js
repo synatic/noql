@@ -5183,6 +5183,282 @@ describe('optimizations', function () {
         });
     });
 
+    describe('ams360 policy buffer joins', () => {
+        const connectionId = 'global-pmcaams360';
+
+        /**
+         * Buffer NoQL joins nine entity slices from one collection.
+         * Literal predicates must be direct $match stages so compound indexes apply.
+         * @param {import('mongodb').Document[]} pipeline
+         */
+        function assertEntityLookupPipelinesUseIndexableMatch(pipeline) {
+            const entityByLookupAs = {
+                div: 'Divisions',
+                dep: 'Departments',
+                branch: 'Branches',
+                grp: 'Groups',
+                comp: 'Companies',
+                wcomp: 'Companies',
+                exec: 'Employees',
+                rep: 'Employees',
+                cust: 'Customers',
+            };
+
+            const lookupStages = pipeline.filter((stage) => stage.$lookup);
+            assert.strictEqual(
+                lookupStages.length,
+                9,
+                'expected nine entity lookups on the buffer collection'
+            );
+
+            for (const [as, entity] of Object.entries(entityByLookupAs)) {
+                const lookupStage = lookupStages.find(
+                    (stage) => stage.$lookup.as === as
+                );
+                assert(lookupStage, `expected $lookup for ${as}`);
+
+                const subPipeline = lookupStage.$lookup.pipeline;
+                const directMatchStage = subPipeline.find(
+                    (stage) => stage.$match && !stage.$match.$expr
+                );
+                assert(
+                    directMatchStage,
+                    `${as} lookup should hoist _connectionId and _entity into a direct $match`
+                );
+                assert.strictEqual(
+                    directMatchStage.$match._connectionId,
+                    connectionId
+                );
+                assert.strictEqual(directMatchStage.$match._entity, entity);
+
+                const exprMatchStage = subPipeline.find(
+                    (stage) => stage.$match && stage.$match.$expr
+                );
+                assert(
+                    exprMatchStage,
+                    `${as} lookup should keep correlated _recordId in $expr`
+                );
+                const expr = exprMatchStage.$match.$expr;
+                assert(
+                    expr.$eq &&
+                        expr.$eq[0] === '$_recordId' &&
+                        expr.$eq[1].startsWith('$$'),
+                    `${as} lookup $expr should correlate on _recordId`
+                );
+
+                assert(
+                    subPipeline.some((stage) => stage.$limit === 1),
+                    `${as} lookup should include $limit 1 for |first hint`
+                );
+            }
+        }
+
+        it('should generate indexable lookup subpipelines for ams360 policy buffer enrichment', async () => {
+            const queryString = `SELECT
+    UNSET(_id),
+    pol.\`_connectionId\` AS _connectionId,
+    pol.\`policyId\` AS policyId,
+    pol.\`customerId\` AS customerId,
+    -- policy info
+    pol.\`policyNumber\` AS policyNumber,
+    pol.\`status\` AS policyStatus,
+    pol.\`policyEffectiveDate\` AS policyEffectiveDateStr,
+    TO_DATE(pol.\`policyEffectiveDate\`) AS policyEffectiveDate,
+    pol.\`policyExpirationDate\` AS policyExpirationDateStr,
+    TO_DATE(pol.\`policyExpirationDate\`) AS policyExpirationDate,
+    pol.\`billMethod\` AS billMethod,
+    pol.\`policySubType\` AS policySubType,
+    pol.\`policyType\` AS policyType,
+    pol.\`typeOfBusiness\` AS policyTypeOfBusiness,
+    pol.\`priorPolicy\` AS priorPolicy,
+    pol.\`typeOfBusiness\` AS typeOfBusiness,
+    pol.\`lineOfBusiness\` AS lineOfBusiness,
+    IFNULL(pol.\`sourcePolicyId\`, NULL) AS sourcePolicyId,
+    IFNULL(pol.\`priorPolicyId\`, NULL) AS priorPolicyId,
+    pol.\`description\` AS description,
+    pol.\`isContinuous\` AS isContinuous,
+    pol.\`isFinanced\` AS isFinanced,
+    pol.\`isBusinessNewToAgency\` AS isBusinessNewToAgency,
+    pol.\`notRenewable\` AS notRenewable,
+    pol.\`renewalReportStatus\` AS renewalReportStatus,
+    pol.\`issuedState\` AS issuedState,
+    pol.\`renewalList\` AS renewalList,
+    pol.\`paymentPlan\` AS paymentPlan,
+    pol.carrierStatus AS carrierStatus,
+    pol.\`agencyNotation\` AS agencyNotation,
+    pol.\`isMultiEntity\` AS isMultiEntity,
+    -- customer details
+    IFNULL(cust.\`names.firstName\`, NULL) AS customerFirstName,
+    IFNULL(cust.\`names.lastName\`, NULL) AS customerLastName,
+    IFNULL(cust.\`names.firmName\`, NULL) AS customerFirmName,
+    IFNULL(cust.\`customerNumber\`, NULL) AS customerNumber,
+    IFNULL(
+        IFNULL(cust.\`customerType\`, pol.\`customerType\`),
+        NULL
+    ) AS customerType,
+    -- servicing agents
+    pol.\`accountExec\` AS accountExec,
+    pol.\`accountRep\` AS accountRep,
+    IFNULL(exec.\`ShortName\`, NULL) AS accountExecShortName,
+    IFNULL(rep.\`ShortName\`, NULL) AS accountRepShortName,
+    IFNULL(
+        IFNULL(exec.\`EmployeeCode\`, pol.executiveCode),
+        NULL
+    ) AS accountExecCode,
+    IFNULL(IFNULL(rep.\`EmployeeCode\`, pol.csrCode), NULL) AS accountRepCode,
+    -- structure
+    IFNULL(
+        IFNULL(dep.\`Name\`, pol.\`businessUnitDepartment\`),
+        NULL
+    ) AS glDepartment,
+    UPPER(TRIM(IFNULL(dep.\`ShortName\`, NULL))) AS glDepartmentShortName,
+    IFNULL(dep.\`GLDepartmentCode\`, NULL) AS glDepartmentCode,
+    IFNULL(
+        IFNULL(div.\`Name\`, pol.\`businessUnitDivision\`),
+        NULL
+    ) AS glDivision,
+    UPPER(TRIM(IFNULL(div.\`ShortName\`, NULL))) AS glDivisionShortName,
+    IFNULL(div.\`GLDivisionCode\`, NULL) AS glDivisionCode,
+    IFNULL(
+        IFNULL(branch.\`Name\`, pol.\`businessUnitBranch\`),
+        NULL
+    ) AS glBranch,
+    UPPER(TRIM(IFNULL(branch.\`ShortName\`, NULL))) AS glBranchShortName,
+    IFNULL(branch.\`GLBranchCode\`, NULL) AS glBranchCode,
+    IFNULL(
+        IFNULL(grp.\`Name\`, pol.\`businessUnitGroup\`),
+        NULL
+    ) AS glGroup,
+    UPPER(TRIM(IFNULL(grp.\`ShortName\`, NULL))) AS glGroupShortName,
+    IFNULL(grp.\`GLGroupCode\`, NULL) AS glGroupCode,
+    -- companies
+    IFNULL(IFNULL(comp.\`Name\`, pol.\`companyName\`), NULL) AS companyName,
+    IFNULL(
+        IFNULL(comp.\`CompanyCode\`, pol.\`companyCode\`),
+        NULL
+    ) AS companyCode,
+    UPPER(TRIM(IFNULL(comp.\`ShortName\`, NULL))) AS companyShortName,
+    IFNULL(IFNULL(wcomp.\`Name\`, pol.\`writingCompany\`), NULL) AS writingCompanyName,
+    IFNULL(
+        IFNULL(wcomp.\`CompanyCode\`, pol.\`writingCompanyCode\`),
+        NULL
+    ) AS writingCompanyCode,
+    UPPER(TRIM(IFNULL(wcomp.\`ShortName\`, NULL))) AS writingCompanyShortName,
+    IFNULL(pol.parentCompany, NULL) AS parentCompany,
+    -- pricing
+    IFNULL(pol.\`premiumTotals.fullTermPremium\`, 0) AS fullTermPremium,
+    IFNULL(pol.\`premiumTotals.premium\`, 0) AS premium,
+    IFNULL(pol.\`premiumTotals.billedPremium\`, 0) AS billedPremium,
+    IFNULL(pol.\`premiumTotals.unbilledPremium\`, 0) AS unbilledPremium,
+    IFNULL(pol.\`premiumTotals.feesAndTaxes\`, 0) AS feesAndTaxes,
+    IFNULL(pol.\`premiumTotals.billedFeesAndTaxes\`, 0) AS billedFeesAndTaxes,
+    IFNULL(pol.\`premiumTotals.costOfInsurance\`, 0) AS costOfInsurance,
+    IFNULL(pol.\`premiumTotals.unbilledFeesAndTaxes\`, 0) AS unbilledFeesAndTaxes,
+    IFNULL(pol.billedStatementPremium, 0) AS billedStatementPremium,
+    -- lob
+    IFNULL(
+        (
+            SELECT
+                lineofBusinessCode AS \`$ROOT\` FROM pol.linesOfBusiness),
+        PARSE_JSON('[]')
+    )                                                                                                                                                                AS linesOfBusinessList,
+    IFNULL(
+        (SELECT description, lobId, lineofBusinessCode, systemDataEntry, isSpecialtyDataEntry, writingCompany, companyPlan, statePlan FROM pol.linesOfBusiness),
+        PARSE_JSON('[]')
+    )                                                                                                                                                                AS linesOfBusiness,
+
+    -- transactions
+    IFNULL(pol.transactionType, NULL)                                                                                                                                AS transactionType,
+    IFNULL(pol.transactionDescription, NULL)                                                                                                                         AS transactionDescription,
+    IFNULL(pol.transactionEffectiveDate, NULL)                                                                                                                       AS transactionEffectiveDateStr,
+    TO_DATE(IFNULL(pol.transactionEffectiveDate, NULL))                                                                                                              AS transactionEffectiveDate,
+    (
+        SELECT
+            \`transactionEffectiveDate\`                                                                                                                               AS transactionEffectiveDateStr,
+            TO_DATE(\`$this.transactionEffectiveDate\`)                                                                                                                AS transactionEffectiveDate,
+            \`transactionType\`                                                                                                                                        AS transactionType,
+            \`description\`                                                                                                                                            AS description,
+            \`enteredDate\`                                                                                                                                            AS enteredDateStr,
+            TO_DATE(\`$this.enteredDate\`)                                                                                                                             AS enteredDate,
+            \`source\`                                                                                                                                                 AS source,
+            \`billedNonPremium\`                                                                                                                                       AS billedNonPremium,
+            CASE WHEN \`isUploaded\` = 'Y' THEN true ELSE false END                                                                                                   AS isUploaded,
+            \`billMethod\`                                                                                                                                             AS billMethod,
+            \`installmentDay\`                                                                                                                                         AS installmentDay,
+            \`paymentPlanId\`                                                                                                                                          AS paymentPlanId,
+            \`reasonForCancellation\`                                                                                                                                  AS reasonForCancellation,
+            \`replaceDateBinder\`                                                                                                                                      AS replaceDateBinder,
+            \`binderReplaceEffectiveDate\`                                                                                                                             AS binderReplaceEffectiveDateStr,
+            TO_DATE(\`$this.binderReplaceEffectiveDate\`)                                                                                                              AS binderReplaceEffectiveDate,
+            \`premiumToBillOnEffectiveDate\`                                                                                                                           AS premiumToBillOnEffectiveDateStr,
+            \`premiumToBillOnEffectiveDate\`                                                                                                            AS premiumToBillOnEffectiveDate,
+            CASE WHEN \`isPosted\` = 'Y' THEN true ELSE false END                                                                                                     AS isPosted,
+            \`estimatedRevenuePercent\`                                                                                                                                AS estimatedRevenuePercent
+        FROM pol.transactions
+    )                                                                                                                                                                AS transactions
+
+FROM \`agencysync-ams360-raw-data\` pol
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`div|first\`
+    ON div.\`_connectionId\` = 'global-pmcaams360'
+    AND div.\`_entity\`      = 'Divisions'
+    AND div.\`_recordId\`    = pol.\`glDivisionCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`dep|first\`
+    ON dep.\`_connectionId\` = 'global-pmcaams360'
+    AND dep.\`_entity\`      = 'Departments'
+    AND dep.\`_recordId\`    = pol.\`glDepartmentCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`branch|first\`
+    ON branch.\`_connectionId\` = 'global-pmcaams360'
+    AND branch.\`_entity\`      = 'Branches'
+    AND branch.\`_recordId\`    = pol.\`glBranchCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`grp|first\`
+    ON grp.\`_connectionId\` = 'global-pmcaams360'
+        AND grp.\`_entity\`      = 'Groups'
+    AND grp.\`_recordId\`    = pol.\`glGroupCode\`
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`comp|first\`
+    ON comp.\`_connectionId\` = 'global-pmcaams360'
+    AND comp.\`_entity\`      = 'Companies'
+    AND comp.\`_recordId\`    = pol.\`companyCode\`
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`wcomp|first\`
+    ON wcomp.\`_connectionId\` = 'global-pmcaams360'
+    AND wcomp.\`_entity\`      = 'Companies'
+    AND wcomp.\`_recordId\`    = pol.\`writingCompanyCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`exec|first\`
+    ON exec.\`_connectionId\` = 'global-pmcaams360'
+    AND exec.\`_entity\`      = 'Employees'
+    AND exec.\`_recordId\` = pol.\`executiveCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`rep|first\`
+    ON rep.\`_connectionId\` = 'global-pmcaams360'
+    AND rep.\`_entity\`      = 'Employees'
+    AND rep.\`_recordId\` = pol.\`csrCode\`
+
+LEFT OUTER JOIN \`agencysync-ams360-raw-data\` \`cust|first\`
+    ON cust.\`_connectionId\` = 'global-pmcaams360'
+    AND cust.\`_entity\`      = 'Customers'
+    AND cust.\`_recordId\`    = pol.\`customerId\`
+
+WHERE
+    pol.\`_connectionId\` = 'global-pmcaams360'
+    AND pol.\`_entity\` = 'Policies'
+AND pol.\`_dateUpdated\` >= TO_DATE('2026-06-22')
+`;
+            const {pipeline} = await queryResultTester({
+                queryString,
+                casePath: 'ams360-policy-buffer.case-1',
+                mode,
+                outputPipeline: false,
+                skipDbQuery: true,
+                postOptimization: true,
+                unsetId: false,
+            });
+            assertEntityLookupPipelinesUseIndexableMatch(pipeline);
+        });
+    });
+
     describe('bug fixes', () => {
         it('optimizer must not change result data when merging root-alias project stages', async () => {
             const queryString = `
@@ -5264,6 +5540,90 @@ describe('optimizations', function () {
                 '$$ROOT',
                 'Merged project must set c to $$ROOT so root alias is preserved; otherwise $c.c.* fields become null'
             );
+        });
+
+        it('should template in values', async () => {
+            const queryString = `
+                SELECT   unset(_id)
+                        ,pol._dateUpdated AS 'pol_dateUpdated'
+                        ,lob._dateUpdated AS 'lob_dateUpdated'
+                        ,pol.*
+                        ,lob.*
+                        ,'{@runInfo.lastRun}' AS 'lastRunDate'
+                        ,CertiCust.*
+                FROM \`veruna-data-warehouse-dds-buffers--vrnapolicyc\` pol
+
+                INNER JOIN (
+                            SELECT  VRNA__Policy__c,recordType.DeveloperName AS VRNA__Policy_Level_Coverage_LOB_Identifier__c,
+                                c._dateUpdated,
+                                c.LastModifiedDate                       AS LMC
+                            FROM \`veruna-data-warehouse-masterdata--vrnacoveragec\` \`c\`
+                            INNER JOIN \`veruna-data-warehouse-masterdata--coveragerecordtypes\` \`recordType|first\` on recordType.Id = c.RecordTypeId
+                            WHERE
+
+                                                recordType.\`DeveloperName\` = 'GL_Hazard_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'GL_Policy_Level_Coverages' OR
+
+                                                recordType.\`DeveloperName\` = 'CL_AUTOB_Policy_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'CL_AUTOB_Hired_Borrowed_NonOwned_DOC_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'Business_Auto_State_Schedule_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'Business_Auto_Policy_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'CL_AUTOB_Vehicle_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'CL_AUTOB_State_Level_Coverages' OR
+
+                                                recordType.\`DeveloperName\` = 'Work_Policy_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'Work_State_Schedule_Level_Coverages' OR
+
+                                                recordType.\`DeveloperName\` = 'CL_Umbrella_Policy_Level_Coverages' OR
+                                                recordType.\`DeveloperName\` = 'CL_Umbrella_Premise_Level_Coverages'
+
+
+
+                            ORDER BY c._dateUpdated DESC
+                            ) \`lob|first|optimize\`
+                ON lob.VRNA__Policy__c = pol.Id
+
+                INNER JOIN \`veruna--certificial-customer\` \`CertiCust|optimize\`
+                ON CertiCust.CustId = pol.VRNA__Account__c
+
+                -- WHERE   pol.VRNA__Status__c != "Expired"
+
+                WHERE   ( TO_DATE(pol._dateUpdated) >= TO_DATE('{@runInfo.lastRun}') OR  TO_DATE(lob._dateUpdated) >= TO_DATE('{@runInfo.lastRun}')  )
+
+                        AND
+                                ( pol.VRNA__Status__c IN  ( {@veruna--certificial-parameters--configpolicystatuses} )
+
+                                        OR
+
+                                ( pol.VRNA__Status__c IN  ( {@veruna--certificial-parameters--policystatusesdepcan} )
+                                AND   (
+                                        pol.NEW_VRNA__Cancellation_Date__c > TO_DATE('{@runInfo.timeStamp}')
+                                                OR
+                                        TO_DATE(pol.VRNA__Cancellation_Date__c) > TO_DATE('{@runInfo.timeStamp}') -- Cancellation date must be in the future.
+
+                                        )
+                                )
+                        )
+            `;
+            await queryResultTester({
+                queryString: queryString,
+                casePath: 'bug-fixes.case-2',
+                mode,
+                outputPipeline: false,
+                skipDbQuery: true,
+                optimizeJoins: true,
+                unsetId: false,
+                templateValues: {
+                    'runInfo.lastRun': '2024-01-01',
+                    'runInfo.timeStamp': '2024-06-01',
+                    'veruna--certificial-parameters--configpolicystatuses': [
+                        'Active',
+                    ],
+                    'veruna--certificial-parameters--policystatusesdepcan': [
+                        'Active',
+                    ],
+                },
+            });
         });
     });
 });
