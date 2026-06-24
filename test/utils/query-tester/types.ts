@@ -16,6 +16,8 @@ export interface BuildQueryResultOptions {
 export interface QueryResultOptions extends ParserOptions {
     /** The query string to run against the db */
     queryString: string;
+    /** Values to substitute for {@key} template placeholders in the query string */
+    templateValues?: Record<string, string | number | boolean | string[]>;
     /** The JSON path in the target file at which to store the results */
     casePath: string;
     /** Specifies if it should be run in write to file mode (when making changes) or test mode where the results are checked, defaults to test */

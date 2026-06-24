@@ -2688,6 +2688,87 @@ limit 501`;
             );
         });
 
+        it('should hoist lookup expr literal predicates with nested $and groups', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'cust',
+                        let: {
+                            pol_customerId: '$pol.customerId',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $and: [
+                                                    {
+                                                        $eq: [
+                                                            '$_connectionId',
+                                                            'global-pmcaams360',
+                                                        ],
+                                                    },
+                                                    {
+                                                        $eq: [
+                                                            '$_entity',
+                                                            'Customers',
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                $eq: [
+                                                    '$_recordId',
+                                                    '$$pol_customerId',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $lookup: {
+                            from: 'agencysync-ams360-raw-data',
+                            as: 'cust',
+                            let: {
+                                pol_customerId: '$pol.customerId',
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        _connectionId: 'global-pmcaams360',
+                                        _entity: 'Customers',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: [
+                                                '$_recordId',
+                                                '$$pol_customerId',
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'did not hoist nested lookup literal predicates'
+            );
+        });
+
         it('should not hoist lookup expr predicates with aggregation operators', function () {
             const pipeline = [
                 {
