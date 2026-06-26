@@ -2769,6 +2769,102 @@ limit 501`;
             );
         });
 
+        it('should hoist lookup literal predicates and preserve nested $or in $expr', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'agencysync-ams360-raw-data',
+                        as: 'comp',
+                        let: {
+                            pol_companyCode: '$pol.companyCode',
+                            pol_altCompanyCode: '$pol.altCompanyCode',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$_connectionId',
+                                                    'global-pmcaams360',
+                                                ],
+                                            },
+                                            {
+                                                $eq: ['$_entity', 'Companies'],
+                                            },
+                                            {
+                                                $or: [
+                                                    {
+                                                        $eq: [
+                                                            '$_recordId',
+                                                            '$$pol_companyCode',
+                                                        ],
+                                                    },
+                                                    {
+                                                        $eq: [
+                                                            '$_recordId',
+                                                            '$$pol_altCompanyCode',
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            assert.deepStrictEqual(
+                optimized,
+                [
+                    {
+                        $lookup: {
+                            from: 'agencysync-ams360-raw-data',
+                            as: 'comp',
+                            let: {
+                                pol_companyCode: '$pol.companyCode',
+                                pol_altCompanyCode: '$pol.altCompanyCode',
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        _connectionId: 'global-pmcaams360',
+                                        _entity: 'Companies',
+                                    },
+                                },
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $or: [
+                                                {
+                                                    $eq: [
+                                                        '$_recordId',
+                                                        '$$pol_companyCode',
+                                                    ],
+                                                },
+                                                {
+                                                    $eq: [
+                                                        '$_recordId',
+                                                        '$$pol_altCompanyCode',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'did not hoist literals while preserving nested $or'
+            );
+        });
+
         it('should not hoist lookup expr predicates with aggregation operators', function () {
             const pipeline = [
                 {
@@ -2894,6 +2990,104 @@ limit 501`;
                 optimizedTwice,
                 optimizedOnce,
                 'lookup hoist optimization should be idempotent'
+            );
+        });
+    });
+
+    describe('Optimize Join And Where', function () {
+        // Stripped-down repro of query-debug/us/02.noql-original.txt:
+        // a WHERE with an OR that spans the base table (pol) and the joined
+        // table (lob). The join optimizer must NOT split that OR across the
+        // lookup boundary, because two separate $match stages are AND-ed
+        // together, which silently turns `(pol OR lob)` into `(pol AND lob)`
+        // and drops part of the WHERE clause.
+        const joinSpanningOrSql = `
+            SELECT pol.*, lob.*
+            FROM \`polColl\` pol
+            INNER JOIN (
+                SELECT c.VRNA__Policy__c, c._dateUpdated
+                FROM \`covColl\` \`c\`
+            ) \`lob|first|optimize\` ON lob.VRNA__Policy__c = pol.Id
+            WHERE ( pol._dateUpdated >= TO_DATE('2026-06-26') OR lob._dateUpdated >= TO_DATE('2026-06-26') )
+              AND pol.Status IN ('New','Renewal')
+        `;
+
+        /**
+         * Collects every $match stage in the pipeline, including those nested
+         * inside $lookup sub-pipelines.
+         * @param {object[]} pipeline
+         * @returns {object[]} the $match bodies
+         */
+        function collectMatchStages(pipeline) {
+            const matches = [];
+            for (const stage of pipeline) {
+                if (stage.$match) {
+                    matches.push(stage.$match);
+                }
+                if (stage.$lookup && Array.isArray(stage.$lookup.pipeline)) {
+                    matches.push(...collectMatchStages(stage.$lookup.pipeline));
+                }
+            }
+            return matches;
+        }
+
+        /**
+         * @param {object} node
+         * @param {string} needle
+         * @returns {boolean} whether the serialized node references the needle
+         */
+        function referencesField(node, needle) {
+            return JSON.stringify(node).includes(needle);
+        }
+
+        it('should not split a join-spanning OR into separate AND-ed matches', function () {
+            const pipeline = SQLParser.parseSQL(joinSpanningOrSql, {
+                optimizeJoins: true,
+            }).pipeline;
+
+            const matchStages = collectMatchStages(pipeline);
+
+            // The pol-date and lob-date predicates must live together in a
+            // single $or. If the optimizer split them, each ends up in its own
+            // $match stage (AND-ed) and this combined $or no longer exists.
+            const combinedOrStages = matchStages.filter((match) => {
+                const or = match.$or || (match.$expr && match.$expr.$or);
+                if (!Array.isArray(or)) {
+                    return false;
+                }
+                const hasPolDate = referencesField(or, '_dateUpdated');
+                const hasLobDate =
+                    or.some((branch) => referencesField(branch, 'lob.')) ||
+                    or.some((branch) => referencesField(branch, '$_dateUpdated'));
+                return hasPolDate && hasLobDate;
+            });
+
+            assert.strictEqual(
+                combinedOrStages.length >= 1,
+                true,
+                'The (pol._dateUpdated OR lob._dateUpdated) predicate must remain a single OR, ' +
+                    'but it was split across the join boundary into separate AND-ed $match stages. ' +
+                    'Pipeline: ' +
+                    JSON.stringify(pipeline)
+            );
+
+            // And there must be no $match stage that references the pol-date
+            // predicate without the lob-date predicate (the tell-tale split).
+            const splitStages = matchStages.filter((match) => {
+                const text = JSON.stringify(match);
+                const mentionsPolDate = text.includes('pol._dateUpdated');
+                const mentionsLobDate =
+                    text.includes('lob._dateUpdated') ||
+                    text.includes('$_dateUpdated');
+                return mentionsPolDate && !mentionsLobDate;
+            });
+
+            assert.strictEqual(
+                splitStages.length,
+                0,
+                'Found a $match that filters on pol._dateUpdated without the lob._dateUpdated ' +
+                    'branch, which means the OR was split into an AND. Offending stages: ' +
+                    JSON.stringify(splitStages)
             );
         });
     });
