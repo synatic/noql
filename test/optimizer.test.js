@@ -1742,21 +1742,10 @@ limit 501`;
                             },
                             pipeline: [
                                 {
-                                    $project: {
-                                        id2: '$id2',
-                                        val: '$val',
-                                    },
-                                },
-                                {
                                     $match: {
                                         val: {
                                             $gt: 3,
                                         },
-                                    },
-                                },
-                                {
-                                    $project: {
-                                        id2: '$id2',
                                     },
                                 },
                                 {
@@ -1827,21 +1816,10 @@ limit 501`;
                             },
                             pipeline: [
                                 {
-                                    $project: {
-                                        id2: '$id2',
-                                        val: '$val',
-                                    },
-                                },
-                                {
                                     $match: {
                                         val: {
                                             $gt: 3,
                                         },
-                                    },
-                                },
-                                {
-                                    $project: {
-                                        id2: '$id2',
                                     },
                                 },
                                 {
@@ -1926,21 +1904,10 @@ limit 501`;
                             },
                             pipeline: [
                                 {
-                                    $project: {
-                                        id2: '$id2',
-                                        val: '$val',
-                                    },
-                                },
-                                {
                                     $match: {
                                         val: {
                                             $gt: 3,
                                         },
-                                    },
-                                },
-                                {
-                                    $project: {
-                                        id2: '$id2',
                                     },
                                 },
                                 {
@@ -2991,6 +2958,302 @@ limit 501`;
                 optimizedOnce,
                 'lookup hoist optimization should be idempotent'
             );
+        });
+
+        it('should move lookup $match before simple rename $project stages', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'ams360-accudata-customer-name',
+                        as: 'matched',
+                        let: {
+                            cust_CustomerId: '$cust.CustomerId',
+                        },
+                        pipeline: [
+                            {
+                                $project: {
+                                    processingStatus: '$processingStatus',
+                                    custId: '$transformedRecord.CustomerId',
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$custId',
+                                                    '$$cust_CustomerId',
+                                                ],
+                                            },
+                                            {
+                                                $or: [
+                                                    {
+                                                        $or: [
+                                                            {
+                                                                $eq: [
+                                                                    '$processingStatus',
+                                                                    'Accepted',
+                                                                ],
+                                                            },
+                                                            {
+                                                                $eq: [
+                                                                    '$processingStatus',
+                                                                    'Rejected',
+                                                                ],
+                                                            },
+                                                        ],
+                                                    },
+                                                    {
+                                                        $eq: [
+                                                            '$processingStatus',
+                                                            'Processed',
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                $limit: 1,
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            const lookupPipeline = optimized[0].$lookup.pipeline;
+
+            assert.strictEqual(
+                lookupPipeline[0].$match !== undefined,
+                true,
+                'first lookup stage should be $match'
+            );
+            assert.strictEqual(
+                lookupPipeline[0].$project,
+                undefined,
+                '$project should be removed when only $limit follows'
+            );
+            assert.strictEqual(
+                JSON.stringify(lookupPipeline[0].$match).includes('$custId'),
+                false,
+                '$match should not reference projected alias custId'
+            );
+            assert.strictEqual(
+                JSON.stringify(lookupPipeline[0].$match).includes(
+                    '$transformedRecord.CustomerId'
+                ),
+                true,
+                '$match should reference underlying nested path'
+            );
+            assert.strictEqual(lookupPipeline[1].$limit, 1);
+        });
+
+        it('should keep lookup rename $project when later stages need aliases', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'matched-buffer',
+                        as: 'matched',
+                        let: {
+                            cust_CustomerId: '$cust.CustomerId',
+                        },
+                        pipeline: [
+                            {
+                                $project: {
+                                    custId: '$transformedRecord.CustomerId',
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$custId', '$$cust_CustomerId'],
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    matchedId: '$custId',
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            const lookupPipeline = optimized[0].$lookup.pipeline;
+
+            assert.strictEqual(
+                lookupPipeline[0].$match !== undefined,
+                true,
+                'rewritten $match should be first'
+            );
+            assert.strictEqual(
+                JSON.stringify(lookupPipeline[0].$match).includes('$custId'),
+                false,
+                '$match should not reference projected alias custId'
+            );
+            assert.strictEqual(
+                JSON.stringify(lookupPipeline).includes(
+                    '$transformedRecord.CustomerId'
+                ),
+                true,
+                'pipeline should reference the underlying nested path'
+            );
+        });
+
+        it('should not reorder lookup $project before $match for non-simple projects', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'matched-buffer',
+                        as: 'matched',
+                        let: {},
+                        pipeline: [
+                            {
+                                $project: {
+                                    custId: {
+                                        $toString: '$transformedRecord.CustomerId',
+                                    },
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$custId', '$$cust_CustomerId'],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            const lookupPipeline = optimized[0].$lookup.pipeline;
+
+            assert.deepStrictEqual(
+                lookupPipeline[0].$project,
+                pipeline[0].$lookup.pipeline[0].$project
+            );
+            assert.deepStrictEqual(
+                lookupPipeline[1].$match,
+                pipeline[0].$lookup.pipeline[1].$match
+            );
+        });
+
+        it('should keep lookup project-before-match optimization idempotent', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'ams360-accudata-customer-name',
+                        as: 'matched',
+                        let: {
+                            cust_CustomerId: '$cust.CustomerId',
+                        },
+                        pipeline: [
+                            {
+                                $project: {
+                                    processingStatus: '$processingStatus',
+                                    custId: '$transformedRecord.CustomerId',
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    '$custId',
+                                                    '$$cust_CustomerId',
+                                                ],
+                                            },
+                                            {
+                                                $eq: [
+                                                    '$processingStatus',
+                                                    'Accepted',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                $limit: 1,
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimizedOnce = optimizer.optimizeMongoAggregate(
+                pipeline,
+                {}
+            );
+            const optimizedTwice = optimizer.optimizeMongoAggregate(
+                optimizedOnce,
+                {}
+            );
+
+            assert.deepStrictEqual(
+                optimizedTwice,
+                optimizedOnce,
+                'lookup project-before-match optimization should be idempotent'
+            );
+        });
+
+        it('should not empty direct $match keys when alias maps to same field name', function () {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'Table2',
+                        as: 't2',
+                        let: {
+                            t1_id1: '$t1.id1',
+                        },
+                        pipeline: [
+                            {
+                                $project: {
+                                    id2: '$id2',
+                                    val: '$val',
+                                },
+                            },
+                            {
+                                $match: {
+                                    val: {
+                                        $gt: 3,
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    id2: '$id2',
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ['$$t1_id1', '$id2'],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            const lookupPipeline = optimized[0].$lookup.pipeline;
+
+            assert.deepStrictEqual(lookupPipeline[0].$match, {
+                val: {
+                    $gt: 3,
+                },
+            });
         });
     });
 
