@@ -36,6 +36,51 @@ describe('joins', function () {
         disconnect().then(done).catch(done);
     });
 
+    describe('join ON IN', () => {
+        /**
+         * @param {string} queryText
+         * @returns {object[]}
+         */
+        function getRecordTypeLookupMatchStages(queryText) {
+            const parsedQuery =
+                /** @type {import('../../lib/types').ParsedMongoAggregate} */ (
+                    SQLParser.parseSQL(queryText, {
+                        optimizeJoins: true,
+                        optimizePipeline: true,
+                    })
+                );
+            const recordTypeLookup = parsedQuery.pipeline.find(
+                (stage) => stage.$lookup && stage.$lookup.as === 'recordType'
+            );
+            assert.ok(recordTypeLookup, 'Should have recordType lookup');
+            return recordTypeLookup.$lookup.pipeline.filter(
+                (stage) => stage.$match
+            );
+        }
+
+        it('should compile join ON IN using the joined collection field path, not the alias prefix', () => {
+            const queryText = `
+                SELECT c.RecordTypeId
+                FROM \`veruna-data-warehouse-masterdata--vrnacoveragec\` c
+                INNER JOIN \`veruna-data-warehouse-masterdata--coveragerecordtypes\` \`recordType|first\`
+                  ON recordType.Id = c.RecordTypeId
+                 AND recordType.\`DeveloperName\` IN (
+                   'GL_Policy_Level_Coverages',
+                   'Work_Policy_Level_Coverages'
+                 )`;
+            const matchStages = getRecordTypeLookupMatchStages(queryText);
+            const matchExpr = JSON.stringify(matchStages);
+            assert.ok(
+                matchExpr.includes('$DeveloperName'),
+                'Expected $DeveloperName in recordType lookup match'
+            );
+            assert.ok(
+                !matchExpr.includes('$recordType.DeveloperName'),
+                'Join ON IN must not compile to $recordType.DeveloperName inside the recordType lookup'
+            );
+        });
+    });
+
     describe('first hint optimization', () => {
         it('should add $limit: 1 inside the lookup sub-pipeline for complex joins with |first hint', () => {
             const queryText = `
