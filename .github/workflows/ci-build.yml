@@ -35,6 +35,10 @@ jobs:
         run: npm install --ignore-scripts
       - name: Audit packages
         run: npm audit --audit-level=high --omit=dev
+      - name: Verify generated SQL grammar parser is up to date
+        run: |
+          npm run build:pegjs
+          git diff --exit-code -- lib/parser/noqlGrammar.js
       - name: Run linting
         run: npm run lint
       - name: Run tests

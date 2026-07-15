@@ -5,11 +5,13 @@
   "main": "index.js",
   "files": [
     "lib/",
-    "index.js"
+    "index.js",
+    "pegjs/"
   ],
   "scripts": {
     "build": "webpack --mode=production --config webpack.config.js",
     "build-dev": "webpack --mode=development --config webpack.config.js",
+    "build:pegjs": "node scripts/build-grammar.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",
@@ -71,7 +73,6 @@
     "dayjs": "1.11.20",
     "deepmerge": "4.3.1",
     "lodash": "4.18.1",
-    "node-sql-parser": "5.3.3",
     "object-hash": "3.0.0"
   },
   "devDependencies": {
@@ -96,6 +97,7 @@
     "mongodb": "7.2.0",
     "mongodb-language-model": "2.3.0",
     "nyc": "17.1.0",
+    "peggy": "3.0.2",
     "pg": "8.21.0",
     "prettier": "3.8.3",
     "underscore.string": "3.3.6",

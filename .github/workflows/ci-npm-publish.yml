@@ -29,6 +29,10 @@ jobs:
       # script could steal NODE_AUTH_TOKEN.
       - name: Install NPM dependencies
         run: npm install --ignore-scripts
+      - name: Verify generated SQL grammar parser is up to date
+        run: |
+          npm run build:pegjs
+          git diff --exit-code -- lib/parser/noqlGrammar.js
       - name: Run linting
         run: npm run lint
       - name: Run tests

@@ -3643,4 +3643,37 @@ order by CurrentDv asc , SQ asc`;
             });
         });
     });
+
+    describe('nested column path through a table alias', () => {
+        it('should resolve a 3-level dotted WHERE condition through a table alias', () => {
+            const {pipeline} = makeMongoAggregate(
+                `select * from mytable s where s.a.b != 'error'`
+            );
+            assert.deepStrictEqual(pipeline[1], {
+                $match: {'s.a.b': {$ne: 'error'}},
+            });
+        });
+
+        it('should resolve a function-wrapped 3-level dotted WHERE condition through a table alias', () => {
+            const {pipeline} = makeMongoAggregate(
+                `select * from mytable s where LOWER(s.a.b) != 'error'`
+            );
+            assert.deepStrictEqual(pipeline[1], {
+                $match: {
+                    $expr: {$ne: [{$toLower: '$s.a.b'}, 'error']},
+                },
+            });
+        });
+
+        it('should resolve a function-wrapped 3-level dotted WHERE condition through a joined table alias', () => {
+            const {pipeline} = makeMongoAggregate(
+                `select * from t1 s inner join t2 \`j|first\` on s.id = j.id where LOWER(j.a.b) != 'error'`
+            );
+            assert.deepStrictEqual(pipeline[pipeline.length - 1], {
+                $match: {
+                    $expr: {$ne: [{$toLower: '$j.a.b'}, 'error']},
+                },
+            });
+        });
+    });
 });
