@@ -40,6 +40,24 @@ docker run --rm -it -p 8000:8000 -v ${PWD}:/docs ghcr.io/afritzler/mkdocs-materi
 
 The docs will be available at [http://localhost:8000](http://localhost:8000)
 
+### Developing without Docker
+
+Alternatively, if you have Python installed locally:
+
+```bash
+pip install mkdocs-material
+```
+
+Then, from the repository root, run:
+
+```bash
+npm run docs:serve
+```
+
+This builds the JS bundle (`npm run build`), copies it into `docs/docs/javascripts/noql/index.js` (mirroring what CI does on release), and starts `mkdocs serve` from the `docs` directory. The docs will be available at [http://localhost:8000](http://localhost:8000).
+
+Note: if you change files under `lib/`, re-run `npm run docs:serve` (or `npm run build:docs` in another terminal) to rebuild the bundle — `mkdocs serve`'s live reload only watches the `docs` directory, but it will pick up the refreshed bundle file automatically once copied.
+
 ### Publishing
 
 Pushing to the `main` branch will automatically publish the docs to [https://noql.synatic.dev](https://noql.synatic.dev)

@@ -12,6 +12,8 @@
     "build": "webpack --mode=production --config webpack.config.js",
     "build-dev": "webpack --mode=development --config webpack.config.js",
     "build:pegjs": "node scripts/build-grammar.js",
+    "build:docs": "npm run build && cp ./dist/index.js ./docs/docs/javascripts/noql/index.js",
+    "docs:serve": "npm run build:docs && cd docs && mkdocs serve",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "lint-errors": "eslint . --quiet",

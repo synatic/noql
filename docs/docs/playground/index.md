@@ -83,3 +83,33 @@ Enter a SQL statement below to see NoQL's output, as well as the equivalent Mong
         </div>
     </div>
 </div>
+
+<hr>
+
+Enter a Mongo aggregation pipeline below (as a JSON array, or a full `{aggregate, pipeline, ...}` command document), along with the base collection(s) it runs against, to see the equivalent NoQL SQL statement. When a command document includes `aggregate`, the collection field can be left blank.
+
+<div>
+    <div class="admonition example">
+        <div style="display: flex; align-items: center; gap:0.5rem;margin-bottom: 0.5rem;margin-top:0.5rem">
+            <label for="playground-pipeline-collections">Collection(s):</label>
+            <input type="text" id="playground-pipeline-collections" name="playground-pipeline-collections" value="rockets" style="flex:1;">
+        </div>
+        <div class="playground-code-input" id="playground-pipeline-input">[
+  { "$match": { "type": "Falcon 9" } }
+]</div>
+    </div>
+    <button class="md-button md-button--primary" id="submit-pipeline">Convert to SQL</button>
+    <div id="playground-pipeline-error-container" class="admonition failure" style="display:none">
+        <p class="admonition-title">Error converting pipeline</p>
+        <p id="playground-pipeline-error-result"></p>
+    </div>
+</div>
+
+<div class="result" id="playground-pipeline-output-container" style="display:none">
+    <div class="admonition success">
+        <p class="admonition-title">SQL Result</p>
+        <div class="language-sql highlight">
+            <pre><code class="playground-code-output language-sql hljs" id="playground-pipeline-sql-result"></code></pre>
+        </div>
+    </div>
+</div>
