@@ -3032,10 +3032,13 @@ limit 501`;
                 true,
                 'first lookup stage should be $match'
             );
-            assert.strictEqual(
-                lookupPipeline[0].$project,
-                undefined,
-                '$project should be removed when only $limit follows'
+            assert.deepStrictEqual(
+                lookupPipeline[1].$project,
+                {
+                    processingStatus: '$processingStatus',
+                    custId: '$transformedRecord.CustomerId',
+                },
+                '$project must be kept after the hoisted $match so output shape is preserved'
             );
             assert.strictEqual(
                 JSON.stringify(lookupPipeline[0].$match).includes('$custId'),
@@ -3049,7 +3052,125 @@ limit 501`;
                 true,
                 '$match should reference underlying nested path'
             );
-            assert.strictEqual(lookupPipeline[1].$limit, 1);
+            assert.strictEqual(lookupPipeline[2].$limit, 1);
+        });
+
+        it('should preserve subquery SELECT $project after join $match hoist', function () {
+            // Repro of norfolk request_step_validations / contract_allowances:
+            // a SELECT $project followed by the join ON $match must not be dropped,
+            // or the subquery leaks the intermediate join shape instead of the
+            // projected columns.
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'norfolk-county-council-requeststepvalidations',
+                        as: 'request_step_validations',
+                        let: {
+                            request__id: '$request._id',
+                        },
+                        pipeline: [
+                            {
+                                $project: {
+                                    request_step_validation: '$$ROOT',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'norfolk-county-council-requeststeps',
+                                    as: 'request_step',
+                                    let: {
+                                        request_step_validation_request_step:
+                                            '$request_step_validation.request_step',
+                                    },
+                                    pipeline: [
+                                        {
+                                            $match: {
+                                                $expr: {
+                                                    $eq: [
+                                                        '$$request_step_validation_request_step',
+                                                        {
+                                                            $toString: '$_id',
+                                                        },
+                                                    ],
+                                                },
+                                            },
+                                        },
+                                        {
+                                            $limit: 1,
+                                        },
+                                    ],
+                                },
+                            },
+                            {
+                                $set: {
+                                    request_step: {
+                                        $first: '$request_step',
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    request:
+                                        '$request_step_validation.request',
+                                    validation:
+                                        '$request_step_validation.validation',
+                                    request_step: '$request_step.name',
+                                },
+                            },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [
+                                            '$request',
+                                            {
+                                                $toString: '$$request__id',
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+            const lookupPipeline = optimized[0].$lookup.pipeline;
+            const selectProject = lookupPipeline.find(
+                (stage) =>
+                    stage.$project &&
+                    stage.$project.request ===
+                        '$request_step_validation.request' &&
+                    stage.$project.validation ===
+                        '$request_step_validation.validation' &&
+                    stage.$project.request_step === '$request_step.name'
+            );
+
+            assert.ok(
+                selectProject,
+                'SELECT $project defining request/validation/request_step must be preserved'
+            );
+
+            const selectProjectIndex = lookupPipeline.indexOf(selectProject);
+            assert.strictEqual(
+                lookupPipeline[selectProjectIndex - 1].$match !== undefined,
+                true,
+                'join $match should be hoisted immediately before the SELECT $project'
+            );
+            assert.strictEqual(
+                JSON.stringify(
+                    lookupPipeline[selectProjectIndex - 1].$match
+                ).includes('$request_step_validation.request'),
+                true,
+                'hoisted join $match should use the underlying path, not the SELECT alias'
+            );
+            assert.strictEqual(
+                JSON.stringify(
+                    lookupPipeline[selectProjectIndex - 1].$match
+                ).includes('"$request"'),
+                false,
+                'hoisted join $match should not still reference the SELECT alias $request'
+            );
         });
 
         it('should keep lookup rename $project when later stages need aliases', function () {
