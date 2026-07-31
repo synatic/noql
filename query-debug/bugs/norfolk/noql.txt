@@ -1,0 +1,202 @@
+SELECT
+    request._id,
+    request.reference,
+    request.`status`,
+    request.comments,
+    request.comments_hr,
+    request.confirmation,
+    request.submitted,
+    request.start_date,
+    request.submission_date,
+    request.approval_date,
+    request._dateUpdated,
+    workitem.*,
+    request_creator.*,
+    request_approver.*,
+    request_type.*,
+    request_subtype.*,
+    request_step_validations.*,
+    establishment.*,
+    establishment_address.*,
+    establishment_type.*,
+    establishment_main.*,
+    establishment_main_address.*,
+    establishment_main_type.*,
+    /* Buffers - New Appointment Request */
+    employee.*,
+    employee_address.*,
+    employee_bank_details.*,
+    employee_bank_address.*,
+    employee_contacts.*,
+    employee_next_of_kin.*,
+    employee_role.*,
+    contract.*,
+    contract_allowances.*,
+    contract_pre_employment_checks.*,
+    contract_medical_referral_checks.*,
+    contract_role.*,
+    contract_salary.*,
+    contract_payscale_table.*,
+    contract_salary_points.*,
+    other_contracts.*,
+    /* Buffers - Changes to Contract Request */
+    contract_change.*,
+    contract_changes.*,
+    contract_changes_details.*,
+    contract_changes_allowances.*,
+    contract_changes_role.*,
+    contract_changes_salary.*,
+    /* Buffers - Changes to Personal Details Request */
+    employee_changes.*,
+    employee_changes_details.*,
+    employee_changes_address.*,
+    employee_changes_bank_details.*,
+    employee_changes_bank_address.*,
+    employee_changes_contacts.*,
+    /* Buffers - Contract Termination Request */
+    contract_termination_details.*
+
+FROM `norfolk-county-council-requests` AS request
+LEFT JOIN `work-management-workitems|first` AS workitem
+    ON workitem._id = TO_OBJECTID(request.workitem)
+LEFT JOIN `norfolk-county-council-users|first` AS request_creator
+    ON request_creator._id = TO_OBJECTID(request.creator)
+LEFT JOIN `norfolk-county-council-users|first` AS request_approver
+    ON request_approver._id = TO_OBJECTID(request.approver)
+LEFT JOIN `norfolk-county-council-requesttypes|first` AS request_type
+    ON request_type._id = TO_OBJECTID(request.type)
+LEFT JOIN `norfolk-county-council-requesttypes|first` AS request_subtype
+    ON request_subtype._id = TO_OBJECTID(request.sub_type)
+LEFT JOIN (
+    SELECT
+        request_step_validation.request as request,
+        request_step_validation.validation as validation,
+        request_step.name as request_step
+    FROM `norfolk-county-council-requeststepvalidations` AS request_step_validation
+    LEFT JOIN `norfolk-county-council-requeststeps|first` AS request_step
+        ON request_step_validation.request_step = TO_STRING(request_step._id)
+	WHERE request_step_validation.request = "{@parameters.request}"
+	) AS request_step_validations
+    On request_step_validations.request = TO_STRING(request._id)
+LEFT JOIN `norfolk-county-council-establishments|first` AS establishment
+    ON establishment._id = TO_OBJECTID(request.establishment)
+LEFT JOIN `norfolk-county-council-establishments|first` AS establishment_address
+    ON establishment_address._id = TO_OBJECTID(request.establishment)
+LEFT JOIN `norfolk-county-council-establishmenttypes|first` AS establishment_type
+    ON establishment_type._id = TO_OBJECTID(establishment.type)
+LEFT JOIN `norfolk-county-council-establishments|first` AS establishment_main
+    ON establishment_main._id = IFNULL(TO_OBJECTID(establishment.main_establishment), establishment._id)
+LEFT JOIN `norfolk-county-council-establishments|first` AS establishment_main_address
+    ON establishment_main_address._id = IFNULL(TO_OBJECTID(establishment.main_establishment), establishment._id)
+LEFT JOIN `norfolk-county-council-establishmenttypes|first` AS establishment_main_type
+    ON establishment_main_type._id = TO_OBJECTID(establishment_main.type)
+
+/* Buffers - New Appointment Request */
+LEFT JOIN `norfolk-county-council-employees|first` AS employee
+    ON employee._id = TO_OBJECTID(request.employee)
+LEFT JOIN `norfolk-county-council-addresses|first` AS employee_address
+    ON employee_address._id = TO_OBJECTID(employee.address)
+LEFT JOIN `norfolk-county-council-employeebankdetails|first` AS employee_bank_details
+    ON employee_bank_details._id = TO_OBJECTID(employee.bank_details)
+LEFT JOIN `norfolk-county-council-addresses|first` AS employee_bank_address
+    ON employee_bank_address._id = TO_OBJECTID(employee_bank_details.address)
+LEFT JOIN `norfolk-county-council-employeecontacts` AS employee_contacts
+    ON employee_contacts.employee = TO_STRING(employee._id)
+LEFT JOIN `norfolk-county-council-employeerelatives|first` AS employee_next_of_kin
+    ON employee_next_of_kin._id = TO_OBJECTID(employee.next_of_kin)
+LEFT JOIN `norfolk-county-council-employeerelatives|first` AS employee_role
+    ON employee_role._id = TO_OBJECTID(employee.role)
+LEFT JOIN `norfolk-county-council-contracts|first` AS contract
+    ON contract._id = TO_OBJECTID(request.contract)
+LEFT JOIN (
+    SELECT
+        allowance._id,
+        allowance.code,
+        allowance.name,
+        allowance_values.contract,
+        allowance_values.permanent_temporary_value,
+        allowance_values.amount_value,
+        allowance_values.pro_rata_amount_value,
+        allowance_values.date_value,
+        allowance_values.text_value,
+        allowance_values.working_percentage
+    FROM `norfolk-county-council-contractallowances` AS allowance_values
+    LEFT JOIN `norfolk-county-council-allowances|first` AS allowance
+        ON allowance._id = TO_OBJECTID(allowance_values.allowance)
+	) AS contract_allowances
+    On contract_allowances.allowance_values.contract = request.contract
+LEFT JOIN `norfolk-county-council-employeeroles|first` AS contract_role
+    ON contract_role._id = TO_OBJECTID(contract.role)
+LEFT JOIN `norfolk-county-council-salaries|first` AS contract_salary
+    ON salaries._id = TO_OBJECTID(contract.salary)
+LEFT JOIN `norfolk-county-council-payscaletables|first` AS contract_payscale_table
+    ON contract_payscale_table._id = TO_OBJECTID(contract_salary.payscale_table)
+LEFT JOIN (
+    SELECT
+        salaryPoint.payscale_table as payscale_table,
+        payscaleGroup.name as name,
+        salaryPoint.name as salary_point,
+        salaryPoint.value as value,
+        ROUND((salaryPoint.value / 52.1429 / 37), 2) as hour_rate
+    FROM `norfolk-county-council-payscalesalarypoints` AS salaryPoint
+    LEFT JOIN `norfolk-county-council-payscalegroups|first` AS payscaleGroup
+        ON payscaleGroup._id = TO_OBJECTID(salaryPoint.payscale_group)
+    ORDER BY salaryPoint.`order`
+    ) AS contract_salary_points ON contract_salary_points.salaryPoint.payscale_table = contract_salary.payscale_table
+LEFT JOIN `norfolk-county-council-requestcontracts` AS other_contracts
+    ON other_contracts.request_contracts.request = TO_STRING(request._id)
+LEFT JOIN `norfolk-county-council-contractpreemploymentchecks|first` AS contract_pre_employment_checks
+    ON contract_pre_employment_checks._id = TO_OBJECTID(contract.pre_employment_checks)
+LEFT JOIN `norfolk-county-council-contractmedicalreferralchecks|first` AS contract_medical_referral_checks
+    ON contract_medical_referral_checks._id = TO_OBJECTID(contract.medical_referral_checks)
+
+/* Buffers - Changes to Contract Request */
+LEFT JOIN `norfolk-county-council-contractchanges|first` AS contract_change
+    ON contract_change._id = TO_OBJECTID(request.contract_changes)
+LEFT JOIN `norfolk-county-council-contractchangedetails` AS contract_changes
+    ON contract_changes.contract_change = TO_STRING(contract_change._id)
+LEFT JOIN `norfolk-county-council-contracts|first` AS contract_changes_details
+    ON contract_changes_details._id = TO_OBJECTID(contract_change.contract_changes)
+LEFT JOIN (
+    SELECT
+        allowance._id,
+        allowance.code as allowance,
+        allowance.name as name,
+        allowance_values.contract,
+        allowance_values.permanent_temporary_value,
+        allowance_values.amount_value,
+        allowance_values.pro_rata_amount_value,
+        allowance_values.date_value,
+        allowance_values.text_value,
+        allowance_values.permanency,
+        allowance_values.working_percentage
+    FROM `norfolk-county-council-contractallowances` AS allowance_values
+    LEFT JOIN `norfolk-county-council-allowances|first` AS allowance
+        ON allowance._id = TO_OBJECTID(allowance_values.allowance)
+    /* FIX PERFORMANCE ISSUES HERE - NEED to do a WHERE by RequestID */
+	) AS contract_changes_allowances
+    On contract_changes_allowances.allowance_values.contract = TO_STRING(contract_changes_details._id)
+LEFT JOIN `norfolk-county-council-employeeroles|first` AS contract_changes_role
+    ON contract_changes_role._id = TO_OBJECTID(contract_changes_details.role)
+LEFT JOIN `norfolk-county-council-salaries|first` AS contract_changes_salary
+    ON contract_changes_salary._id = TO_OBJECTID(contract_changes_details.salary)
+
+/* Buffers - Changes to Personal Details Request */
+LEFT JOIN `norfolk-county-council-employeechanges|first` AS employee_changes
+    ON employee_changes._id = TO_OBJECTID(request.employee_changes)
+LEFT JOIN `norfolk-county-council-employees|first` AS employee_changes_details
+    ON employee_changes_details._id = TO_OBJECTID(employee_changes.employee_changes)
+LEFT JOIN `norfolk-county-council-addresses|first` AS employee_changes_address
+    ON employee_changes_address._id = TO_OBJECTID(employee_changes_details.address)
+LEFT JOIN `norfolk-county-council-employeebankdetails|first` AS employee_changes_bank_details
+    ON employee_changes_bankdetails._id = TO_OBJECTID(employee_changes_details.bank_details)
+LEFT JOIN `norfolk-county-council-addresses|first` AS employee_changes_bank_address
+    ON employee_changes_bank_address._id = TO_OBJECTID(employee_changes_bank_details.address)
+LEFT JOIN `norfolk-county-council-employeecontacts` AS employee_changes_contacts
+    ON employee_changes_contacts.employee = TO_STRING(employee_changes_details._id)
+
+/* Buffers - Contract Termination Request */
+LEFT JOIN `norfolk-county-council-contractterminationdetails|first` AS contract_termination_details
+    ON contract_termination_details._id = TO_OBJECTID(request.contract_termination_details)
+
+WHERE _id = TO_OBJECTID("{@parameters.request}")
