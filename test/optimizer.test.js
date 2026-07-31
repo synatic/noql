@@ -3255,6 +3255,89 @@ limit 501`;
                 },
             });
         });
+
+        it('should hoist a late WHERE match that compares against an ObjectId', function () {
+            const {ObjectId} = require('bson');
+            const requestId = new ObjectId('6a4cfc38f8536c5035a00429');
+            const pipeline = [
+                {
+                    $project: {
+                        request: '$$ROOT',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        as: 'creator',
+                        let: {
+                            request_creator: '$request.creator',
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [
+                                            '$_id',
+                                            {
+                                                $toObjectId: '$$request_creator',
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                $limit: 1,
+                            },
+                        ],
+                    },
+                },
+                {
+                    $set: {
+                        creator: {
+                            $first: '$creator',
+                        },
+                    },
+                },
+                {
+                    $match: {
+                        'request._id': {
+                            $eq: requestId,
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: '$request._id',
+                        creator: '$creator',
+                    },
+                },
+            ];
+
+            const optimized = optimizer.optimizeMongoAggregate(pipeline, {});
+
+            assert.deepStrictEqual(optimized[0], {
+                $match: {
+                    _id: {
+                        $eq: requestId,
+                    },
+                },
+            });
+            assert.strictEqual(
+                Object.keys(optimized[1])[0],
+                '$project',
+                'root project should follow the hoisted ObjectId match'
+            );
+            assert.strictEqual(
+                optimized.some(
+                    (stage) =>
+                        stage.$match &&
+                        stage.$match['request._id'] &&
+                        stage.$match['request._id'].$eq === requestId
+                ),
+                false,
+                'late request._id ObjectId match should have been removed'
+            );
+        });
     });
 
     describe('Optimize Join And Where', function () {
