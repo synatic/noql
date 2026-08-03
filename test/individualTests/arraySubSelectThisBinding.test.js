@@ -456,4 +456,145 @@ describe('Array subselect $$this binding', function () {
             });
         });
     });
+
+    describe('backwards compatibility with $this / $$this workarounds', function () {
+        it('should still accept mixed $this/$$this hacks in SELECT CASE', function () {
+            // Production workaround before includeThis was threaded through CASE /
+            // arithmetic: `$this` in comparisons/else, `$$this` in multiply/divide.
+            const expr = parseProjectionField(`
+                SELECT
+                    (
+                        SELECT
+                            CASE
+                                WHEN \`$this.numberOfTerms\` > 0
+                                THEN \`$$this.premium\` * (12 / \`$$this.numberOfTerms\`)
+                                ELSE \`$this.premium\`
+                            END AS s
+                        FROM policies
+                    ) AS activePremiums
+                FROM \`agencysync-hawksoft-raw-data\`
+                WHERE _entity = 'Clients'
+            `);
+
+            assert.deepStrictEqual(expr, {
+                $map: {
+                    input: '$policies',
+                    in: {
+                        s: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: {
+                                            $gt: ['$$this.numberOfTerms', 0],
+                                        },
+                                        then: {
+                                            $multiply: [
+                                                '$$this.premium',
+                                                {
+                                                    $divide: [
+                                                        12,
+                                                        '$$this.numberOfTerms',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                ],
+                                default: '$$this.premium',
+                            },
+                        },
+                    },
+                },
+            });
+        });
+
+        it('should still accept mixed $this/$$this hacks in SELECT CASE + WHERE', function () {
+            const expr = parseProjectionField(`
+                SELECT
+                    (
+                        SELECT
+                            CASE
+                                WHEN \`$this.numberOfTerms\` > 0
+                                THEN \`$$this.premium\` * (12 / \`$$this.numberOfTerms\`)
+                                ELSE \`$this.premium\`
+                            END AS \`$$ROOT\`
+                        FROM policies
+                        WHERE status != 'Lead'
+                          AND status != 'Prospect'
+                          AND status != 'Refused'
+                          AND status != 'DeadFiled'
+                          AND status != 'Void'
+                          AND status != 'Rejected'
+                          AND (
+                              TO_DATE(\`$this.expirationDate\`) >= CURRENT_DATE()
+                              OR expirationDate = null
+                          )
+                          AND (
+                              TO_DATE(\`$this.effectiveDate\`) <= CURRENT_DATE()
+                              OR effectiveDate = null
+                          )
+                          AND (
+                              CASE
+                                  WHEN \`$$this.status\` IN (
+                                      'NonRenew',
+                                      'Cancelled',
+                                      'Replaced'
+                                  )
+                                  AND TO_DATE(\`$this.statusDate\`) < CURRENT_DATE()
+                                  THEN false
+                                  ELSE true
+                              END
+                          )
+                    ) AS activePremiums
+                FROM \`agencysync-hawksoft-raw-data\`
+                WHERE _entity = 'Clients'
+            `);
+
+            assertNoRootFieldRefsInArrayContext(expr);
+            assert.deepStrictEqual(expr.$map.in, {
+                $switch: {
+                    branches: [
+                        {
+                            case: {
+                                $gt: ['$$this.numberOfTerms', 0],
+                            },
+                            then: {
+                                $multiply: [
+                                    '$$this.premium',
+                                    {
+                                        $divide: [12, '$$this.numberOfTerms'],
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                    default: '$$this.premium',
+                },
+            });
+
+            const serialized = JSON.stringify(expr);
+            assert.strictEqual(
+                serialized.includes('$$this.$this.'),
+                false,
+                'legacy $this columns must not be double-prefixed as $$this.$this.'
+            );
+            assert.strictEqual(
+                serialized.includes('$$this.$$this.'),
+                false,
+                'legacy $$this columns must not be double-prefixed as $$this.$$this.'
+            );
+            assert.ok(
+                serialized.includes('"$$this.expirationDate"'),
+                'TO_DATE($this.expirationDate) workaround should normalize to $$this.expirationDate'
+            );
+            assert.ok(
+                serialized.includes('"$$this.status"'),
+                '$$this.status workaround should remain $$this.status'
+            );
+            assert.ok(
+                serialized.includes('"$$this.statusDate"'),
+                'TO_DATE($this.statusDate) workaround should normalize to $$this.statusDate'
+            );
+        });
+    });
 });
