@@ -1,0 +1,2735 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../js-library/api-reference/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/synatic-favicon.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Skill.md - NoQL</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7VEMMQEFLN"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7VEMMQEFLN",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7VEMMQEFLN",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#noql-skill-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="NoQL" class="md-header__button md-logo" aria-label="NoQL" data-md-component="logo">
+      
+  <img src="../assets/synatic.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NoQL
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Skill.md
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/synatic/noql" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    synatic/noql
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../sql-syntax/introduction/" class="md-tabs__link">
+          
+  
+  
+  SQL Syntax
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../playground/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Playground
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../js-library/getting-started/" class="md-tabs__link">
+          
+  
+  
+  JS Library
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Skill.md
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="NoQL" class="md-nav__button md-logo" aria-label="NoQL" data-md-component="logo">
+      
+  <img src="../assets/synatic.svg" alt="logo">
+
+    </a>
+    NoQL
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/synatic/noql" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    synatic/noql
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Syntax
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SQL Syntax
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/where-clause/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where Clause
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/order-by-clause/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order By Clause
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/joins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/aggregates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aggregates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/comparison-operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison Operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/field-functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/string-functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/date-functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Date Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/mathematical-operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/mathematical-functions/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 6c-1.64 0-3 1.36-3 3v12h2V9c0-.57.43-1 1-1h1c.57 0 1 .43 1 1v1c0 .57-.43 1-1 1h-1v2h1c.57 0 1 .43 1 1v1c0 .57-.43 1-1 1h-1v2h1c1.65 0 3-1.35 3-3v-1c0-.82-.41-1.54-1-2 .59-.46 1-1.18 1-2V9c0-1.64-1.35-3-3-3M7 9c-1.64 0-3 1.36-3 3v3c0 1.65 1.36 3 3 3h.7c.5 0 .95-.19 1.3-.5v.5h2V9H9v.5c-.35-.31-.8-.5-1.3-.5M7 11h1c.57 0 1 .43 1 1v3c0 .57-.43 1-1 1H7c-.57 0-1-.43-1-1v-3c0-.57.43-1 1-1"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/conversion-functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conversion Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/window-functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Window Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/limits-and-offsets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limits and Offsets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/union/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Union
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-syntax/pivot-unpivot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pivot And Unpivot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JS Library
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JS Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../js-library/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../js-library/api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill.md
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill.md
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quoting-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quoting Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aliasing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aliasing Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Syntax
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#select-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELECT / FROM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WHERE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-by-aggregates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GROUP BY / Aggregates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-by-limit-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ORDER BY / LIMIT / OFFSET
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Joins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#join-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Hints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-array-functions-alternative-syntax-in-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JOIN Array Functions (alternative syntax in SELECT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-table-n-level-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-table (N-level) Joins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subquery-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subquery Joins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arrays
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arrays">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#field-references-in-array-sub-selects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field references in array sub-selects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conversion-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conversion Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#string-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        String Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#date-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mathematical-functions-and-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mathematical Functions and Operators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#window-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Window Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#union" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNION
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pivot-and-unpivot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pivot and Unpivot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subqueries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subqueries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Caveats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quoting-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quoting Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aliasing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aliasing Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Syntax
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#select-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELECT / FROM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WHERE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-by-aggregates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GROUP BY / Aggregates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-by-limit-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ORDER BY / LIMIT / OFFSET
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Joins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#join-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Hints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-array-functions-alternative-syntax-in-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JOIN Array Functions (alternative syntax in SELECT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-table-n-level-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-table (N-level) Joins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subquery-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subquery Joins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join Caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arrays
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arrays">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#field-references-in-array-sub-selects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field references in array sub-selects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conversion-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conversion Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#string-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        String Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#date-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mathematical-functions-and-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mathematical Functions and Operators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#window-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Window Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#union" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNION
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pivot-and-unpivot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pivot and Unpivot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subqueries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subqueries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Caveats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="noql-skill-reference">NoQL Skill Reference</h1>
+<p>NoQL converts SQL statements into MongoDB queries and aggregation pipelines. Use this reference to write correct NoQL statements.</p>
+<div style="margin: 1.5rem 0;">
+  <button id="noql-download-btn" onclick="downloadSkillFile()" style="background:#3e8db9;color:#fff;border:none;padding:0.6rem 1.4rem;border-radius:4px;font-size:1rem;cursor:pointer;font-weight:600;letter-spacing:0.02em;">
+    ⬇ Download skill.md
+  </button>
+</div>
+
+<script>
+function downloadSkillFile() {
+    fetch('assets/noql-skill.txt')
+        .then(function(r) { return r.blob(); })
+        .then(function(blob) {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'noql-skill.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+}
+</script>
+
+<hr />
+<h2 id="installation">Installation</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npm<span class="w"> </span>i<span class="w"> </span>@synatic/noql<span class="w"> </span>--save
+</code></pre></div>
+<h2 id="api-usage">API Usage</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">SQLParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'@synatic/noql'</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">MongoClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'mongodb'</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">parsedSQL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">SQLParser</span><span class="p">.</span><span class="nx">parseSQL</span><span class="p">(</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="s2">"SELECT id FROM `films` LIMIT 10"</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">database</span><span class="o">:</span><span class="w"> </span><span class="s1">'postgresql'</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// or 'mysql'</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">);</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'query'</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">collection</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">query</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">projection</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{})</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">limit</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">50</span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="p">.</span><span class="nx">toArray</span><span class="p">();</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'aggregate'</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">collections</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="p">.</span><span class="nx">aggregate</span><span class="p">(</span><span class="nx">parsedSQL</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="p">.</span><span class="nx">toArray</span><span class="p">();</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="quoting-conventions">Quoting Conventions</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Quote character</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Field names with spaces or special chars</td>
+<td>backtick or single quote</td>
+<td><code>`First Name`</code> or <code>'First Name'</code></td>
+</tr>
+<tr>
+<td><code>$</code> Mongo paths in array sub-selects</td>
+<td>backtick</td>
+<td><code>`$favouriteFilms`</code>, <code>`$$ROOT.filmId`</code></td>
+</tr>
+<tr>
+<td>Collection names with hyphens</td>
+<td>backtick or single/double quote</td>
+<td><code>`customer-notes`</code></td>
+</tr>
+<tr>
+<td>String literals</td>
+<td>single quote</td>
+<td><code>'hello'</code></td>
+</tr>
+<tr>
+<td>Aliased table in FROM</td>
+<td>backtick or no quotes</td>
+<td><code>FROM customers AS c</code></td>
+</tr>
+</tbody>
+</table>
+<p>MongoDB field names are <strong>case-sensitive</strong>. Use dot notation to traverse nested documents: <code>`Address.City`</code>.</p>
+<hr />
+<h2 id="aliasing-rules">Aliasing Rules</h2>
+<ul>
+<li>Functions <strong>must</strong> be aliased: <code>ABS(id) AS absId</code></li>
+<li>Subqueries <strong>must</strong> be aliased: <code>(SELECT ...) AS t</code></li>
+<li>Table aliases enable prefixed field access: <code>FROM customers AS c</code> → <code>c.id</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">-- Required alias on function</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">ABS</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">absId</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">customers</span><span class="o">`</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">-- Required alias on subquery</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">films</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span>
+</code></pre></div>
+<hr />
+<h2 id="core-syntax">Core Syntax</h2>
+<h3 id="select-from">SELECT / FROM</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="k">First</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">-- Wildcard</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">-- Remove _id from results</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1">-- Multiple UNSET fields</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+</code></pre></div>
+<h3 id="where">WHERE</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="o">`</span><span class="k">First</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'m%'</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">FIELD_EXISTS</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">true</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">FIELD_EXISTS</span><span class="p">(</span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">-- Functions in WHERE must be repeated (cannot reference alias)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">ABS</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">absId</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">ABS</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+</code></pre></div>
+<h3 id="group-by-aggregates">GROUP BY / Aggregates</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">City</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">City</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cnt</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">City</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">Town</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">uniq</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">City</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">avg</span><span class="p">,</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">mn</span><span class="p">,</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">mx</span><span class="p">,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">       </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">City</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="c1">-- Return first/last N records per group as array</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">City</span><span class="p">,</span><span class="w"> </span><span class="n">FIRSTN</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sample</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="c1">-- SUM with CASE</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`=</span><span class="s1">'Ueda'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">END</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Ueda</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+</code></pre></div>
+<h3 id="order-by-limit-offset">ORDER BY / LIMIT / OFFSET</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="k">Last</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="w"> </span><span class="k">ASC</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">5</span>
+</code></pre></div>
+<hr />
+<h2 id="joins">Joins</h2>
+<p>By default, joins produce an <strong>array field</strong> on each result document. Use <strong>join hints</strong> to control output shape.</p>
+<h3 id="join-types">Join Types</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">-- LEFT JOIN: all left records, matched right records (or empty array)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">sku</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">-- INNER JOIN: only records with a match on both sides</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">sku</span>
+</code></pre></div>
+<h3 id="join-hints">Join Hints</h3>
+<p>Append hints to the <strong>table name or alias</strong> using <code>|</code>. Multiple hints can be chained.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">-- |first  → collapse array to first match (object, not array)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">customer</span><span class="o">-</span><span class="n">notes</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="n">cn</span><span class="o">|</span><span class="k">first</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1">-- Also valid on the alias side:</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="s1">'customer-notes'</span><span class="w"> </span><span class="s1">'cn|first'</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">to_int</span><span class="p">(</span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1">-- |last   → collapse array to last match</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="n">inv</span><span class="o">|</span><span class="k">last</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">inv</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="c1">-- |unwind → expand matches into multiple result rows</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="n">inv</span><span class="o">|</span><span class="n">unwind</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">inv</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="c1">-- |optimize → push $match to beginning of sub-pipeline (better index use)</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1">-- Use with sub-select joins</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">customer</span><span class="o">-</span><span class="n">notes</span><span class="o">`</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">`</span><span class="n">cn</span><span class="o">|</span><span class="n">optimize</span><span class="o">`</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="c1">-- Chain hints: |optimize|first</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">customer</span><span class="o">-</span><span class="n">notes</span><span class="o">`</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">`</span><span class="n">cn</span><span class="o">|</span><span class="n">optimize</span><span class="o">|</span><span class="k">first</span><span class="o">`</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
+</code></pre></div>
+<h3 id="join-array-functions-alternative-syntax-in-select">JOIN Array Functions (alternative syntax in SELECT)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">FIRST_IN_ARRAY</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">inv</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">LAST_IN_ARRAY</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">inv</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">UNWIND</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">inv</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">`</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span>
+</code></pre></div>
+<h3 id="multi-table-n-level-joins">Multi-table (N-level) Joins</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">orderId</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">inventoryId</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customerId</span><span class="p">,</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">       </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">|</span><span class="n">unwind</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">sku</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">customers</span><span class="o">|</span><span class="n">unwind</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customerId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
+</code></pre></div>
+<h3 id="subquery-joins">Subquery Joins</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="o">*</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">customer</span><span class="o">-</span><span class="n">notes</span><span class="o">`</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">`</span><span class="n">cn</span><span class="o">|</span><span class="k">first</span><span class="o">`</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span>
+</code></pre></div>
+<h3 id="join-caveats">Join Caveats</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">-- IN sub-select does NOT work as a join substitute — use JOIN instead</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1">-- WRONG:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">inventory</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">inventory</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sku</span><span class="o">=</span><span class="n">orders</span><span class="p">.</span><span class="n">item</span><span class="p">)</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1">-- CORRECT:</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">inventory</span><span class="w"> </span><span class="n">inv</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">inv</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">orders</span><span class="p">.</span><span class="n">item</span>
+</code></pre></div>
+<hr />
+<h2 id="arrays">Arrays</h2>
+<p>Use sub-selects referencing an array field name as the FROM target.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">-- Filter array elements</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">filtered</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1">-- Project specific fields from array elements</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">filmId</span><span class="p">,</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">-- Promote single field to root array values with $$ROOT as an alias</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">filmId</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="err">$$</span><span class="n">ROOT</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">filmIds</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1">-- Slice array</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="c1">-- Sort array (MongoDB 5.2+)</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sorted</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="c1">-- Aggregate functions NOT supported inside array sub-selects</span>
+</code></pre></div>
+<h3 id="field-references-in-array-sub-selects">Field references in array sub-selects</h3>
+<p>Array sub-selects compile to <code>$map</code> / <code>$filter</code>. Bare names bind to the current element (<code>$$this</code>). A backtick-quoted <code>$path</code> is a parent/root document field.</p>
+<table>
+<thead>
+<tr>
+<th>NoQL</th>
+<th>Meaning</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filmId</code></td>
+<td>Current array element</td>
+<td><code>$$this.filmId</code></td>
+</tr>
+<tr>
+<td><code>`$favouriteFilms`</code></td>
+<td>Parent document</td>
+<td><code>$favouriteFilms</code></td>
+</tr>
+<tr>
+<td><code>`$$ROOT.favouriteFilms`</code></td>
+<td>Explicit root document</td>
+<td><code>$$ROOT.favouriteFilms</code></td>
+</tr>
+<tr>
+<td><code>`$this.filmId`</code> / <code>`$$this.filmId`</code></td>
+<td>Legacy element workaround</td>
+<td><code>$$this.filmId</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">-- Parent array + element field: $favouriteFilms stays on the customer</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">INDEXOF_ARRAY</span><span class="p">(</span><span class="o">`</span><span class="err">$</span><span class="n">favouriteFilms</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="n">filmId</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">favourites</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1">-- Equivalent explicit root path</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">INDEXOF_ARRAY</span><span class="p">(</span><span class="o">`</span><span class="err">$$</span><span class="n">ROOT</span><span class="p">.</span><span class="n">favouriteFilms</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="n">filmId</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">favourites</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+</code></pre></div>
+<p>Prefer bare names for element fields. <code>$this</code> / <code>$$this</code> still work for backwards compatibility but should not be used in new queries. <code>$field</code> / <code>$$ROOT.field</code> always mean the query's root document, not an intermediate nested <code>$map</code> parent. Quote <code>$</code> paths with backticks. Use <code>INDEXOF_ARRAY(...) &gt;= 0</code> (it returns <code>0</code> for the first match).</p>
+<h3 id="array-functions">Array Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ARRAY_ELEM_AT</code></td>
+<td><code>(array, pos)</code></td>
+<td>Element at position</td>
+</tr>
+<tr>
+<td><code>ARRAY_RANGE</code></td>
+<td><code>(start, stop, step)</code></td>
+<td>Generate number array</td>
+</tr>
+<tr>
+<td><code>ARRAY_TO_OBJECT</code></td>
+<td><code>(array)</code></td>
+<td>Array → object</td>
+</tr>
+<tr>
+<td><code>AVG_ARRAY</code></td>
+<td><code>(array, field)</code></td>
+<td>Average field in array</td>
+</tr>
+<tr>
+<td><code>CONCAT_ARRAYS</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Concatenate arrays</td>
+</tr>
+<tr>
+<td><code>FIRST_IN_ARRAY</code></td>
+<td><code>(array)</code></td>
+<td>First element</td>
+</tr>
+<tr>
+<td><code>INDEXOF_ARRAY</code></td>
+<td><code>(array, val, [start], [end])</code></td>
+<td>Index of value</td>
+</tr>
+<tr>
+<td><code>IS_ARRAY</code></td>
+<td><code>(expr)</code></td>
+<td>Boolean: is array?</td>
+</tr>
+<tr>
+<td><code>JOIN</code></td>
+<td><code>(array, delimiter)</code></td>
+<td>Array → delimited string</td>
+</tr>
+<tr>
+<td><code>LAST_IN_ARRAY</code></td>
+<td><code>(array)</code></td>
+<td>Last element</td>
+</tr>
+<tr>
+<td><code>OBJECT_TO_ARRAY</code></td>
+<td><code>(expr)</code></td>
+<td>Object → array</td>
+</tr>
+<tr>
+<td><code>REVERSE_ARRAY</code></td>
+<td><code>(array)</code></td>
+<td>Reverse order</td>
+</tr>
+<tr>
+<td><code>SET_DIFFERENCE</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Set difference</td>
+</tr>
+<tr>
+<td><code>SET_EQUALS</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Arrays equal?</td>
+</tr>
+<tr>
+<td><code>SET_INTERSECTION</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Set intersection</td>
+</tr>
+<tr>
+<td><code>SET_IS_SUBSET</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Is subset?</td>
+</tr>
+<tr>
+<td><code>SET_UNION</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Set union</td>
+</tr>
+<tr>
+<td><code>SIZE_OF_ARRAY</code></td>
+<td><code>(array)</code></td>
+<td>Array length</td>
+</tr>
+<tr>
+<td><code>SUM_ARRAY</code></td>
+<td><code>(array, field)</code></td>
+<td>Sum field in array</td>
+</tr>
+<tr>
+<td><code>UNWIND</code></td>
+<td><code>(array)</code></td>
+<td>Unwind to multiple rows</td>
+</tr>
+<tr>
+<td><code>ZIP_ARRAY</code></td>
+<td><code>(arr, ...)</code></td>
+<td>Transpose arrays</td>
+</tr>
+<tr>
+<td><code>ALL_ELEMENTS_TRUE</code></td>
+<td><code>(array)</code></td>
+<td>All elements truthy?</td>
+</tr>
+<tr>
+<td><code>ANY_ELEMENT_TRUE</code></td>
+<td><code>(array)</code></td>
+<td>Any element truthy?</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="objects">Objects</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">-- $$ROOT: promote a sub-expression to the document root</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="err">$$</span><span class="n">ROOT</span><span class="o">`</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="k">First</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="k">Last</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1">-- Create an inline object (SELECT without FROM)</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="k">First</span><span class="w"> </span><span class="n">Name</span><span class="o">`</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Name</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="c1">-- MERGE_OBJECTS: merge two objects</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">MERGE_OBJECTS</span><span class="p">(</span><span class="o">`</span><span class="n">Address</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="n">PARSE_JSON</span><span class="p">(</span><span class="s1">'{"val":1}'</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">merged</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="c1">-- FLATTEN: spread object fields to root level with optional prefix</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">FLATTEN</span><span class="p">(</span><span class="o">`</span><span class="n">Address</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="s1">'addr_'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="c1">-- With third arg true, removes the original field:</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">FLATTEN</span><span class="p">(</span><span class="o">`</span><span class="n">Address</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="s1">'addr_'</span><span class="p">,</span><span class="w"> </span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="c1">-- PARSE_JSON: parse a JSON string</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ARRAY_TO_OBJECT</span><span class="p">(</span><span class="n">PARSE_JSON</span><span class="p">(</span><span class="s1">'[{"k":"key","v":1}]'</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="c1">-- EMPTY_OBJECT</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">EMPTY_OBJECT</span><span class="p">()</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">empty</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+</code></pre></div>
+<hr />
+<h2 id="conversion-functions">Conversion Functions</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">CONVERT</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="s1">'int'</span><span class="p">)</span><span class="w">       </span><span class="c1">-- double, string, bool, date, int, objectId, long, decimal</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">TO_INT</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">TO_LONG</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">TO_DOUBLE</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">TO_DECIMAL</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">TO_STRING</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">TO_BOOL</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">TO_DATE</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w">              </span><span class="c1">-- auto-converts literal strings in WHERE</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">TO_OBJECTID</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">IFNULL</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">fallback</span><span class="p">)</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">TYPEOF</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w">               </span><span class="c1">-- returns MongoDB type name</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="k">CAST</span><span class="p">(</span><span class="n">expr</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w">          </span><span class="c1">-- MySQL-style; VARCHAR, DECIMAL, INT, DATETIME, FLOAT, CHAR, TEXT</span>
+</code></pre></div>
+<p>Literal type conversion in <code>WHERE</code> is automatic:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1">-- TO_DATE on a literal is auto-resolved</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="n">orderDate</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'2021-01-01'</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="string-functions">String Functions</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">CONCAT</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">                  </span><span class="c1">-- string concatenation (use instead of +)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">TRIM</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">chars</span><span class="p">])</span><span class="w">                </span><span class="c1">-- strip chars from both ends</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">LTRIM</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">chars</span><span class="p">])</span><span class="w">               </span><span class="c1">-- strip from left</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">RTRIM</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">chars</span><span class="p">])</span><span class="w">               </span><span class="c1">-- strip from right</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="n">SUBSTR</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">)</span><span class="w">        </span><span class="c1">-- substring (1-indexed)</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="n">SUBSTR_BYTES</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="k">start</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">)</span><span class="w">  </span><span class="c1">-- substring by byte position</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="k">REPLACE</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">find</span><span class="p">,</span><span class="w"> </span><span class="n">replacement</span><span class="p">)</span><span class="w">   </span><span class="c1">-- replace first occurrence</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="n">REPLACE_ALL</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">find</span><span class="p">,</span><span class="w"> </span><span class="n">replacement</span><span class="p">)</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="n">STRLEN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w">                       </span><span class="c1">-- byte length</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="n">STRLEN_CP</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w">                    </span><span class="c1">-- code-point length</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="n">SPLIT</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="k">delimiter</span><span class="p">)</span><span class="w">             </span><span class="c1">-- string → array</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="n">STRPOS</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">substr</span><span class="p">)</span><span class="w">               </span><span class="c1">-- 1-based index; 0 if not found (PostgreSQL style)</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="n">LOCATE</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">substr</span><span class="p">)</span><span class="w">               </span><span class="c1">-- 1-based index; 0 if not found (MySQL style)</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="k">LEFT</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">)</span><span class="w">                 </span><span class="c1">-- leftmost N chars</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="n">STARTS_WITH</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="k">prefix</span><span class="p">)</span><span class="w">          </span><span class="c1">-- boolean</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="n">WRAP_PARAM</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">forceString</span><span class="p">])</span><span class="w">    </span><span class="c1">-- wrap/escape a parameter</span>
+</code></pre></div>
+<p>Pattern matching:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'john%'</span><span class="w">     </span><span class="c1">-- case-insensitive</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'john%'</span>
+</code></pre></div></p>
+<hr />
+<h2 id="date-functions">Date Functions</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">CURRENT_DATE</span><span class="p">()</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">DATE_FROM_PARTS</span><span class="p">(</span><span class="k">year</span><span class="p">,</span><span class="w"> </span><span class="k">month</span><span class="p">,</span><span class="w"> </span><span class="k">day</span><span class="p">,</span><span class="w"> </span><span class="n">hour</span><span class="p">,</span><span class="w"> </span><span class="k">second</span><span class="p">,</span><span class="w"> </span><span class="k">minute</span><span class="p">,</span><span class="w"> </span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="p">)</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">DATE_FROM_ISO_PARTS</span><span class="p">(</span><span class="n">isoWeekYear</span><span class="p">,</span><span class="w"> </span><span class="n">isoWeek</span><span class="p">,</span><span class="w"> </span><span class="n">isoDayOfWeek</span><span class="p">,</span><span class="w"> </span><span class="n">hour</span><span class="p">,</span><span class="w"> </span><span class="k">second</span><span class="p">,</span><span class="w"> </span><span class="k">minute</span><span class="p">,</span><span class="w"> </span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="p">)</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">DATE_FROM_STRING</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="p">,</span><span class="w"> </span><span class="n">onError</span><span class="p">,</span><span class="w"> </span><span class="n">onNull</span><span class="p">)</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">DATE_TO_STRING</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="p">,</span><span class="w"> </span><span class="n">onNull</span><span class="p">)</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="n">DATE_TO_PARTS</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="p">,</span><span class="w"> </span><span class="n">iso8601</span><span class="p">)</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">DATE_ADD</span><span class="p">(</span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">tz</span><span class="p">])</span><span class="w">      </span><span class="c1">-- alias: DATEADD</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="n">DATE_SUBTRACT</span><span class="p">(</span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">tz</span><span class="p">])</span><span class="w"> </span><span class="c1">-- alias: DATESUBTRACT</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="n">DATE_DIFF</span><span class="p">(</span><span class="k">start</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">tz</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">startOfWeek</span><span class="p">])</span><span class="w"> </span><span class="c1">-- alias: DATEDIFF</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="n">DATE_TRUNC</span><span class="p">(</span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w">                  </span><span class="c1">-- units: year, quarter, month, week, day, hour, minute, second, millisecond</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="k">YEAR</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">MONTH</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DAY_OF_MONTH</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DAY_OF_WEEK</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DAY_OF_YEAR</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="n">HOUR</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">MINUTE</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">SECOND</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MILLISECOND</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="n">WEEK</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ISO_WEEK</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ISO_WEEK_YEAR</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ISO_DAY_OF_WEEK</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="k">EXTRACT</span><span class="p">(</span><span class="k">year</span><span class="o">|</span><span class="k">month</span><span class="o">|</span><span class="k">day</span><span class="o">|</span><span class="n">hour</span><span class="o">|</span><span class="k">minute</span><span class="o">|</span><span class="k">second</span><span class="o">|</span><span class="n">milliseconds</span><span class="o">|</span><span class="n">week</span><span class="o">|</span><span class="n">dow</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">expr</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="mathematical-functions-and-operators">Mathematical Functions and Operators</h2>
+<p>Operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> (modulo)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">ABS</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">CEIL</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">FLOOR</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="n">ROUND</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">places</span><span class="p">])</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">SQRT</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">POW</span><span class="p">(</span><span class="n">base</span><span class="p">,</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="k">MOD</span><span class="p">(</span><span class="n">dividend</span><span class="p">,</span><span class="w"> </span><span class="n">divisor</span><span class="p">)</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="n">LN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="n">LOG</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">base</span><span class="p">)</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="n">LOG10</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="n">EXP</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="n">TRUNC</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">places</span><span class="p">])</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="n">SIN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">COS</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">TAN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="n">ASIN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ACOS</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ATAN</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ATAN2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="n">SINH</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">COSH</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">TANH</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="n">DEGREES_TO_RADIANS</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">RADIANS_TO_DEGREES</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="n">RAND</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="window-functions">Window Functions</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1">-- RANK (gaps on ties)</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">       </span><span class="n">RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rank_number</span><span class="p">,</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">       </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="k">function</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="k">data</span><span class="o">`</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="c1">-- DENSE_RANK (no gaps on ties)</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="w">       </span><span class="n">DENSE_RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">dense_rank</span><span class="p">,</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="w">       </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="k">function</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="k">data</span><span class="o">`</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="c1">-- ROW_NUMBER (sequential, no ties)</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="w">       </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">row_num</span><span class="p">,</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="w">       </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="k">function</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="k">data</span><span class="o">`</span>
+</code></pre></div>
+<hr />
+<h2 id="union">UNION</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</code></pre></div>
+<hr />
+<h2 id="pivot-and-unpivot">Pivot and Unpivot</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1">-- PIVOT: rows → columns</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sales</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="n">PIVOT</span><span class="w"> </span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Electronics'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Clothing'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Food'</span><span class="p">))</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1">-- UNPIVOT: columns → rows</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">quarterly_sales</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="n">UNPIVOT</span><span class="w"> </span><span class="p">(</span><span class="n">amount</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="n">quarter</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="n">Q1</span><span class="p">,</span><span class="w"> </span><span class="n">Q2</span><span class="p">,</span><span class="w"> </span><span class="n">Q3</span><span class="p">,</span><span class="w"> </span><span class="n">Q4</span><span class="p">))</span>
+</code></pre></div>
+<hr />
+<h2 id="subqueries">Subqueries</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1">-- FROM subquery (must alias)</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">total</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">price</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1">-- Correlated subquery in SELECT (for array operations)</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">filtered</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="c1">-- FULL OUTER JOIN</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customerName</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">orderId</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="k">FROM</span><span class="w"> </span><span class="ss">"foj-customers"</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="k">FULL</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="ss">"foj-orders"</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customerId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customerId</span>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customerName</span><span class="w"> </span><span class="k">ASC</span>
+</code></pre></div>
+<hr />
+<h2 id="key-caveats">Key Caveats</h2>
+<ol>
+<li><strong>Case-sensitive fields and values</strong> — <code>First Name</code> ≠ <code>first name</code></li>
+<li><strong>Stored field names cannot start with <code>$</code> or contain <code>.</code></strong>. Dot notation is for traversal. In array sub-selects, a backtick-quoted <code>$path</code> is a parent-document Mongo path, not a stored field name.</li>
+<li><strong>Functions in WHERE must be repeated</strong> — cannot reference a computed alias</li>
+<li><strong><code>+</code> is not string concatenation</strong> — use <code>CONCAT(a, b)</code></li>
+<li><strong>IN subselect does not work</strong> — use JOIN instead</li>
+<li><strong>Aggregate functions not allowed inside array sub-selects</strong></li>
+<li><strong>Always alias functions and subqueries</strong> — <code>ABS(id) AS absId</code>, <code>(SELECT ...) AS t</code></li>
+<li><strong><code>|optimize</code> hint</strong>: only effective when the ON field is part of the sub-select</li>
+<li><strong><code>|first</code> and <code>|last</code> hints</strong>: for complex ON conditions (functions, AND) or subquery joins, a <code>$limit: 1</code> / scan-all is applied inside the lookup pipeline; simple <code>col = col</code> joins use MongoDB's native <code>localField</code>/<code>foreignField</code></li>
+<li><strong>Sorting arrays</strong> requires MongoDB 5.2+</li>
+</ol>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1">-- Simple query</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1">-- Nested field</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">Country</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="c1">-- Aggregate</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">cnt</span><span class="p">,</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">`</span><span class="n">Address</span><span class="p">.</span><span class="n">City</span><span class="o">`</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="c1">-- Left join with first hint</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">notes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">note</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="s1">'customer-notes'</span><span class="w"> </span><span class="s1">'cn|first'</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">cn</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TO_INT</span><span class="p">(</span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="c1">-- Inner join with unwind</span>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">sku</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">instock</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">inventory</span><span class="o">|</span><span class="n">unwind</span><span class="o">`</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">item</span>
+<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>
+<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a><span class="c1">-- Array sub-select (bare names = element; `$field` = parent document)</span>
+<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">filmId</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">`</span><span class="err">$$</span><span class="n">ROOT</span><span class="o">`</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">staffId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">films</span>
+<a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-26-23" name="__codelineno-26-23" href="#__codelineno-26-23"></a><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-26-24" name="__codelineno-26-24" href="#__codelineno-26-24"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Rentals</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">INDEXOF_ARRAY</span><span class="p">(</span><span class="o">`</span><span class="err">$</span><span class="n">favouriteFilms</span><span class="o">`</span><span class="p">,</span><span class="w"> </span><span class="n">filmId</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-26-25" name="__codelineno-26-25" href="#__codelineno-26-25"></a><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">favourites</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-26-26" name="__codelineno-26-26" href="#__codelineno-26-26"></a>
+<a id="__codelineno-26-27" name="__codelineno-26-27" href="#__codelineno-26-27"></a><span class="c1">-- SUM with CASE</span>
+<a id="__codelineno-26-28" name="__codelineno-26-28" href="#__codelineno-26-28"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'active'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">END</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">activeCount</span>
+<a id="__codelineno-26-29" name="__codelineno-26-29" href="#__codelineno-26-29"></a><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<a id="__codelineno-26-30" name="__codelineno-26-30" href="#__codelineno-26-30"></a>
+<a id="__codelineno-26-31" name="__codelineno-26-31" href="#__codelineno-26-31"></a><span class="c1">-- Date filter with auto-conversion</span>
+<a id="__codelineno-26-32" name="__codelineno-26-32" href="#__codelineno-26-32"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="n">orderDate</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'2021-01-01'</span><span class="p">)</span>
+<a id="__codelineno-26-33" name="__codelineno-26-33" href="#__codelineno-26-33"></a>
+<a id="__codelineno-26-34" name="__codelineno-26-34" href="#__codelineno-26-34"></a><span class="c1">-- Window function</span>
+<a id="__codelineno-26-35" name="__codelineno-26-35" href="#__codelineno-26-35"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rnk</span><span class="p">,</span><span class="w"> </span><span class="n">UNSET</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">results</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 15V3h4v12zM15 3a2 2 0 0 1 2 2v10c0 .55-.22 1.05-.59 1.41L9.83 23l-1.06-1.06c-.27-.27-.44-.64-.44-1.06l.03-.31.95-4.57H3a2 2 0 0 1-2-2v-2c0-.26.05-.5.14-.73l3.02-7.05C4.46 3.5 5.17 3 6 3zm0 2H5.97L3 12v2h8.78l-1.13 5.32L15 14.97z"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              
+              
+                
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              
+              
+                
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../js-library/api-reference/" class="md-footer__link md-footer__link--prev" aria-label="Previous: API">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                API
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 <a href="https://synatic.com">Synatic Inc.</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/datasynatic" target="_blank" rel="noopener" title="Synatic on Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/synatic/noql" target="_blank" rel="noopener" title="NoQL on Github" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/15815217/" target="_blank" rel="noopener" title="Synatic on Linkedin" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "content.code.copy", "navigation.footer", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.path"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.2/ace.js"></script>
+      
+        <script src="../javascripts/noql/index.js"></script>
+      
+        <script src="../javascripts/playground/nodeQueryConstructor.js"></script>
+      
+        <script src="../javascripts/playground/shellQueryConstructor.js"></script>
+      
+        <script src="../javascripts/playground/playground.js"></script>
+      
+        <script src="../javascripts/skill-download.js"></script>
+      
+    
+  </body>
+</html>
