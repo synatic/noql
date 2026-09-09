@@ -26,7 +26,7 @@ NoQL provides a shortcut syntax to selecting fields from objects using a sub-sel
 
 ### Arrays
 
-NoQL provides many methods for using arrays and functions by using a sub select with a where statement. See [`Arrays`](/sql-syntax/arrays)
+NoQL provides many methods for using arrays and functions by using a sub select with a where statement. See [`Arrays`](/sql-syntax/arrays). Inside an array sub-select, bare field names bind to the current element; use `` `$field` `` or `` `$$ROOT.field` `` to read the parent document.
 
 ### Joins
 

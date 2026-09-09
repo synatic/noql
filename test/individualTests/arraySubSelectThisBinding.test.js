@@ -1,18 +1,30 @@
 const assert = require('assert');
 const SQLParser = require('../../lib/SQLParser.js');
+const {normalizeFieldReference} = require('../../lib/make/buildFieldReference');
 
 /**
  * @param {string} sql
+ * @param {string} [fieldName]
  * @returns {any}
  */
-function parseProjectionField(sql) {
+function parseProjectionField(sql, fieldName = 'activePremiums') {
     const result = SQLParser.parseSQL(sql);
     if (result.type === 'query') {
-        return result.projection.activePremiums;
+        assert.ok(
+            result.projection && fieldName in result.projection,
+            `expected projection field ${fieldName}`
+        );
+        return result.projection[fieldName];
     }
-    const projectStage = (result.pipeline || []).find((stage) => stage.$project);
+    const projectStage = (result.pipeline || []).find(
+        (stage) => stage.$project
+    );
     assert.ok(projectStage, 'expected a $project stage');
-    return projectStage.$project.activePremiums;
+    assert.ok(
+        fieldName in projectStage.$project,
+        `expected $project field ${fieldName}`
+    );
+    return projectStage.$project[fieldName];
 }
 
 /**
@@ -45,7 +57,10 @@ function assertNoRootFieldRefsInArrayContext(node, path = []) {
     }
     if (Array.isArray(node)) {
         node.forEach((item, index) =>
-            assertNoRootFieldRefsInArrayContext(item, path.concat(String(index)))
+            assertNoRootFieldRefsInArrayContext(
+                item,
+                path.concat(String(index))
+            )
         );
         return;
     }
@@ -594,6 +609,257 @@ describe('Array subselect $$this binding', function () {
             assert.ok(
                 serialized.includes('"$$this.statusDate"'),
                 'TO_DATE($this.statusDate) workaround should normalize to $$this.statusDate'
+            );
+        });
+    });
+
+    describe('parent / root field refs in array subselects', function () {
+        describe('normalizeFieldReference', function () {
+            it('should bind bare names to $$this when includeThis is set', function () {
+                assert.strictEqual(
+                    normalizeFieldReference('id', true),
+                    '$$this.id'
+                );
+                assert.strictEqual(
+                    normalizeFieldReference('details.mainContacts', true),
+                    '$$this.details.mainContacts'
+                );
+            });
+
+            it('should leave $-prefixed parent paths unchanged when includeThis is set', function () {
+                assert.strictEqual(
+                    normalizeFieldReference('$details.mainContacts', true),
+                    '$details.mainContacts'
+                );
+                assert.strictEqual(
+                    normalizeFieldReference('$status', true),
+                    '$status'
+                );
+            });
+
+            it('should leave $$ROOT / $$NOW system paths unchanged', function () {
+                assert.strictEqual(
+                    normalizeFieldReference(
+                        '$$ROOT.details.mainContacts',
+                        true
+                    ),
+                    '$$ROOT.details.mainContacts'
+                );
+                assert.strictEqual(
+                    normalizeFieldReference('$$NOW', true),
+                    '$$NOW'
+                );
+            });
+
+            it('should still normalize legacy $this / $$this element hacks', function () {
+                assert.strictEqual(
+                    normalizeFieldReference('$this.id', true),
+                    '$$this.id'
+                );
+                assert.strictEqual(
+                    normalizeFieldReference('$$this.id', true),
+                    '$$this.id'
+                );
+                assert.strictEqual(
+                    normalizeFieldReference('$$$this.id', true),
+                    '$$this.id'
+                );
+            });
+
+            it('should still prefix bare names with $ outside array subselects', function () {
+                assert.strictEqual(normalizeFieldReference('id', false), '$id');
+                assert.strictEqual(
+                    normalizeFieldReference('$details.mainContacts', false),
+                    '$details.mainContacts'
+                );
+            });
+        });
+
+        it('should keep `$parent.path` as a root field in INDEXOF_ARRAY while binding id to $$this', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT *
+                        FROM people
+                        WHERE INDEXOF_ARRAY(\`$details.mainContacts\`, id) > 0
+                    ) AS mainContacts
+                FROM "agencysync-hawksoft-raw-data"
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(expr, {
+                $map: {
+                    input: {
+                        $filter: {
+                            input: '$people',
+                            cond: {
+                                $and: [
+                                    {
+                                        $gt: [
+                                            {
+                                                $indexOfArray: [
+                                                    '$details.mainContacts',
+                                                    '$$this.id',
+                                                ],
+                                            },
+                                            0,
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    in: '$$this',
+                },
+            });
+            assert.strictEqual(
+                JSON.stringify(expr).includes('$$this.$details'),
+                false,
+                'parent `$details` must not be prefixed as $$this.$details'
+            );
+        });
+
+        it('should accept $$ROOT.field as an explicit parent/root path', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT *
+                        FROM people
+                        WHERE INDEXOF_ARRAY(\`$$ROOT.details.mainContacts\`, id) >= 0
+                    ) AS mainContacts
+                FROM "agencysync-hawksoft-raw-data"
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(expr.$map.input.$filter.cond.$and[0], {
+                $gte: [
+                    {
+                        $indexOfArray: [
+                            '$$ROOT.details.mainContacts',
+                            '$$this.id',
+                        ],
+                    },
+                    0,
+                ],
+            });
+            assert.strictEqual(
+                JSON.stringify(expr).includes('$$this.$$ROOT'),
+                false,
+                '$$ROOT must not be prefixed as $$this.$$ROOT'
+            );
+        });
+
+        it('should compare an element field to a parent field', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT *
+                        FROM people
+                        WHERE id = \`$details.ownerId\`
+                    ) AS mainContacts
+                FROM clients
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(expr.$map.input.$filter.cond.$and[0], {
+                $eq: ['$$this.id', '$details.ownerId'],
+            });
+        });
+
+        it('should project a parent field next to an element field', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT
+                            id,
+                            \`$details.agencyId\` AS agencyId
+                        FROM people
+                    ) AS mainContacts
+                FROM clients
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(expr, {
+                $map: {
+                    input: '$people',
+                    in: {
+                        id: '$$this.id',
+                        agencyId: '$details.agencyId',
+                    },
+                },
+            });
+        });
+
+        it('should keep parent paths in CASE while binding bare columns to $$this', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT
+                            CASE
+                                WHEN INDEXOF_ARRAY(\`$details.mainContacts\`, id) >= 0
+                                THEN id
+                                ELSE \`$details.ownerId\`
+                            END AS s
+                        FROM people
+                    ) AS mainContacts
+                FROM clients
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(expr.$map.in, {
+                s: {
+                    $switch: {
+                        branches: [
+                            {
+                                case: {
+                                    $gte: [
+                                        {
+                                            $indexOfArray: [
+                                                '$details.mainContacts',
+                                                '$$this.id',
+                                            ],
+                                        },
+                                        0,
+                                    ],
+                                },
+                                then: '$$this.id',
+                            },
+                        ],
+                        default: '$details.ownerId',
+                    },
+                },
+            });
+        });
+
+        it('should not treat a bare parent-shaped path as a root ref', function () {
+            const expr = parseProjectionField(
+                `
+                SELECT
+                    (
+                        SELECT *
+                        FROM people
+                        WHERE INDEXOF_ARRAY(details.mainContacts, id) > 0
+                    ) AS mainContacts
+                FROM clients
+            `,
+                'mainContacts'
+            );
+
+            assert.deepStrictEqual(
+                expr.$map.input.$filter.cond.$and[0].$gt[0],
+                {
+                    $indexOfArray: ['$$this.details.mainContacts', '$$this.id'],
+                }
             );
         });
     });

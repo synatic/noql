@@ -15,9 +15,9 @@ NoQL uses sub-selects with a FROM array field to query array fields in collectio
         `customers`
     ```
 
-Using '$$ROOT' in sub select promotes the field to the root value of the array
+Using `$$ROOT` as a column **alias** in a sub-select promotes the field to the root value of the result array.
 
-???+ example "Using '$$ROOT' in sub select"
+???+ example "Using '$$ROOT' as an alias in a sub-select"
 
     ```sql
     SELECT
@@ -25,6 +25,92 @@ Using '$$ROOT' in sub select promotes the field to the root value of the array
     FROM
         `customers`
     ```
+
+## Field references in array sub-selects
+
+Array sub-selects compile to MongoDB `$map` / `$filter`. Inside those, NoQL has to choose whether a column means the **current array element** (`$$this`) or the **parent document** (`$field` / `$$ROOT`).
+
+| NoQL in the sub-select | Meaning | MongoDB |
+|---|---|---|
+| `staffId` | Current array element | `$$this.staffId` |
+| `` `$favouriteFilms` `` | Parent document | `$favouriteFilms` |
+| `` `$$ROOT.favouriteFilms` `` | Explicit root document | `$$ROOT.favouriteFilms` |
+| `` `$this.staffId` `` or `` `$$this.staffId` `` | Legacy element workaround | `$$this.staffId` |
+
+Bare names are the normal way to read element fields. Prefix a path with `$` (and wrap it in backticks) when you need a field from the outer document.
+
+???+ example "Bare names bind to the array element"
+
+    ```sql
+    SELECT
+        (
+            SELECT
+                CASE
+                    WHEN numberOfTerms > 0 THEN premium * (12 / numberOfTerms)
+                    ELSE premium
+                END AS annualPremium
+            FROM policies
+            WHERE status != 'Lead'
+        ) AS activePremiums
+    FROM clients
+    ```
+
+    `premium`, `numberOfTerms` and `status` all become `$$this.…` on each `policies` element.
+
+???+ example "Parent document path with `$field`"
+
+    ```sql
+    SELECT
+        (
+            SELECT *
+            FROM Rentals
+            WHERE INDEXOF_ARRAY(`$favouriteFilms`, filmId) >= 0
+        ) AS favourites
+    FROM customers
+    ```
+
+    Compiles to `$indexOfArray: ["$favouriteFilms", "$$this.filmId"]`. `$favouriteFilms` stays on the customer; `filmId` is the rental element.
+
+    Use `>= 0` (or `!= -1`) with `INDEXOF_ARRAY`. The function returns `0` when the value is the first match and `-1` when it is missing.
+
+???+ example "Explicit root path with `$$ROOT.field`"
+
+    ```sql
+    SELECT
+        (
+            SELECT *
+            FROM Rentals
+            WHERE INDEXOF_ARRAY(`$$ROOT.favouriteFilms`, filmId) >= 0
+        ) AS favourites
+    FROM customers
+    ```
+
+    `$$ROOT.favouriteFilms` is equivalent to `$favouriteFilms` here and makes the outer-document intent obvious.
+
+???+ example "Mixing parent and element fields in the SELECT list"
+
+    ```sql
+    SELECT
+        (
+            SELECT
+                filmId,
+                `$customerId` AS customerId
+            FROM Rentals
+        ) AS t
+    FROM customers
+    ```
+
+    `filmId` → `$$this.filmId`. `` `$customerId` `` → `$customerId` on the parent customer.
+
+!!! note "Backticks are required for `$` paths"
+    Identifiers that start with `$` must be quoted: `` `$favouriteFilms` ``, `` `$$ROOT.favouriteFilms` ``, `` `$this.staffId` ``.
+
+!!! warning "Do not use `$this` / `$$this` in new queries"
+    `` `$this.field` `` and `` `$$this.field` `` are still accepted so existing queries keep working. New queries should use a bare `field` for the element and `` `$field` `` / `` `$$ROOT.field` `` for the parent.
+
+`$field` and `$$ROOT.field` always mean the **root document** of the query. In a nested array sub-select they do not bind to an intermediate `$map` parent.
+
+## Slicing and sorting
 
 Slicing the array is supported by limit and offset in queries
 
