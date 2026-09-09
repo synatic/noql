@@ -27,6 +27,8 @@ jobs:
         run: npm run build
       - name: Copy over frontend dist to docs
         run: cp ./dist/index.js ./docs/docs/javascripts/noql/index.js
+      - name: Package Agent Skill zip
+        run: bash docs/package-skill.sh
       - name: Install mkdocs
         run: cd docs &&pip install mkdocs-material
       - name: Deploy docs

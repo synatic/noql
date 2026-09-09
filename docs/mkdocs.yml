@@ -122,4 +122,4 @@ nav:
   - JS Library:
       - Getting Started: js-library/getting-started.md
       - API: js-library/api-reference.md
-  - Skill.md: skill.md
+  - Skill: skill.md
