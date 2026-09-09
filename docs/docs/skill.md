@@ -63,6 +63,7 @@ if (parsedSQL.type === 'query') {
 | Situation | Quote character | Example |
 |---|---|---|
 | Field names with spaces or special chars | backtick or single quote | `` `First Name` `` or `'First Name'` |
+| `$` Mongo paths in array sub-selects | backtick | `` `$favouriteFilms` ``, `` `$$ROOT.filmId` `` |
 | Collection names with hyphens | backtick or single/double quote | `` `customer-notes` `` |
 | String literals | single quote | `'hello'` |
 | Aliased table in FROM | backtick or no quotes | `` FROM customers AS c `` |
@@ -255,7 +256,7 @@ SELECT (SELECT * FROM Rentals WHERE staffId = 2) AS filtered FROM customers
 -- Project specific fields from array elements
 SELECT (SELECT filmId, staffId FROM Rentals WHERE staffId = 2) AS t FROM customers
 
--- Promote single field to root array values with $$ROOT
+-- Promote single field to root array values with $$ROOT as an alias
 SELECT (SELECT filmId AS `$$ROOT` FROM Rentals WHERE staffId = 2) AS filmIds FROM customers
 
 -- Slice array
@@ -266,6 +267,37 @@ SELECT id, (SELECT * FROM Rentals ORDER BY id DESC) AS sorted FROM customers
 
 -- Aggregate functions NOT supported inside array sub-selects
 ```
+
+### Field references in array sub-selects
+
+Array sub-selects compile to `$map` / `$filter`. Bare names bind to the current element (`$$this`). A backtick-quoted `$path` is a parent/root document field.
+
+| NoQL | Meaning | MongoDB |
+|---|---|---|
+| `filmId` | Current array element | `$$this.filmId` |
+| `` `$favouriteFilms` `` | Parent document | `$favouriteFilms` |
+| `` `$$ROOT.favouriteFilms` `` | Explicit root document | `$$ROOT.favouriteFilms` |
+| `` `$this.filmId` `` / `` `$$this.filmId` `` | Legacy element workaround | `$$this.filmId` |
+
+```sql
+-- Parent array + element field: $favouriteFilms stays on the customer
+SELECT (
+    SELECT *
+    FROM Rentals
+    WHERE INDEXOF_ARRAY(`$favouriteFilms`, filmId) >= 0
+) AS favourites
+FROM customers
+
+-- Equivalent explicit root path
+SELECT (
+    SELECT *
+    FROM Rentals
+    WHERE INDEXOF_ARRAY(`$$ROOT.favouriteFilms`, filmId) >= 0
+) AS favourites
+FROM customers
+```
+
+Prefer bare names for element fields. `$this` / `$$this` still work for backwards compatibility but should not be used in new queries. `$field` / `$$ROOT.field` always mean the query's root document, not an intermediate nested `$map` parent. Quote `$` paths with backticks. Use `INDEXOF_ARRAY(...) >= 0` (it returns `0` for the first match).
 
 ### Array Functions
 
@@ -498,7 +530,7 @@ ORDER BY c.customerName ASC
 ## Key Caveats
 
 1. **Case-sensitive fields and values** — `First Name` ≠ `first name`
-2. **Field names cannot start with `$` or contain `.`** (dot notation is for traversal only)
+2. **Stored field names cannot start with `$` or contain `.`**. Dot notation is for traversal. In array sub-selects, a backtick-quoted `$path` is a parent-document Mongo path, not a stored field name.
 3. **Functions in WHERE must be repeated** — cannot reference a computed alias
 4. **`+` is not string concatenation** — use `CONCAT(a, b)`
 5. **IN subselect does not work** — use JOIN instead
@@ -532,9 +564,12 @@ SELECT o.id, i.sku, i.instock, UNSET(_id)
 FROM orders o
 INNER JOIN `inventory|unwind` i ON i.sku = o.item
 
--- Array sub-select
+-- Array sub-select (bare names = element; `$field` = parent document)
 SELECT id, (SELECT filmId AS `$$ROOT` FROM Rentals WHERE staffId = 2) AS films
 FROM customers
+SELECT (
+    SELECT * FROM Rentals WHERE INDEXOF_ARRAY(`$favouriteFilms`, filmId) >= 0
+) AS favourites FROM customers
 
 -- SUM with CASE
 SELECT SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) AS activeCount

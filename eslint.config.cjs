@@ -5,7 +5,13 @@ const jsdoc = require('eslint-plugin-jsdoc');
 
 module.exports = [
     {
-        ignores: ['build/**', 'coverage/**', '.nyc_output/**', 'docs/**'],
+        ignores: [
+            'build/**',
+            'coverage/**',
+            '.nyc_output/**',
+            'docs/**',
+            'dist/**',
+        ],
     },
     js.configs.recommended,
     eslintConfigPrettier,

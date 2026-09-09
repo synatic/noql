@@ -4,6 +4,8 @@
 
 Specifying `$$ROOT` as a column alias sets the value to root object but only works with aggregates (unless contained in array sub select). This is useful when you want to return the root object as a column.
 
+That alias is different from using `` `$$ROOT.field` `` as a **column** inside an array sub-select, which reads a field from the parent/root document. See [Field references in array sub-selects](/sql-syntax/arrays/#field-references-in-array-sub-selects).
+
 ???+ example "Example `$$ROOT` usage"
 
     ```sql
