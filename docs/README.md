@@ -46,6 +46,14 @@ Pushing to the `main` branch will automatically publish the docs to [https://noq
 
 This is a github pages site, hosted on the `gh-pages` branch of this repo.
 
+The Agent Skill lives in `skill/noql/` at the repo root. Before a docs deploy (or after editing the skill), regenerate the downloadable zip:
+
+```bash
+bash docs/package-skill.sh
+```
+
+That writes `docs/docs/assets/noql.zip` with `noql/` as the zip root. CI runs the same script before `mkdocs gh-deploy`.
+
 ### Quirks and known issues
 
 -   For some reason, the `{% block footer %}{% endblock %}` doesn't render the footer on the overridden home page. I've had to manually copy the footer into the home page for now. Remember to update it for date and social links.

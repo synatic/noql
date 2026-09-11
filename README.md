@@ -6,6 +6,8 @@ NoQL Converts SQL statements to Mongo find statements or aggregation pipelines. 
 
 For full docs and a playground to try NoQL out, visit [https://noql.synatic.dev/](https://noql.synatic.dev/)
 
+An [Agent Skill](https://agentskills.io/specification) for writing NoQL (Claude, Claude Code, Cursor, and other compatible agents) is at [https://noql.synatic.dev/skill/](https://noql.synatic.dev/skill/). Source: [`skill/noql`](skill/noql).
+
 ## Installation
 
 Install NoQL using the [npm install command](https://docs.npmjs.com/downloading-and-installing-packages-locally):
