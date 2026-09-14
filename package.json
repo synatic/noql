@@ -71,7 +71,7 @@
     "dayjs": "1.11.20",
     "deepmerge": "4.3.1",
     "lodash": "4.18.1",
-    "node-sql-parser": "5.3.3",
+    "node-sql-parser": "5.4.0",
     "object-hash": "3.0.0"
   },
   "devDependencies": {
