@@ -284,21 +284,21 @@ Returns true if the expression starts with the specified prefix.
     FROM `customers`;
     ```
 
-### WRAP_PARAM
+### wrapParam
 
-`WRAP_PARAM(expr, [forceString])`
+`wrapParam(expr, [forceString])`
 
 Wraps a parameter, typically used for handling special characters or ensuring correct interpretation of a string.
 
-???+ example "Example `WRAP_PARAM` usage"
+???+ example "Example `wrapParam` usage"
 
     ```sql
     SELECT
-        WRAP_PARAM('Hello, "World"!') as wrappedString,
-        WRAP_PARAM(42, true) as wrappedNumber
+        wrapParam('Hello, "World"!') as wrappedString,
+        wrapParam(42, true) as wrappedNumber
     FROM
         `customers`
     LIMIT 1
     ```
 
-In this example, `WRAP_PARAM` ensures that the string with quotes is properly handled, and when `forceString` is set to true, it forces the number to be treated as a string.
+In this example, `wrapParam` ensures that the string with quotes is properly handled, and when `forceString` is set to true, it forces the number to be treated as a string.
