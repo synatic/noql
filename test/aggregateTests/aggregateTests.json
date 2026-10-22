@@ -29,10 +29,10 @@
       "collections": ["films"],
       "pipeline": [
         {
-          "$limit": 10
+          "$skip": 5
         },
         {
-          "$skip": 5
+          "$limit": 10
         }
       ]
     }

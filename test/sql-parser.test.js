@@ -283,9 +283,9 @@ describe('SQL Parser', function () {
                     pipeline.push({$project: parsedQuery.projection});
 
                 if (parsedQuery.sort) pipeline.push({$sort: parsedQuery.sort});
+                if (parsedQuery.skip) pipeline.push({$skip: parsedQuery.skip});
                 if (parsedQuery.limit !== 100)
                     pipeline.push({$limit: parsedQuery.limit});
-                if (parsedQuery.skip) pipeline.push({$skip: parsedQuery.skip});
 
                 assert.deepEqual(
                     parsedAggregate,
