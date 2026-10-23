@@ -897,5 +897,34 @@ describe('joins', function () {
                 unwindJoins: true,
             });
         });
+
+        it('should automatically unwind an inner join the same as the |unwind hint', async () => {
+            const db = mongoClient.db('sql-to-mongo-test');
+            const run = async (sql, options) => {
+                const {pipeline, collections} = SQLParser.makeMongoAggregate(
+                    sql,
+                    options
+                );
+                return db
+                    .collection(collections[0])
+                    .aggregate(pipeline)
+                    .toArray();
+            };
+            const hinted = await run(
+                'select o.item, i.sku from orders as o inner join `inventory|unwind` as i on o.item=i.sku',
+                {}
+            );
+            const auto = await run(
+                'select o.item, i.sku from orders as o inner join `inventory` as i on o.item=i.sku',
+                {
+                    unwindJoins: true,
+                }
+            );
+            assert.ok(
+                hinted.length > 0,
+                'expected the hinted join to return rows'
+            );
+            assert.deepStrictEqual(auto, hinted);
+        });
     });
 });
